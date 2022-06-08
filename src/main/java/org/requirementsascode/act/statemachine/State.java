@@ -49,7 +49,7 @@ public class State<S,V> implements Behavior<S,V>{
 	}
 	
 	private Behavior<S, V> createConditionalStateBehavior(Behavior<S, V> stateBehavior) {
-		return inCase(i -> getInvariant().test(i.getState()), stateBehavior);
+		return inCase(this::matchesStateIn, stateBehavior);
 	}
 
 	@Override
