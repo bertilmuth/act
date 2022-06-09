@@ -44,8 +44,8 @@ public class FlatCart {
 	}
 	
 	private Statemachine<CartState, Trigger> createStatemachine() {
-		State<CartState, Trigger> emptyCartState = state("Empty Cart", cs -> cs != null && cs.isEmpty());
-		State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cs -> cs != null && !cs.isEmpty());
+		State<CartState, Trigger> emptyCartState = state("Empty Cart", cs -> cs != null && cs.getItems().size() == 0);
+		State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cs -> cs != null && cs.getItems().size() > 0);
 
 		Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
 			.states(emptyCartState,nonEmptyCartState)
