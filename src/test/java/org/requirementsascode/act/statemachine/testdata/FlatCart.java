@@ -3,7 +3,6 @@ package org.requirementsascode.act.statemachine.testdata;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
-import static org.requirementsascode.act.statemachine.ExitFlow.exitFlow;
 import static org.requirementsascode.act.statemachine.Init.init;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.Transit.transit;
@@ -20,8 +19,6 @@ import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
 public class FlatCart {	
-	public static final String INVARIANT_BREAKING_ITEM = "InvariantBreakingItem";
-
 	private CartState state;
 	Statemachine<CartState, Trigger> statemachine;
 
@@ -38,10 +35,6 @@ public class FlatCart {
 		}
 	}
 	
-	public boolean subStateEntered(){
-		return state.isSubStateEntered();
-	}
-	
 	public List<String> items(){
 		return state.getItems();
 	}
@@ -52,15 +45,20 @@ public class FlatCart {
 	
 	private Statemachine<CartState, Trigger> createStatemachine() {
 		State<CartState, Trigger> emptyCartState = state("Empty Cart", cs -> cs != null && cs.isEmpty());
-
-		State<CartState, Trigger> nonEmptyCartState = createNonEmptyCartStateWithSubstates();
+		State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cs -> cs != null && !cs.isEmpty());
 
 		Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
 			.states(emptyCartState,nonEmptyCartState)
 			.transitions(
 				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, transit(CartState::addItem))),
-				transition(emptyCartState, nonEmptyCartState, when(RemoveItem.class, transit((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
-				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(CartState::removeItem))))
+				
+				transition(nonEmptyCartState, nonEmptyCartState, when(AddItem.class, transit(CartState::addItem))),
+				
+				transition(nonEmptyCartState, nonEmptyCartState, 
+					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() > 1, transit(CartState::removeItem)))),
+				
+				transition(nonEmptyCartState, emptyCartState, 
+					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(CartState::removeItem))))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))
@@ -68,26 +66,6 @@ public class FlatCart {
 			.build();
 		
 		return statemachine;
-	}
-
-	private State<CartState, Trigger> createNonEmptyCartStateWithSubstates() {
-		State<CartState, Trigger> nonFullCartSubState = state("Non-full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.getItems().size() == 1);
-		State<CartState, Trigger> fullCartSubState = state("Full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.getItems().size() >= 2);
-
-		Statemachine<CartState, Trigger> nonEmptyCartStateMachine = Statemachine.builder()
-			.states(nonFullCartSubState, fullCartSubState)
-			.transitions(
-				transition(nonFullCartSubState, fullCartSubState, when(AddItem.class, transit(CartState::addItem))),
-				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, transit(CartState::removeItem)))
-			)
-			.flows(
-				entryFlow(nonFullCartSubState, transit(CartState::enterSubstate)),
-				exitFlow(nonFullCartSubState, when(RemoveItem.class, transit(CartState::exitSubstate)))
-			)
-			.build();
-		
-		State<CartState, Trigger> nonEmptyCartState = state("Non-empty Cart", cs -> cs != null && !cs.isEmpty(), nonEmptyCartStateMachine);
-		return nonEmptyCartState;
 	}
 }
 
