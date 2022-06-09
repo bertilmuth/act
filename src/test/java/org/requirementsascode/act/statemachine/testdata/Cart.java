@@ -10,14 +10,12 @@ import static org.requirementsascode.act.statemachine.Transit.transit;
 import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
-import org.requirementsascode.act.statemachine.testdata.trigger.ConflictingTrigger;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
@@ -62,22 +60,7 @@ public class Cart {
 			.transitions(
 				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, transit(CartState::addItem))),
 				transition(emptyCartState, nonEmptyCartState, when(RemoveItem.class, transit((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
-				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(CartState::removeItem)))),
-				
-				// The following is a deliberately invalid transition, since removing 1 item from  
-				// a cart that contains 3 item doesn't make the cart empty.
-				// This is tested by method transitionToStateMustNotBreakItsInvariant()
-				transition(nonEmptyCartState, emptyCartState, 
-					when(RemoveItem.class, 
-						inCase(input -> input != null && input.getState().getItems().size() == 3 && input.getState().getItems().get(0).equals(INVARIANT_BREAKING_ITEM), 
-							transit(CartState::removeItem)))),
-				
-				// The following transitions are used to see if exceptions are thrown for transitions that conflict (i.e. are both enabled)
-				transition(emptyCartState, nonEmptyCartState, when(ConflictingTrigger.class, 
-					transit((s,t) -> CartState.cartState(Arrays.asList("PASS"), false)))),
-				
-				transition(emptyCartState, nonEmptyCartState, when(ConflictingTrigger.class, 
-					transit((s,t) -> CartState.cartState(Arrays.asList("FAIL"), false))))
+				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(CartState::removeItem))))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))

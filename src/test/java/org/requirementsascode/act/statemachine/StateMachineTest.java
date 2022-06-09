@@ -6,14 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.statemachine.merge.MoreThanOneBehaviorActed;
 import org.requirementsascode.act.statemachine.testdata.Cart;
 import org.requirementsascode.act.statemachine.testdata.CreateCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
-import org.requirementsascode.act.statemachine.testdata.trigger.ConflictingTrigger;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
-class TransitionTest {
+class StateMachineTest {
 	private Cart cart;
 
 	@BeforeEach
@@ -99,11 +97,6 @@ class TransitionTest {
 		cart.actOn(new CreateCart(true, item, item, item));
 				
 		assertThrows(IllegalStateException.class, () -> cart.actOn(new RemoveItem(item)));
-	}
-	
-	@Test
-	void onlyOneTransitionMayFire() {		
-		assertThrows(MoreThanOneBehaviorActed.class, () -> cart.actOn(new ConflictingTrigger()));
 	}
 }
 
