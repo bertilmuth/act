@@ -50,9 +50,11 @@ public class FlatCart {
 		Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
 			.states(emptyCartState,nonEmptyCartState)
 			.transitions(
-				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, transit(CartState::addItem))),
+				transition(emptyCartState, nonEmptyCartState, 
+					when(AddItem.class, transit(CartState::addItem))),
 				
-				transition(nonEmptyCartState, nonEmptyCartState, when(AddItem.class, transit(CartState::addItem))),
+				transition(nonEmptyCartState, nonEmptyCartState, 
+					when(AddItem.class, transit(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
 					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() > 1, transit(CartState::removeItem)))),
