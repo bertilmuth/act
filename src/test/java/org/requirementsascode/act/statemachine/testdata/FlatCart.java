@@ -19,13 +19,13 @@ import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
-public class Cart {	
+public class FlatCart {	
 	public static final String INVARIANT_BREAKING_ITEM = "InvariantBreakingItem";
 
 	private CartState state;
 	Statemachine<CartState, Trigger> statemachine;
 
-	public Cart() {
+	public FlatCart() {
 		this.statemachine = createStatemachine();
 	}
 	
