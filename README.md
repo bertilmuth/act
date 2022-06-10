@@ -22,5 +22,5 @@ And here's how the state machine is presented in code:
 
 ![The code of the statemachine of the shopping cart](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_code.png)
 
-To learn more, see [this test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/FlatStateMachineTest.java)
-and the [Cart class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/FlatCart.java).
+To learn more, see [this test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/StateMachineTest.java)
+and the [Cart class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/Cart.java).

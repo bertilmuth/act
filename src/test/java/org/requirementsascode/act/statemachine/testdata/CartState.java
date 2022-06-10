@@ -7,10 +7,10 @@ import java.util.List;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
-public class FlatCartState {
+public class CartState {
 	private final List<String> items;
 	
-	private FlatCartState(List<String> items) {		
+	private CartState(List<String> items) {		
 		this.items = new ArrayList<>(items);
 	}
 	
@@ -22,21 +22,21 @@ public class FlatCartState {
 		return Collections.unmodifiableList(items);
 	}
 	
-	static FlatCartState cartState(List<String> items) {
-		return new FlatCartState(items);
+	static CartState cartState(List<String> items) {
+		return new CartState(items);
 	}
 	
-	static FlatCartState createCart(CreateCart createCart) {
+	static CartState createCart(CreateCart createCart) {
 		return cartState(createCart.getItems());
 	}
 	
-	FlatCartState addItem(AddItem addItem) {		
+	CartState addItem(AddItem addItem) {		
 		ArrayList<String> items = new ArrayList<>(getItems());
 		items.add(addItem.item());
 		return cartState(items);
 	}
 
-	FlatCartState removeItem(RemoveItem removeItem) {		
+	CartState removeItem(RemoveItem removeItem) {		
 		ArrayList<String> items = new ArrayList<>(getItems());
 		items.remove(removeItem.item());
 		return cartState(items);

@@ -49,10 +49,6 @@ public class HierarchicalCartState {
 		return cartState(items, subStateEntered);
 	}
 	
-	HierarchicalCartState removeAllItems(AddItem removeAllItems) {				
-		return cartState(Collections.emptyList(), false);
-	}
-	
 	HierarchicalCartState enterSubstate(Trigger trigger) {
 		return cartState(getItems(), true);
 	}

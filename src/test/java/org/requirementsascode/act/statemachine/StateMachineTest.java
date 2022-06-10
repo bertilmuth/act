@@ -6,16 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.testdata.CreateCart;
-import org.requirementsascode.act.statemachine.testdata.FlatCart;
+import org.requirementsascode.act.statemachine.testdata.Cart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
-class FlatStateMachineTest {
-	private FlatCart cart;
+class StateMachineTest {
+	private Cart cart;
 
 	@BeforeEach
 	void setup() {
-		cart = new FlatCart();
+		cart = new Cart();
 		cart.actOn(new CreateCart(false));
 	}
 
