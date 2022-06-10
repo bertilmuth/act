@@ -63,7 +63,7 @@ public class HierarchicalCart {
 				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(HierarchicalCartState::removeItem))))
 			)
 			.flows(
-				entryFlow(when(CreateCart.class, init(HierarchicalCartState::createCart)))
+				entryFlow(when(CreateHierarchicalCart.class, init(HierarchicalCartState::createCart)))
 			)
 			.build();
 		

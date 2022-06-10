@@ -33,7 +33,7 @@ public class HierarchicalCartState {
 		return new HierarchicalCartState(items, subStateEntered);
 	}
 	
-	static HierarchicalCartState createCart(CreateCart createCart) {
+	static HierarchicalCartState createCart(CreateHierarchicalCart createCart) {
 		return cartState(createCart.getItems(), createCart.isSubStateEntered());
 	}
 	

@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.statemachine.testdata.CreateCart;
 import org.requirementsascode.act.statemachine.testdata.Cart;
+import org.requirementsascode.act.statemachine.testdata.CreateCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
@@ -16,7 +16,7 @@ class StateMachineTest {
 	@BeforeEach
 	void setup() {
 		cart = new Cart();
-		cart.actOn(new CreateCart(false));
+		cart.actOn(new CreateCart());
 	}
 
 	@Test

@@ -14,10 +14,6 @@ public class CartState {
 		this.items = new ArrayList<>(items);
 	}
 	
-	public boolean isEmpty() {
-		return items.isEmpty();
-	}
-	
 	public List<String> getItems() {
 		return Collections.unmodifiableList(items);
 	}
@@ -44,6 +40,6 @@ public class CartState {
 
 	@Override
 	public String toString() {
-		return "FlatCartState [items=" + items + "]";
+		return "CartState [items=" + items + "]";
 	}
 }
