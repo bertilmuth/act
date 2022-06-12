@@ -1,13 +1,12 @@
 package org.requirementsascode.act.statemachine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.statemachine.testdata.HierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.CreateHierarchicalCart;
+import org.requirementsascode.act.statemachine.testdata.HierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
@@ -88,15 +87,6 @@ class HierarchicalStateMachineTest {
 		cart.actOn(new RemoveItem(item1));
 		assertEquals(1, cart.items().size());
 		assertEquals(item2, cart.items().get(0));
-	}
-	
-	@Test
-	void transitionToStateMustNotBreakItsInvariant() {
-		String item = HierarchicalCart.INVARIANT_BREAKING_ITEM;
-		cart = new HierarchicalCart();
-		cart.actOn(new CreateHierarchicalCart(true, item, item, item));
-				
-		assertThrows(IllegalStateException.class, () -> cart.actOn(new RemoveItem(item)));
 	}
 }
 
