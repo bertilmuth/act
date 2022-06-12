@@ -57,7 +57,7 @@ public class HierarchicalCart {
 			.states(emptyCartState,nonEmptyCartState)
 			.transitions(
 				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, transit(HierarchicalCartState::addItem))),
-				transition(emptyCartState, nonEmptyCartState, when(RemoveItem.class, transit((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
+				transition(emptyCartState, emptyCartState, when(RemoveItem.class, transit((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
 				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(HierarchicalCartState::removeItem))))
 			)
 			.flows(
