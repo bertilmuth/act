@@ -1,6 +1,7 @@
 package org.requirementsascode.act.statemachine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.Transit.transit;
@@ -33,5 +34,18 @@ class InvariantTest {
 		
 		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
 		assertEquals(STATE2, statemachine.actOn(anyEventInState1).getState());
+	}
+	
+	@Test
+	void notFulfilledInvariantOfToStateCausesException() {
+		Statemachine<String,String> statemachine = 
+			Statemachine.builder()
+				.states(statemachineState1, statemachineState2)
+				.transitions(
+					transition(statemachineState1, statemachineState2, transit((s,v) -> STATE1))
+				).build();
+		
+		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
+		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).getState());
 	}
 }
