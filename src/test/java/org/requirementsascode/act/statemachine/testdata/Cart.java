@@ -30,9 +30,7 @@ public class Cart {
 		Data<CartState, Trigger> input = data(state, trigger);
 		
 		Data<CartState, Trigger> output = statemachine.actOn(input);
-		if(output != null) {
-			setState(output.getState());
-		}
+		setState(output.getState());
 	}
 	
 	public List<String> items(){
