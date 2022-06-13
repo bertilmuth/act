@@ -37,13 +37,28 @@ class InvariantTest {
 	}
 	
 	@Test
-	void notFulfilledInvariantOfToStateCausesException() {
+	void exceptionIfInvariantOfToStateIsNotFulfilled() {
 		Statemachine<String,String> statemachine = 
 			Statemachine.builder()
 				.states(statemachineState1, statemachineState2)
 				.transitions(
 					transition(statemachineState1, statemachineState2, transit((s,v) -> STATE1))
 				).build();
+		
+		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
+		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).getState());
+	}
+	
+	@Test
+	void exceptionIfStateBehaviorChangesState() {
+		State<String, String> stateWithBehaviorThatChangesState = 
+			state(STATE1, s -> s.equals(STATE1), transit((s, v) -> STATE2));
+
+		Statemachine<String,String> statemachine = 
+			Statemachine.builder()
+				.states(stateWithBehaviorThatChangesState)
+				.transitions()
+				.build();
 		
 		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
 		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).getState());
