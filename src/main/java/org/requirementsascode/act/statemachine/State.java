@@ -1,9 +1,8 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Behavior.identity;
-
 import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.core.Behavior.identity;
 
 import java.util.function.Predicate;
 
@@ -45,22 +44,18 @@ public class State<S, V> implements Behavior<S, V> {
 	public Predicate<S> getInvariant() {
 		return invariant;
 	}
+	
+	private Behavior<S, V> createStateBehavior(Behavior<S, V> stateBehavior) {
+		return inCase(this::matchesStateIn,
+			stateBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
+	}
 
 	public boolean matchesStateIn(Data<S, V> data) {
 		return getInvariant().test(data.getState());
 	}
 
-	private Behavior<S, V> createStateBehavior(Behavior<S, V> stateBehavior) {
-		return inCase(this::matchesStateIn, stateBehavior)
-			.andThen(inCase(this::isInDifferentState, this::throwsIllegalStateException, identity()));
-	}
-
-	private boolean isInDifferentState(Data<S, V> data) {
-		return data.getValue() != null && !matchesStateIn(data);
-	}
-
 	private Data<S, V> throwsIllegalStateException(Data<S, V> output) {
-		throw new IllegalStateException("Behavior of state " + getName() + " changed its invariant! " + output);
+		throw new IllegalStateException("After behavior of state " + getName() + " invariant is false! -> output: " + output);
 	}
 
 	@Override

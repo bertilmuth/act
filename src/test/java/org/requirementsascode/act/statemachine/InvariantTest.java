@@ -52,7 +52,7 @@ class InvariantTest {
 	@Test
 	void exceptionIfStateBehaviorChangesState() {
 		State<String, String> stateWithBehaviorThatChangesState = 
-			state(STATE1, s -> s.equals(STATE1), transit((s, v) -> STATE2));
+			state(STATE1, s -> s.equals(STATE1), d -> data(STATE2));
 
 		Statemachine<String,String> statemachine = 
 			Statemachine.builder()
