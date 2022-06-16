@@ -42,3 +42,10 @@ And here's how the state machine is presented in code:
 
 To learn more, see [this test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/StateMachineTest.java)
 and the [Cart class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/Cart.java).
+
+# Hierarchical state machines (a.k.a. state charts)
+You can use Act to create hierarchical state machines as well.
+
+That means: states can have a behavior that is a state machine itself.
+
+Have a look at [this class] for details on how to create one.
