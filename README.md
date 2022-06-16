@@ -48,4 +48,4 @@ You can use Act to create hierarchical state machines as well.
 
 That means: states can have a behavior that is a state machine itself.
 
-Have a look at [this class] for details on how to create one.
+Have a look at [this class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/HierarchicalCart.java) for details on how to create one.
