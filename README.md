@@ -25,21 +25,21 @@ changes over time depending on the state, chances are you may benefit from using
 But why would you use Act to define an executable state machine model?
 The main difference between Act and many other state machine libraries is the relationship between state machine and application state.
 
-In most state machine libraries, state is only losely coupled to the "real" appliction state. You need to build logic to keep the two in sync. And that logic may be error-prone.
+In most state machine libraries, the state of the state machine is only losely coupled to the "real" appliction state. 
+You need to build logic to keep the two in sync. And that logic may be error-prone.
 
 In contrast, Act directly operates on the application state. Act checks in which state the state machine is by checking invariant conditions. These conditions are based on the application state. Also, transitions are behaviors that transform the application state.
 
 That has some interesting benefits, for example:
 
-* Act can automatically check if the application really is in the intended target state of a transition. This is great for verification and can e.g. be used together with properties based testing to verify the application behavior.
+* Act can automatically check if the application really is in the intended target state of a transition. This is great for verification and can e.g. be used together with property based testing to verify the application behavior.
 
-* When application state is persisted and reloaded, the state machine will automatically be reset to the latest state. So Harel's history states are an intrinsic part of Act's design.
+* When application state is persisted and reloaded, the state machine will automatically be reset to the latest state. 
 
 In short, Act brings the state machine closer to what really happens.
 
 Apart from that, Act is a light-weight implementation (single jar, <64 kBytes).
 Ease of use is a key design goal. 
-And it's in an early stage of development, so constructive feedback is very helpful for me.
 
 # Example usage
 
