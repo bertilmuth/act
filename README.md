@@ -2,29 +2,6 @@ Act
 ===
 [![Gitter](https://badges.gitter.im/requirementsascode/community.svg)](https://gitter.im/requirementsascode/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# Why another state machine library?
-If you notice that you use complicated if-else checks throughout your code, or your application's behavior
-changes over time depending on some application state, you might benefit from using a state machine in your code.
-
-But why would you use Act to define an executable state machine model?
-The main difference between Act and many other state machine libraries is the relationship between state machine and application state.
-
-In most state machine libraries, the state of the state machine is only losely related to the "real" appliction state. 
-You need to build logic to keep the two in sync. And that logic may be error-prone.
-
-In contrast, Act directly operates on the application state. Act checks in which state the state machine is by checking invariant conditions. These conditions are based on the application state. Also, transitions directly transform the application state.
-
-That has some interesting benefits, for example:
-
-* Act can automatically check if the application really is in the intended target state of a transition. This is great for verification and can e.g. be used together with property based testing to verify the application behavior.
-
-* When application state is persisted and reloaded, the state machine will automatically be reset to the latest state. 
-
-In short, Act brings the state machine closer to what really happens.
-
-Apart from that, Act is a light-weight implementation (single jar, <64 kBytes).
-Ease of use is a key design goal. 
-
 # Example usage
 
 As an example, look at the following state machine for a shopping cart.
@@ -73,3 +50,26 @@ If you are using Gradle, include the following in your build.gradle dependencies
 ```
 implementation 'org.requirementsascode.act:act:0.1.2'
 ```
+
+# Why another state machine library?
+If you notice that you use complicated if-else checks throughout your code, or your application's behavior
+changes over time depending on some application state, you might benefit from using a state machine in your code.
+
+But why would you use Act to define an executable state machine model?
+The main difference between Act and many other state machine libraries is the relationship between state machine and application state.
+
+In most state machine libraries, the state of the state machine is only losely related to the "real" appliction state. 
+You need to build logic to keep the two in sync. And that logic may be error-prone.
+
+In contrast, Act directly operates on the application state. Act checks in which state the state machine is by checking invariant conditions. These conditions are based on the application state. Also, transitions directly transform the application state.
+
+That has some interesting benefits, for example:
+
+* Act can automatically check if the application really is in the intended target state of a transition. This is great for verification and can e.g. be used together with property based testing to verify the application behavior.
+
+* When application state is persisted and reloaded, the state machine will automatically be reset to the latest state. 
+
+In short, Act brings the state machine closer to what really happens.
+
+Apart from that, Act is a light-weight implementation (single jar, <64 kBytes).
+Ease of use is a key design goal. 
