@@ -19,16 +19,16 @@ implementation 'org.requirementsascode.act:act:0.1.2'
 ```
 
 # Why another state machine library?
-If you notice that you use complicated if-else condition checks throughout your code, or your application's behavior
-changes over time depending on the state, chances are you may benefit from using a state machine in your code.
+If you notice that you use complicated if-else checks throughout your code, or your application's behavior
+changes over time depending on some application state, you might benefit from using a state machine in your code.
 
 But why would you use Act to define an executable state machine model?
 The main difference between Act and many other state machine libraries is the relationship between state machine and application state.
 
-In most state machine libraries, the state of the state machine is only losely coupled to the "real" appliction state. 
+In most state machine libraries, the state of the state machine is only losely related to the "real" appliction state. 
 You need to build logic to keep the two in sync. And that logic may be error-prone.
 
-In contrast, Act directly operates on the application state. Act checks in which state the state machine is by checking invariant conditions. These conditions are based on the application state. Also, transitions are behaviors that transform the application state.
+In contrast, Act directly operates on the application state. Act checks in which state the state machine is by checking invariant conditions. These conditions are based on the application state. Also, transitions directly transform the application state.
 
 That has some interesting benefits, for example:
 
