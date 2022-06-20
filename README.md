@@ -2,6 +2,23 @@ Act
 ===
 [![Gitter](https://badges.gitter.im/requirementsascode/community.svg)](https://gitter.im/requirementsascode/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+# Getting started
+If you are using Maven, include the following in your POM:
+
+``` xml
+  <dependency>
+    <groupId>org.requirementsascode.act</groupId>
+    <artifactId>act</artifactId>
+    <version>0.1.2</version>
+  </dependency>
+```
+
+If you are using Gradle, include the following in your build.gradle dependencies:
+
+```
+implementation 'org.requirementsascode.act:act:0.1.2'
+```
+
 # Example usage
 
 As an example, look at the following state machine for a shopping cart.
@@ -33,23 +50,6 @@ You can use Act to create hierarchical state machines as well.
 That means: states can have a behavior that is a state machine itself.
 
 Have a look at [this class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/HierarchicalCart.java) for details on how to create one.
-
-# Getting started
-If you are using Maven, include the following in your POM:
-
-``` xml
-  <dependency>
-    <groupId>org.requirementsascode.act</groupId>
-    <artifactId>act</artifactId>
-    <version>0.1.2</version>
-  </dependency>
-```
-
-If you are using Gradle, include the following in your build.gradle dependencies:
-
-```
-implementation 'org.requirementsascode.act:act:0.1.2'
-```
 
 # Why another state machine library?
 If you notice that you use complicated if-else checks throughout your code, or your application's behavior
