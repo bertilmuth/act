@@ -98,14 +98,14 @@ class RegularLanguageTest {
 	enum NonTerminal{
 		S0(false), S1(false), S2(false), S3(true), WordTooLong(false);
 
-		private final boolean isAccepting;
+		private final boolean accepting;
 		
-		NonTerminal(boolean isAccepting){
-			this.isAccepting = isAccepting;
+		NonTerminal(boolean accepting){
+			this.accepting = accepting;
 		}
 
 		public boolean isAccepting() {
-			return isAccepting;
+			return accepting;
 		}
 	};
 	
