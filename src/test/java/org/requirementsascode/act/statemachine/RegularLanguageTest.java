@@ -6,6 +6,8 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.Transition.transition;
+import static org.requirementsascode.act.statemachine.Transit.transit;
+import static org.requirementsascode.act.statemachine.ExitFlow.exitFlow;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.*;
 
 import java.util.function.Predicate;
@@ -85,7 +87,7 @@ class RegularLanguageTest {
 				transition(s2, s3, accept("b", S3))
 			)
 			.flows(
-				ExitFlow.exitFlow(s3, inCase(i -> !i.getValue().isEmpty(), Transit.transit((s,t) -> Rejected)))
+				exitFlow(s3, inCase(i -> !i.getValue().isEmpty(), transit((s,t) -> Rejected)))
 			)
 			.build();
 		
@@ -127,8 +129,9 @@ class RegularLanguageTest {
 		  	i -> data(targetState, tail(i.getValue())));
 	}
 
-	private boolean isFirstLetterTheSame(String terminal, Data<NonTerminal, String> i) {
-		return !i.getValue().isEmpty() && firstLetter(terminal) == firstLetter(i.getValue());
+	private boolean isFirstLetterTheSame(String expectedTerminal, Data<NonTerminal, String> i) {
+		String inputValue = i.getValue();
+		return !inputValue.isEmpty() && firstLetter(expectedTerminal) == firstLetter(inputValue);
 	}
 
 	private char firstLetter(String s) {
