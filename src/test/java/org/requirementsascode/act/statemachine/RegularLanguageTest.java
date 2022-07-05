@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S0;
+import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S1;
+import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S2;
+import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S3;
+import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.WordTooLong;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.Transition.transition;
-import static org.requirementsascode.act.statemachine.Transit.transit;
-import static org.requirementsascode.act.statemachine.ExitFlow.exitFlow;
-import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.*;
 
 import java.util.function.Predicate;
 
@@ -76,18 +78,17 @@ class RegularLanguageTest {
 		State<NonTerminal, String> s1 = s(S1);
 		State<NonTerminal, String> s2 = s(S2);
 		State<NonTerminal, String> s3 = s(S3);
+		State<NonTerminal, String> wordTooLong = s(WordTooLong);
 
 		Statemachine<NonTerminal, String> statemachine = Statemachine.builder()
-			.states(s0,s1, s2, s3)
+			.states(s0,s1, s2, s3, wordTooLong)
 			.transitions(
 				transition(s0, s1, accept("a", S1)),
 				transition(s0, s1, accept("b", S1)),
 				transition(s1, s2, accept("a", S2)),
 				transition(s1, s2, accept("b", S2)),
-				transition(s2, s3, accept("b", S3))
-			)
-			.flows(
-				exitFlow(s3, inCase(i -> !i.getValue().isEmpty(), transit((s,t) -> Rejected)))
+				transition(s2, s3, accept("b", S3)),
+				transition(s3, wordTooLong, inCase(i -> !i.getValue().isEmpty(), i -> data(WordTooLong)))
 			)
 			.build();
 		
@@ -95,7 +96,7 @@ class RegularLanguageTest {
 	}
 	
 	enum NonTerminal{
-		S0(false), S1(false), S2(false), S3(true), Rejected(false);
+		S0(false), S1(false), S2(false), S3(true), WordTooLong(false);
 
 		private final boolean isAccepting;
 		
