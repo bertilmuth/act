@@ -18,7 +18,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
 /**
- * Test for a regular language that accepts words of exactly three letters of a and b character,
+ * Test of a state machine for a regular language that accepts words of exactly three letters of a and b character,
  * where the last letter must be b.
  * 
  * @author b_muth
