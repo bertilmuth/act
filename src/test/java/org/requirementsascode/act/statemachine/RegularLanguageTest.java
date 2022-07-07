@@ -83,11 +83,11 @@ class RegularLanguageTest {
 		Statemachine<NonTerminal, String> statemachine = Statemachine.builder()
 			.states(s0,s1, s2, s3, wordTooLong)
 			.transitions(
-				transition(s0, s1, accept("a", S1)),
-				transition(s0, s1, accept("b", S1)),
-				transition(s1, s2, accept("a", S2)),
-				transition(s1, s2, accept("b", S2)),
-				transition(s2, s3, accept("b", S3)),
+				transition(s0, s1, accept('a', S1)),
+				transition(s0, s1, accept('b', S1)),
+				transition(s1, s2, accept('a', S2)),
+				transition(s1, s2, accept('b', S2)),
+				transition(s2, s3, accept('b', S3)),
 				transition(s3, wordTooLong, inCase(i -> !i.getValue().isEmpty(), i -> data(WordTooLong)))
 			)
 			.build();
@@ -124,15 +124,15 @@ class RegularLanguageTest {
 		return nonTerminal::equals;
 	}
 	
-	private Behavior<NonTerminal, String> accept(String terminal, NonTerminal targetState) {
+	private Behavior<NonTerminal, String> accept(char expectedTerminal, NonTerminal targetState) {
 		return inCase(i -> 
-		  isFirstLetterTheSame(terminal, i), 
+		  isFirstLetterTheSame(expectedTerminal, i), 
 		  	i -> data(targetState, tail(i.getValue())));
 	}
 
-	private boolean isFirstLetterTheSame(String expectedTerminal, Data<NonTerminal, String> i) {
+	private boolean isFirstLetterTheSame(char expectedTerminal, Data<NonTerminal, String> i) {
 		String inputValue = i.getValue();
-		return !inputValue.isEmpty() && firstLetter(expectedTerminal) == firstLetter(inputValue);
+		return !inputValue.isEmpty() && expectedTerminal == firstLetter(inputValue);
 	}
 
 	private char firstLetter(String s) {
