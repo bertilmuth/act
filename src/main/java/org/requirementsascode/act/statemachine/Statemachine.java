@@ -85,7 +85,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 		Behavior<S, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
 			statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
 			flowsBehavior
-
 		);
 
 		return behavior;
