@@ -46,7 +46,8 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
 
 	private Behavior<S, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0> behavior) {
 		return inCase(input -> fromState.matchesStateIn(input), behavior
-			.andThen(inCase(this::isNotInToState, this::throwsIllegalStateException, identity())).andThen(getToState()));
+			.andThen(inCase(this::isNotInToState, this::throwsIllegalStateException, identity()))
+				.andThen(getToState()));
 	}
 
 	private boolean isNotInToState(Data<S, V0> data) {

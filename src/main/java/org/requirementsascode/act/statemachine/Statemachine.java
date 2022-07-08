@@ -62,14 +62,13 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 	public State<S, V0> getDefaultState() {
 		return defaultState;
 	}
-	
+
 	public State<S, V0> getDefinedState() {
 		return definedState;
 	}
 
 	private State<S, V0> createDefinedState(List<State<S, V0>> states) {
-		return state(DEFINED_STATE, states.stream().map(State::getInvariant).reduce(s -> false, Predicate::or),
-			identity());
+		return state(DEFINED_STATE, states.stream().map(State::getInvariant).reduce(s -> false, Predicate::or), identity());
 	}
 
 	private State<S, V0> createDefaultState(State<S, V0> definedState) {
@@ -83,17 +82,15 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 		Behavior<S, V0> transitionsBehavior = transitionsBehavior(getTransitions());
 		Behavior<S, V0> flowsBehavior = flowsBehavior(getFlows(), getDefinedState(), getDefaultState());
 
-		Behavior<S, V0> behavior = 
-			unitedBehavior(
-				new FirstOneWhoActsWins<>(), 
-				flowsBehavior,
-				statesBehaviorOrIdentity.andThen(
-					transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity())))
-			);
+		Behavior<S, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
+			statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
+			flowsBehavior
+
+		);
 
 		return behavior;
 	}
-	
+
 	private boolean isOutputPresent(Data<S, V0> data) {
 		return data.getValue() != null;
 	}
