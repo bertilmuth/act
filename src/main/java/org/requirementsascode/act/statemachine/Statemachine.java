@@ -87,14 +87,14 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 			unitedBehavior(
 				new FirstOneWhoActsWins<>(), 
 				flowsBehavior,
-				statesBehaviorOrIdentity.andThen(transitionsBehavior)
-			)
-			.andThen(inCase(this::isInDefinedStateAndOutputIsPresent, this, identity()));
+				statesBehaviorOrIdentity.andThen(
+					transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity())))
+			);
 
 		return behavior;
 	}
 	
-	private boolean isInDefinedStateAndOutputIsPresent(Data<S, V0> data) {
-		return data.getValue() != null && getDefinedState().matchesStateIn(data);
+	private boolean isOutputPresent(Data<S, V0> data) {
+		return data.getValue() != null;
 	}
 }
