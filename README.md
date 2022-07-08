@@ -9,14 +9,14 @@ If you are using Maven, include the following in your POM:
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
     <artifactId>act</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
   </dependency>
 ```
 
 If you are using Gradle, include the following in your build.gradle dependencies:
 
 ```
-implementation 'org.requirementsascode.act:act:0.1.2'
+implementation 'org.requirementsascode.act:act:0.1.3'
 ```
 
 # Example usage
@@ -50,6 +50,11 @@ You can use Act to create hierarchical state machines as well.
 That means: states can have a behavior that is a state machine itself.
 
 Have a look at [this class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/HierarchicalCart.java) for details on how to create one.
+
+# Processing regular languages
+Act can be used to decide whether a word is part of a regular language or not.
+
+[This test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/RegularLanguageTest.java) shows how to do it. 
 
 # Why another state machine library?
 If you notice that you use complicated if-else checks throughout your code, or your application's behavior
