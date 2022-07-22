@@ -39,7 +39,30 @@ Here's the state machine diagram with the states' invariants (yellow sticky note
 
 And here's how the state machine is presented in code:
 
-![The code of the statemachine of the shopping cart](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_code.png)
+``` java
+State<CartState, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.getItems().size() == 0);
+State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.getItems().size() > 0);
+
+Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
+  .states(emptyCartState,nonEmptyCartState)
+  .transitions(
+    transition(emptyCartState, nonEmptyCartState, 
+      when(AddItem.class, transit(CartState::addItem))),
+
+    transition(nonEmptyCartState, nonEmptyCartState, 
+      when(AddItem.class, transit(CartState::addItem))),
+
+    transition(nonEmptyCartState, nonEmptyCartState, 
+      when(RemoveItem.class, inCase(i -> i.getState().getItems().size() > 1, transit(CartState::removeItem)))),
+
+    transition(nonEmptyCartState, emptyCartState, 
+      when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(CartState::removeItem))))
+  )
+  .flows(
+    entryFlow(when(CreateCart.class, init(CartState::createCart)))
+  )
+  .build();
+```
 
 To learn more, see [this test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/StateMachineTest.java)
 and the [Cart class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/Cart.java).
