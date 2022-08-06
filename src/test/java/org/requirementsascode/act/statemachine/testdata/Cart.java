@@ -5,7 +5,7 @@ import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
 import static org.requirementsascode.act.statemachine.Init.init;
 import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.Transit.transit;
+import static org.requirementsascode.act.statemachine.Consume.consume;
 import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
 
@@ -49,16 +49,16 @@ public class Cart {
 			.states(emptyCartState,nonEmptyCartState)
 			.transitions(
 				transition(emptyCartState, nonEmptyCartState, 
-					when(AddItem.class, transit(CartState::addItem))),
+					when(AddItem.class, consume(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					when(AddItem.class, transit(CartState::addItem))),
+					when(AddItem.class, consume(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() > 1, transit(CartState::removeItem)))),
+					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() > 1, consume(CartState::removeItem)))),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(CartState::removeItem))))
+					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, consume(CartState::removeItem))))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))

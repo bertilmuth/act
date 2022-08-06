@@ -7,9 +7,9 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 
-public class Transit{
-	public static <S,V> Behavior<S,V> transit(BiFunction<S,V,S> transit){
-		requireNonNull(transit, "transit must be non-null!");
-		return i -> data(transit.apply(i.getState(), i.getValue()), i.getValue());
+public class Consume{
+	public static <S,V> Behavior<S,V> consume(BiFunction<S,V,S> consumer){
+		requireNonNull(consumer, "consumer must be non-null!");
+		return i -> data(consumer.apply(i.getState(), i.getValue()), i.getValue());
 	}
 }
