@@ -10,6 +10,14 @@ public interface Behavior<S, V> {
     return input -> nextBehavior.actOn(actOn(input));
 	}
 	
+	default Behavior<S, V> andHandleChange(HandleChange<S, V> changeHandler){
+		return input -> {
+			Data<S, V> output = actOn(input);
+			changeHandler.handleChange(input, output);
+			return output;
+		};
+	}
+	
 	static <S,V> Behavior<S, V> identity() {
     return d -> d;
   }

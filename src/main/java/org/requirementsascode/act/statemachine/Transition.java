@@ -1,29 +1,34 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.HandleChange;
 
 public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0> transitionBehavior;
 
-	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0> behavior) {
+	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0> behavior, HandleChange<S,V0> handleChange) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
 		requireNonNull(behavior, "behavior must be non-null");
 
-		this.transitionBehavior = createTransitionBehavior(fromState, behavior);
+		this.transitionBehavior = createTransitionBehavior(fromState, behavior, handleChange);
 	}
 
 	public static <S, V extends V0, V0> Transition<S, V, V0> transition(State<S, V0> fromState, State<S, V0> toState,
 		Behavior<S, V0> behavior) {
-		return new Transition<>(fromState, toState, behavior);
+		return transition(fromState, toState, behavior, (before, after) -> {});
 	}
+	
+	public static <S, V extends V0, V0> Transition<S, V, V0> transition(State<S, V0> fromState, State<S, V0> toState,
+			Behavior<S, V0> behavior, HandleChange<S, V0> handleChange) {
+			return new Transition<>(fromState, toState, behavior, handleChange);
+		}
 
 	@Override
 	public Data<S, V0> actOn(Data<S, V0> input) {
@@ -44,18 +49,17 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
 		return "Transition [fromState=" + fromState + ", toState=" + toState + "]";
 	}
 
-	private Behavior<S, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0> behavior) {
+	private Behavior<S, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0> behavior, HandleChange<S, V0> handleChange) {
 		return inCase(input -> fromState.matchesStateIn(input), behavior
-			.andThen(inCase(this::isNotInToState, this::throwsIllegalStateException, identity()))
-				.andThen(getToState()));
+			.andHandleChange(this::errorIfNotInToState)
+			.andHandleChange(handleChange)
+			.andThen(getToState()));
 	}
-
-	private boolean isNotInToState(Data<S, V0> data) {
-		return data.getValue() != null && !getToState().matchesStateIn(data);
-	}
-
-	private Data<S, V0> throwsIllegalStateException(Data<S, V0> output) {
-		throw new IllegalStateException(
-			"Tried transition from " + fromState + " to " + toState + ", but invariant was false -> output: " + output);
+	
+	private void errorIfNotInToState(Data<S, V0> before, Data<S, V0> after) {
+		if(after.getValue() != null && !getToState().matchesStateIn(after)){
+			throw new IllegalStateException(
+					"Tried transition from " + fromState + " to " + toState + ", but invariant was false!\nbefore: " + before + "after: " + after);
+		}
 	}
 }
