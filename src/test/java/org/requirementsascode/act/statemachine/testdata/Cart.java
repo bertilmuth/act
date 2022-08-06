@@ -62,10 +62,10 @@ public class Cart {
 						when(ListItems.class, supply(CartState::listItems), this::validateListItems)),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supply(CartState::removeItem), this::validateRemoval)),
+					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supply(CartState::removeItem), this::validateRemoveItem)),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supply(CartState::removeItem), this::validateRemoval))
+					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supply(CartState::removeItem), this::validateRemoveItem))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))
@@ -75,7 +75,7 @@ public class Cart {
 		return statemachine;
 	}
 	
-	private void validateRemoval(Data<CartState, RemoveItem> before, Data<CartState, RemoveItem> after) {
+	private void validateRemoveItem(Data<CartState, RemoveItem> before, Data<CartState, RemoveItem> after) {
 		if(!before.value().equals(after.value())) {
 			throw new IllegalStateException("Item " + before.value() +" could not be removed!");
 		}

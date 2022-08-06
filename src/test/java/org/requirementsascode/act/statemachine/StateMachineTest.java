@@ -3,18 +3,13 @@ package org.requirementsascode.act.statemachine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.testdata.Cart;
-import org.requirementsascode.act.statemachine.testdata.CartState;
 import org.requirementsascode.act.statemachine.testdata.CreateCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.ListItems;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
-import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
 class StateMachineTest {
 	private Cart cart;

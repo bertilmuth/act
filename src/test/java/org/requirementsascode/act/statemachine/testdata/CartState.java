@@ -43,7 +43,7 @@ public class CartState {
 		return data(cartState(items), removedItem);
 	}
 	
-	Data<CartState,ListItems> listItems(ListItems listItems) {		
+	Data<CartState,ListItems> listItems() {		
 		Data<CartState, ListItems> data = data(cartState(items), new ListItems(items()));
 		return data;
 	}
