@@ -19,7 +19,7 @@ public class ExitFlow<S, V extends V0, V0> implements Flow<S, V0, V0>{
 	}
 
 	@Override
-	public Transition<S, V0, V0> toTransition(State<S, V0> definedState, State<S, V0> defaultState) {
+	public Transition<S, V0, V0> convertToTransition(State<S, V0> definedState, State<S, V0> defaultState) {
 		return transition(fromState, defaultState, exitBehavior);
 	}
 }

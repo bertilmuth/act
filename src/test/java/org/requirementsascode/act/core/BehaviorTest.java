@@ -110,7 +110,7 @@ class BehaviorTest {
 
 	@Test
 	void doesntActOnFalseTrigger() {
-		assertNull(conditionalB1().actOn(FALSE_INPUT_B1).getValue());
+		assertNull(conditionalB1().actOn(FALSE_INPUT_B1).value());
 	}
 	
 	@Test
@@ -121,7 +121,7 @@ class BehaviorTest {
 			);
 
 		Data<State, ConditionalTrigger_B1> output = unitedBehavior.actOn(TRUE_INPUT_B1);
-		assertNull(output.getValue());
+		assertNull(output.value());
 	}
 
 	@Test
@@ -140,7 +140,7 @@ class BehaviorTest {
 	}
 
 	private Behavior<State, ConditionalTrigger_B1> conditionalB1() {
-		return inCase(input -> input.getValue().isTriggering(), input -> CONDITIONAL_OUTPUT_B1);
+		return inCase(input -> input.value().isTriggering(), input -> CONDITIONAL_OUTPUT_B1);
 	}
 
 	private Behavior<State, Trigger_B2> b2() {

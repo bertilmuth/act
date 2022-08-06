@@ -6,14 +6,19 @@ import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.HandleChange;
 
 public class When {
 	public static <S, V extends V0, V0> Behavior<S, V0> when(Class<V> expectedTriggerType, Behavior<S, V> behavior) {
-		return inCase(typeMatches(expectedTriggerType), i -> behaviorActOn(behavior, i));
+		return when(expectedTriggerType, behavior, (b,a) -> {});
+	}
+	
+	public static <S, V extends V0, V0> Behavior<S, V0> when(Class<V> expectedTriggerType, Behavior<S, V> behavior, HandleChange<S,V> changeHandler) {
+		return inCase(typeMatches(expectedTriggerType), i -> behaviorActOn(behavior.andHandleChange(changeHandler), i));
 	}
 
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(Class<V> expectedTriggerType) {
-		Predicate<Data<S, V0>> predicate = i -> i.getValue() != null && hasExpectedType(triggerTypeOf(i), expectedTriggerType);
+		Predicate<Data<S, V0>> predicate = i -> i.value() != null && hasExpectedType(triggerTypeOf(i), expectedTriggerType);
 		return predicate;
 	}
 
@@ -28,6 +33,6 @@ public class When {
 	}
 
 	private static Class<? extends Object> triggerTypeOf(Data<?, ?> i) {
-		return i.getValue().getClass();
+		return i.value().getClass();
 	}
 }

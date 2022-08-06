@@ -30,11 +30,11 @@ public class Cart {
 		Data<CartState, Trigger> input = data(state, trigger);
 		
 		Data<CartState, Trigger> output = statemachine.actOn(input);
-		setState(output.getState());
+		setState(output.state());
 	}
 	
 	public List<String> items(){
-		return state.getItems();
+		return state.items();
 	}
 	
 	private void setState(CartState cartState) {
@@ -42,8 +42,8 @@ public class Cart {
 	}
 	
 	private Statemachine<CartState, Trigger> createStatemachine() {
-		State<CartState, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.getItems().size() == 0);
-		State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.getItems().size() > 0);
+		State<CartState, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.items().size() == 0);
+		State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.items().size() > 0);
 
 		Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
 			.states(emptyCartState,nonEmptyCartState)
@@ -55,10 +55,10 @@ public class Cart {
 					when(AddItem.class, consume(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.getState().getItems().size() > 1, consume(CartState::removeItem))),
+					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, consume(CartState::removeItem))),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.getState().getItems().size() == 1, consume(CartState::removeItem)))
+					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, consume(CartState::removeItem)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))

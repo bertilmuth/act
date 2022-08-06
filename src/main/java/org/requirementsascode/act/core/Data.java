@@ -19,11 +19,11 @@ public class Data<S,V> {
 		return new Data<S, V>(state, value);
 	}
 
-	public S getState() {
+	public S state() {
 		return state;
 	}
 
-	public V getValue() {
+	public V value() {
 		return value;
 	}
 

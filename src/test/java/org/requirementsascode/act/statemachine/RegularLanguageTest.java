@@ -38,35 +38,35 @@ class RegularLanguageTest {
 	void acceptsThreeLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> input = data(S0, "bbb");
 		Data<NonTerminal, String> output = statemachine.actOn(input);
-		assertTrue(output.getState().isAccepting());
+		assertTrue(output.state().isAccepting());
 	}
 	
 	@Test
 	void acceptsAnotherThreeLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> input = data(S0, "aab");
 		Data<NonTerminal, String> output = statemachine.actOn(input);
-		assertTrue(output.getState().isAccepting());
+		assertTrue(output.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsThreeLetterStringWithLastOneBeingB_ifFirstLetterIsNeitherANorB() {
 		Data<NonTerminal, String> input = data(S0, "cab");
 		Data<NonTerminal, String> output = statemachine.actOn(input);
-		assertFalse(output.getState().isAccepting());
+		assertFalse(output.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsFourLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> input = data(S0, "bbbb");
 		Data<NonTerminal, String> output = statemachine.actOn(input);
-		assertFalse(output.getState().isAccepting());
+		assertFalse(output.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsEmptyString() {
 		Data<NonTerminal, String> input = data(S0, "");
 		Data<NonTerminal, String> output = statemachine.actOn(input);
-		assertFalse(output.getState().isAccepting());
+		assertFalse(output.state().isAccepting());
 	}
 	
 	////////////////////////////////////////
@@ -88,7 +88,7 @@ class RegularLanguageTest {
 				transition(s1, s2, accept('a', S2)),
 				transition(s1, s2, accept('b', S2)),
 				transition(s2, s3, accept('b', S3)),
-				transition(s3, wordTooLong, inCase(i -> !i.getValue().isEmpty(), i -> data(WordTooLong)))
+				transition(s3, wordTooLong, inCase(i -> !i.value().isEmpty(), i -> data(WordTooLong)))
 			)
 			.build();
 		
@@ -127,11 +127,11 @@ class RegularLanguageTest {
 	private Behavior<NonTerminal, String> accept(char expectedTerminal, NonTerminal targetState) {
 		return inCase(i -> 
 		  isFirstLetterTheSame(expectedTerminal, i), 
-		  	i -> data(targetState, tail(i.getValue())));
+		  	i -> data(targetState, tail(i.value())));
 	}
 
 	private boolean isFirstLetterTheSame(char expectedTerminal, Data<NonTerminal, String> i) {
-		String inputValue = i.getValue();
+		String inputValue = i.value();
 		return !inputValue.isEmpty() && expectedTerminal == firstLetter(inputValue);
 	}
 

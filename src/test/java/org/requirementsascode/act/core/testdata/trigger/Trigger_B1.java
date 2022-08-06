@@ -7,7 +7,7 @@ public class Trigger_B1 implements Trigger {
 		this.number = number;
 	}
 
-	public Number getNumber() {
+	public Number number() {
 		return number;
 	}
 }

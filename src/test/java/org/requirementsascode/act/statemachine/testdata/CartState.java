@@ -14,7 +14,7 @@ public class CartState {
 		this.items = new ArrayList<>(items);
 	}
 	
-	public List<String> getItems() {
+	public List<String> items() {
 		return Collections.unmodifiableList(items);
 	}
 	
@@ -23,17 +23,17 @@ public class CartState {
 	}
 	
 	static CartState createCart(CreateCart createCart) {
-		return cartState(createCart.getItems());
+		return cartState(createCart.items());
 	}
 	
 	CartState addItem(AddItem addItem) {		
-		ArrayList<String> items = new ArrayList<>(getItems());
+		ArrayList<String> items = new ArrayList<>(items());
 		items.add(addItem.item());
 		return cartState(items);
 	}
 
 	CartState removeItem(RemoveItem removeItem) {		
-		ArrayList<String> items = new ArrayList<>(getItems());
+		ArrayList<String> items = new ArrayList<>(items());
 		items.remove(removeItem.item());
 		return cartState(items);
 	}

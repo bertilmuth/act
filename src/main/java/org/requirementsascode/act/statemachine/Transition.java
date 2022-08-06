@@ -5,32 +5,24 @@ import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.HandleChange;
 
-public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
+public class Transition<S, V extends V0, V0> implements Behavior<S, V0> {
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0> transitionBehavior;
-	private final HandleChange<S, V0> handleChange;
 
-	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0> behavior, HandleChange<S,V0> handleChange) {
+	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0> behavior) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
-		this.handleChange = requireNonNull(handleChange, "handleChange must be non-null");
 		requireNonNull(behavior, "behavior must be non-null");
 
-		this.transitionBehavior = createTransitionBehavior(fromState, behavior, handleChange);
+		this.transitionBehavior = createTransitionBehavior(fromState, behavior);
 	}
 
 	public static <S, V extends V0, V0> Transition<S, V, V0> transition(State<S, V0> fromState, State<S, V0> toState,
-		Behavior<S, V0> behavior) {
-		return transition(fromState, toState, behavior, (before, after) -> {});
+			Behavior<S, V0> behavior) {
+		return new Transition<>(fromState, toState, behavior);
 	}
-	
-	public static <S, V extends V0, V0> Transition<S, V, V0> transition(State<S, V0> fromState, State<S, V0> toState,
-			Behavior<S, V0> behavior, HandleChange<S, V0> handleChange) {
-			return new Transition<>(fromState, toState, behavior, handleChange);
-		}
 
 	@Override
 	public Data<S, V0> actOn(Data<S, V0> input) {
@@ -38,11 +30,11 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
 		return result;
 	}
 
-	public State<S, V0> getFromState() {
+	public State<S, V0> fromState() {
 		return fromState;
 	}
 
-	public State<S, V0> getToState() {
+	public State<S, V0> toState() {
 		return toState;
 	}
 
@@ -51,27 +43,19 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
 		return "Transition [fromState=" + fromState + ", toState=" + toState + "]";
 	}
 
-	private Behavior<S, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0> behavior, HandleChange<S, V0> handleChange) {
-		return inCase(input -> fromState.matchesStateIn(input), behavior
-			.andHandleChange(this::errorIfNotInToStateIfTransitionFired)
-			.andHandleChange(this::handleChangeIfTransitionFired)
-			.andThen(getToState()));
+	private Behavior<S, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0> behavior) {
+		return inCase(input -> fromState.matchesStateIn(input),
+				behavior.andHandleChange(this::errorIfNotInToStateIfTransitionFired).andThen(toState()));
 	}
-	
+
 	private void errorIfNotInToStateIfTransitionFired(Data<S, V0> before, Data<S, V0> after) {
-		if(hasTransitionFired(after) && !getToState().matchesStateIn(after)){
-			throw new IllegalStateException(
-					"Tried transition from " + fromState + " to " + toState + ", but invariant was false!\nbefore: " + before + "\nafter: " + after);
+		if (hasTransitionFired(after) && !toState().matchesStateIn(after)) {
+			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
+					+ ", but invariant was false!\nbefore: " + before + "\nafter: " + after);
 		}
 	}
-	
-	private void handleChangeIfTransitionFired(Data<S, V0> before, Data<S, V0> after) {
-		if(hasTransitionFired(after)){
-			handleChange.handleChange(before, after);
-		}
-	}
-	
+
 	private boolean hasTransitionFired(Data<S, V0> after) {
-		return after.getValue() != null;
+		return after.value() != null;
 	}
 }

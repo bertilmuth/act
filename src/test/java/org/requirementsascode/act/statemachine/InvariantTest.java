@@ -33,7 +33,7 @@ class InvariantTest {
 				).build();
 		
 		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
-		assertEquals(STATE2, statemachine.actOn(anyEventInState1).getState());
+		assertEquals(STATE2, statemachine.actOn(anyEventInState1).state());
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ class InvariantTest {
 				).build();
 		
 		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
-		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).getState());
+		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).state());
 	}
 	
 	@Test
@@ -61,6 +61,6 @@ class InvariantTest {
 				.build();
 		
 		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
-		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).getState());
+		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).state());
 	}
 }

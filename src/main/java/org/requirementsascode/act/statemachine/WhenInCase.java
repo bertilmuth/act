@@ -6,15 +6,20 @@ import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.HandleChange;
 
 public class WhenInCase {
-	@SuppressWarnings("unchecked")
 	public static <S, V extends V0, V0> Behavior<S, V0> whenInCase(Class<V> expectedTriggerType, Predicate<Data<S,V>> predicate, Behavior<S, V> behavior) {
+		return whenInCase(expectedTriggerType, predicate, behavior, (b,a) -> {});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <S, V extends V0, V0> Behavior<S, V0> whenInCase(Class<V> expectedTriggerType, Predicate<Data<S,V>> predicate, Behavior<S, V> behavior, HandleChange<S,V> changeHandler) {
 		return (Behavior<S, V0>) inCase(typeMatches(expectedTriggerType), inCase(predicate, i -> behaviorActOn(behavior, i)));
 	}
 
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(Class<V> expectedTriggerType) {
-		Predicate<Data<S, V0>> predicate = i -> i.getValue() != null && hasExpectedType(triggerTypeOf(i), expectedTriggerType);
+		Predicate<Data<S, V0>> predicate = i -> i.value() != null && hasExpectedType(triggerTypeOf(i), expectedTriggerType);
 		return predicate;
 	}
 
@@ -29,6 +34,6 @@ public class WhenInCase {
 	}
 
 	private static Class<? extends Object> triggerTypeOf(Data<?, ?> i) {
-		return i.getValue().getClass();
+		return i.value().getClass();
 	}
 }

@@ -21,7 +21,7 @@ public class HierarchicalCartState {
 		return items.isEmpty();
 	}
 	
-	public List<String> getItems() {
+	public List<String> items() {
 		return Collections.unmodifiableList(items);
 	}
 	
@@ -34,27 +34,27 @@ public class HierarchicalCartState {
 	}
 	
 	static HierarchicalCartState createCart(CreateHierarchicalCart createCart) {
-		return cartState(createCart.getItems(), createCart.isSubStateEntered());
+		return cartState(createCart.items(), createCart.isSubStateEntered());
 	}
 	
 	HierarchicalCartState addItem(AddItem addItem) {		
-		ArrayList<String> items = new ArrayList<>(getItems());
+		ArrayList<String> items = new ArrayList<>(items());
 		items.add(addItem.item());
 		return cartState(items, subStateEntered);
 	}
 
 	HierarchicalCartState removeItem(RemoveItem removeItem) {		
-		ArrayList<String> items = new ArrayList<>(getItems());
+		ArrayList<String> items = new ArrayList<>(items());
 		items.remove(removeItem.item());
 		return cartState(items, subStateEntered);
 	}
 	
 	HierarchicalCartState enterSubstate(Trigger trigger) {
-		return cartState(getItems(), true);
+		return cartState(items(), true);
 	}
 	
 	HierarchicalCartState exitSubstate(Trigger trigger) {
-		return cartState(getItems(), false);
+		return cartState(items(), false);
 	}
 
 	@Override

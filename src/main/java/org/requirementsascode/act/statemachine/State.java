@@ -37,11 +37,11 @@ public class State<S, V> implements Behavior<S, V> {
 		return result;
 	}
 
-	public String getName() {
+	public String name() {
 		return name;
 	}
 
-	public Predicate<S> getInvariant() {
+	public Predicate<S> invariant() {
 		return invariant;
 	}
 	
@@ -51,11 +51,11 @@ public class State<S, V> implements Behavior<S, V> {
 	}
 
 	public boolean matchesStateIn(Data<S, V> data) {
-		return getInvariant().test(data.getState());
+		return invariant().test(data.state());
 	}
 
 	private Data<S, V> throwsIllegalStateException(Data<S, V> output) {
-		throw new IllegalStateException("After behavior of state " + getName() + " invariant is false! -> output: " + output);
+		throw new IllegalStateException("After behavior of state " + name() + " invariant is false! -> output: " + output);
 	}
 
 	@Override

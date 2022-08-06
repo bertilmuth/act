@@ -14,7 +14,7 @@ public class CreateHierarchicalCart implements Trigger {
 		this.items = Arrays.asList(items);
 	}
 
-	public List<String> getItems() {
+	public List<String> items() {
 		return items;
 	}
 

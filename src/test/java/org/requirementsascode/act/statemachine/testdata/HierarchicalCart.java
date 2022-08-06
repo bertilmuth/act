@@ -33,7 +33,7 @@ public class HierarchicalCart {
 		Data<HierarchicalCartState, Trigger> input = data(state, trigger);
 		
 		Data<HierarchicalCartState, Trigger> output = statemachine.actOn(input);
-		setState(output.getState());
+		setState(output.state());
 	}
 	
 	public boolean subStateEntered(){
@@ -41,7 +41,7 @@ public class HierarchicalCart {
 	}
 	
 	public List<String> items(){
-		return state.getItems();
+		return state.items();
 	}
 	
 	private void setState(HierarchicalCartState cartState) {
@@ -58,7 +58,7 @@ public class HierarchicalCart {
 			.transitions(
 				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, consume(HierarchicalCartState::addItem))),
 				transition(emptyCartState, emptyCartState, when(RemoveItem.class, consume((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
-				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, consume(HierarchicalCartState::removeItem))))
+				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.state().items().size() == 1, consume(HierarchicalCartState::removeItem))))
 			)
 			.flows(
 				entryFlow(when(CreateHierarchicalCart.class, init(HierarchicalCartState::createCart)))
@@ -69,8 +69,8 @@ public class HierarchicalCart {
 	}
 
 	private State<HierarchicalCartState, Trigger> createNonEmptyCartStateWithSubstates() {
-		State<HierarchicalCartState, Trigger> nonFullCartSubState = state("Non-full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.getItems().size() == 1);
-		State<HierarchicalCartState, Trigger> fullCartSubState = state("Full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.getItems().size() >= 2);
+		State<HierarchicalCartState, Trigger> nonFullCartSubState = state("Non-full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.items().size() == 1);
+		State<HierarchicalCartState, Trigger> fullCartSubState = state("Full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.items().size() >= 2);
 
 		Statemachine<HierarchicalCartState, Trigger> nonEmptyCartStateMachine = Statemachine.builder()
 			.states(nonFullCartSubState, fullCartSubState)

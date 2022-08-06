@@ -25,17 +25,17 @@ public class EntryFlow<S, V extends V0, V0> implements Flow<S, V0, V0>{
 		return new EntryFlow<>(toState, entryBehavior);
 	}
 
-	public Optional<State<S, V0>> getToState() {
+	public Optional<State<S, V0>> toState() {
 		return Optional.ofNullable(toState);
 	}
 
-	public Behavior<S, V0> getEntryBehavior() {
+	public Behavior<S, V0> entryBehavior() {
 		return entryBehavior;
 	}
 
 	@Override
-	public Transition<S, V0, V0> toTransition(State<S, V0> definedState, State<S, V0> defaultState) {
-		State<S, V0> toStateOrAnyDefinedState = getToState() .orElse(definedState);
-		return transition(defaultState, toStateOrAnyDefinedState, getEntryBehavior());
+	public Transition<S, V0, V0> convertToTransition(State<S, V0> definedState, State<S, V0> defaultState) {
+		State<S, V0> toStateOrAnyDefinedState = toState().orElse(definedState);
+		return transition(defaultState, toStateOrAnyDefinedState, entryBehavior());
 	}
 }

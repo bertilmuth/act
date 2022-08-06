@@ -47,40 +47,40 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 		return statemachineBehavior.actOn(input);
 	}
 
-	public List<State<S, V0>> getStates() {
+	public List<State<S, V0>> states() {
 		return states;
 	}
 
-	public List<Transition<S, ? extends V0, V0>> getTransitions() {
+	public List<Transition<S, ? extends V0, V0>> transitions() {
 		return transitions;
 	}
 
-	public List<Flow<S, ? extends V0, V0>> getFlows() {
+	public List<Flow<S, ? extends V0, V0>> flows() {
 		return flows;
 	}
 
-	public State<S, V0> getDefaultState() {
+	public State<S, V0> defaultState() {
 		return defaultState;
 	}
 
-	public State<S, V0> getDefinedState() {
+	public State<S, V0> definedState() {
 		return definedState;
 	}
 
 	private State<S, V0> createDefinedState(List<State<S, V0>> states) {
-		return state(DEFINED_STATE, states.stream().map(State::getInvariant).reduce(s -> false, Predicate::or), identity());
+		return state(DEFINED_STATE, states.stream().map(State::invariant).reduce(s -> false, Predicate::or), identity());
 	}
 
 	private State<S, V0> createDefaultState(State<S, V0> definedState) {
-		return state(DEFAULT_STATE, definedState.getInvariant().negate(), identity());
+		return state(DEFAULT_STATE, definedState.invariant().negate(), identity());
 	}
 
 	private Behavior<S, V0> createStatemachineBehavior() {
 		validate(this);
 
-		Behavior<S, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(getStates());
-		Behavior<S, V0> transitionsBehavior = transitionsBehavior(getTransitions());
-		Behavior<S, V0> flowsBehavior = flowsBehavior(getFlows(), getDefinedState(), getDefaultState());
+		Behavior<S, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(states());
+		Behavior<S, V0> transitionsBehavior = transitionsBehavior(transitions());
+		Behavior<S, V0> flowsBehavior = flowsBehavior(flows(), definedState(), defaultState());
 
 		Behavior<S, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
 			statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
@@ -91,6 +91,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 	}
 
 	private boolean isOutputPresent(Data<S, V0> data) {
-		return data.getValue() != null;
+		return data.value() != null;
 	}
 }

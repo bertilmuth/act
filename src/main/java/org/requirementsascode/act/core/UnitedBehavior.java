@@ -57,7 +57,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V> {
 		return mergedOutput;
 	}
 
-	public List<Behavior<S, ? extends V>> getBehaviors() {
+	public List<Behavior<S, ? extends V>> behaviors() {
 		return Collections.unmodifiableList(behaviors);
 	}
 }
