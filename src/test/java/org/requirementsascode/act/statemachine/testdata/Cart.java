@@ -1,11 +1,11 @@
 package org.requirementsascode.act.statemachine.testdata;
 
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.Consume.consume;
+import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
 import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
 import static org.requirementsascode.act.statemachine.Init.init;
 import static org.requirementsascode.act.statemachine.State.*;
-import static org.requirementsascode.act.statemachine.Supply.supply;
+import static org.requirementsascode.act.statemachine.SupplyWith.supplyWith;
 import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
 import static org.requirementsascode.act.statemachine.WhenInCase.whenInCase;
@@ -53,18 +53,18 @@ public class Cart {
 			.states(emptyCartState,nonEmptyCartState)
 			.transitions(
 				transition(anyState(), nonEmptyCartState, 
-					when(AddItem.class, consume(CartState::addItem))),
+					when(AddItem.class, consumeWith(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supply(CartState::removeItem)
+					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem)
 						.andHandleChange(this::validateRemoveItem))),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supply(CartState::removeItem)
+					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem)
 						.andHandleChange(this::validateRemoveItem))),
 				
 				transition(anyState(), anyState(), 
-						when(ListItems.class, supply(CartState::listItems)
+						when(ListItems.class, supplyWith(CartState::listItems)
 							.andHandleChange(this::validateListItems)))
 			)
 			.flows(

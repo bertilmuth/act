@@ -6,7 +6,7 @@ import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
 import static org.requirementsascode.act.statemachine.ExitFlow.exitFlow;
 import static org.requirementsascode.act.statemachine.Init.init;
 import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.Consume.consume;
+import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
 import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
 
@@ -56,9 +56,9 @@ public class HierarchicalCart {
 		Statemachine<HierarchicalCartState, Trigger> statemachine = Statemachine.builder()
 			.states(emptyCartState,nonEmptyCartState)
 			.transitions(
-				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, consume(HierarchicalCartState::addItem))),
-				transition(emptyCartState, emptyCartState, when(RemoveItem.class, consume((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
-				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.state().items().size() == 1, consume(HierarchicalCartState::removeItem))))
+				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, consumeWith(HierarchicalCartState::addItem))),
+				transition(emptyCartState, emptyCartState, when(RemoveItem.class, consumeWith((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
+				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.state().items().size() == 1, consumeWith(HierarchicalCartState::removeItem))))
 			)
 			.flows(
 				entryFlow(when(CreateHierarchicalCart.class, init(HierarchicalCartState::createCart)))
@@ -75,12 +75,12 @@ public class HierarchicalCart {
 		Statemachine<HierarchicalCartState, Trigger> nonEmptyCartStateMachine = Statemachine.builder()
 			.states(nonFullCartSubState, fullCartSubState)
 			.transitions(
-				transition(nonFullCartSubState, fullCartSubState, when(AddItem.class, consume(HierarchicalCartState::addItem))),
-				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, consume(HierarchicalCartState::removeItem)))
+				transition(nonFullCartSubState, fullCartSubState, when(AddItem.class, consumeWith(HierarchicalCartState::addItem))),
+				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCartState::removeItem)))
 			)
 			.flows(
-				entryFlow(nonFullCartSubState, consume(HierarchicalCartState::enterSubstate)),
-				exitFlow(nonFullCartSubState, when(RemoveItem.class, consume(HierarchicalCartState::exitSubstate)))
+				entryFlow(nonFullCartSubState, consumeWith(HierarchicalCartState::enterSubstate)),
+				exitFlow(nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCartState::exitSubstate)))
 			)
 			.build();
 		
