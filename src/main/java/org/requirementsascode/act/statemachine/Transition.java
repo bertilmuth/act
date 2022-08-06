@@ -11,10 +11,12 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0> transitionBehavior;
+	private final HandleChange<S, V0> handleChange;
 
 	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0> behavior, HandleChange<S,V0> handleChange) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
+		this.handleChange = requireNonNull(handleChange, "handleChange must be non-null");
 		requireNonNull(behavior, "behavior must be non-null");
 
 		this.transitionBehavior = createTransitionBehavior(fromState, behavior, handleChange);
@@ -51,15 +53,25 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0>{
 
 	private Behavior<S, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0> behavior, HandleChange<S, V0> handleChange) {
 		return inCase(input -> fromState.matchesStateIn(input), behavior
-			.andHandleChange(this::errorIfNotInToState)
-			.andHandleChange(handleChange)
+			.andHandleChange(this::errorIfNotInToStateIfTransitionFired)
+			.andHandleChange(this::handleChangeIfTransitionFired)
 			.andThen(getToState()));
 	}
 	
-	private void errorIfNotInToState(Data<S, V0> before, Data<S, V0> after) {
-		if(after.getValue() != null && !getToState().matchesStateIn(after)){
+	private void errorIfNotInToStateIfTransitionFired(Data<S, V0> before, Data<S, V0> after) {
+		if(hasTransitionFired(after) && !getToState().matchesStateIn(after)){
 			throw new IllegalStateException(
 					"Tried transition from " + fromState + " to " + toState + ", but invariant was false!\nbefore: " + before + "after: " + after);
 		}
+	}
+	
+	private void handleChangeIfTransitionFired(Data<S, V0> before, Data<S, V0> after) {
+		if(hasTransitionFired(after)){
+			handleChange.handleChange(before, after);
+		}
+	}
+	
+	private boolean hasTransitionFired(Data<S, V0> after) {
+		return after.getValue() != null;
 	}
 }
