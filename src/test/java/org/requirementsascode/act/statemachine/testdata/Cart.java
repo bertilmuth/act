@@ -59,13 +59,16 @@ public class Cart {
 					when(AddItem.class, consume(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-						when(ListItems.class, supply(CartState::listItems), this::validateListItems)),
+						when(ListItems.class, supply(CartState::listItems)
+							.andHandleChange(this::validateListItems))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supply(CartState::removeItem), this::validateRemoveItem)),
+					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supply(CartState::removeItem)
+						.andHandleChange(this::validateRemoveItem))),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supply(CartState::removeItem), this::validateRemoveItem))
+					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supply(CartState::removeItem)
+						.andHandleChange(this::validateRemoveItem)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))
