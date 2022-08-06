@@ -36,7 +36,7 @@ public class StatemachineValidator {
 
 		List<State<S, ?>> statesNotInList = transitions.stream()
 			.map(transitionStateAccess)
-			.filter(s -> !definedState.equals(s) && !defaultState.equals(s) && !expectedStates.contains(s))
+			.filter(s -> !definedState.equals(s) && !defaultState.equals(s) && !State.anyState().equals(s) && !expectedStates.contains(s))
 			.collect(Collectors.toList());
 
 		if (!statesNotInList.isEmpty()) {

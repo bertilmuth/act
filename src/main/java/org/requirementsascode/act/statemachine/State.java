@@ -1,16 +1,17 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.Behavior.identity;
+import static org.requirementsascode.act.core.InCase.inCase;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.DoNothing;
 
-public class State<S, V> implements Behavior<S, V> {
+public class State<S, V> implements Behavior<S, V> {	
 	private final String name;
 	private final Predicate<S> invariant;
 	private Behavior<S, V> behavior;
@@ -29,6 +30,10 @@ public class State<S, V> implements Behavior<S, V> {
 
 	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V> stateBehavior) {
 		return new State<>(stateName, stateInvariant, stateBehavior);
+	}
+	
+	public static<S, V> State<S, V> anyState() {
+		return state("Any State", s -> true);
 	}
 
 	@Override
@@ -61,5 +66,22 @@ public class State<S, V> implements Behavior<S, V> {
 	@Override
 	public String toString() {
 		return "State [name=" + name + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		State<?,?> other = (State<?,?>) obj;
+		return Objects.equals(name, other.name);
 	}
 }
