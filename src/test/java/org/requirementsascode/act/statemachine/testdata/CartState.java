@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.requirementsascode.act.core.Data;
+import static org.requirementsascode.act.core.Data.*;
+
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
@@ -32,10 +35,11 @@ public class CartState {
 		return cartState(items);
 	}
 
-	CartState removeItem(RemoveItem removeItem) {		
+	Data<CartState, RemoveItem> removeItem(RemoveItem removeItem) {		
 		ArrayList<String> items = new ArrayList<>(items());
-		items.remove(removeItem.item());
-		return cartState(items);
+		boolean actuallyRemoved = items.remove(removeItem.item());
+		RemoveItem removedItem = actuallyRemoved? removeItem : null;
+		return data(cartState(items), removedItem);
 	}
 
 	@Override

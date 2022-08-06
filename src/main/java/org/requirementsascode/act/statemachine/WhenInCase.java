@@ -15,7 +15,7 @@ public class WhenInCase {
 	
 	@SuppressWarnings("unchecked")
 	public static <S, V extends V0, V0> Behavior<S, V0> whenInCase(Class<V> expectedTriggerType, Predicate<Data<S,V>> predicate, Behavior<S, V> behavior, HandleChange<S,V> changeHandler) {
-		return (Behavior<S, V0>) inCase(typeMatches(expectedTriggerType), inCase(predicate, i -> behaviorActOn(behavior, i)));
+		return (Behavior<S, V0>) inCase(typeMatches(expectedTriggerType), inCase(predicate, i -> behaviorActOn(behavior.andHandleChange(changeHandler), i)));
 	}
 
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(Class<V> expectedTriggerType) {
