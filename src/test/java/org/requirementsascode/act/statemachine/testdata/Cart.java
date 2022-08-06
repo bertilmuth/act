@@ -1,13 +1,13 @@
 package org.requirementsascode.act.statemachine.testdata;
 
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
 import static org.requirementsascode.act.statemachine.Init.init;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.Consume.consume;
 import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
+import static org.requirementsascode.act.statemachine.WhenInCase.whenInCase;
 
 import java.util.List;
 
@@ -55,10 +55,10 @@ public class Cart {
 					when(AddItem.class, consume(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() > 1, consume(CartState::removeItem)))),
+					whenInCase(RemoveItem.class, i -> i.getState().getItems().size() > 1, consume(CartState::removeItem))),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, consume(CartState::removeItem))))
+					whenInCase(RemoveItem.class, i -> i.getState().getItems().size() == 1, consume(CartState::removeItem)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))
