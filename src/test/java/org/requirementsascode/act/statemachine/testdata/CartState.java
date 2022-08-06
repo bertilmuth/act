@@ -1,13 +1,14 @@
 package org.requirementsascode.act.statemachine.testdata;
 
+import static org.requirementsascode.act.core.Data.data;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.requirementsascode.act.core.Data;
-import static org.requirementsascode.act.core.Data.*;
-
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
+import org.requirementsascode.act.statemachine.testdata.trigger.ListItems;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
 public class CartState {
@@ -40,6 +41,11 @@ public class CartState {
 		boolean actuallyRemoved = items.remove(removeItem.item());
 		RemoveItem removedItem = actuallyRemoved? removeItem : null;
 		return data(cartState(items), removedItem);
+	}
+	
+	Data<CartState,ListItems> listItems(ListItems listItems) {		
+		Data<CartState, ListItems> data = data(cartState(items), new ListItems(items()));
+		return data;
 	}
 
 	@Override

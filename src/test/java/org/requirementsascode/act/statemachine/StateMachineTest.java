@@ -3,12 +3,18 @@ package org.requirementsascode.act.statemachine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.testdata.Cart;
+import org.requirementsascode.act.statemachine.testdata.CartState;
 import org.requirementsascode.act.statemachine.testdata.CreateCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
+import org.requirementsascode.act.statemachine.testdata.trigger.ListItems;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
+import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
 class StateMachineTest {
 	private Cart cart;
@@ -39,6 +45,16 @@ class StateMachineTest {
 		assertEquals(2, cart.items().size());
 		assertEquals(item1, cart.items().get(0));
 		assertEquals(item2, cart.items().get(1));
+	}
+	
+	@Test
+	void listsItems() {
+		String item1 = "Item1";
+		String item2 = "Item2";
+		
+		cart.actOn(new AddItem(item1));
+		cart.actOn(new AddItem(item2));
+		cart.actOn(new ListItems());
 	}
 	
 	@Test
