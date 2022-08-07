@@ -20,11 +20,11 @@ import org.requirementsascode.act.statemachine.testdata.trigger.ListItems;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
-public class Cart {	
+public class CartWithValidation {	
 	private CartState state;
 	Statemachine<CartState, Trigger> statemachine;
 
-	public Cart() {
+	public CartWithValidation() {
 		this.statemachine = createStatemachine();
 	}
 	
@@ -56,12 +56,16 @@ public class Cart {
 					when(AddItem.class, consumeWith(CartState::addItem))),
 				
 				transition(nonEmptyCartState, nonEmptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem))),
+					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem)
+						.andHandleChange(this::validateRemoveItem))),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem))),
+					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem)
+						.andHandleChange(this::validateRemoveItem))),
 				
-				transition(anyState(), anyState(), when(ListItems.class, supplyWith(CartState::listItems)))
+				transition(anyState(), anyState(), 
+					when(ListItems.class, supplyWith(CartState::listItems)
+						.andHandleChange(this::validateListItems)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))
@@ -69,6 +73,18 @@ public class Cart {
 			.build();
 		
 		return statemachine;
+	}
+	
+	private void validateRemoveItem(Data<CartState, RemoveItem> before, Data<CartState, RemoveItem> after) {
+		if(!before.value().equals(after.value())) {
+			throw new IllegalStateException("Item " + before.value() +" could not be removed!");
+		}
+	}
+	
+	private void validateListItems(Data<CartState, ListItems> before, Data<CartState, ListItems> after) {
+		if(!after.value().items().equals(items())) {
+			throw new IllegalStateException("Items not correct!");
+		}
 	}
 }
 

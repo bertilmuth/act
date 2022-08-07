@@ -40,6 +40,9 @@ Here's the state machine diagram with the states' invariants (yellow sticky note
 And here's how the state machine is presented in code:
 
 ``` java
+State<CartState, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.items().size() == 0);
+State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.items().size() > 0);
+
 Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
 	.states(emptyCartState,nonEmptyCartState)
 	.transitions(
@@ -47,16 +50,12 @@ Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
 			when(AddItem.class, consumeWith(CartState::addItem))),
 		
 		transition(nonEmptyCartState, nonEmptyCartState, 
-			whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem)
-				.andHandleChange(this::validateRemoveItem))),
+			whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem))),
 		
 		transition(nonEmptyCartState, emptyCartState, 
-			whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem)
-				.andHandleChange(this::validateRemoveItem))),
+			whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem))),
 		
-		transition(anyState(), anyState(), 
-			when(ListItems.class, supplyWith(CartState::listItems)
-				.andHandleChange(this::validateListItems)))
+		transition(anyState(), anyState(), when(ListItems.class, supplyWith(CartState::listItems)))
 	)
 	.flows(
 		entryFlow(when(CreateCart.class, init(CartState::createCart)))
