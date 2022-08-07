@@ -55,7 +55,8 @@ Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
 		transition(nonEmptyCartState, emptyCartState, 
 			whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem))),
 		
-		transition(anyState(), anyState(), when(ListItems.class, supplyWith(CartState::listItems)))
+		transition(anyState(), anyState(), 
+			when(ListItems.class, supplyWith(CartState::listItems)))
 	)
 	.flows(
 		entryFlow(when(CreateCart.class, init(CartState::createCart)))
