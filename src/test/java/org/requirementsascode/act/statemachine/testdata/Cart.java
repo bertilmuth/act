@@ -4,7 +4,8 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
 import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
 import static org.requirementsascode.act.statemachine.Init.init;
-import static org.requirementsascode.act.statemachine.State.*;
+import static org.requirementsascode.act.statemachine.State.anyState;
+import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.SupplyWith.supplyWith;
 import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
@@ -16,7 +17,6 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
-import org.requirementsascode.act.statemachine.testdata.trigger.ListItems;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
@@ -59,10 +59,7 @@ public class Cart {
 					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem))),
 				
 				transition(nonEmptyCartState, emptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem))),
-				
-				transition(anyState(), anyState(), 
-					when(ListItems.class, supplyWith(CartState::listItems)))
+					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))
