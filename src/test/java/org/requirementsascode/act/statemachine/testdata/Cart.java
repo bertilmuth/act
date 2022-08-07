@@ -64,8 +64,8 @@ public class Cart {
 						.andHandleChange(this::validateRemoveItem))),
 				
 				transition(anyState(), anyState(), 
-						when(ListItems.class, supplyWith(CartState::listItems)
-							.andHandleChange(this::validateListItems)))
+					when(ListItems.class, supplyWith(CartState::listItems)
+						.andHandleChange(this::validateListItems)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(CartState::createCart)))

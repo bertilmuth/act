@@ -9,14 +9,14 @@ If you are using Maven, include the following in your POM:
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
     <artifactId>act</artifactId>
-    <version>0.1.3</version>
+    <version>0.2</version>
   </dependency>
 ```
 
 If you are using Gradle, include the following in your build.gradle dependencies:
 
 ```
-implementation 'org.requirementsascode.act:act:0.1.3'
+implementation 'org.requirementsascode.act:act:0.2'
 ```
 
 # Example usage
@@ -40,32 +40,32 @@ Here's the state machine diagram with the states' invariants (yellow sticky note
 And here's how the state machine is presented in code:
 
 ``` java
-State<CartState, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.getItems().size() == 0);
-State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.getItems().size() > 0);
-
 Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
-  .states(emptyCartState,nonEmptyCartState)
-  .transitions(
-    transition(emptyCartState, nonEmptyCartState, 
-      when(AddItem.class, transit(CartState::addItem))),
-
-    transition(nonEmptyCartState, nonEmptyCartState, 
-      when(AddItem.class, transit(CartState::addItem))),
-
-    transition(nonEmptyCartState, nonEmptyCartState, 
-      when(RemoveItem.class, inCase(i -> i.getState().getItems().size() > 1, transit(CartState::removeItem)))),
-
-    transition(nonEmptyCartState, emptyCartState, 
-      when(RemoveItem.class, inCase(i -> i.getState().getItems().size() == 1, transit(CartState::removeItem))))
-  )
-  .flows(
-    entryFlow(when(CreateCart.class, init(CartState::createCart)))
-  )
-  .build();
+	.states(emptyCartState,nonEmptyCartState)
+	.transitions(
+		transition(anyState(), nonEmptyCartState, 
+			when(AddItem.class, consumeWith(CartState::addItem))),
+		
+		transition(nonEmptyCartState, nonEmptyCartState, 
+			whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem)
+				.andHandleChange(this::validateRemoveItem))),
+		
+		transition(nonEmptyCartState, emptyCartState, 
+			whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem)
+				.andHandleChange(this::validateRemoveItem))),
+		
+		transition(anyState(), anyState(), 
+			when(ListItems.class, supplyWith(CartState::listItems)
+				.andHandleChange(this::validateListItems)))
+	)
+	.flows(
+		entryFlow(when(CreateCart.class, init(CartState::createCart)))
+	)
+	.build();
 ```
 
-To learn more, see [this test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/StateMachineTest.java)
-and the [Cart class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/Cart.java).
+To learn more, see the [Cart class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/Cart.java)
+and [this test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/StateMachineTest.java) .
 
 # Hierarchical state machines (a.k.a. state charts)
 You can use Act to create hierarchical state machines as well.
