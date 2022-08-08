@@ -62,7 +62,7 @@ Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
 ```
 
 To learn more, see the [CartStateMachine class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java)
-and [the CartStateMachineTest class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) .
+and [the CartStateMachineTest class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java).
 
 # Hierarchical state machines (a.k.a. state charts)
 You can use Act to create hierarchical state machines as well.
