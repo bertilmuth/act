@@ -40,29 +40,29 @@ Here's the state machine diagram with the states' invariants (yellow sticky note
 And here's how the state machine is presented in code:
 
 ``` java
-State<CartState, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.items().size() == 0);
-State<CartState, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.items().size() > 0);
+State<Cart, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.items().size() == 0);
+State<Cart, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.items().size() > 0);
 
-Statemachine<CartState, Trigger> statemachine = Statemachine.builder()
+Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
 	.states(emptyCartState,nonEmptyCartState)
 	.transitions(
 		transition(anyState(), nonEmptyCartState, 
-			when(AddItem.class, consumeWith(CartState::addItem))),
+			when(AddItem.class, consumeWith(Cart::addItem))),
 		
 		transition(nonEmptyCartState, nonEmptyCartState, 
-			whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(CartState::removeItem))),
+			whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(Cart::removeItem))),
 		
 		transition(nonEmptyCartState, emptyCartState, 
-			whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(CartState::removeItem)))
+			whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(Cart::removeItem)))
 	)
 	.flows(
-		entryFlow(when(CreateCart.class, init(CartState::createCart)))
+		entryFlow(when(CreateCart.class, init(Cart::createCart)))
 	)
 	.build();
 ```
 
-To learn more, see the [Cart class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/Cart.java)
-and [this test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/StateMachineTest.java) .
+To learn more, see the [CartStateMachine class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java)
+and [the CartStateMachineTest class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) .
 
 # Hierarchical state machines (a.k.a. state charts)
 You can use Act to create hierarchical state machines as well.

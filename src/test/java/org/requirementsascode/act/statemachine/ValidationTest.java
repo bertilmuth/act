@@ -7,15 +7,15 @@ import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
 
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.statemachine.testdata.HierarchicalCartState;
+import org.requirementsascode.act.statemachine.testdata.HierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
 class ValidationTest {
 	@Test
 	void allTransitionFromStatesMustBeInStateList() {
-		State<HierarchicalCartState,Trigger> firstState = state("Empty Cart", cs -> false);
-		State<HierarchicalCartState, Trigger> secondState = state("Non-empty Cart", cs -> true);
+		State<HierarchicalCart,Trigger> firstState = state("Empty Cart", cs -> false);
+		State<HierarchicalCart, Trigger> secondState = state("Non-empty Cart", cs -> true);
 
 		assertThrows(IllegalArgumentException.class, () -> 
 			Statemachine.builder() 
@@ -29,8 +29,8 @@ class ValidationTest {
 	
 	@Test
 	void allTransitionToStatesMustBeInStateList() {
-		State<HierarchicalCartState,Trigger> firstState = state("Empty Cart", cs -> false);
-		State<HierarchicalCartState, Trigger> secondState = state("Non-empty Cart", cs -> true);
+		State<HierarchicalCart,Trigger> firstState = state("Empty Cart", cs -> false);
+		State<HierarchicalCart, Trigger> secondState = state("Non-empty Cart", cs -> true);
 
 		assertThrows(IllegalArgumentException.class, () -> 
 			Statemachine.builder()

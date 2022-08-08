@@ -5,17 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.statemachine.testdata.HierarchicalCart;
+import org.requirementsascode.act.statemachine.testdata.HierarchicalCartStateMachine;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.CreateHierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
 class FlowTest {
-	private HierarchicalCart cart;
+	private HierarchicalCartStateMachine cart;
 
 	@BeforeEach
 	void setup() {
-		cart = new HierarchicalCart();
+		cart = new HierarchicalCartStateMachine();
 		cart.actOn(new CreateHierarchicalCart(false));
 	}
 

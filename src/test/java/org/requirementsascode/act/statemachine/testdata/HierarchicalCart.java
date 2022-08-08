@@ -1,97 +1,65 @@
 package org.requirementsascode.act.statemachine.testdata;
 
-import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
-import static org.requirementsascode.act.statemachine.ExitFlow.exitFlow;
-import static org.requirementsascode.act.statemachine.Init.init;
-import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
-import static org.requirementsascode.act.statemachine.Transition.transition;
-import static org.requirementsascode.act.statemachine.When.when;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.statemachine.State;
-import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.CreateHierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
-public class HierarchicalCart {	
-	public static final String INVARIANT_BREAKING_ITEM = "InvariantBreakingItem";
-
-	private HierarchicalCartState state;
-	Statemachine<HierarchicalCartState, Trigger> statemachine;
-
-	public HierarchicalCart() {
-		this.statemachine = createStatemachine();
+public class HierarchicalCart {
+	private final List<String> items;
+	private final boolean subStateEntered;
+	
+	private HierarchicalCart(List<String> items, boolean subStateEntered) {		
+		this.items = new ArrayList<>(items);
+		this.subStateEntered = subStateEntered;
 	}
 	
-	public void actOn(Trigger trigger) {
-		Data<HierarchicalCartState, Trigger> input = data(state, trigger);
-		
-		Data<HierarchicalCartState, Trigger> output = statemachine.actOn(input);
-		setState(output.state());
+	public boolean isEmpty() {
+		return items.isEmpty();
 	}
 	
-	public boolean subStateEntered(){
-		return state.isSubStateEntered();
+	public List<String> items() {
+		return Collections.unmodifiableList(items);
 	}
 	
-	public List<String> items(){
-		return state.items();
+	public boolean isSubStateEntered() {
+		return subStateEntered;
 	}
 	
-	private void setState(HierarchicalCartState cartState) {
-		this.state = cartState;
+	static HierarchicalCart cartState(List<String> items, boolean subStateEntered) {
+		return new HierarchicalCart(items, subStateEntered);
 	}
 	
-	private Statemachine<HierarchicalCartState, Trigger> createStatemachine() {
-		State<HierarchicalCartState, Trigger> emptyCartState = state("Empty Cart", cs -> cs != null && cs.isEmpty());
-
-		State<HierarchicalCartState, Trigger> nonEmptyCartState = createNonEmptyCartStateWithSubstates();
-
-		Statemachine<HierarchicalCartState, Trigger> statemachine = Statemachine.builder()
-			.states(emptyCartState,nonEmptyCartState)
-			.transitions(
-				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, consumeWith(HierarchicalCartState::addItem))),
-				transition(emptyCartState, emptyCartState, when(RemoveItem.class, consumeWith((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
-				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.state().items().size() == 1, consumeWith(HierarchicalCartState::removeItem))))
-			)
-			.flows(
-				entryFlow(when(CreateHierarchicalCart.class, init(HierarchicalCartState::createCart)))
-			)
-			.build();
-		
-		return statemachine;
+	static HierarchicalCart createCart(CreateHierarchicalCart createCart) {
+		return cartState(createCart.items(), createCart.isSubStateEntered());
+	}
+	
+	HierarchicalCart addItem(AddItem addItem) {		
+		ArrayList<String> items = new ArrayList<>(items());
+		items.add(addItem.item());
+		return cartState(items, subStateEntered);
 	}
 
-	private State<HierarchicalCartState, Trigger> createNonEmptyCartStateWithSubstates() {
-		State<HierarchicalCartState, Trigger> nonFullCartSubState = state("Non-full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.items().size() == 1);
-		State<HierarchicalCartState, Trigger> fullCartSubState = state("Full Cart", cs -> cs != null && cs.isSubStateEntered() && cs.items().size() >= 2);
+	HierarchicalCart removeItem(RemoveItem removeItem) {		
+		ArrayList<String> items = new ArrayList<>(items());
+		items.remove(removeItem.item());
+		return cartState(items, subStateEntered);
+	}
+	
+	HierarchicalCart enterSubstate(Trigger trigger) {
+		return cartState(items(), true);
+	}
+	
+	HierarchicalCart exitSubstate(Trigger trigger) {
+		return cartState(items(), false);
+	}
 
-		Statemachine<HierarchicalCartState, Trigger> nonEmptyCartStateMachine = Statemachine.builder()
-			.states(nonFullCartSubState, fullCartSubState)
-			.transitions(
-				transition(nonFullCartSubState, fullCartSubState, when(AddItem.class, consumeWith(HierarchicalCartState::addItem))),
-				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCartState::removeItem)))
-			)
-			.flows(
-				entryFlow(nonFullCartSubState, consumeWith(HierarchicalCartState::enterSubstate)),
-				exitFlow(nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCartState::exitSubstate)))
-			)
-			.build();
-		
-		State<HierarchicalCartState, Trigger> nonEmptyCartState = state("Non-empty Cart", cs -> cs != null && !cs.isEmpty(), nonEmptyCartStateMachine);
-		return nonEmptyCartState;
+	@Override
+	public String toString() {
+		return "CartState [items=" + items + ", subStateEntered=" + subStateEntered + "]";
 	}
 }
-
-
-
-
-
-
