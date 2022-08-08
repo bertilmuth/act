@@ -23,7 +23,7 @@ import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
 public class CartStateMachineWithValidation {	
 	private Cart cart;
-	Statemachine<Cart, Trigger> statemachine;
+	private final Statemachine<Cart, Trigger> statemachine;
 
 	public CartStateMachineWithValidation() {
 		this.statemachine = createStatemachine();
