@@ -16,6 +16,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
+import org.requirementsascode.act.statemachine.testdata.trigger.CreateHierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
+import org.requirementsascode.act.statemachine.testdata.trigger.CreateHierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 

@@ -1,9 +1,7 @@
-package org.requirementsascode.act.statemachine.testdata;
+package org.requirementsascode.act.statemachine.testdata.trigger;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.requirementsascode.act.statemachine.testdata.trigger.Trigger;
 
 public class CreateHierarchicalCart implements Trigger {
 	private final boolean subStateEntered;

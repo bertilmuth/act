@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
+import org.requirementsascode.act.statemachine.testdata.trigger.CreateCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.ListItems;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 

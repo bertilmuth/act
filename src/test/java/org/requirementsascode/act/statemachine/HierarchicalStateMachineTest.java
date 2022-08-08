@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.statemachine.testdata.CreateHierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.HierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.AddItem;
+import org.requirementsascode.act.statemachine.testdata.trigger.CreateHierarchicalCart;
 import org.requirementsascode.act.statemachine.testdata.trigger.RemoveItem;
 
 class HierarchicalStateMachineTest {
