@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
+import org.requirementsascode.act.core.Change;
 import org.requirementsascode.act.core.Data;
 
 public class Transition<S, V extends V0, V0> implements Behavior<S, V0> {
@@ -48,11 +49,12 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0> {
 				behavior.andHandleChange(this::errorIfNotInToStateIfTransitionFired).andThen(toState()));
 	}
 
-	private void errorIfNotInToStateIfTransitionFired(Data<S, V0> before, Data<S, V0> after) {
-		if (hasTransitionFired(after) && !toState().matchesStateIn(after)) {
+	private Data<S, V0> errorIfNotInToStateIfTransitionFired(Change<S, V0> c) {
+		if (hasTransitionFired(c.output()) && !toState().matchesStateIn(c.output())) {
 			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
-					+ ", but invariant was false!\nbefore: " + before + "\nafter: " + after);
+					+ ", but invariant was false!\ninput: " + c.input() + "\noutput: " + c.output());
 		}
+		return c.output();
 	}
 
 	private boolean hasTransitionFired(Data<S, V0> after) {
