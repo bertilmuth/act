@@ -58,15 +58,15 @@ public class CartStateMachine {
 				
 				transition(nonEmpty, nonEmpty, 
 					whenInCase(RemoveItem.class, i -> cartSize(i) > 1 && itemIsInCart(i), 
-							consumeWith(Cart::removeItem))),
+						consumeWith(Cart::removeItem))),
 				
 				transition(nonEmpty, empty, 
-						whenInCase(RemoveItem.class, i -> cartSize(i) == 1 && itemIsInCart(i), 
-								consumeWith(Cart::removeItem))),
+					whenInCase(RemoveItem.class, i -> cartSize(i) == 1 && itemIsInCart(i), 
+						consumeWith(Cart::removeItem))),
 				
 				transition(anyState(), anyState(), 
 					whenInCase(RemoveItem.class, this::itemIsNotInCart, 
-							consumeWith(Cart::removeItem)))
+						consumeWith(Cart::removeItem)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(Cart::createCart)))
