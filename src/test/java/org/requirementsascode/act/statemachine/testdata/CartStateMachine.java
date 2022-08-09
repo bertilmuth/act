@@ -6,7 +6,6 @@ import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
 import static org.requirementsascode.act.statemachine.Init.init;
 import static org.requirementsascode.act.statemachine.State.anyState;
 import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.SupplyWith.supplyWith;
 import static org.requirementsascode.act.statemachine.Transition.transition;
 import static org.requirementsascode.act.statemachine.When.when;
 import static org.requirementsascode.act.statemachine.WhenInCase.whenInCase;
@@ -47,20 +46,27 @@ public class CartStateMachine {
 	}
 	
 	private Statemachine<Cart, Trigger> createStatemachine() {
-		State<Cart, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.items().size() == 0);
-		State<Cart, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.items().size() > 0);
-
+		State<Cart, Trigger> empty = state("Empty", cart -> cart != null && cart.items().size() == 0);
+		State<Cart, Trigger> nonEmpty = state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
+		
 		Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
-			.states(emptyCartState,nonEmptyCartState)
+			.states(empty,nonEmpty)
 			.transitions(
-				transition(anyState(), nonEmptyCartState, 
-					when(AddItem.class, consumeWith(Cart::addItem))),
+				transition(anyState(), nonEmpty, 
+					when(AddItem.class, 
+						consumeWith(Cart::addItem))),	
 				
-				transition(nonEmptyCartState, nonEmptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(Cart::removeItem))),
+				transition(nonEmpty, nonEmpty, 
+					whenInCase(RemoveItem.class, i -> cartSize(i) > 1 && itemIsInCart(i), 
+							consumeWith(Cart::removeItem))),
 				
-				transition(nonEmptyCartState, emptyCartState, 
-					whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(Cart::removeItem)))
+				transition(nonEmpty, empty, 
+						whenInCase(RemoveItem.class, i -> cartSize(i) == 1 && itemIsInCart(i), 
+								consumeWith(Cart::removeItem))),
+				
+				transition(anyState(), anyState(), 
+					whenInCase(RemoveItem.class, this::itemIsNotInCart, 
+							consumeWith(Cart::removeItem)))
 			)
 			.flows(
 				entryFlow(when(CreateCart.class, init(Cart::createCart)))
@@ -68,6 +74,25 @@ public class CartStateMachine {
 			.build();
 		
 		return statemachine;
+	}
+	
+	
+	/**************** Helper methods ****************************/
+	
+	private List<String> cartItems(Data<Cart, RemoveItem> data) {
+		return data.state().items();
+	}
+	
+	private int cartSize(Data<Cart, RemoveItem> data) {
+		return cartItems(data).size();
+	}
+	
+	private boolean itemIsInCart(Data<Cart, RemoveItem> i) {
+		return cartItems(i).contains(i.value().item());
+	}
+	
+	private boolean itemIsNotInCart(Data<Cart, RemoveItem> i) {
+		return !itemIsInCart(i);
 	}
 }
 

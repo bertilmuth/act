@@ -21,7 +21,7 @@ implementation 'org.requirementsascode.act:act:0.2'
 
 # Example usage
 
-As an example, look at the following state machine for a shopping cart.
+As an example, look at the following simplified state machine for a shopping cart.
 
 It represents its two fundamental states of being either empty, or non-empty.
 
@@ -37,32 +37,40 @@ Here's the state machine diagram with the states' invariants (yellow sticky note
 
 ![Image of a statemachine of a shopping cart, with two states and invariants](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_diagram.png)
 
-And here's how the state machine is presented in code:
+And here's how the state machine is presented in code.
 
 ``` java
-State<Cart, Trigger> emptyCartState = state("Empty Cart", cart -> cart != null && cart.items().size() == 0);
-State<Cart, Trigger> nonEmptyCartState = state("Non-Empty Cart", cart -> cart != null && cart.items().size() > 0);
+State<Cart, Trigger> empty = state("Empty", cart -> cart != null && cart.items().size() == 0);
+State<Cart, Trigger> nonEmpty = state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
 
 Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
-	.states(emptyCartState,nonEmptyCartState)
+	.states(empty,nonEmpty)
 	.transitions(
-		transition(anyState(), nonEmptyCartState, 
-			when(AddItem.class, consumeWith(Cart::addItem))),
+		transition(anyState(), nonEmpty, 
+			when(AddItem.class, 
+				consumeWith(Cart::addItem))),	
 		
-		transition(nonEmptyCartState, nonEmptyCartState, 
-			whenInCase(RemoveItem.class, i -> i.state().items().size() > 1, supplyWith(Cart::removeItem))),
+		transition(nonEmpty, nonEmpty, 
+			whenInCase(RemoveItem.class, i -> cartSize(i) > 1 && itemIsInCart(i), 
+					consumeWith(Cart::removeItem))),
 		
-		transition(nonEmptyCartState, emptyCartState, 
-			whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, supplyWith(Cart::removeItem)))
+		transition(nonEmpty, empty, 
+				whenInCase(RemoveItem.class, i -> cartSize(i) == 1 && itemIsInCart(i), 
+						consumeWith(Cart::removeItem))),
+		
+		transition(anyState(), anyState(), 
+			whenInCase(RemoveItem.class, this::itemIsNotInCart, 
+					consumeWith(Cart::removeItem)))
 	)
 	.flows(
 		entryFlow(when(CreateCart.class, init(Cart::createCart)))
 	)
 	.build();
 ```
+In addition to what you see on the diagram, the code also checks if items are contained in the cart when removing them,
+to make sure the target state is correct.
 
-To learn more, see the [CartStateMachine class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java)
-and the [CartStateMachineTest class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java).
+To learn more, see the [CartStateMachine](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java) class and the [CartStateMachineTest](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) class.
 
 # Hierarchical state machines (a.k.a. state charts)
 You can use Act to create hierarchical state machines as well.
