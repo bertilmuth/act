@@ -80,13 +80,6 @@ public class MyStringStack {
 
 	MyStringStack clear(Clear clear) {
 		return new MyStringStack();
-		
-		// Wrong implementation to provoke falsification for stacks with more than 2 elements
-		/*if (elements.size() > 2) {
-			return pop().state();
-		} else {
-			return new MyStringStack();
-		}*/
 	}
 
 	public boolean isEmpty() {
