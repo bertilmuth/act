@@ -36,10 +36,10 @@ class BehaviorTest {
 	/**
 	 * Inputs
 	 */
-	private static final Data<State, Trigger_B1> INPUT_B1 = data(STATE_BEFORE_B1, TRIGGER_B1);
-	private static final Data<State, ConditionalTrigger_B1> TRUE_INPUT_B1 = data(STATE_BEFORE_B1, TRUE_TRIGGER_B1);
-	private static final Data<State, ConditionalTrigger_B1> FALSE_INPUT_B1 = data(STATE_BEFORE_B1, FALSE_TRIGGER_B1);
-	private static final Data<State, Trigger_B2> INPUT_B2 = data(STATE_BEFORE_B2, TRIGGER_B2);
+	private static final Data<State, Trigger_B1> DATA_BEFORE_B1 = data(STATE_BEFORE_B1, TRIGGER_B1);
+	private static final Data<State, ConditionalTrigger_B1> TRUE_BEFORE_B1 = data(STATE_BEFORE_B1, TRUE_TRIGGER_B1);
+	private static final Data<State, ConditionalTrigger_B1> FALSE_BEFORE_B1 = data(STATE_BEFORE_B1, FALSE_TRIGGER_B1);
+	private static final Data<State, Trigger_B2> DATA_BEFORE_B2 = data(STATE_BEFORE_B2, TRIGGER_B2);
 	
 	/**
 	 * Results
@@ -50,19 +50,19 @@ class BehaviorTest {
 	/**
 	 * Outputs
 	 */
-	private static final Data<State, Trigger_B1> OUTPUT_B1 = data(STATE_AFTER_B1, RESULT_B1);
-	private static final Data<State, Trigger_B2> OUTPUT_B2 = data(STATE_AFTER_B2, RESULT_B2);
-	private static final Data<State, ConditionalTrigger_B1> CONDITIONAL_OUTPUT_B1 = data(STATE_AFTER_B1, TRUE_TRIGGER_B1);
+	private static final Data<State, Trigger_B1> DATA_AFTER_B1 = data(STATE_AFTER_B1, RESULT_B1);
+	private static final Data<State, Trigger_B2> DATA_AFTER_B2 = data(STATE_AFTER_B2, RESULT_B2);
+	private static final Data<State, ConditionalTrigger_B1> CONDITIONAL_AFTER_B1 = data(STATE_AFTER_B1, TRUE_TRIGGER_B1);
 
 
 	@Test
 	void performsB1() {
-		assertEquals(OUTPUT_B1, b1().actOn(INPUT_B1));
+		assertEquals(DATA_AFTER_B1, b1().actOn(DATA_BEFORE_B1));
 	}
 
 	@Test
 	void performsB2() {
-		assertEquals(OUTPUT_B2, b2().actOn(INPUT_B2));
+		assertEquals(DATA_AFTER_B2, b2().actOn(DATA_BEFORE_B2));
 	}
 
 	@Test
@@ -74,9 +74,9 @@ class BehaviorTest {
 				on(Trigger_B2.class.getSimpleName(), b2())
 			);
 		
-		assertEquals(OUTPUT_B2, behavior.actOn(data(STATE_BEFORE_B2, TRIGGER_B2)));
+		assertEquals(DATA_AFTER_B2, behavior.actOn(data(STATE_BEFORE_B2, TRIGGER_B2)));
 
-		assertEquals(OUTPUT_B1, behavior.actOn(data(STATE_BEFORE_B1, TRIGGER_B1)));
+		assertEquals(DATA_AFTER_B1, behavior.actOn(data(STATE_BEFORE_B1, TRIGGER_B1)));
 	}
 
 	@Test
@@ -100,17 +100,17 @@ class BehaviorTest {
 				on(Trigger_B1.class.getSimpleName(), new DoNothing<>()), 
 				on(Trigger_B1.class.getSimpleName(), b1())
 			);		
-		assertEquals(OUTPUT_B1, behavior.actOn(data(STATE_BEFORE_B1, TRIGGER_B1)));
+		assertEquals(DATA_AFTER_B1, behavior.actOn(data(STATE_BEFORE_B1, TRIGGER_B1)));
 	}
 
 	@Test
 	void actsOnTrueTrigger() {
-		assertEquals(CONDITIONAL_OUTPUT_B1, conditionalB1().actOn(TRUE_INPUT_B1));
+		assertEquals(CONDITIONAL_AFTER_B1, conditionalB1().actOn(TRUE_BEFORE_B1));
 	}
 
 	@Test
 	void doesntActOnFalseTrigger() {
-		assertNull(conditionalB1().actOn(FALSE_INPUT_B1).value());
+		assertNull(conditionalB1().actOn(FALSE_BEFORE_B1).value());
 	}
 	
 	@Test
@@ -120,7 +120,7 @@ class BehaviorTest {
 				inCase(i -> false, conditionalB1())
 			);
 
-		Data<State, ConditionalTrigger_B1> output = unitedBehavior.actOn(TRUE_INPUT_B1);
+		Data<State, ConditionalTrigger_B1> output = unitedBehavior.actOn(TRUE_BEFORE_B1);
 		assertNull(output.value());
 	}
 
@@ -132,18 +132,18 @@ class BehaviorTest {
 				inCase(i -> true, conditionalB1())
 			);
 
-		assertEquals(CONDITIONAL_OUTPUT_B1, unitedBehavior.actOn(TRUE_INPUT_B1));
+		assertEquals(CONDITIONAL_AFTER_B1, unitedBehavior.actOn(TRUE_BEFORE_B1));
 	}
 
 	private Behavior<State, Trigger_B1> b1() {
-		return before -> OUTPUT_B1;
+		return before -> DATA_AFTER_B1;
 	}
 
 	private Behavior<State, ConditionalTrigger_B1> conditionalB1() {
-		return inCase(before -> before.value().isTriggering(), before -> CONDITIONAL_OUTPUT_B1);
+		return inCase(before -> before.value().isTriggering(), before -> CONDITIONAL_AFTER_B1);
 	}
 
 	private Behavior<State, Trigger_B2> b2() {
-		return before -> OUTPUT_B2;
+		return before -> DATA_AFTER_B2;
 	}
 }
