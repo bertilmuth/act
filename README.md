@@ -47,8 +47,7 @@ Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
 	.states(empty,nonEmpty)
 	.transitions(
 		transition(anyState(), nonEmpty, 
-			when(AddItem.class, 
-				consumeWith(Cart::addItem))),	
+			when(AddItem.class, consumeWith(Cart::addItem))),	
 		
 		transition(nonEmpty, nonEmpty, 
 			whenInCase(RemoveItem.class, i -> cartSize(i) > 1 && itemIsInCart(i), 
