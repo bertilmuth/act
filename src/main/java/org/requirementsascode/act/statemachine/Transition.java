@@ -50,11 +50,11 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0> {
 	}
 
 	private Data<S, V0> errorIfNotInToStateIfTransitionFired(Change<S, V0> c) {
-		if (hasTransitionFired(c.output()) && !toState().matchesStateIn(c.output())) {
+		if (hasTransitionFired(c.after()) && !toState().matchesStateIn(c.after())) {
 			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
-					+ ", but invariant was false!\ninput: " + c.input() + "\noutput: " + c.output());
+					+ ", but invariant was false!\nbefore: " + c.before() + "\nafter: " + c.after());
 		}
-		return c.output();
+		return c.after();
 	}
 
 	private boolean hasTransitionFired(Data<S, V0> after) {
