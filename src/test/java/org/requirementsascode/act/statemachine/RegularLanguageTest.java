@@ -36,36 +36,36 @@ class RegularLanguageTest {
 
 	@Test
 	void acceptsThreeLetterStringWithLastOneBeingB() {
-		Data<NonTerminal, String> input = data(S0, "bbb");
-		Data<NonTerminal, String> output = statemachine.actOn(input);
+		Data<NonTerminal, String> before = data(S0, "bbb");
+		Data<NonTerminal, String> output = statemachine.actOn(before);
 		assertTrue(output.state().isAccepting());
 	}
 	
 	@Test
 	void acceptsAnotherThreeLetterStringWithLastOneBeingB() {
-		Data<NonTerminal, String> input = data(S0, "aab");
-		Data<NonTerminal, String> output = statemachine.actOn(input);
+		Data<NonTerminal, String> before = data(S0, "aab");
+		Data<NonTerminal, String> output = statemachine.actOn(before);
 		assertTrue(output.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsThreeLetterStringWithLastOneBeingB_ifFirstLetterIsNeitherANorB() {
-		Data<NonTerminal, String> input = data(S0, "cab");
-		Data<NonTerminal, String> output = statemachine.actOn(input);
+		Data<NonTerminal, String> before = data(S0, "cab");
+		Data<NonTerminal, String> output = statemachine.actOn(before);
 		assertFalse(output.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsFourLetterStringWithLastOneBeingB() {
-		Data<NonTerminal, String> input = data(S0, "bbbb");
-		Data<NonTerminal, String> output = statemachine.actOn(input);
+		Data<NonTerminal, String> before = data(S0, "bbbb");
+		Data<NonTerminal, String> output = statemachine.actOn(before);
 		assertFalse(output.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsEmptyString() {
-		Data<NonTerminal, String> input = data(S0, "");
-		Data<NonTerminal, String> output = statemachine.actOn(input);
+		Data<NonTerminal, String> before = data(S0, "");
+		Data<NonTerminal, String> output = statemachine.actOn(before);
 		assertFalse(output.state().isAccepting());
 	}
 	
@@ -131,15 +131,15 @@ class RegularLanguageTest {
 	}
 
 	private boolean isFirstLetterTheSame(char expectedTerminal, Data<NonTerminal, String> i) {
-		String inputValue = i.value();
-		return !inputValue.isEmpty() && expectedTerminal == firstLetter(inputValue);
+		String beforeValue = i.value();
+		return !beforeValue.isEmpty() && expectedTerminal == firstLetter(beforeValue);
 	}
 
 	private char firstLetter(String s) {
 		return s.charAt(0);
 	}
 	
-	private String tail(String input) {
-		return input.substring(1);
+	private String tail(String before) {
+		return before.substring(1);
 	}
 }

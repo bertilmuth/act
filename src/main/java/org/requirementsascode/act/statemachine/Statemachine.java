@@ -43,8 +43,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 	}
 
 	@Override
-	public Data<S, V0> actOn(Data<S, V0> input) {
-		return statemachineBehavior.actOn(input);
+	public Data<S, V0> actOn(Data<S, V0> before) {
+		return statemachineBehavior.actOn(before);
 	}
 
 	public List<State<S, V0>> states() {

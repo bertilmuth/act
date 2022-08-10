@@ -26,9 +26,9 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0> {
 	}
 
 	@Override
-	public Data<S, V0> actOn(Data<S, V0> input) {
-		Data<S, V0> result = transitionBehavior.actOn(input);
-		return result;
+	public Data<S, V0> actOn(Data<S, V0> before) {
+		Data<S, V0> after = transitionBehavior.actOn(before);
+		return after;
 	}
 
 	public State<S, V0> fromState() {
@@ -45,7 +45,7 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0> {
 	}
 
 	private Behavior<S, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0> behavior) {
-		return inCase(input -> fromState.matchesStateIn(input),
+		return inCase(before -> fromState.matchesStateIn(before),
 				behavior.andHandleChangeWith(this::errorIfNotInToStateIfTransitionFired).andThen(toState()));
 	}
 

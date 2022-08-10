@@ -10,6 +10,6 @@ import org.requirementsascode.act.core.Behavior;
 public class ConsumeWith{
 	public static <S,V> Behavior<S,V> consumeWith(BiFunction<S,V,S> consumer){
 		requireNonNull(consumer, "consumer must be non-null!");
-		return i -> data(consumer.apply(i.state(), i.value()), i.value());
+		return d -> data(consumer.apply(d.state(), d.value()), d.value());
 	}
 }

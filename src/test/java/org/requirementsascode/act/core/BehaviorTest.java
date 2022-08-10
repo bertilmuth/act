@@ -87,9 +87,9 @@ class BehaviorTest {
 				on(Trigger_B1.class.getSimpleName(), b1()), 
 				on(Trigger_B2.class.getSimpleName(), b2())
 			);
-		Data<State, Trigger> input = data(STATE_BEFORE_B1, new UnknownTrigger());
-		Data<State, Trigger> output = behavior.actOn(input);
-		assertEquals(new DoNothing<State, Trigger>().actOn(input), output);
+		Data<State, Trigger> before = data(STATE_BEFORE_B1, new UnknownTrigger());
+		Data<State, Trigger> output = behavior.actOn(before);
+		assertEquals(new DoNothing<State, Trigger>().actOn(before), output);
 	}
 
 	@Test
@@ -136,14 +136,14 @@ class BehaviorTest {
 	}
 
 	private Behavior<State, Trigger_B1> b1() {
-		return input -> OUTPUT_B1;
+		return before -> OUTPUT_B1;
 	}
 
 	private Behavior<State, ConditionalTrigger_B1> conditionalB1() {
-		return inCase(input -> input.value().isTriggering(), input -> CONDITIONAL_OUTPUT_B1);
+		return inCase(before -> before.value().isTriggering(), before -> CONDITIONAL_OUTPUT_B1);
 	}
 
 	private Behavior<State, Trigger_B2> b2() {
-		return input -> OUTPUT_B2;
+		return before -> OUTPUT_B2;
 	}
 }

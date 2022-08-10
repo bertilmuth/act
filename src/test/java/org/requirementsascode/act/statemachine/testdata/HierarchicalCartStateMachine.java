@@ -31,9 +31,9 @@ public class HierarchicalCartStateMachine {
 	}
 	
 	public void actOn(Trigger trigger) {
-		Data<HierarchicalCart, Trigger> input = data(state, trigger);
+		Data<HierarchicalCart, Trigger> before = data(state, trigger);
 		
-		Data<HierarchicalCart, Trigger> output = statemachine.actOn(input);
+		Data<HierarchicalCart, Trigger> output = statemachine.actOn(before);
 		setState(output.state());
 	}
 	

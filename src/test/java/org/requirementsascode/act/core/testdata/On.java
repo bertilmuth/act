@@ -17,8 +17,8 @@ public class On{
 		return predicate;
 	}
 	
-	private static <V> boolean hasExpectedType(String inputTriggerTypeName, String expectedTriggerTypeName) {
-		return expectedTriggerTypeName.equals(inputTriggerTypeName);
+	private static <V> boolean hasExpectedType(String beforeTriggerTypeName, String expectedTriggerTypeName) {
+		return expectedTriggerTypeName.equals(beforeTriggerTypeName);
 	}
 	
 	private static String triggerTypeOf(Data<?, ?> i) {
@@ -26,8 +26,8 @@ public class On{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <S, V extends V0, V0> Data<S, V0> behaviorActOn(Behavior<S, V> behavior, Data<S, V0> input) {
-		Data<S, V0> output = (Data<S, V0>) behavior.actOn((Data<S, V>) input);
+	private static <S, V extends V0, V0> Data<S, V0> behaviorActOn(Behavior<S, V> behavior, Data<S, V0> before) {
+		Data<S, V0> output = (Data<S, V0>) behavior.actOn((Data<S, V>) before);
 		return output;
 	}
 }

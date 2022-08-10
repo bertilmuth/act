@@ -29,9 +29,9 @@ public class CartStateMachine {
 	}
 	
 	public Data<Cart, Trigger> actOn(Trigger trigger) {
-		Data<Cart, Trigger> input = data(cart, trigger);
+		Data<Cart, Trigger> before = data(cart, trigger);
 		
-		Data<Cart, Trigger> output = statemachine.actOn(input);
+		Data<Cart, Trigger> output = statemachine.actOn(before);
 		setState(output.state());
 		
 		return output;

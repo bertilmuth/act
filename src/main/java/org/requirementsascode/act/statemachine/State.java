@@ -37,8 +37,8 @@ public class State<S, V> implements Behavior<S, V> {
 	}
 
 	@Override
-	public Data<S, V> actOn(Data<S, V> input) {
-		Data<S, V> result = behavior.actOn(input);
+	public Data<S, V> actOn(Data<S, V> before) {
+		Data<S, V> result = behavior.actOn(before);
 		return result;
 	}
 
@@ -60,7 +60,7 @@ public class State<S, V> implements Behavior<S, V> {
 	}
 
 	private Data<S, V> throwsIllegalStateException(Data<S, V> output) {
-		throw new IllegalStateException("After behavior of state " + name() + " invariant is false! -> output: " + output);
+		throw new IllegalStateException("After behavior of state " + name() + ", invariant is false. Output: " + output);
 	}
 
 	@Override
