@@ -33,8 +33,8 @@ public class HierarchicalCartStateMachine {
 	public void actOn(Trigger trigger) {
 		Data<HierarchicalCart, Trigger> before = data(state, trigger);
 		
-		Data<HierarchicalCart, Trigger> output = statemachine.actOn(before);
-		setState(output.state());
+		Data<HierarchicalCart, Trigger> after = statemachine.actOn(before);
+		setState(after.state());
 	}
 	
 	public boolean subStateEntered(){

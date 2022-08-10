@@ -5,7 +5,7 @@ import org.requirementsascode.act.core.merge.MergeStrategy;
 
 public class FirstOneWhoActsWins<S, V> implements MergeStrategy<S, V> {
 	@Override
-	public Data<S, V> merge(Data<S, V> outputBefore, Data<S, V> outputNow) {
-		return outputBefore;
+	public Data<S, V> merge(Data<S, V> dataBefore, Data<S, V> dataNow) {
+		return dataBefore;
 	}
 }

@@ -20,8 +20,8 @@ public class WhenInCase {
 
 	@SuppressWarnings("unchecked")
 	private static <S, V extends V0, V0> Data<S, V0> behaviorActOn(Behavior<S, V> behavior, Data<S, V0> before) {
-		Data<S, V0> output = (Data<S, V0>) behavior.actOn((Data<S, V>) before);
-		return output;
+		Data<S, V0> after = (Data<S, V0>) behavior.actOn((Data<S, V>) before);
+		return after;
 	}
 
 	private static <V> boolean hasExpectedType(Class<? extends Object> beforeTriggerType, Class<V> expectedTriggerType) {

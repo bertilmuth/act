@@ -88,8 +88,8 @@ class BehaviorTest {
 				on(Trigger_B2.class.getSimpleName(), b2())
 			);
 		Data<State, Trigger> before = data(STATE_BEFORE_B1, new UnknownTrigger());
-		Data<State, Trigger> output = behavior.actOn(before);
-		assertEquals(new DoNothing<State, Trigger>().actOn(before), output);
+		Data<State, Trigger> after = behavior.actOn(before);
+		assertEquals(new DoNothing<State, Trigger>().actOn(before), after);
 	}
 
 	@Test
@@ -120,8 +120,8 @@ class BehaviorTest {
 				inCase(i -> false, conditionalB1())
 			);
 
-		Data<State, ConditionalTrigger_B1> output = unitedBehavior.actOn(TRUE_BEFORE_B1);
-		assertNull(output.value());
+		Data<State, ConditionalTrigger_B1> after = unitedBehavior.actOn(TRUE_BEFORE_B1);
+		assertNull(after.value());
 	}
 
 	@Test

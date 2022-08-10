@@ -31,10 +31,10 @@ public class CartStateMachine {
 	public Data<Cart, Trigger> actOn(Trigger trigger) {
 		Data<Cart, Trigger> before = data(cart, trigger);
 		
-		Data<Cart, Trigger> output = statemachine.actOn(before);
-		setState(output.state());
+		Data<Cart, Trigger> after = statemachine.actOn(before);
+		setState(after.state());
 		
-		return output;
+		return after;
 	}
 	
 	public List<String> items(){

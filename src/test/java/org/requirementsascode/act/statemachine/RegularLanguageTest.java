@@ -37,36 +37,36 @@ class RegularLanguageTest {
 	@Test
 	void acceptsThreeLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> before = data(S0, "bbb");
-		Data<NonTerminal, String> output = statemachine.actOn(before);
-		assertTrue(output.state().isAccepting());
+		Data<NonTerminal, String> after = statemachine.actOn(before);
+		assertTrue(after.state().isAccepting());
 	}
 	
 	@Test
 	void acceptsAnotherThreeLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> before = data(S0, "aab");
-		Data<NonTerminal, String> output = statemachine.actOn(before);
-		assertTrue(output.state().isAccepting());
+		Data<NonTerminal, String> after = statemachine.actOn(before);
+		assertTrue(after.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsThreeLetterStringWithLastOneBeingB_ifFirstLetterIsNeitherANorB() {
 		Data<NonTerminal, String> before = data(S0, "cab");
-		Data<NonTerminal, String> output = statemachine.actOn(before);
-		assertFalse(output.state().isAccepting());
+		Data<NonTerminal, String> after = statemachine.actOn(before);
+		assertFalse(after.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsFourLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> before = data(S0, "bbbb");
-		Data<NonTerminal, String> output = statemachine.actOn(before);
-		assertFalse(output.state().isAccepting());
+		Data<NonTerminal, String> after = statemachine.actOn(before);
+		assertFalse(after.state().isAccepting());
 	}
 	
 	@Test
 	void rejectsEmptyString() {
 		Data<NonTerminal, String> before = data(S0, "");
-		Data<NonTerminal, String> output = statemachine.actOn(before);
-		assertFalse(output.state().isAccepting());
+		Data<NonTerminal, String> after = statemachine.actOn(before);
+		assertFalse(after.state().isAccepting());
 	}
 	
 	////////////////////////////////////////
@@ -115,7 +115,7 @@ class RegularLanguageTest {
 	
 	private State<NonTerminal, String> s(NonTerminal nonTerminal){
 		// The Behavior.identity() part is the state behavior.
-		// The purpose of the state behavior is to pass on the output value of each transition that fires 
+		// The purpose of the state behavior is to pass on the after value of each transition that fires 
 		// to another transition, unchanged.
 		return state(nonTerminal.toString(), stateInvariantOf(nonTerminal), Behavior.identity());
 	}

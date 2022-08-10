@@ -59,8 +59,8 @@ public class State<S, V> implements Behavior<S, V> {
 		return invariant().test(data.state());
 	}
 
-	private Data<S, V> throwsIllegalStateException(Data<S, V> output) {
-		throw new IllegalStateException("After behavior of state " + name() + ", invariant is false. Output: " + output);
+	private Data<S, V> throwsIllegalStateException(Data<S, V> data) {
+		throw new IllegalStateException("After behavior of state " + name() + ", invariant is false. Data: " + data);
 	}
 
 	@Override
