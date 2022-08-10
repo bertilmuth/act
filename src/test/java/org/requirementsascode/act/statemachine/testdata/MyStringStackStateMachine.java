@@ -10,7 +10,7 @@ import static org.requirementsascode.act.statemachine.WhenInCase.whenInCase;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.HandleChangeWith;
+import org.requirementsascode.act.core.HandleChange;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.testdata.MyStringStack.Clear;
@@ -21,11 +21,11 @@ import org.requirementsascode.act.statemachine.testdata.MyStringStack.Value;
 public class MyStringStackStateMachine implements Behavior<MyStringStack, Value>{
 	private static int MAX_STACK_SIZE = 50000;
 	
-	private HandleChangeWith<MyStringStack, Push> pushValidator;
-	private HandleChangeWith<MyStringStack, Pop> popValidator;
+	private HandleChange<MyStringStack, Push> pushValidator;
+	private HandleChange<MyStringStack, Pop> popValidator;
 	private Statemachine<MyStringStack, Value> statemachine;
 
-	public MyStringStackStateMachine(HandleChangeWith<MyStringStack, Push> pushValidator, HandleChangeWith<MyStringStack, Pop> popValidator) {
+	public MyStringStackStateMachine(HandleChange<MyStringStack, Push> pushValidator, HandleChange<MyStringStack, Pop> popValidator) {
 		this.pushValidator = pushValidator;
 		this.popValidator = popValidator;
 		this.statemachine = createStateMachine();

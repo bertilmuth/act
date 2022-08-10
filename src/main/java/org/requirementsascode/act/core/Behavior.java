@@ -1,6 +1,7 @@
 package org.requirementsascode.act.core;
 
 import static org.requirementsascode.act.core.Change.change;
+
 import java.util.Objects;
 
 public interface Behavior<S, V> {
@@ -11,11 +12,11 @@ public interface Behavior<S, V> {
     return before -> nextBehavior.actOn(actOn(before));
 	}
 	
-	default Behavior<S, V> andHandleChangeWith(HandleChangeWith<S, V> changeHandler){
+	default Behavior<S, V> andHandleChangeWith(HandleChange<S, V> changeHandler){
 		return before -> {
 			Data<S, V> after = actOn(before);
-			changeHandler.handleChangeWith(change(before, after));
-			return after;
+			Change<S, V> change = change(before, after);
+			return changeHandler.handleChange(change);
 		};
 	}
 	
