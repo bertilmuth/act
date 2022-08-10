@@ -8,7 +8,7 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class FlowsTransitions {
-	public static <S, V0> List<Transition<S, ? extends V0, V0>> flowsTransitions(List<Flow<S, ? extends V0, V0>> flows,
+	public static <S, V0> List<Transition<S, V0>> flowsTransitions(List<Flow<S, V0>> flows,
 		State<S, V0> definedState, State<S, V0> defaultState) {
 		return flows.stream().map(e -> e.convertToTransition(definedState, defaultState)).collect(Collectors.toList());
 	}

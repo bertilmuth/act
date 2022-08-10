@@ -16,10 +16,10 @@ public class StatemachineValidator {
 
 		State<S, V0> definedState = statemachine.definedState();
 		State<S, V0> defaultState = statemachine.defaultState();
-		List<Transition<S, ? extends V0, V0>> flowsTransitions = flowsTransitions(statemachine.flows(), definedState,
+		List<Transition<S, V0>> flowsTransitions = flowsTransitions(statemachine.flows(), definedState,
 			defaultState);
 
-		List<Transition<S, ? extends V0, V0>> transitions = new ArrayList<>(flowsTransitions);
+		List<Transition<S, V0>> transitions = new ArrayList<>(flowsTransitions);
 		transitions.addAll(statemachine.transitions());
 
 		List<State<S, V0>> expectedStates = statemachine.states();
@@ -30,9 +30,9 @@ public class StatemachineValidator {
 			"The following toStates are not in the state list:");
 	}
 
-	private static <S, V0> void validateStates(List<Transition<S, ? extends V0, V0>> transitions,
+	private static <S, V0> void validateStates(List<Transition<S, V0>> transitions,
 		List<State<S, V0>> expectedStates, State<S, V0> definedState, State<S, V0> defaultState,
-		Function<Transition<S, ?, ?>, State<S, ?>> transitionStateAccess, String message) {
+		Function<Transition<S, ?>, State<S, ?>> transitionStateAccess, String message) {
 
 		List<State<S, ?>> statesNotInList = transitions.stream()
 			.map(transitionStateAccess)

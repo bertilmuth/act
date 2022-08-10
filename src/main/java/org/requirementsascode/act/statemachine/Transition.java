@@ -7,7 +7,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Change;
 import org.requirementsascode.act.core.Data;
 
-public class Transition<S, V extends V0, V0> implements Behavior<S, V0,V0> {
+public class Transition<S, V0> implements Behavior<S, V0,V0> {
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0, V0> transitionBehavior;
@@ -20,7 +20,7 @@ public class Transition<S, V extends V0, V0> implements Behavior<S, V0,V0> {
 		this.transitionBehavior = createTransitionBehavior(fromState, behavior);
 	}
 
-	public static <S, V extends V0, V0> Transition<S, V, V0> transition(State<S, V0> fromState, State<S, V0> toState,
+	public static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
 			Behavior<S, V0, V0> behavior) {
 		return new Transition<>(fromState, toState, behavior);
 	}

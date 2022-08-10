@@ -17,8 +17,8 @@ public class StatemachineBuilder {
 
 	public class States<S,V> {
 		private final List<State<S,V>> builderStates;
-		private List<Transition<S, ? extends V, V>> builderTransitions;
-		private List<Flow<S, ? extends V, V>> builderFlows = new ArrayList<>();
+		private List<Transition<S, V>> builderTransitions;
+		private List<Flow<S, V>> builderFlows = new ArrayList<>();
 
 		private States(State<S,V>[] states) {
 			requireNonNull(states, "states must be non-null!");
@@ -26,7 +26,7 @@ public class StatemachineBuilder {
 		}
 
 		@SafeVarargs
-		public final Transitions transitions(Transition<S, ? extends V, V>... transitions) {
+		public final Transitions transitions(Transition<S, V>... transitions) {
 			requireNonNull(transitions, "transitions must be non-null!");
 			builderTransitions = Arrays.asList(transitions);
 			return new Transitions();
@@ -36,7 +36,7 @@ public class StatemachineBuilder {
 			private Transitions(){}
 			
 			@SafeVarargs
-			public final Flows flows(Flow<S, ? extends V, V>... flows) {
+			public final Flows flows(Flow<S, V>... flows) {
 				requireNonNull(flows, "flows must be non-null!");
 				builderFlows = Arrays.asList(flows);
 				return new Flows();

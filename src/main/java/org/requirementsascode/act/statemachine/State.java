@@ -55,7 +55,7 @@ public class State<S, V> implements Behavior<S, V, V> {
 			stateBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
 	}
 
-	public boolean matchesStateIn(Data<S, V> data) {
+	public boolean matchesStateIn(Data<S, ?> data) {
 		return invariant().test(data.state());
 	}
 
