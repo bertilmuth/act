@@ -89,7 +89,7 @@ class BehaviorTest {
 			);
 		Data<State, Trigger> before = data(STATE_BEFORE_B1, new UnknownTrigger());
 		Data<State, Trigger> after = behavior.actOn(before);
-		assertEquals(new DoNothing<State, Trigger>().actOn(before), after);
+		assertEquals(new DoNothing<State, Trigger, Trigger>().actOn(before), after);
 	}
 
 	@Test

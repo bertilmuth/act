@@ -31,7 +31,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> before) {
-		Data<S, V> nothingDoneAtFirst = new DoNothing<S, V>().actOn(before);
+		Data<S, V> nothingDoneAtFirst = new DoNothing<S, V, V>().actOn(before);
 		
 		Data<S, V> after = behaviors.stream()
 			.map(b -> b.actOn(before))

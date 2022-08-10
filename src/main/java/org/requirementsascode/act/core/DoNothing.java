@@ -2,9 +2,9 @@ package org.requirementsascode.act.core;
 
 import static org.requirementsascode.act.core.Data.data;
 
-public class DoNothing<S,V> implements Behavior<S, V, V>{
+public class DoNothing<S,V1,V2> implements Behavior<S, V1, V2>{
 	@Override
-	public Data<S,V> actOn(Data<S,V> before) {
+	public Data<S,V2> actOn(Data<S,V1> before) {
 		return data(before.state());
 	}
 }

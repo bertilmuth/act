@@ -5,7 +5,6 @@ import static org.requirementsascode.act.core.Data.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
 
@@ -80,7 +79,7 @@ public class MyStringStack {
 		return new MyStringStack(newElements);
 	}
 
-	Data<MyStringStack, PoppedElement> pop() {		
+	Data<MyStringStack, PoppedElement> pop(Pop pop) {		
 		List<String> newElements = new ArrayList<>(elements);
 		String element = newElements.remove(0);
 		return data(new MyStringStack(newElements), new PoppedElement(element));
