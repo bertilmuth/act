@@ -30,31 +30,31 @@ public class UnitedBehavior<S, V> implements Behavior<S, V> {
 	}
 
 	@Override
-	public Data<S, V> actOn(Data<S, V> input) {
-		Data<S, V> nothingDoneAtFirst = new DoNothing<S, V>().actOn(input);
+	public Data<S, V> actOn(Data<S, V> before) {
+		Data<S, V> nothingDoneAtFirst = new DoNothing<S, V>().actOn(before);
 		
-		Data<S, V> output = behaviors.stream()
-			.map(b -> b.actOn(input))
+		Data<S, V> after = behaviors.stream()
+			.map(b -> b.actOn(before))
 			.reduce(nothingDoneAtFirst,
-				(outputBefore, outputNow) -> merge(nothingGotDone(input), outputBefore, outputNow));
+				(dataBefore, dataNow) -> merge(nothingGotDone(before), dataBefore, dataNow));
 
-		return output;
+		return after;
 	}
 
-	private Data<S, V> merge(NothingGotDone<S, V> nothingGotDone, Data<S, V> outputBefore, Data<S, V> outputNow) {
-		Data<S, V> mergedOutput;
+	private Data<S, V> merge(NothingGotDone<S, V> nothingGotDone, Data<S, V> dataBefore, Data<S, V> dataNow) {
+		Data<S, V> mergedData;
 
-		if (nothingGotDone.test(outputBefore)) {
-			// Nothing got done before --> take output now
-			mergedOutput = outputNow;
-		} else if (nothingGotDone.test(outputNow)) {
-			// Nothing got done now --> take output before
-			mergedOutput = outputBefore;
+		if (nothingGotDone.test(dataBefore)) {
+			// Nothing got done before --> take data now
+			mergedData = dataNow;
+		} else if (nothingGotDone.test(dataNow)) {
+			// Nothing got done now --> take data before
+			mergedData = dataBefore;
 		} else {
 			// Custom merge for everything else
-			mergedOutput = mergeStrategy.merge(outputBefore, outputNow);
+			mergedData = mergeStrategy.merge(dataBefore, dataNow);
 		}
-		return mergedOutput;
+		return mergedData;
 	}
 
 	public List<Behavior<S, ? extends V>> behaviors() {

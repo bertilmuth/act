@@ -8,14 +8,14 @@ public class InCase<S,V>{
 	}
 	
 	public static <S,V> Behavior<S,V> inCase(Predicate<Data<S,V>> predicate, Behavior<S,V> behavior, Behavior<S,V> elseBehavior) {
-		return input -> {
-			Data<S,V> output = null;
-			if (predicate.test(input)) {
-				output = behavior.actOn(input);
+		return before -> {
+			Data<S,V> after = null;
+			if (predicate.test(before)) {
+				after = behavior.actOn(before);
 			} else {
-				output = elseBehavior.actOn(input);
+				after = elseBehavior.actOn(before);
 			}
-			return output;
+			return after;
 		};
 	}
 }
