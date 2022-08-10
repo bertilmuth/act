@@ -124,7 +124,7 @@ class RegularLanguageTest {
 		return nonTerminal::equals;
 	}
 	
-	private Behavior<NonTerminal, String> accept(char expectedTerminal, NonTerminal targetState) {
+	private Behavior<NonTerminal, String, String> accept(char expectedTerminal, NonTerminal targetState) {
 		return inCase(i -> 
 		  isFirstLetterTheSame(expectedTerminal, i), 
 		  	i -> data(targetState, tail(i.value())));

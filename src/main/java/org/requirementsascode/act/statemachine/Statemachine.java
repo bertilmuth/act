@@ -17,14 +17,14 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
 
-public class Statemachine<S, V0> implements Behavior<S, V0> {
+public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String DEFINED_STATE = "Defined State";
 	private static final String DEFAULT_STATE = "Default State";
 
 	private final List<State<S, V0>> states;
 	private final List<Transition<S, ? extends V0, V0>> transitions;
 	private final List<Flow<S, ? extends V0, V0>> flows;
-	private final Behavior<S, V0> statemachineBehavior;
+	private final Behavior<S, V0, V0> statemachineBehavior;
 	private final State<S, V0> defaultState;
 	private final State<S, V0> definedState;
 
@@ -75,14 +75,14 @@ public class Statemachine<S, V0> implements Behavior<S, V0> {
 		return state(DEFAULT_STATE, definedState.invariant().negate(), identity());
 	}
 
-	private Behavior<S, V0> createStatemachineBehavior() {
+	private Behavior<S, V0, V0> createStatemachineBehavior() {
 		validate(this);
 
-		Behavior<S, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(states());
-		Behavior<S, V0> transitionsBehavior = transitionsBehavior(transitions());
-		Behavior<S, V0> flowsBehavior = flowsBehavior(flows(), definedState(), defaultState());
+		Behavior<S, V0, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(states());
+		Behavior<S, V0, V0> transitionsBehavior = transitionsBehavior(transitions());
+		Behavior<S, V0, V0> flowsBehavior = flowsBehavior(flows(), definedState(), defaultState());
 
-		Behavior<S, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
+		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
 			statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
 			flowsBehavior
 		);

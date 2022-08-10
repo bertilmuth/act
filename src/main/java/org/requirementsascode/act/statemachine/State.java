@@ -11,12 +11,12 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.DoNothing;
 
-public class State<S, V> implements Behavior<S, V> {	
+public class State<S, V> implements Behavior<S, V, V> {	
 	private final String name;
 	private final Predicate<S> invariant;
-	private Behavior<S, V> behavior;
+	private Behavior<S, V, V> behavior;
 
-	private State(String name, Predicate<S> invariant, Behavior<S, V> behavior) {
+	private State(String name, Predicate<S> invariant, Behavior<S, V, V> behavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.invariant = requireNonNull(invariant, "invariant must be non-null!");
 
@@ -28,7 +28,7 @@ public class State<S, V> implements Behavior<S, V> {
 		return new State<>(stateName, stateInvariant, new DoNothing<>());
 	}
 
-	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V> stateBehavior) {
+	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {
 		return new State<>(stateName, stateInvariant, stateBehavior);
 	}
 	
@@ -50,7 +50,7 @@ public class State<S, V> implements Behavior<S, V> {
 		return invariant;
 	}
 	
-	private Behavior<S, V> createStateBehavior(Behavior<S, V> stateBehavior) {
+	private Behavior<S, V, V> createStateBehavior(Behavior<S, V, V> stateBehavior) {
 		return inCase(this::matchesStateIn,
 			stateBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
 	}

@@ -15,17 +15,18 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.testdata.MyStringStack.Clear;
 import org.requirementsascode.act.statemachine.testdata.MyStringStack.Pop;
+import org.requirementsascode.act.statemachine.testdata.MyStringStack.PoppedElement;
 import org.requirementsascode.act.statemachine.testdata.MyStringStack.Push;
 import org.requirementsascode.act.statemachine.testdata.MyStringStack.Value;
 
-public class MyStringStackStateMachine implements Behavior<MyStringStack, Value>{
+public class MyStringStackStateMachine implements Behavior<MyStringStack, Value, Value>{
 	private static int MAX_STACK_SIZE = 50000;
 	
-	private HandleChange<MyStringStack, Push> pushValidator;
-	private HandleChange<MyStringStack, Pop> popValidator;
+	private HandleChange<MyStringStack, Push, Push> pushValidator;
+	private HandleChange<MyStringStack, Pop, PoppedElement> popValidator;
 	private Statemachine<MyStringStack, Value> statemachine;
 
-	public MyStringStackStateMachine(HandleChange<MyStringStack, Push> pushValidator, HandleChange<MyStringStack, Pop> popValidator) {
+	public MyStringStackStateMachine(HandleChange<MyStringStack, Push, Push> pushValidator, HandleChange<MyStringStack, Pop, PoppedElement> popValidator) {
 		this.pushValidator = pushValidator;
 		this.popValidator = popValidator;
 		this.statemachine = createStateMachine();

@@ -2,30 +2,30 @@ package org.requirementsascode.act.core;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.NothingGotDone.*;
+import static org.requirementsascode.act.core.NothingGotDone.nothingGotDone;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.requirementsascode.act.core.merge.MergeStrategy;
 
-public class UnitedBehavior<S, V> implements Behavior<S, V> {
+public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 	private final MergeStrategy<S, V> mergeStrategy;
-	private final List<? extends Behavior<S, V>> behaviors;
+	private final List<? extends Behavior<S, V, V>> behaviors;
 
-	private UnitedBehavior(MergeStrategy<S, V> mergeStrategy, List<? extends Behavior<S, V>> behaviors) {
+	private UnitedBehavior(MergeStrategy<S, V> mergeStrategy, List<? extends Behavior<S, V,V>> behaviors) {
 		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 		this.behaviors = requireNonNull(behaviors, "behaviors must be non-null!");
 	}
 
 	@SafeVarargs
 	public static <S, V> UnitedBehavior<S, V> unitedBehavior(MergeStrategy<S, V> mergeStrategy,
-		Behavior<S, V>... behaviors) {
+		Behavior<S, V,V>... behaviors) {
 		return new UnitedBehavior<>(mergeStrategy, asList(behaviors));
 	}
 
 	public static <S, V> UnitedBehavior<S, V> unitedBehavior(MergeStrategy<S, V> mergeStrategy,
-		List<? extends Behavior<S, V>> behaviors) {
+		List<? extends Behavior<S, V,V>> behaviors) {
 		return new UnitedBehavior<>(mergeStrategy, behaviors);
 	}
 
@@ -57,7 +57,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V> {
 		return mergedData;
 	}
 
-	public List<Behavior<S, ? extends V>> behaviors() {
+	public List<Behavior<S, ? extends V, ? extends V>> behaviors() {
 		return Collections.unmodifiableList(behaviors);
 	}
 }

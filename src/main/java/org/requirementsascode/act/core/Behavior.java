@@ -4,23 +4,23 @@ import static org.requirementsascode.act.core.Change.change;
 
 import java.util.Objects;
 
-public interface Behavior<S, V> {
-	Data<S,V> actOn(Data<S,V> before);
+public interface Behavior<S, V1, V2> {
+	Data<S,V2> actOn(Data<S,V1> before);
 
-	default Behavior<S, V> andThen(Behavior<S, V> nextBehavior){
+	default <V3> Behavior<S, V1, V3> andThen(Behavior<S, V2, V3> nextBehavior){
     Objects.requireNonNull(nextBehavior);    
     return before -> nextBehavior.actOn(actOn(before));
 	}
 	
-	default Behavior<S, V> andHandleChangeWith(HandleChange<S, V> changeHandler){
+	default Behavior<S, V1, V2> andHandleChangeWith(HandleChange<S, V1, V2> changeHandler){
 		return before -> {
-			Data<S, V> after = actOn(before);
-			Change<S, V> change = change(before, after);
+			Data<S, V2> after = actOn(before);
+			Change<S, V1, V2> change = change(before, after);
 			return changeHandler.handleChange(change);
 		};
 	}
 	
-	static <S,V> Behavior<S, V> identity() {
+	static <S,V1> Behavior<S, V1, V1> identity() {
     return d -> d;
   }
 }

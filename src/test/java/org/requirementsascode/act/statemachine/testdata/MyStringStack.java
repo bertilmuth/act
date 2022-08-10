@@ -36,21 +36,29 @@ public class MyStringStack {
 		}
 	};
 	
-	public static class Pop implements Value {
+	public static class Pop implements Value {		
+		public Pop() { }
+		
+		@Override
+		public String toString() {
+			return "Pop []";
+		}
+	};
+	
+	public static class PoppedElement implements Value {
 		private String text;
 		
-		public Pop() { }
-		private Pop(String text) {
+		public PoppedElement(String text) {
 			this.text = text;
 		}
 		
-		public Optional<String> text() {
-			return Optional.ofNullable(text);
+		public String text() {
+			return text;
 		}
 		
 		@Override
 		public String toString() {
-			return "Pop [text=" + text + "]";
+			return "PoppedElement [text=" + text + "]";
 		}
 	};
 	
@@ -72,10 +80,10 @@ public class MyStringStack {
 		return new MyStringStack(newElements);
 	}
 
-	Data<MyStringStack, Pop> pop() {		
+	Data<MyStringStack, PoppedElement> pop() {		
 		List<String> newElements = new ArrayList<>(elements);
 		String element = newElements.remove(0);
-		return data(new MyStringStack(newElements), new Pop(element));
+		return data(new MyStringStack(newElements), new PoppedElement(element));
 	}
 
 	MyStringStack clear(Clear clear) {

@@ -135,15 +135,15 @@ class BehaviorTest {
 		assertEquals(CONDITIONAL_AFTER_B1, unitedBehavior.actOn(TRUE_BEFORE_B1));
 	}
 
-	private Behavior<State, Trigger_B1> b1() {
+	private Behavior<State, Trigger_B1, Trigger_B1> b1() {
 		return before -> DATA_AFTER_B1;
 	}
 
-	private Behavior<State, ConditionalTrigger_B1> conditionalB1() {
+	private Behavior<State, ConditionalTrigger_B1, ConditionalTrigger_B1> conditionalB1() {
 		return inCase(before -> before.value().isTriggering(), before -> CONDITIONAL_AFTER_B1);
 	}
 
-	private Behavior<State, Trigger_B2> b2() {
+	private Behavior<State, Trigger_B2, Trigger_B2> b2() {
 		return before -> DATA_AFTER_B2;
 	}
 }

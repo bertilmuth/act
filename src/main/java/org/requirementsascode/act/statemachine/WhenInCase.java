@@ -9,8 +9,8 @@ import org.requirementsascode.act.core.Data;
 
 public class WhenInCase {
 	@SuppressWarnings("unchecked")
-	public static <S, V extends V0, V0> Behavior<S, V0> whenInCase(Class<V> expectedTriggerType, Predicate<Data<S,V>> predicate, Behavior<S, V> behavior) {
-		return (Behavior<S, V0>) inCase(typeMatches(expectedTriggerType), inCase(predicate, i -> behaviorActOn(behavior, i)));
+	public static <S, V extends V0, V0> Behavior<S, V0,V0> whenInCase(Class<V> expectedTriggerType, Predicate<Data<S,V>> predicate, Behavior<S, V,V> behavior) {
+		return (Behavior<S, V0,V0>) inCase(typeMatches(expectedTriggerType), inCase(predicate, i -> behaviorActOn(behavior, i)));
 	}
 
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(Class<V> expectedTriggerType) {
@@ -19,7 +19,7 @@ public class WhenInCase {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <S, V extends V0, V0> Data<S, V0> behaviorActOn(Behavior<S, V> behavior, Data<S, V0> before) {
+	private static <S, V extends V0, V0> Data<S, V0> behaviorActOn(Behavior<S, V,V> behavior, Data<S, V0> before) {
 		Data<S, V0> after = (Data<S, V0>) behavior.actOn((Data<S, V>) before);
 		return after;
 	}
