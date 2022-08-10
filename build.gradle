@@ -28,6 +28,7 @@ jar {
 dependencies {
 	testImplementation 'org.junit.platform:junit-platform-suite-engine:1.8.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation "org.assertj:assertj-core:3.12.2"
 }
 
 tasks.named('test') {
