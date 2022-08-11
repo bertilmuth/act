@@ -1,0 +1,117 @@
+plugins {
+	id 'java'
+	id 'eclipse'
+	id 'idea'
+	id 'maven-publish'
+}
+
+group = 'org.requirementsascode.act'
+version = '0.4.2-SNAPSHOT'
+
+sourceCompatibility = 8
+targetCompatibility = 8
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://oss.sonatype.org/content/repositories/snapshots/"
+	}
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'act-core',
+                   'Implementation-Version': archiveVersion
+	}
+}
+
+dependencies {
+	testImplementation 'org.junit.platform:junit-platform-suite-engine:1.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives javadocJar, sourcesJar
+}
+
+if (project.hasProperty("signing.keyId")) {
+	apply plugin: 'signing'
+
+	signing {
+	    sign configurations.archives
+	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				pom{
+					name = 'act-core'
+					description = 'Basic classes for the act project (Behavior, Data etc.)'
+					url = 'http://requirementsascode.org/'
+					packaging = 'jar'
+
+					from components.java
+
+      				artifact javadocJar {
+						classifier "javadoc"
+      				}
+
+					artifact sourcesJar {
+						classifier "sources"
+      				}
+
+					licenses {
+						license {
+							name = 'The Apache Software License, Version 2.0'
+							url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						}
+					}
+
+					developers {
+						developer {
+							id = 'bertilmuth'
+							name = 'Bertil Muth'
+						}
+					}
+
+					scm {
+						url = 'scm:git@github.com:bertilmuth/requirementsascode.git'
+						connection = 'scm:git@github.com:bertilmuth/requirementsascode.git'
+						developerConnection = 'scm:git@github.com:bertilmuth/requirementsascode.git'
+					}
+				}
+			}
+		}
+
+		repositories {
+			maven {
+				credentials {
+					username sonatypeUsername
+					password sonatypePassword
+				}
+
+				def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+				def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+				url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+			}
+		}
+	}
+
+	signing {
+		sign publishing.publications.mavenJava
+	}
+}

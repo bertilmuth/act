@@ -1,5 +1,5 @@
 plugins {
-	id 'java'
+	id 'java-library'
 	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
@@ -20,12 +20,13 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'act',
+        attributes 'Implementation-Title': 'act-statemachine',
                    'Implementation-Version': archiveVersion
 	}
 }
 
 dependencies {
+	api(project(':act-core'))
 	testImplementation 'org.junit.platform:junit-platform-suite-engine:1.8.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation "org.assertj:assertj-core:3.12.2"
@@ -60,8 +61,8 @@ if (project.hasProperty("signing.keyId")) {
 		publications {
 			mavenJava(MavenPublication) {
 				pom{
-					name = 'act'
-					description = 'A language for state charts, workflows and more.'
+					name = 'act-statemachine'
+					description = 'A language for state charts.'
 					url = 'http://requirementsascode.org/'
 					packaging = 'jar'
 
