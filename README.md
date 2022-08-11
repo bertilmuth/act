@@ -8,7 +8,7 @@ If you are using Maven, include the following in your `pom.xml`:
 ``` xml
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
-    <artifactId>act</artifactId>
+    <artifactId>act-statemachine</artifactId>
     <version>0.4.2</version>
   </dependency>
 ```
