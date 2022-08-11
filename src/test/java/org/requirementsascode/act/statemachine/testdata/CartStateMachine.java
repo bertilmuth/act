@@ -83,8 +83,8 @@ public class CartStateMachine {
 		return cartItems(data).size();
 	}
 	
-	private boolean itemIsInCart(Data<Cart, RemoveItem> i) {
-		return cartItems(i).contains(i.value().item());
+	private boolean itemIsInCart(Data<Cart, RemoveItem> data) {
+		return cartItems(data).contains(data.value().item());
 	}
 }
 
