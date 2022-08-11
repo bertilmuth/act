@@ -9,14 +9,14 @@ If you are using Maven, include the following in your `pom.xml`:
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
     <artifactId>act</artifactId>
-    <version>0.4</version>
+    <version>0.4.1</version>
   </dependency>
 ```
 
 If you are using Gradle, include the following in your `build.gradle` dependencies:
 
 ```
-implementation 'org.requirementsascode.act:act:0.4'
+implementation 'org.requirementsascode.act:act:0.4.1'
 ```
 
 # Example usage
