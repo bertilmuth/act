@@ -29,6 +29,16 @@ class CartStateMachineTest {
 	}
 	
 	@Test
+	void removesItemFromCartThatsNotInIt() {
+		String itemToBeAdded = "SomeItem";
+		
+		stateMachine.actOn(new AddItem(itemToBeAdded));
+		stateMachine.actOn(new RemoveItem("ItemThatsNotInCart"));
+		assertEquals(1, stateMachine.items().size());
+		assertEquals(itemToBeAdded, stateMachine.items().get(0));
+	}
+	
+	@Test
 	void addsSecondItemToCart() {
 		String item1 = "Item1";
 		String item2 = "Item2";
