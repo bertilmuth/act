@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.testdata.MyStringStack;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.Pop;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.Push;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.Value;
 import org.requirementsascode.act.statemachine.testdata.MyStringStackStateMachine;
+import org.requirementsascode.act.statemachine.testdata.Pop;
+import org.requirementsascode.act.statemachine.testdata.Push;
+import org.requirementsascode.act.statemachine.testdata.Value;
 
 class MyStringStackSmokeTest {
 

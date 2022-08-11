@@ -16,52 +16,6 @@ import org.requirementsascode.act.core.Data;
  *
  */
 public class MyStringStack {
-	public interface Value{};
-	
-	public static class Push implements Value {
-		private String text;
-				
-		public Push(String text) {
-			this.text = text;
-		}
-		
-		public String text() {
-			return text;
-		}
-		
-		@Override
-		public String toString() {
-			return "Push [text=" + text + "]";
-		}
-	};
-	
-	public static class Pop implements Value {		
-		public Pop() { }
-		
-		@Override
-		public String toString() {
-			return "Pop []";
-		}
-	};
-	
-	public static class PoppedElement implements Value {
-		private String text;
-		
-		public PoppedElement(String text) {
-			this.text = text;
-		}
-		
-		public String text() {
-			return text;
-		}
-		
-		@Override
-		public String toString() {
-			return "PoppedElement [text=" + text + "]";
-		}
-	};
-	
-	public static class Clear implements Value {};
 		
 	private final List<String> elements = new ArrayList<>();
 	

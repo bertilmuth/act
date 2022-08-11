@@ -13,11 +13,6 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.HandleChange;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.Clear;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.Pop;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.PoppedElement;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.Push;
-import org.requirementsascode.act.statemachine.testdata.MyStringStack.Value;
 
 public class MyStringStackStateMachine implements Behavior<MyStringStack, Value, Value>{
 	private static int MAX_STACK_SIZE = 50000;
