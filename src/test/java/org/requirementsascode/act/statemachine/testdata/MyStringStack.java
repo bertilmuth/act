@@ -9,21 +9,21 @@ import java.util.List;
 import org.requirementsascode.act.core.Data;
 
 /**
- * This is a statemachine based variation of the jqwik property based testing class:
+ * This is a statemachine based variation of the jqwik property based testing
+ * class:
  * https://github.com/jlink/jqwik/blob/main/documentation/src/test/java/net/jqwik/docs/state/mystack/MyStringStack.java
  * 
  * @author BertilMuth
  *
  */
 public class MyStringStack {
-		
 	private final List<String> elements = new ArrayList<>();
-	
-	public MyStringStack(){
+
+	public MyStringStack() {
 		this(new ArrayList<>());
 	}
-	
-	private MyStringStack(List<String> elements){
+
+	private MyStringStack(List<String> elements) {
 		this.elements.addAll(elements);
 	}
 
@@ -33,7 +33,7 @@ public class MyStringStack {
 		return new MyStringStack(newElements);
 	}
 
-	Data<MyStringStack, PoppedElement> pop(Pop pop) {		
+	Data<MyStringStack, PoppedElement> pop(Pop pop) {
 		List<String> newElements = new ArrayList<>(elements);
 		String element = newElements.remove(0);
 		return data(new MyStringStack(newElements), new PoppedElement(element));
@@ -54,7 +54,7 @@ public class MyStringStack {
 	public String top() {
 		return elements.get(0);
 	}
-	
+
 	public List<String> elements() {
 		return Collections.unmodifiableList(elements);
 	}
