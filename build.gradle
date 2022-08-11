@@ -1,0 +1,4 @@
+subprojects{	
+	group = 'org.requirementsascode.act'
+	version = '0.4.2'
+}
