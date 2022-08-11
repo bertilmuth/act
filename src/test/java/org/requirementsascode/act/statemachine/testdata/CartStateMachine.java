@@ -86,10 +86,6 @@ public class CartStateMachine {
 	private boolean itemIsInCart(Data<Cart, RemoveItem> i) {
 		return cartItems(i).contains(i.value().item());
 	}
-	
-	private boolean itemIsNotInCart(Data<Cart, RemoveItem> i) {
-		return !itemIsInCart(i);
-	}
 }
 
 
