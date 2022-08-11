@@ -51,11 +51,11 @@ Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
 				consumeWith(Cart::addItem))),	
 		
 		transition(nonEmpty, nonEmpty, 
-			whenInCase(RemoveItem.class, i -> cartSize(i) > 1 && itemIsInCart(i), 
+			whenInCase(RemoveItem.class, d -> cartSize(d) > 1 && itemIsInCart(d), 
 				consumeWith(Cart::removeItem))),
 		
 		transition(nonEmpty, empty, 
-			whenInCase(RemoveItem.class, i -> cartSize(i) == 1 && itemIsInCart(i), 
+			whenInCase(RemoveItem.class, d -> cartSize(d) == 1 && itemIsInCart(d), 
 				consumeWith(Cart::removeItem)))
 	)
 	.flows(
