@@ -1,7 +1,7 @@
 @startuml
 [*] -right-> CartEmpty
 CartEmpty -right-> CartNotEmpty : AddItem
-CartNotEmpty --> CartEmpty : RemoveItem [cartSize == 1]
+CartNotEmpty --> CartEmpty : RemoveItem [cartSize == 1 && itemIsInCart]
 CartNotEmpty -left-> CartNotEmpty : AddItem
-CartNotEmpty -right-> CartNotEmpty : RemoveItem[cartSize > 1]
+CartNotEmpty -right-> CartNotEmpty : RemoveItem[cartSize > 1 && itemIsInCart]
 @enduml

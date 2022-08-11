@@ -35,7 +35,7 @@ Act uses invariant conditions to be able to check if the state machine is in a c
 
 Here's the state machine diagram with the states' invariants (yellow sticky notes).
 
-![Image of a statemachine of a shopping cart, with two states and invariants](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_diagram.png)
+![Image of a statemachine of a shopping cart, with two states and invariants](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_diagram_withInvariants.png)
 
 And here's how the state machine is presented in code.
 
@@ -63,8 +63,8 @@ Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
 	)
 	.build();
 ```
-In addition to what you see on the diagram, the code also checks if items are contained in the cart when removing them,
-to make sure the target state is correct.
+As you can see in the code, the number of transitions is 3, instead of 4 on the diagram.
+Since adding an item always leads to the `nonEmpty` state, you can specify `anyState()` as the source state.
 
 To learn more, see the [CartStateMachine](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java) class and the [CartStateMachineTest](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) class.
 
