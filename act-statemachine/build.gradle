@@ -5,9 +5,6 @@ plugins {
 	id 'maven-publish'
 }
 
-sourceCompatibility = 8
-targetCompatibility = 8
-
 repositories {
 	mavenCentral()
 	maven {
@@ -24,9 +21,10 @@ jar {
 
 dependencies {
 	api(project(':act-core'))
-	testImplementation 'org.junit.platform:junit-platform-suite-engine:1.8.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-    testImplementation "org.assertj:assertj-core:3.12.2"
+	testImplementation(platform('org.junit:junit-bom:5.9.0'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+	testImplementation('org.junit.platform:junit-platform-suite-engine:1.9.0')
+	testImplementation('org.assertj:assertj-core:3.23.1')
 }
 
 tasks.named('test') {
