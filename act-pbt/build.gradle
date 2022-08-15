@@ -26,11 +26,11 @@ compileTestJava {
 
 dependencies {
 	implementation 'org.requirementsascode.act:act-statemachine:0.4.2'
-    implementation "net.jqwik:jqwik:${jqwikVersion}"
-    
-    testImplementation "org.assertj:assertj-core:3.12.2"
+	implementation "net.jqwik:jqwik:${jqwikVersion}"
+	
+	testImplementation "org.assertj:assertj-core:3.12.2"
 	testImplementation "org.junit.platform:junit-platform-suite-engine:${junitPlatformVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+	testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
 }
 
 tasks.named('test') {
