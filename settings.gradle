@@ -1,4 +1,4 @@
 rootProject.name = 'act'
 include 'act-core'
 include 'act-statemachine'
-
+include 'act-pbt'

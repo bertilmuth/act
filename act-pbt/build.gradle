@@ -1,0 +1,40 @@
+plugins {
+	id 'java'
+	id 'eclipse'
+	id 'idea'
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven {	url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
+	
+}
+
+ext.junitPlatformVersion = '1.8.2'
+ext.junitJupiterVersion = '5.8.2'
+
+ext.jqwikVersion = '1.7.0-SNAPSHOT'
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+compileTestJava {
+    // To enable argument names in reporting and debugging
+	options.compilerArgs += '-parameters'
+}
+
+dependencies {
+	implementation 'org.requirementsascode.act:act-statemachine:0.4.2'
+    implementation "net.jqwik:jqwik:${jqwikVersion}"
+    
+    testImplementation "org.assertj:assertj-core:3.12.2"
+	testImplementation "org.junit.platform:junit-platform-suite-engine:${junitPlatformVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+}
+
+tasks.named('test') {
+	useJUnitPlatform {
+		includeEngines 'jqwik', 'junit-jupiter'
+	}
+}
