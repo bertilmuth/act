@@ -1,0 +1,59 @@
+package org.requirementsascode.act.statemachine;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import org.requirementsascode.act.core.Behavior;
+import org.requirementsascode.act.core.Data;
+
+public class StatemachineApi {	
+	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
+		return State.state(stateName, stateInvariant);
+	}
+	
+	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {
+		return State.state(stateName, stateInvariant, stateBehavior);
+	}
+	
+	public static<S, V> State<S, V> anyState() {
+		return State.anyState();
+	}
+	
+	public static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
+			Behavior<S, V0, V0> behavior) {
+		return Transition.transition(fromState, toState, behavior);
+	}
+	
+	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> when(Class<V1> expectedType, Behavior<S, V1,V2> behavior) {
+		return When.when(expectedType, behavior);
+	}
+	
+	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> whenInCase(Class<V1> expectedType, Predicate<Data<S,V1>> predicate, Behavior<S, V1,V2> behavior) {
+		return WhenInCase.whenInCase(expectedType, predicate, behavior);
+	}
+	
+	public static <S,V> Behavior<S,V,V> consumeWith(BiFunction<S,V,S> consumer){
+		return ConsumeWith.consumeWith(consumer);
+	}
+	
+	public static <S,V1,V2> Behavior<S,V1,V2> supplyWith(BiFunction<S,V1,Data<S,V2>> supplier){
+		return SupplyWith.supplyWith(supplier);
+	}
+	
+	public static <S, V0> EntryFlow<S, V0> entryFlow(Behavior<S, V0,V0> entryBehavior) {
+		return EntryFlow.entryFlow(entryBehavior);
+	}
+	
+	public static <S, V0> EntryFlow<S, V0> entryFlow(State<S, V0> toState, Behavior<S, V0,V0> entryBehavior) {
+		return EntryFlow.entryFlow(toState, entryBehavior);
+	}
+	
+	public static <S, V0> ExitFlow<S, V0> exitFlow(State<S, V0> fromState, Behavior<S, V0, V0> exitBehavior) {
+		return ExitFlow.exitFlow(fromState, exitBehavior);
+	}
+	
+	public static <S,V> Behavior<S,V,V> init(Function<V,S> init){
+		return Init.init(init);
+	}
+}

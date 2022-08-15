@@ -1,14 +1,6 @@
 package org.requirementsascode.act.statemachine.testdata;
-
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
-import static org.requirementsascode.act.statemachine.ExitFlow.exitFlow;
-import static org.requirementsascode.act.statemachine.Init.init;
-import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
-import static org.requirementsascode.act.statemachine.Transition.transition;
-import static org.requirementsascode.act.statemachine.When.when;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.List;
 
@@ -59,7 +51,7 @@ public class HierarchicalCartStateMachine {
 			.transitions(
 				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, consumeWith(HierarchicalCart::addItem))),
 				transition(emptyCartState, emptyCartState, when(RemoveItem.class, consumeWith((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
-				transition(nonEmptyCartState, emptyCartState, when(RemoveItem.class, inCase(i -> i.state().items().size() == 1, consumeWith(HierarchicalCart::removeItem))))
+				transition(nonEmptyCartState, emptyCartState, whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, consumeWith(HierarchicalCart::removeItem)))
 			)
 			.flows(
 				entryFlow(when(CreateHierarchicalCart.class, init(HierarchicalCart::createCart)))

@@ -1,14 +1,7 @@
 package org.requirementsascode.act.statemachine.testdata;
 
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
-import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
-import static org.requirementsascode.act.statemachine.Init.init;
-import static org.requirementsascode.act.statemachine.State.anyState;
-import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.Transition.transition;
-import static org.requirementsascode.act.statemachine.When.when;
-import static org.requirementsascode.act.statemachine.WhenInCase.whenInCase;
 
 import java.util.List;
 
@@ -59,7 +52,7 @@ public class CartStateMachine {
 				transition(nonEmpty, nonEmpty, 
 					whenInCase(RemoveItem.class, d -> cartSize(d) > 1 && itemIsInCart(d), 
 						consumeWith(Cart::removeItem))),
-				
+								
 				transition(nonEmpty, empty, 
 					whenInCase(RemoveItem.class, d -> cartSize(d) == 1 && itemIsInCart(d), 
 						consumeWith(Cart::removeItem)))

@@ -24,11 +24,11 @@ public class State<S, V> implements Behavior<S, V, V> {
 		this.behavior = createStateBehavior(behavior);
 	}
 
-	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
+	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
 		return new State<>(stateName, stateInvariant, new DoNothing<>());
 	}
 
-	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {
+	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {
 		return new State<>(stateName, stateInvariant, stateBehavior);
 	}
 	

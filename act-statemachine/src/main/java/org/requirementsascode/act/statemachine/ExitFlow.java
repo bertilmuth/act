@@ -14,7 +14,7 @@ public class ExitFlow<S, V0> implements Flow<S, V0>{
 		this.exitBehavior = requireNonNull(exitBehavior, "exitBehavior must be non-null");
 	}
 
-	public static <S, V0> ExitFlow<S, V0> exitFlow(State<S, V0> fromState, Behavior<S, V0, V0> exitBehavior) {
+	static <S, V0> ExitFlow<S, V0> exitFlow(State<S, V0> fromState, Behavior<S, V0, V0> exitBehavior) {
 		return new ExitFlow<>(fromState, exitBehavior);
 	}
 

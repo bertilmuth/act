@@ -20,7 +20,7 @@ public class Transition<S, V0> implements Behavior<S, V0,V0> {
 		this.transitionBehavior = createTransitionBehavior(fromState, behavior);
 	}
 
-	public static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
+	static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
 			Behavior<S, V0, V0> behavior) {
 		return new Transition<>(fromState, toState, behavior);
 	}

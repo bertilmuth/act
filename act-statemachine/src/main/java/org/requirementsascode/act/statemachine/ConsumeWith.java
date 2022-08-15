@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import org.requirementsascode.act.core.Behavior;
 
 public class ConsumeWith{
-	public static <S,V> Behavior<S,V,V> consumeWith(BiFunction<S,V,S> consumer){
+	static <S,V> Behavior<S,V,V> consumeWith(BiFunction<S,V,S> consumer){
 		requireNonNull(consumer, "consumer must be non-null!");
 		return d -> data(consumer.apply(d.state(), d.value()), d.value());
 	}
