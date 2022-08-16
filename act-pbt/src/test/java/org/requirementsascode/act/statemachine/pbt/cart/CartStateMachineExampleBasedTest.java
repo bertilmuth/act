@@ -7,7 +7,6 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.pbt.cart.Cart.cart;
 
 import java.util.List;
-import java.util.function.IntPredicate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

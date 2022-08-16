@@ -23,7 +23,7 @@ import net.jqwik.api.state.ActionChain;
  * to generate randomized event instances (jqwik calls them "actions").
  * 
  * The test then fires these events at a state machine, that controls the behavior of a shopping cart.
- * (see https://github.com/bertilmuth/act-pbt/blob/main/src/test/java/org/requirementsascode/act/pbt/cart/CartStateMachine.java)
+ * (see https://github.com/bertilmuth/act/blob/main/act-pbt/src/test/java/org/requirementsascode/act/statemachine/pbt/cart/CartStateMachine.java)
  * 
  * The properties to test are attached to the transitions of the state machine.
  * That's why this test class doesn't need assert statements.
