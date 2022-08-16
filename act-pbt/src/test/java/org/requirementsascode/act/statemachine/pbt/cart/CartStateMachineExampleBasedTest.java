@@ -18,7 +18,7 @@ import org.requirementsascode.act.statemachine.pbt.cart.Cart.CreateCart;
 import org.requirementsascode.act.statemachine.pbt.cart.Cart.RemoveItem;
 import org.requirementsascode.act.statemachine.pbt.cart.Cart.Value;
 
-class CartStateMachineSmokeTest {
+class CartStateMachineExampleBasedTest {
 	private CartStateMachine statemachine;
 
 	@BeforeEach
