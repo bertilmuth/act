@@ -36,8 +36,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 	}
 	
 	private Statemachine<Cart, Value> createStatemachine() {
-		State<Cart, Value> empty = State.state("Empty", cart -> cart != null && cart.items().size() == 0);
-		State<Cart, Value> nonEmpty = State.state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
+		State<Cart, Value> empty = State.state("Empty", cart -> cart != null && cart.distinctItems().size() == 0);
+		State<Cart, Value> nonEmpty = State.state("Non-Empty", cart -> cart != null && cart.distinctItems().size() > 0);
 		
 		var itemRemoved = itemRemoved();
 		var itemNotRemoved = itemNotRemoved();
@@ -85,7 +85,7 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 	/**************** Helper methods ****************************/
 	
 	private List<String> items(Data<Cart, ?> d) {
-		return d.state().items();
+		return d.state().distinctItems();
 	}
 	
 	private String item(Data<Cart, RemoveItem> d) {

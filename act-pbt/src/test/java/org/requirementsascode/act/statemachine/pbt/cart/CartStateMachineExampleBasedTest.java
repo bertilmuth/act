@@ -1,13 +1,11 @@
 package org.requirementsascode.act.statemachine.pbt.cart;
 
-import static java.util.Collections.emptyList;
-
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.pbt.cart.Cart.cart;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +32,7 @@ class CartStateMachineExampleBasedTest {
 	}
 
 	@Test
-	void addsOneElement() {
+	void addsOneItem() {
 		final String testString = "AAAAA";
 		Data<Cart, Value> add = data(cart(emptyList()), new AddItem(testString));
 		Data<Cart, Value> after = statemachine.actOn(add);
@@ -43,7 +41,16 @@ class CartStateMachineExampleBasedTest {
 	}
 	
 	@Test
-	void removesOneElement() {
+	void addsTheSameItemTwice() {
+		final String testString = "AAAAA";
+		Data<Cart, Value> add = data(cart(asList(testString)), new AddItem(testString));
+		Data<Cart, Value> after = statemachine.actOn(add);
+		assertThat(cartSize(after)).isEqualTo(1);
+		assertThat(items(after).get(0)).isEqualTo(testString);
+	}
+	
+	@Test
+	void removesOneItem() {
 		final String testString = "AAAAA";
 		Data<Cart, Value> add = data(cart(asList(testString)), new RemoveItem(testString));
 		Data<Cart, Value> after = statemachine.actOn(add);
@@ -51,7 +58,7 @@ class CartStateMachineExampleBasedTest {
 	}
 
 	private List<String> items(Data<Cart, Value> after) {
-		return after.state().items();
+		return after.state().distinctItems();
 	}
 
 	private int cartSize(Data<Cart, Value> data) {
