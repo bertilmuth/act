@@ -36,8 +36,7 @@ class CartStateMachineExampleBasedTest {
 		final String testString = "AAAAA";
 		Data<Cart, Value> add = data(cart(emptyList()), new AddItem(testString));
 		Data<Cart, Value> after = statemachine.actOn(add);
-		assertThat(cartSize(after)).isEqualTo(1);
-		assertThat(items(after).get(0)).isEqualTo(testString);
+		assertThat(items(after)).containsExactly(testString);
 	}
 	
 	@Test
@@ -45,8 +44,7 @@ class CartStateMachineExampleBasedTest {
 		final String testString = "AAAAA";
 		Data<Cart, Value> add = data(cart(asList(testString)), new AddItem(testString));
 		Data<Cart, Value> after = statemachine.actOn(add);
-		assertThat(cartSize(after)).isEqualTo(1);
-		assertThat(items(after).get(0)).isEqualTo(testString);
+		assertThat(items(after)).containsExactly(testString);
 	}
 	
 	@Test
