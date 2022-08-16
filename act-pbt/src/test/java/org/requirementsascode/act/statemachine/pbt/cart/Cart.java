@@ -20,6 +20,10 @@ public class Cart {
 		return items.stream().distinct().toList();
 	}
 	
+	public long quantityOf(String item) {
+		return items.stream().filter(item::equals).count();
+	}
+	
 	static Cart cart(List<String> items) {
 		return new Cart(items);
 	}
@@ -27,7 +31,7 @@ public class Cart {
 	static Cart create(CreateCart createCart) {
 		return cart(Collections.emptyList());
 	}
-	
+
 	Cart addItem(AddItem addItem) {		
 		ArrayList<String> items = new ArrayList<>(items());
 		items.add(addItem.item());
@@ -44,4 +48,5 @@ public class Cart {
 	public String toString() {
 		return "CartState [items=" + items + "]";
 	}
+
 }
