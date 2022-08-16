@@ -16,7 +16,7 @@ public class Cart {
 		this.items = new ArrayList<>(items);
 	}
 	
-	public List<String> distinctItems() {
+	public List<String> items() {
 		return items.stream().distinct().toList();
 	}
 	
@@ -29,13 +29,13 @@ public class Cart {
 	}
 	
 	Cart addItem(AddItem addItem) {		
-		ArrayList<String> items = new ArrayList<>(distinctItems());
+		ArrayList<String> items = new ArrayList<>(items());
 		items.add(addItem.item());
 		return cart(items);
 	}
 
 	Cart removeItem(RemoveItem removeItem) {		
-		ArrayList<String> items = new ArrayList<>(distinctItems());
+		ArrayList<String> items = new ArrayList<>(items());
 		items.remove(removeItem.item());
 		return cart(items);
 	}

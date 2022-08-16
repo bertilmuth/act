@@ -58,7 +58,7 @@ class CartStateMachineExampleBasedTest {
 	}
 
 	private List<String> items(Data<Cart, Value> after) {
-		return after.state().distinctItems();
+		return after.state().items();
 	}
 
 	private int cartSize(Data<Cart, Value> data) {
