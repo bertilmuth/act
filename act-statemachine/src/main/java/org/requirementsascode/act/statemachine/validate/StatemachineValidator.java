@@ -1,6 +1,7 @@
 package org.requirementsascode.act.statemachine.validate;
 
 import static org.requirementsascode.act.statemachine.unitedbehavior.FlowsTransitions.flowsTransitions;
+import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class StatemachineValidator {
 		List<State<S, ?>> statesNotInList = transitions.stream()
 			.map(transitionStateAccess)
 			.filter(s -> !definedState.equals(s) && 
-				!defaultState.equals(s) && !State.anyState().equals(s) && 
+				!defaultState.equals(s) && !anyState().equals(s) && 
 				!expectedStates.contains(s))
 			.collect(Collectors.toList());
 

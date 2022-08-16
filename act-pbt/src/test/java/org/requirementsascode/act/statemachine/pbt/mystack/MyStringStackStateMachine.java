@@ -1,12 +1,6 @@
 package org.requirementsascode.act.statemachine.pbt.mystack;
 
-import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
-import static org.requirementsascode.act.statemachine.State.anyState;
-import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.SupplyWith.supplyWith;
-import static org.requirementsascode.act.statemachine.Transition.transition;
-import static org.requirementsascode.act.statemachine.When.when;
-import static org.requirementsascode.act.statemachine.WhenInCase.whenInCase;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;

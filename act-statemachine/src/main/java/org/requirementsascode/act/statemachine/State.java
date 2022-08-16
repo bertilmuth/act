@@ -32,7 +32,7 @@ public class State<S, V> implements Behavior<S, V, V> {
 		return new State<>(stateName, stateInvariant, stateBehavior);
 	}
 	
-	public static<S, V> State<S, V> anyState() {
+	static<S, V> State<S, V> anyState() {
 		return state("Any State", s -> true);
 	}
 

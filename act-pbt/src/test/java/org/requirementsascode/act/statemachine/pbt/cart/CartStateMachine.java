@@ -1,12 +1,6 @@
 package org.requirementsascode.act.statemachine.pbt.cart;
 
-import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
-import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
-import static org.requirementsascode.act.statemachine.Init.init;
-import static org.requirementsascode.act.statemachine.State.anyState;
-import static org.requirementsascode.act.statemachine.Transition.transition;
-import static org.requirementsascode.act.statemachine.When.when;
-import static org.requirementsascode.act.statemachine.WhenInCase.whenInCase;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.statemachine.pbt.Property.property;
 import static org.requirementsascode.act.statemachine.pbt.PropertyValidator.propertyValidator;
 
@@ -36,8 +30,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 	}
 	
 	private Statemachine<Cart, Value> createStatemachine() {
-		State<Cart, Value> empty = State.state("Empty", cart -> cart != null && cart.items().size() == 0);
-		State<Cart, Value> nonEmpty = State.state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
+		State<Cart, Value> empty = state("Empty", cart -> cart != null && cart.items().size() == 0);
+		State<Cart, Value> nonEmpty = state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
 		
 		var itemRemoved = itemRemoved();
 		var itemNotRemoved = itemNotRemoved();
@@ -45,7 +39,7 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 		Statemachine<Cart, Value> statemachine = Statemachine.builder()
 			.states(empty,nonEmpty)
 			.transitions(
-				transition(State.anyState(), nonEmpty, 
+				transition(anyState(), nonEmpty, 
 					when(AddItem.class, consumeWith(Cart::addItem))),	
 				
 				transition(nonEmpty, nonEmpty, 
