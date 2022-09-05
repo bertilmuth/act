@@ -11,7 +11,7 @@ public class Transitions<S, V0> {
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
 	}
 
-	public static <S, V0> Transitions<S, V0> transitions(List<Transition<S, V0>> transitions) {
+	static <S, V0> Transitions<S, V0> transitions(List<Transition<S, V0>> transitions) {
 		return new Transitions<>(transitions);
 	}
 	
