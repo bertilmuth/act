@@ -38,7 +38,7 @@ public class StatemachineBuilder {
 			private TransitionsBuilder(){}
 			
 			@SafeVarargs
-			public final FlowsBuilder flows(AsTransition<S, V>... flows) {
+			public final FlowsBuilder flows(Flow<S, V>... flows) {
 				requireNonNull(flows, "flows must be non-null!");
 				builderFlows = Flows.of(Arrays.asList(flows));
 				return new FlowsBuilder();

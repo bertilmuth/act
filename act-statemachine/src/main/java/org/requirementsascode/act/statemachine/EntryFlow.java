@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.requirementsascode.act.core.Behavior;
 
-public class EntryFlow<S, V0> implements AsTransition<S, V0>{
+public class EntryFlow<S, V0> implements Flow<S, V0>{
 	private final State<S, V0> toState;
 	private final Behavior<S, V0,V0> entryBehavior;
 

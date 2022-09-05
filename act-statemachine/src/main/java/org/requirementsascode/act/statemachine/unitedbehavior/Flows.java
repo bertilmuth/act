@@ -7,18 +7,18 @@ import static org.requirementsascode.act.statemachine.unitedbehavior.FlowsTransi
 import java.util.Collection;
 
 import org.requirementsascode.act.core.Behavior;
-import org.requirementsascode.act.statemachine.AsTransition;
+import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
 public class Flows<S, V0> {
-	private final Collection<AsTransition<S, V0>> flows;
+	private final Collection<Flow<S, V0>> flows;
 
-	private Flows(Collection<AsTransition<S, V0>> flows) {
+	private Flows(Collection<Flow<S, V0>> flows) {
 		this.flows = requireNonNull(flows, "flows must be non-null!");
 	}
 	
-	public static <S, V0> Flows<S, V0> of(Collection<AsTransition<S, V0>> flows){
+	public static <S, V0> Flows<S, V0> of(Collection<Flow<S, V0>> flows){
 		return new Flows<>(flows);
 	}
 
@@ -28,7 +28,7 @@ public class Flows<S, V0> {
 		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), flowsTransitions(this, definedState, defaultState));
 	}
 
-	public Collection<AsTransition<S, V0>> asCollection() {
+	public Collection<Flow<S, V0>> asCollection() {
 		return flows;
 	}
 }
