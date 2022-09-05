@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.requirementsascode.act.core.Behavior;
 
-public class EntryFlow<S, V0> implements Flow<S, V0>{
+public class EntryFlow<S, V0> implements AsTransition<S, V0>{
 	private final State<S, V0> toState;
 	private final Behavior<S, V0,V0> entryBehavior;
 
@@ -34,7 +34,7 @@ public class EntryFlow<S, V0> implements Flow<S, V0>{
 	}
 
 	@Override
-	public Transition<S, V0> convertToTransition(State<S, V0> definedState, State<S, V0> defaultState) {
+	public Transition<S, V0> asTransition(State<S, V0> definedState, State<S, V0> defaultState) {
 		State<S, V0> toStateOrAnyDefinedState = toState().orElse(definedState);
 		return transition(defaultState, toStateOrAnyDefinedState, entryBehavior());
 	}

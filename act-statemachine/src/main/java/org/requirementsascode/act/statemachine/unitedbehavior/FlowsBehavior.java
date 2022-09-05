@@ -6,12 +6,12 @@ import static org.requirementsascode.act.statemachine.unitedbehavior.FlowsTransi
 import java.util.List;
 
 import org.requirementsascode.act.core.Behavior;
-import org.requirementsascode.act.statemachine.Flow;
+import org.requirementsascode.act.statemachine.AsTransition;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
 public class FlowsBehavior {
-	public static <S, V0> Behavior<S, V0, V0> flowsBehavior(List<Flow<S, V0>> flows, State<S, V0> definedState,
+	public static <S, V0> Behavior<S, V0, V0> flowsBehavior(List<AsTransition<S, V0>> flows, State<S, V0> definedState,
 		State<S, V0> defaultState) {
 
 		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), flowsTransitions(flows, definedState, defaultState));
