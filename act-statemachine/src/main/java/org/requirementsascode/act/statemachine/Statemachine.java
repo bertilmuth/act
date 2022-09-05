@@ -5,7 +5,6 @@ import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.unitedbehavior.FlowsBehavior.flowsBehavior;
 import static org.requirementsascode.act.statemachine.unitedbehavior.StatesBehaviorOrIdentity.statesBehaviorOrIdentity;
 import static org.requirementsascode.act.statemachine.unitedbehavior.TransitionsBehavior.transitionsBehavior;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
@@ -16,6 +15,7 @@ import java.util.function.Predicate;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
+import org.requirementsascode.act.statemachine.unitedbehavior.Flows;
 
 public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String DEFINED_STATE = "Defined State";
@@ -80,7 +80,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 		Behavior<S, V0, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(states());
 		Behavior<S, V0, V0> transitionsBehavior = transitionsBehavior(transitions());
-		Behavior<S, V0, V0> flowsBehavior = flowsBehavior(flows(), definedState(), defaultState());
+		Behavior<S, V0, V0> flowsBehavior = Flows.of(flows()).asBehavior(definedState(), defaultState());
 
 		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
 			statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
