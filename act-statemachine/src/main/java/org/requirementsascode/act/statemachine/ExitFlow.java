@@ -19,7 +19,8 @@ public class ExitFlow<S, V0> implements Flow<S, V0>{
 	}
 
 	@Override
-	public Transition<S, V0> asTransition(State<S, V0> definedState, State<S, V0> defaultState) {
+	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
+		State<S, V0> defaultState = owningStatemachine.defaultState();
 		return transition(fromState, defaultState, exitBehavior);
 	}
 }

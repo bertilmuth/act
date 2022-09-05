@@ -21,13 +21,13 @@ public class Flows<S, V0> {
 		return new Flows<>(flows);
 	}
 
-	public Behavior<S, V0, V0> asBehavior(State<S, V0> definedState, State<S, V0> defaultState) {
+	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
 
-		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), asTransitions(definedState, defaultState));
+		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), asTransitions(owningStatemachine));
 	}
 
-	public List<Transition<S, V0>> asTransitions(State<S, V0> definedState, State<S, V0> defaultState) {
-		return asCollection().stream().map(e -> e.asTransition(definedState, defaultState)).collect(Collectors.toList());
+	public List<Transition<S, V0>> asTransitions(Statemachine<S, V0> owningStatemachine) {
+		return asCollection().stream().map(e -> e.asTransition(owningStatemachine)).collect(Collectors.toList());
 	}
 
 	public Collection<Flow<S, V0>> asCollection() {

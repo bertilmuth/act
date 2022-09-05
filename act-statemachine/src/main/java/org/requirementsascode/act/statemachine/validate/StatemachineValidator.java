@@ -16,7 +16,7 @@ public class StatemachineValidator {
 
 		State<S, V0> definedState = statemachine.definedState();
 		State<S, V0> defaultState = statemachine.defaultState();
-		List<Transition<S, V0>> flowsTransitions = statemachine.flows().asTransitions(definedState, defaultState);
+		List<Transition<S, V0>> flowsTransitions = statemachine.flows().asTransitions(statemachine);
 
 		List<Transition<S, V0>> transitions = new ArrayList<>(flowsTransitions);
 		transitions.addAll(statemachine.transitions());

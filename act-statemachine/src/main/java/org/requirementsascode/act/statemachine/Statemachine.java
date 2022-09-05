@@ -79,7 +79,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 		Behavior<S, V0, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(states());
 		Behavior<S, V0, V0> transitionsBehavior = transitionsBehavior(transitions());
-		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(definedState(), defaultState());
+		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
 
 		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
 			statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
