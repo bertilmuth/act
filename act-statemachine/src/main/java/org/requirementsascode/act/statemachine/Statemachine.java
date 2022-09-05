@@ -21,13 +21,13 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String DEFAULT_STATE = "Default State";
 
 	private final List<State<S, V0>> states;
-	private final List<Transition<S, V0>> transitions;
+	private final Transitions<S, V0> transitions;
 	private final Flows<S, V0> flows;
 	private final Behavior<S, V0, V0> statemachineBehavior;
 	private final State<S, V0> defaultState;
 	private final State<S, V0> definedState;
 
-	Statemachine(List<State<S, V0>> states, List<Transition<S, V0>> transitions,
+	Statemachine(List<State<S, V0>> states, Transitions<S, V0> transitions,
 		Flows<S, V0> flows) {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
@@ -50,7 +50,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return states;
 	}
 
-	public List<Transition<S, V0>> transitions() {
+	public Transitions<S, V0> transitions() {
 		return transitions;
 	}
 

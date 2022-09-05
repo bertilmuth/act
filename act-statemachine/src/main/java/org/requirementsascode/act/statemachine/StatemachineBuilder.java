@@ -1,5 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ public class StatemachineBuilder {
 
 	public class StatesBuilder<S,V> {
 		private final List<State<S,V>> builderStates;
-		private List<Transition<S, V>> builderTransitions;
+		private Transitions<S, V> builderTransitions = Transitions.transitions(Collections.emptyList());
 		private Flows<S, V> builderFlows = Flows.flows(Collections.emptyList());
 
 		private StatesBuilder(State<S,V>[] states) {
@@ -26,9 +27,9 @@ public class StatemachineBuilder {
 		}
 
 		@SafeVarargs
-		public final TransitionsBuilder transitions(Transition<S, V>... transitions) {
-			requireNonNull(transitions, "transitions must be non-null!");
-			builderTransitions = Arrays.asList(transitions);
+		public final TransitionsBuilder transitions(Transition<S, V>... transitionsArray) {
+			requireNonNull(transitionsArray, "transitionsArray must be non-null!");
+			builderTransitions = Transitions.transitions(Arrays.asList(transitionsArray));
 			return new TransitionsBuilder();
 		}
 
@@ -36,9 +37,9 @@ public class StatemachineBuilder {
 			private TransitionsBuilder(){}
 			
 			@SafeVarargs
-			public final FlowsBuilder flows(Flow<S, V>... flows) {
-				requireNonNull(flows, "flows must be non-null!");
-				builderFlows = Flows.flows(Arrays.asList(flows));
+			public final FlowsBuilder flows(Flow<S, V>... flowsArray) {
+				requireNonNull(flowsArray, "flowsArray must be non-null!");
+				builderFlows = Flows.flows(asList(flowsArray));
 				return new FlowsBuilder();
 			}
 			

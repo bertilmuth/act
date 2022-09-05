@@ -10,32 +10,21 @@ import java.util.stream.Collectors;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
-import org.requirementsascode.act.statemachine.Transitions;
 
 public class StatemachineValidator {
 	public static <S, V0> void validate(Statemachine<S, V0> statemachine) {
-
-		State<S, V0> definedState = statemachine.definedState();
-		State<S, V0> defaultState = statemachine.defaultState();
-		Transitions<S, V0> flowsTransitions = statemachine.flows().asTransitions(statemachine);
-
-		List<Transition<S, V0>> transitions = new ArrayList<>();
-		transitions.addAll(flowsTransitions.asList());
-		transitions.addAll(statemachine.transitions());
-
-		List<State<S, V0>> expectedStates = statemachine.states();
-
-		validateStates(transitions, expectedStates, definedState, defaultState, Transition::fromState,
-				"The following fromStates are not in the state list:");
-		validateStates(transitions, expectedStates, definedState, defaultState, Transition::toState,
-				"The following toStates are not in the state list:");
+		validateStates(statemachine, Transition::fromState, "The following fromStates are not in the state list:");
+		validateStates(statemachine, Transition::toState, "The following toStates are not in the state list:");
 	}
 
-	private static <S, V0> void validateStates(List<Transition<S, V0>> transitions,
-		List<State<S, V0>> expectedStates, State<S, V0> definedState, State<S, V0> defaultState,
+	private static <S, V0> void validateStates(Statemachine<S, V0> statemachine,
 		Function<Transition<S, ?>, State<S, ?>> transitionStateAccess, String message) {
-
-		List<State<S, ?>> statesNotInList = transitions.stream()
+		
+		List<State<S, V0>> expectedStates = statemachine.states();
+		State<S, V0> definedState = statemachine.definedState();
+		State<S, V0> defaultState = statemachine.defaultState();
+		
+		List<State<S, ?>> statesNotInList = transitionsAndFlowsOf(statemachine).stream()
 			.map(transitionStateAccess)
 			.filter(s -> !definedState.equals(s) && 
 				!defaultState.equals(s) && !anyState().equals(s) && 
@@ -45,5 +34,12 @@ public class StatemachineValidator {
 		if (!statesNotInList.isEmpty()) {
 			throw new IllegalArgumentException(message + " " + statesNotInList);
 		}
+	}
+
+	private static <V0, S> List<Transition<S, V0>> transitionsAndFlowsOf(Statemachine<S, V0> stateMachine) {
+		List<Transition<S, V0>> transitions = new ArrayList<>();
+		transitions.addAll(stateMachine.flows().asTransitions(stateMachine).asList());
+		transitions.addAll(stateMachine.transitions().asList());
+		return transitions;
 	}
 }
