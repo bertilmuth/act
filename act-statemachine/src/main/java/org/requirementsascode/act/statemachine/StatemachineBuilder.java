@@ -2,53 +2,55 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import org.requirementsascode.act.statemachine.unitedbehavior.Flows;
 
 public class StatemachineBuilder {
 	StatemachineBuilder() {
 	}
 
 	@SafeVarargs
-	public final <S,V> States<S,V> states(State<S,V>... states) {
-		return new States<>(states);
+	public final <S,V> StatesBuilder<S,V> states(State<S,V>... states) {
+		return new StatesBuilder<>(states);
 	}
 
-	public class States<S,V> {
+	public class StatesBuilder<S,V> {
 		private final List<State<S,V>> builderStates;
 		private List<Transition<S, V>> builderTransitions;
-		private List<AsTransition<S, V>> builderFlows = new ArrayList<>();
+		private Flows<S, V> builderFlows = Flows.of(Collections.emptyList());
 
-		private States(State<S,V>[] states) {
+		private StatesBuilder(State<S,V>[] states) {
 			requireNonNull(states, "states must be non-null!");
 			this.builderStates = Arrays.asList(states);
 		}
 
 		@SafeVarargs
-		public final Transitions transitions(Transition<S, V>... transitions) {
+		public final TransitionsBuilder transitions(Transition<S, V>... transitions) {
 			requireNonNull(transitions, "transitions must be non-null!");
 			builderTransitions = Arrays.asList(transitions);
-			return new Transitions();
+			return new TransitionsBuilder();
 		}
 
-		public class Transitions {
-			private Transitions(){}
+		public class TransitionsBuilder {
+			private TransitionsBuilder(){}
 			
 			@SafeVarargs
-			public final Flows flows(AsTransition<S, V>... flows) {
+			public final FlowsBuilder flows(AsTransition<S, V>... flows) {
 				requireNonNull(flows, "flows must be non-null!");
-				builderFlows = Arrays.asList(flows);
-				return new Flows();
+				builderFlows = Flows.of(Arrays.asList(flows));
+				return new FlowsBuilder();
 			}
 			
 			public final Statemachine<S,V> build() {
-				return new Flows().build();
+				return new FlowsBuilder().build();
 			}
 		}
 		
-		public class Flows {
-			private Flows(){}
+		public class FlowsBuilder {
+			private FlowsBuilder(){}
 			
 			public final Statemachine<S,V> build() {
 				return new Statemachine<>(builderStates, builderTransitions, builderFlows);

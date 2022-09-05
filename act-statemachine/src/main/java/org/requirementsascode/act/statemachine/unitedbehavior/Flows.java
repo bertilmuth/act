@@ -25,6 +25,10 @@ public class Flows<S, V0> {
 	public Behavior<S, V0, V0> asBehavior(State<S, V0> definedState,
 		State<S, V0> defaultState) {
 
-		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), flowsTransitions(flows, definedState, defaultState));
+		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), flowsTransitions(this, definedState, defaultState));
+	}
+
+	public Collection<AsTransition<S, V0>> asCollection() {
+		return flows;
 	}
 }
