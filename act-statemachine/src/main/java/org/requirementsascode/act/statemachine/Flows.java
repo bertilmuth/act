@@ -1,4 +1,4 @@
-package org.requirementsascode.act.statemachine.unitedbehavior;
+package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
@@ -7,8 +7,6 @@ import static org.requirementsascode.act.statemachine.unitedbehavior.FlowsTransi
 import java.util.Collection;
 
 import org.requirementsascode.act.core.Behavior;
-import org.requirementsascode.act.statemachine.Flow;
-import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
 public class Flows<S, V0> {

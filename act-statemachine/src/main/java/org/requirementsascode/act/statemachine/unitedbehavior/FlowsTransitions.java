@@ -3,6 +3,7 @@ package org.requirementsascode.act.statemachine.unitedbehavior;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.requirementsascode.act.statemachine.Flows;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Transition;
 
