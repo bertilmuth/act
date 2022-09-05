@@ -17,12 +17,11 @@ public class Flows<S, V0> {
 		this.flows = requireNonNull(flows, "flows must be non-null!");
 	}
 
-	public static <S, V0> Flows<S, V0> of(Collection<Flow<S, V0>> flows) {
+	static <S, V0> Flows<S, V0> flows(Collection<Flow<S, V0>> flows) {
 		return new Flows<>(flows);
 	}
 
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
-
 		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), asTransitions(owningStatemachine));
 	}
 
