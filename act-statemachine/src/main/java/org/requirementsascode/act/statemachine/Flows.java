@@ -2,7 +2,7 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
-import static org.requirementsascode.act.statemachine.unitedbehavior.FlowsTransitions.flowsTransitions;
+import static org.requirementsascode.act.statemachine.FlowsTransitions.flowsTransitions;
 
 import java.util.Collection;
 

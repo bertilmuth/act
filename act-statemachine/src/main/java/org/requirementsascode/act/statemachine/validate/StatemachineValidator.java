@@ -1,6 +1,6 @@
 package org.requirementsascode.act.statemachine.validate;
 
-import static org.requirementsascode.act.statemachine.unitedbehavior.FlowsTransitions.flowsTransitions;
+import static org.requirementsascode.act.statemachine.FlowsTransitions.flowsTransitions;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 
 import java.util.ArrayList;
