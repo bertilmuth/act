@@ -10,15 +10,17 @@ import java.util.stream.Collectors;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
+import org.requirementsascode.act.statemachine.Transitions;
 
 public class StatemachineValidator {
 	public static <S, V0> void validate(Statemachine<S, V0> statemachine) {
 
 		State<S, V0> definedState = statemachine.definedState();
 		State<S, V0> defaultState = statemachine.defaultState();
-		List<Transition<S, V0>> flowsTransitions = statemachine.flows().asTransitions(statemachine);
+		Transitions<S, V0> flowsTransitions = statemachine.flows().asTransitions(statemachine);
 
-		List<Transition<S, V0>> transitions = new ArrayList<>(flowsTransitions);
+		List<Transition<S, V0>> transitions = new ArrayList<>();
+		transitions.addAll(flowsTransitions.asList());
 		transitions.addAll(statemachine.transitions());
 
 		List<State<S, V0>> expectedStates = statemachine.states();
