@@ -78,7 +78,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		validate(this);
 
 		Behavior<S, V0, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(states());
-		Behavior<S, V0, V0> transitionsBehavior = transitionsBehavior(transitions());
+		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
 		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
 
 		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
