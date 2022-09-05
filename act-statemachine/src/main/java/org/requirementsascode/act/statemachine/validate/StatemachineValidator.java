@@ -1,6 +1,5 @@
 package org.requirementsascode.act.statemachine.validate;
 
-import static org.requirementsascode.act.statemachine.FlowsTransitions.flowsTransitions;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 
 import java.util.ArrayList;
@@ -17,8 +16,7 @@ public class StatemachineValidator {
 
 		State<S, V0> definedState = statemachine.definedState();
 		State<S, V0> defaultState = statemachine.defaultState();
-		List<Transition<S, V0>> flowsTransitions = flowsTransitions(statemachine.flows(), definedState,
-			defaultState);
+		List<Transition<S, V0>> flowsTransitions = statemachine.flows().asTransitions(definedState, defaultState);
 
 		List<Transition<S, V0>> transitions = new ArrayList<>(flowsTransitions);
 		transitions.addAll(statemachine.transitions());
@@ -26,9 +24,9 @@ public class StatemachineValidator {
 		List<State<S, V0>> expectedStates = statemachine.states();
 
 		validateStates(transitions, expectedStates, definedState, defaultState, Transition::fromState,
-			"The following fromStates are not in the state list:");
+				"The following fromStates are not in the state list:");
 		validateStates(transitions, expectedStates, definedState, defaultState, Transition::toState,
-			"The following toStates are not in the state list:");
+				"The following toStates are not in the state list:");
 	}
 
 	private static <S, V0> void validateStates(List<Transition<S, V0>> transitions,
