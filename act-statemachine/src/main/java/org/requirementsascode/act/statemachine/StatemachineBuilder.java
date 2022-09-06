@@ -3,9 +3,7 @@ package org.requirementsascode.act.statemachine;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 public class StatemachineBuilder {
 	StatemachineBuilder() {
@@ -17,19 +15,19 @@ public class StatemachineBuilder {
 	}
 
 	public class StatesBuilder<S,V> {
-		private final List<State<S,V>> builderStates;
+		private States<S, V> builderStates = States.states(Collections.emptyList());
 		private Transitions<S, V> builderTransitions = Transitions.transitions(Collections.emptyList());
 		private Flows<S, V> builderFlows = Flows.flows(Collections.emptyList());
 
 		private StatesBuilder(State<S,V>[] states) {
 			requireNonNull(states, "states must be non-null!");
-			this.builderStates = Arrays.asList(states);
+			this.builderStates = States.states(asList(states));
 		}
 
 		@SafeVarargs
 		public final TransitionsBuilder transitions(Transition<S, V>... transitionsArray) {
 			requireNonNull(transitionsArray, "transitionsArray must be non-null!");
-			builderTransitions = Transitions.transitions(Arrays.asList(transitionsArray));
+			builderTransitions = Transitions.transitions(asList(transitionsArray));
 			return new TransitionsBuilder();
 		}
 

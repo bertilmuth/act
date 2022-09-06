@@ -8,7 +8,6 @@ import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.unitedbehavior.StatesBehaviorOrIdentity.statesBehaviorOrIdentity;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
@@ -19,15 +18,14 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String DEFINED_STATE = "Defined State";
 	private static final String DEFAULT_STATE = "Default State";
 
-	private final List<State<S, V0>> states;
+	private final States<S, V0> states;
 	private final Transitions<S, V0> transitions;
 	private final Flows<S, V0> flows;
 	private final Behavior<S, V0, V0> statemachineBehavior;
 	private final State<S, V0> defaultState;
 	private final State<S, V0> definedState;
 
-	Statemachine(List<State<S, V0>> states, Transitions<S, V0> transitions,
-		Flows<S, V0> flows) {
+	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, Flows<S, V0> flows) {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
 		this.flows = requireNonNull(flows, "flows must be non-null!");
@@ -45,7 +43,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return statemachineBehavior.actOn(before);
 	}
 
-	public List<State<S, V0>> states() {
+	public States<S, V0> states() {
 		return states;
 	}
 
@@ -65,8 +63,9 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return definedState;
 	}
 
-	private State<S, V0> createDefinedState(List<State<S, V0>> states) {
-		return state(DEFINED_STATE, states.stream().map(State::invariant).reduce(s -> false, Predicate::or), identity());
+	private State<S, V0> createDefinedState(States<S, V0> states) {
+		return state(DEFINED_STATE, states.asList().stream().map(State::invariant).reduce(s -> false, Predicate::or),
+				identity());
 	}
 
 	private State<S, V0> createDefaultState(State<S, V0> definedState) {
@@ -76,14 +75,13 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private Behavior<S, V0, V0> createStatemachineBehavior() {
 		validate(this);
 
-		Behavior<S, V0, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(states());
+		Behavior<S, V0, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(this);
 		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
 		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
 
 		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
-			statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
-			flowsBehavior
-		);
+				statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
+				flowsBehavior);
 
 		return behavior;
 	}

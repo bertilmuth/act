@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
-public class Flows<S, V0> {
+public class Flows<S, V0> implements AsBehavior<S, V0>{
 	private final List<Flow<S, V0>> flows;
 
 	private Flows(List<Flow<S, V0>> flows) {
@@ -20,6 +20,7 @@ public class Flows<S, V0> {
 		return new Flows<>(flows);
 	}
 
+	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
 		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), asTransitions(owningStatemachine).asList());
 	}

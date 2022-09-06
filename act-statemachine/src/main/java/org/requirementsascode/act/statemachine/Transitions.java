@@ -8,7 +8,7 @@ import java.util.List;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
-public class Transitions<S, V0> {
+public class Transitions<S, V0> implements AsBehavior<S, V0>{
 	private final List<Transition<S, V0>> transitions;
 
 	private Transitions(List<Transition<S, V0>> transitions) {
@@ -19,6 +19,7 @@ public class Transitions<S, V0> {
 		return new Transitions<>(transitions);
 	}
 	
+	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
 		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), asList());
 	}

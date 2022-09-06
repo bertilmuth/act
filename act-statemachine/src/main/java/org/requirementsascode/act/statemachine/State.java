@@ -50,6 +50,10 @@ public class State<S, V> implements Behavior<S, V, V> {
 		return invariant;
 	}
 	
+	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStatemachine) {
+		return behavior;
+	}
+	
 	private Behavior<S, V, V> createStateBehavior(Behavior<S, V, V> stateBehavior) {
 		return inCase(this::matchesStateIn,
 			stateBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
