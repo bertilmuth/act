@@ -30,32 +30,32 @@ public class HierarchicalCart {
 		return subStateEntered;
 	}
 	
-	static HierarchicalCart cartState(List<String> items, boolean subStateEntered) {
+	static HierarchicalCart cart(List<String> items, boolean subStateEntered) {
 		return new HierarchicalCart(items, subStateEntered);
 	}
 	
 	static HierarchicalCart createCart(CreateHierarchicalCart createCart) {
-		return cartState(createCart.items(), createCart.isSubStateEntered());
+		return cart(createCart.items(), createCart.isSubStateEntered());
 	}
 	
 	HierarchicalCart addItem(AddItem addItem) {		
 		ArrayList<String> items = new ArrayList<>(items());
 		items.add(addItem.item());
-		return cartState(items, subStateEntered);
+		return cart(items, subStateEntered);
 	}
 
 	HierarchicalCart removeItem(RemoveItem removeItem) {		
 		ArrayList<String> items = new ArrayList<>(items());
 		items.remove(removeItem.item());
-		return cartState(items, subStateEntered);
+		return cart(items, subStateEntered);
 	}
 	
 	HierarchicalCart enterSubstate(Trigger trigger) {
-		return cartState(items(), true);
+		return cart(items(), true);
 	}
 	
 	HierarchicalCart exitSubstate(Trigger trigger) {
-		return cartState(items(), false);
+		return cart(items(), false);
 	}
 
 	@Override
