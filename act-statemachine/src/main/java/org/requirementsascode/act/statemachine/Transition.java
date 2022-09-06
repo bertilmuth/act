@@ -7,28 +7,20 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Change;
 import org.requirementsascode.act.core.Data;
 
-public class Transition<S, V0> implements Behavior<S, V0,V0> {
+public class Transition<S, V0> implements AsBehavior<S, V0> {
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
-	private final Behavior<S, V0, V0> transitionBehavior;
+	private final Behavior<S, V0, V0> behavior;
 
 	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> behavior) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
-		requireNonNull(behavior, "behavior must be non-null");
-
-		this.transitionBehavior = createTransitionBehavior(fromState, behavior);
+		this.behavior = requireNonNull(behavior, "behavior must be non-null");
 	}
 
 	static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
 			Behavior<S, V0, V0> behavior) {
 		return new Transition<>(fromState, toState, behavior);
-	}
-
-	@Override
-	public Data<S, V0> actOn(Data<S, V0> before) {
-		Data<S, V0> after = transitionBehavior.actOn(before);
-		return after;
 	}
 
 	public State<S, V0> fromState() {
@@ -44,7 +36,8 @@ public class Transition<S, V0> implements Behavior<S, V0,V0> {
 		return "Transition [fromState=" + fromState + ", toState=" + toState + "]";
 	}
 
-	private Behavior<S, V0, V0> createTransitionBehavior(State<S, V0> fromState, Behavior<S, V0, V0> behavior) {
+	@Override
+	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
 		return inCase(before -> fromState.matchesStateIn(before),
 				behavior.andHandleChangeWith(this::errorIfNotInToStateIfTransitionFired).andThen(toState()));
 	}
