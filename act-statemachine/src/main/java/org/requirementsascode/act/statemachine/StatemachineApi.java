@@ -6,6 +6,11 @@ import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.statemachine.function.ConsumeWith;
+import org.requirementsascode.act.statemachine.function.Init;
+import org.requirementsascode.act.statemachine.function.SupplyWith;
+import org.requirementsascode.act.statemachine.function.When;
+import org.requirementsascode.act.statemachine.function.WhenInCase;
 
 public class StatemachineApi {	
 	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
@@ -41,6 +46,10 @@ public class StatemachineApi {
 		return SupplyWith.supplyWith(supplier);
 	}
 	
+	public static <S,V> Behavior<S,V,V> init(Function<V,S> init){
+		return Init.init(init);
+	}
+	
 	public static <S, V0> EntryFlow<S, V0> entryFlow(Behavior<S, V0,V0> entryBehavior) {
 		return EntryFlow.entryFlow(entryBehavior);
 	}
@@ -51,9 +60,5 @@ public class StatemachineApi {
 	
 	public static <S, V0> ExitFlow<S, V0> exitFlow(State<S, V0> fromState, Behavior<S, V0, V0> exitBehavior) {
 		return ExitFlow.exitFlow(fromState, exitBehavior);
-	}
-	
-	public static <S,V> Behavior<S,V,V> init(Function<V,S> init){
-		return Init.init(init);
 	}
 }

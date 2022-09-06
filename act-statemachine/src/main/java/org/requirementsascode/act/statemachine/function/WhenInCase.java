@@ -1,4 +1,4 @@
-package org.requirementsascode.act.statemachine;
+package org.requirementsascode.act.statemachine.function;
 
 import static org.requirementsascode.act.core.InCase.inCase;
 
@@ -9,7 +9,7 @@ import org.requirementsascode.act.core.Data;
 
 public class WhenInCase {
 	@SuppressWarnings("unchecked")
-	static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> whenInCase(Class<V1> expectedType, Predicate<Data<S,V1>> predicate, Behavior<S, V1,V2> behavior) {
+	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> whenInCase(Class<V1> expectedType, Predicate<Data<S,V1>> predicate, Behavior<S, V1,V2> behavior) {
 		return (Behavior<S, V0,V0>) inCase(typeMatches(expectedType), inCase(predicate, i -> behaviorActOn(i, behavior)));
 	}
 

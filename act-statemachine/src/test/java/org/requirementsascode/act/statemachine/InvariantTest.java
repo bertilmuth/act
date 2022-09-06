@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.ConsumeWith.consumeWith;
 import static org.requirementsascode.act.statemachine.Transition.transition;
+import static org.requirementsascode.act.statemachine.function.ConsumeWith.consumeWith;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
