@@ -11,17 +11,15 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.DoNothing;
 
-public class State<S, V> implements Behavior<S, V, V> {	
+public class State<S, V> implements AsBehavior<S, V> {
 	private final String name;
 	private final Predicate<S> invariant;
-	private Behavior<S, V, V> behavior;
+	private Behavior<S, V, V> stateInternalBehavior;
 
-	private State(String name, Predicate<S> invariant, Behavior<S, V, V> behavior) {
+	private State(String name, Predicate<S> invariant, Behavior<S, V, V> stateInternalBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.invariant = requireNonNull(invariant, "invariant must be non-null!");
-
-		requireNonNull(behavior, "behavior must be non-null!");
-		this.behavior = createStateBehavior(behavior);
+		this.stateInternalBehavior = requireNonNull(stateInternalBehavior, "stateInternalBehavior must be non-null!");
 	}
 
 	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
@@ -31,15 +29,9 @@ public class State<S, V> implements Behavior<S, V, V> {
 	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {
 		return new State<>(stateName, stateInvariant, stateBehavior);
 	}
-	
-	static<S, V> State<S, V> anyState() {
-		return state("Any State", s -> true);
-	}
 
-	@Override
-	public Data<S, V> actOn(Data<S, V> before) {
-		Data<S, V> result = behavior.actOn(before);
-		return result;
+	static <S, V> State<S, V> anyState() {
+		return state("Any State", s -> true);
 	}
 
 	public String name() {
@@ -49,14 +41,11 @@ public class State<S, V> implements Behavior<S, V, V> {
 	public Predicate<S> invariant() {
 		return invariant;
 	}
-	
+
+	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStatemachine) {
-		return behavior;
-	}
-	
-	private Behavior<S, V, V> createStateBehavior(Behavior<S, V, V> stateBehavior) {
 		return inCase(this::matchesStateIn,
-			stateBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
+				stateInternalBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
@@ -85,7 +74,7 @@ public class State<S, V> implements Behavior<S, V, V> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		State<?,?> other = (State<?,?>) obj;
+		State<?, ?> other = (State<?, ?>) obj;
 		return Objects.equals(name, other.name);
 	}
 }

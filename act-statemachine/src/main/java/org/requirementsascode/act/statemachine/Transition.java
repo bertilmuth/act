@@ -38,8 +38,11 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
+		Behavior<S, V0, V0> toStateBehavior = toState().asBehavior(owningStatemachine);
+		
 		return inCase(before -> fromState.matchesStateIn(before),
-				behavior.andHandleChangeWith(this::errorIfNotInToStateIfTransitionFired).andThen(toState()));
+				behavior.andHandleChangeWith(this::errorIfNotInToStateIfTransitionFired)
+					.andThen(toStateBehavior));
 	}
 
 	private Data<S, V0> errorIfNotInToStateIfTransitionFired(Change<S, V0, V0> c) {
