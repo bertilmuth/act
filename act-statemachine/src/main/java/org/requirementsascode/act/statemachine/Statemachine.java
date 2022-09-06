@@ -80,13 +80,13 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
 
 		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
-				statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::isOutputPresent, this, identity()))),
+				statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::hasTransitionFired, this, identity()))),
 				flowsBehavior);
 
 		return behavior;
 	}
 
-	private boolean isOutputPresent(Data<S, V0> data) {
-		return data.value() != null;
+	private boolean hasTransitionFired(Data<S, V0> date) {
+		return date.value() != null;
 	}
 }
