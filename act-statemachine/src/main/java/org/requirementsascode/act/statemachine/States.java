@@ -27,7 +27,7 @@ public class States<S, V0> implements AsBehavior<S, V0>{
 
 	private List<Behavior<S, V0, V0>> stateBehaviors(Statemachine<S, V0> owningStatemachine) {
 		List<Behavior<S, V0, V0>> behaviors = asList().stream().map(e -> e.asBehavior(owningStatemachine))
-				.collect(Collectors.toList());
+			.collect(Collectors.toList());
 		return behaviors;
 	}
 
