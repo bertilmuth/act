@@ -46,14 +46,14 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	}
 
 	private Data<S, V0> errorIfNotInToStateIfTransitionFired(Change<S, V0, V0> c) {
-		if (hasTransitionFired(c.after()) && !toState().matchesStateIn(c.after())) {
+		if (hasFired(c.after()) && !toState().matchesStateIn(c.after())) {
 			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
 					+ ", but invariant was false!\nbefore: " + c.before() + "\nafter: " + c.after());
 		}
 		return c.after();
 	}
 
-	private boolean hasTransitionFired(Data<S, V0> data) {
+	public static boolean hasFired(Data<?, ?> data) {
 		return data.value() != null;
 	}
 }
