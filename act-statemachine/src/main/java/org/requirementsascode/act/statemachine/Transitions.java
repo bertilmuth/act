@@ -26,9 +26,14 @@ public class Transitions<S, V0> implements AsBehavior<S, V0>{
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
 		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), transitionBehaviors(owningStatemachine))
-			.andThen(inCase(d -> outputIsPresentAndNotInDefaultState(owningStatemachine, d), owningStatemachine, identity()));
+			.andThen(recallStatemachineIfTransitionHasFired(owningStatemachine));
 	}
-	private boolean outputIsPresentAndNotInDefaultState(Statemachine<S, V0> owningStatemachine, Data<S, V0> d) {
+
+	private Behavior<S, V0, V0> recallStatemachineIfTransitionHasFired(Statemachine<S, V0> owningStatemachine) {
+		return inCase(d -> hasTransitionFiredAndNotInDefaultState(owningStatemachine, d), owningStatemachine, identity());
+	}
+	
+	private boolean hasTransitionFiredAndNotInDefaultState(Statemachine<S, V0> owningStatemachine, Data<S, V0> d) {
 		State<S, V0> defaultState = owningStatemachine.defaultState();
 		return !defaultState.matchesStateIn(d) && d.value() != null;
 	}
