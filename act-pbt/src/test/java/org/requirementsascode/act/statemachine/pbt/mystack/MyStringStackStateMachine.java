@@ -46,11 +46,11 @@ public class MyStringStackStateMachine implements Behavior<MyStringStack, Value,
 								.andHandleChangeWith(pushValidator))),
 						
 						transition(stackNotEmpty, stackEmpty, 
-							whenInCase(Pop.class, i -> i.state().size() == 1, supplyWith(MyStringStack::pop)
+							whenInCase(Pop.class, i -> i.state().size() == 1, mapWith(MyStringStack::pop)
 								.andHandleChangeWith(popValidator))),
 						
 						transition(stackNotEmpty, stackNotEmpty, 
-							whenInCase(Pop.class, i -> i.state().size() > 1, supplyWith(MyStringStack::pop)
+							whenInCase(Pop.class, i -> i.state().size() > 1, mapWith(MyStringStack::pop)
 								.andHandleChangeWith(popValidator))),
 						
 						transition(anyState(), stackEmpty, 

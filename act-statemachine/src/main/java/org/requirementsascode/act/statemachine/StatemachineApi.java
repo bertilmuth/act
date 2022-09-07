@@ -8,7 +8,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.function.ConsumeWith;
 import org.requirementsascode.act.statemachine.function.Init;
-import org.requirementsascode.act.statemachine.function.SupplyWith;
+import org.requirementsascode.act.statemachine.function.MapWith;
 import org.requirementsascode.act.statemachine.function.When;
 import org.requirementsascode.act.statemachine.function.WhenInCase;
 
@@ -42,8 +42,8 @@ public class StatemachineApi {
 		return ConsumeWith.consumeWith(consumer);
 	}
 	
-	public static <S,V1,V2> Behavior<S,V1,V2> supplyWith(BiFunction<S,V1,Data<S,V2>> supplier){
-		return SupplyWith.supplyWith(supplier);
+	public static <S,V1,V2> Behavior<S,V1,V2> mapWith(BiFunction<S,V1,Data<S,V2>> mapper){
+		return MapWith.mapWith(mapper);
 	}
 	
 	public static <S,V> Behavior<S,V,V> init(Function<V,S> init){
