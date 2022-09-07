@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.statemachine.EntryFlow.entryFlow;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S0;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S1;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S2;
@@ -74,21 +75,22 @@ class RegularLanguageTest {
 	////////////////////////////////////////
 
 	private Statemachine<NonTerminal, String> createStatemachine() {
-		State<NonTerminal, String> s0 = s(S0);
 		State<NonTerminal, String> s1 = s(S1);
 		State<NonTerminal, String> s2 = s(S2);
 		State<NonTerminal, String> s3 = s(S3);
 		State<NonTerminal, String> wordTooLong = s(WordTooLong);
 
 		Statemachine<NonTerminal, String> statemachine = Statemachine.builder()
-			.states(s0,s1, s2, s3, wordTooLong)
+			.states(s1, s2, s3, wordTooLong)
 			.transitions(
-				transition(s0, s1, accept('a', S1)),
-				transition(s0, s1, accept('b', S1)),
 				transition(s1, s2, accept('a', S2)),
 				transition(s1, s2, accept('b', S2)),
 				transition(s2, s3, accept('b', S3)),
 				transition(s3, wordTooLong, inCase(i -> !i.value().isEmpty(), i -> data(WordTooLong)))
+			)
+			.flows(
+					entryFlow(s1, accept('a', S1)),
+					entryFlow(s1, accept('b', S1))
 			)
 			.build();
 		

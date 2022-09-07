@@ -2,7 +2,6 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
-import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.unitedbehavior.StatesBehaviorOrIdentity.statesBehaviorOrIdentity;
@@ -80,13 +79,9 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
 
 		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
-				statesBehaviorOrIdentity.andThen(transitionsBehavior.andThen(inCase(this::hasTransitionFired, this, identity()))),
+				statesBehaviorOrIdentity.andThen(transitionsBehavior),
 				flowsBehavior);
 
 		return behavior;
-	}
-
-	private boolean hasTransitionFired(Data<S, V0> date) {
-		return date.value() != null;
 	}
 }

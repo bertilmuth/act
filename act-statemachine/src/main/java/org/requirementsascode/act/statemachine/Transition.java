@@ -53,7 +53,7 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 		return c.after();
 	}
 
-	private boolean hasTransitionFired(Data<S, V0> date) {
-		return date.value() != null;
+	private boolean hasTransitionFired(Data<S, V0> data) {
+		return data.value() != null;
 	}
 }
