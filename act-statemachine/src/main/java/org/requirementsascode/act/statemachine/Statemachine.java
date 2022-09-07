@@ -1,10 +1,10 @@
 package org.requirementsascode.act.statemachine;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.unitedbehavior.StatesBehaviorOrIdentity.statesBehaviorOrIdentity;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
 import java.util.function.Predicate;
@@ -74,14 +74,19 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private Behavior<S, V0, V0> createStatemachineBehavior() {
 		validate(this);
 
-		Behavior<S, V0, V0> statesBehaviorOrIdentity = statesBehaviorOrIdentity(this);
 		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
 		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
 
-		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(),
-				statesBehaviorOrIdentity.andThen(transitionsBehavior),
+		Behavior<S, V0, V0> behavior = 
+			unitedBehavior(new FirstOneWhoActsWins<>(),
+				statesBehaviorOrIdentity().andThen(transitionsBehavior),
 				flowsBehavior);
 
 		return behavior;
+	}
+	
+	public Behavior<S, V0, V0> statesBehaviorOrIdentity() {
+		Behavior<S, V0, V0> statesBehavior = states().asBehavior(this);
+		return unitedBehavior(new FirstOneWhoActsWins<>(), asList(statesBehavior, identity()));
 	}
 }
