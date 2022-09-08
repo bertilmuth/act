@@ -16,12 +16,16 @@ public class OnlyOneBehaviorMayAct<S, V> implements MergeStrategy<S, V> {
 			throw new MoreThanOneBehaviorActed(
 				"Only 1 behavior may act, but more than one can. Data before: " + dataBefore + " Data afters: " + dataAfters);
 		} else if(dataAfters.size() == 1) {
-			result = dataAfters.get(0);
+			result = firstOf(dataAfters);
 		} else {
 			result = clearValueOf(dataBefore);
 		}
 		
 		return result;
+	}
+
+	private Data<S, V> firstOf(List<Data<S, V>> dataAfters) {
+		return dataAfters.get(0);
 	}
 	
 	private Data<S, V> clearValueOf(Data<S, V> dataBefore) {
