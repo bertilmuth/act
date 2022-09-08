@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 public class InCase<S,V>{
 	public static <S,V1, V2> Behavior<S,V1,V2> inCase(Predicate<Data<S,V1>> predicate, Behavior<S,V1,V2> behavior) {
-		return inCase(predicate, behavior, new DoNothing<>());
+		return inCase(predicate, behavior, new ClearValue<>());
 	}
 	
 	public static <S,V1,V2> Behavior<S,V1,V2> inCase(Predicate<Data<S,V1>> predicate, Behavior<S,V1,V2> behavior, Behavior<S,V1,V2> elseBehavior) {
