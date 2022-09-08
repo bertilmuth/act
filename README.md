@@ -9,14 +9,14 @@ If you are using Maven, include the following in your `pom.xml`:
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
     <artifactId>act-statemachine</artifactId>
-    <version>0.5</version>
+    <version>0.6</version>
   </dependency>
 ```
 
 If you are using Gradle, include the following in your `build.gradle` dependencies:
 
 ```
-implementation 'org.requirementsascode.act:act-statemachine:0.5'
+implementation 'org.requirementsascode.act:act-statemachine:0.6'
 ```
 
 # Example usage
@@ -66,19 +66,19 @@ Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
 As you can see in the code, the number of transitions is 3, instead of 4 on the diagram.
 Since adding an item always leads to the `nonEmpty` state, you can specify `anyState()` as the source state.
 
-To learn more, see the [CartStateMachine](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java) class and the [CartStateMachineTest](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) class.
+To learn more, see the [CartStateMachine](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java) class and the [CartStateMachineTest](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) class.
 
 # Hierarchical state machines (a.k.a. state charts)
 You can use Act to create hierarchical state machines as well.
 
 That means: states can have a behavior that is a state machine itself.
 
-Have a look at [this class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/testdata/HierarchicalCart.java) for details on how to create one.
+Have a look at [this class](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/testdata/HierarchicalCart.java) for details on how to create one.
 
 # Processing regular languages
 Act can be used to decide whether a word is part of a regular language or not.
 
-[This test class](https://github.com/bertilmuth/act/blob/main/src/test/java/org/requirementsascode/act/statemachine/RegularLanguageTest.java) shows how to do it. 
+[This test class](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/RegularLanguageTest.java) shows how to do it. 
 
 # Why another state machine library?
 If you notice that you use complicated if-else checks throughout your code, or your application's behavior
