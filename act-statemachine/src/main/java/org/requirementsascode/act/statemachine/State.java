@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.KeepState;
+import org.requirementsascode.act.core.NoOp;
 
 public class State<S, V> implements AsBehavior<S, V> {
 	private final String name;
@@ -23,7 +23,7 @@ public class State<S, V> implements AsBehavior<S, V> {
 	}
 
 	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
-		return new State<>(stateName, stateInvariant, new KeepState<>());
+		return new State<>(stateName, stateInvariant, new NoOp<>());
 	}
 
 	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {

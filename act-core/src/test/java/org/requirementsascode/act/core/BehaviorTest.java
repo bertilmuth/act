@@ -89,7 +89,7 @@ class BehaviorTest {
 			);
 		Data<State, Trigger> before = data(STATE_BEFORE_B1, new UnknownTrigger());
 		Data<State, Trigger> after = behavior.actOn(before);
-		assertEquals(new KeepState<State, Trigger, Trigger>().actOn(before), after);
+		assertEquals(new NoOp<State, Trigger, Trigger>().actOn(before), after);
 	}
 
 	@Test
@@ -97,7 +97,7 @@ class BehaviorTest {
 		UnitedBehavior<State, Trigger_B1> behavior = 
 			unitedBehavior(
 				new LastOneWhoActsWins<>(),
-				on(Trigger_B1.class.getSimpleName(), new KeepState<>()), 
+				on(Trigger_B1.class.getSimpleName(), new NoOp<>()), 
 				on(Trigger_B1.class.getSimpleName(), b1())
 			);		
 		assertEquals(DATA_AFTER_B1, behavior.actOn(data(STATE_BEFORE_B1, TRIGGER_B1)));

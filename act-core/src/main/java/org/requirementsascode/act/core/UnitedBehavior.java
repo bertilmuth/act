@@ -1,6 +1,6 @@
 package org.requirementsascode.act.core;
 
-import static org.requirementsascode.act.core.NothingGotDone.*;
+import static org.requirementsascode.act.core.NoOpTest.*;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
@@ -32,17 +32,17 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> dataBefore) {
-		NothingGotDone<S, V> nothingGotDone = nothingGotDone(dataBefore);
+		NoOpTest<S, V> noOpTest = noOpTest(dataBefore);
 
 		List<Data<S, V>> dataAfters = behaviors.stream()
 				.map(b -> b.actOn(dataBefore))
-				.filter(nothingGotDone.negate())
+				.filter(noOpTest.negate())
 				.collect(Collectors.toList());
 
 		Data<S, V> mergedData;
 
 		if (dataAfters.isEmpty()) {
-			mergedData = keepStateOf(dataBefore);
+			mergedData = noOp(dataBefore);
 		} else if (dataAfters.size() == 1) {
 			mergedData = singleElementOf(dataAfters);
 		} else {
@@ -52,8 +52,8 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		return mergedData;
 	}
 
-	private Data<S, V> keepStateOf(Data<S, V> dataBefore) {
-		Data<S, V> stateWithoutValue = new KeepState<S, V, V>().actOn(dataBefore);
+	private Data<S, V> noOp(Data<S, V> dataBefore) {
+		Data<S, V> stateWithoutValue = new NoOp<S, V, V>().actOn(dataBefore);
 		return stateWithoutValue;
 	}
 
