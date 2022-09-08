@@ -1,6 +1,7 @@
 package org.requirementsascode.act.core;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class Data<S,V> {
 	private final S state;
@@ -23,8 +24,8 @@ public class Data<S,V> {
 		return state;
 	}
 
-	public V value() {
-		return value;
+	public Optional<V> value() {
+		return Optional.ofNullable(value);
 	}
 
 	@Override

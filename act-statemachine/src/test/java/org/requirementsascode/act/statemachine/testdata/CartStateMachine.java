@@ -1,7 +1,14 @@
 package org.requirementsascode.act.statemachine.testdata;
 
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
+import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
+import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
+import static org.requirementsascode.act.statemachine.StatemachineApi.init;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.when;
+import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 
 import java.util.List;
 
@@ -77,7 +84,12 @@ public class CartStateMachine {
 	}
 	
 	private boolean itemIsInCart(Data<Cart, RemoveItem> data) {
-		return cartItems(data).contains(data.value().item());
+		return cartItems(data).contains(item(data));
+	}
+	
+	private String item(Data<Cart, RemoveItem> d) {
+		return d.value().map(data -> data.item())
+			.orElseThrow(() -> new IllegalArgumentException("No item in cart"));
 	}
 }
 

@@ -86,7 +86,7 @@ class RegularLanguageTest {
 				transition(s1, s2, accept('a', S2)),
 				transition(s1, s2, accept('b', S2)),
 				transition(s2, s3, accept('b', S3)),
-				transition(s3, wordTooLong, inCase(i -> !i.value().isEmpty(), i -> data(WordTooLong)))
+				transition(s3, wordTooLong, inCase(i -> !i.value().get().isEmpty(), i -> data(WordTooLong)))
 			)
 			.flows(
 					entryFlow(s1, accept('a', S1)),
@@ -129,11 +129,11 @@ class RegularLanguageTest {
 	private Behavior<NonTerminal, String, String> accept(char expectedTerminal, NonTerminal targetState) {
 		return inCase(i -> 
 		  isFirstLetterTheSame(expectedTerminal, i), 
-		  	i -> data(targetState, tail(i.value())));
+		  	i -> data(targetState, tail(i.value().get())));
 	}
 
 	private boolean isFirstLetterTheSame(char expectedTerminal, Data<NonTerminal, String> i) {
-		String beforeValue = i.value();
+		String beforeValue = i.value().get();
 		return !beforeValue.isEmpty() && expectedTerminal == firstLetter(beforeValue);
 	}
 

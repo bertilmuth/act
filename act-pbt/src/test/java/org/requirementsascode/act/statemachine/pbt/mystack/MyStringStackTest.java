@@ -75,6 +75,6 @@ class MyStringStackTest {
 	}
 	
 	private String poppedElement(Change<MyStringStack, Pop, PoppedElement> c) {
-		return c.after().value().text();
+		return c.after().value().get().text();
 	}
 }

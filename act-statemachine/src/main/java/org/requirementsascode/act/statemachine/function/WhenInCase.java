@@ -14,7 +14,7 @@ public class WhenInCase {
 	}
 
 	private static <S, V1 extends V0, V0> Predicate<Data<S, V0>> typeMatches(Class<V1> expectedType) {
-		Predicate<Data<S, V0>> predicate = d -> d.value() != null && hasExpectedType(triggerTypeOf(d), expectedType);
+		Predicate<Data<S, V0>> predicate = d -> d.value().isPresent() && hasExpectedType(triggerTypeOf(d), expectedType);
 		return predicate;
 	}
 
@@ -29,6 +29,6 @@ public class WhenInCase {
 	}
 
 	private static Class<? extends Object> triggerTypeOf(Data<?, ?> d) {
-		return d.value().getClass();
+		return d.value().get().getClass();
 	}
 }

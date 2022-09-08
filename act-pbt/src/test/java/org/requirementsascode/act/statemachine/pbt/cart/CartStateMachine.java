@@ -83,7 +83,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 	}
 	
 	private String item(Data<Cart, RemoveItem> d) {
-		return d.value().item();
+		return d.value().map(data -> data.item())
+			.orElseThrow(() -> new IllegalArgumentException("No item in cart"));
 	}
 	
 	private int size(Data<Cart, ?> d) {

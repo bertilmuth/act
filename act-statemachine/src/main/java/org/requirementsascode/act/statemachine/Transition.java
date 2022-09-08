@@ -54,6 +54,6 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	}
 
 	public static boolean hasFired(Data<?, ?> data) {
-		return data.value() != null;
+		return data.value().isPresent();
 	}
 }

@@ -13,7 +13,7 @@ public class On{
 	}
 	
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(String expectedTriggerTypeName) {
-		Predicate<Data<S, V0>> predicate = i -> i.value() != null && hasExpectedType(triggerTypeOf(i), expectedTriggerTypeName);
+		Predicate<Data<S, V0>> predicate = i -> i.value().isPresent() && hasExpectedType(triggerTypeOf(i), expectedTriggerTypeName);
 		return predicate;
 	}
 	
