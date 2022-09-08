@@ -6,7 +6,7 @@ public class NothingGotDone<S,V> implements Predicate<Data<S, V>> {
 	private final Data<S, V> nothingDone;
 	
 	private NothingGotDone(Data<S, V> data) {
-		nothingDone = new ClearValue<S,V,V>().actOn(data);
+		nothingDone = new KeepState<S,V,V>().actOn(data);
 	}
 	
 	public static <S,V> NothingGotDone<S,V> nothingGotDone(Data<S, V> before) {

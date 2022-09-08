@@ -3,7 +3,7 @@ package org.requirementsascode.act.core.testdata;
 import java.util.List;
 
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.ClearValue;
+import org.requirementsascode.act.core.KeepState;
 import org.requirementsascode.act.core.merge.MergeStrategy;
 
 public class LastOneWhoActsWins<S,V> implements MergeStrategy<S,V> {
@@ -14,7 +14,7 @@ public class LastOneWhoActsWins<S,V> implements MergeStrategy<S,V> {
 	}
 
 	private Data<S, V> stateOf(Data<S, V> dataBefore) {
-		Data<S, V> stateWithoutValue = new ClearValue<S, V, V>().actOn(dataBefore);
+		Data<S, V> stateWithoutValue = new KeepState<S, V, V>().actOn(dataBefore);
 		return stateWithoutValue;
 	}
 	
