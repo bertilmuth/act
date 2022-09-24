@@ -1,6 +1,7 @@
 package org.requirementsascode.act.statemachine;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 
@@ -20,13 +21,13 @@ class ToStateBehaviorTest {
 	@BeforeEach
 	void setup() {
 		State<String, Trigger> s1 = State.state(S1, s -> S1.equals(s));
-		State<String, Trigger> s2 = State.state(S2, s -> S2.equals(s));
+		State<String, Trigger> s2 = State.state(S2, s -> S2.equals(s), consumeWith(this::enterS2));
 		
 		statemachine = Statemachine.builder()
 				.states(s1, s2)
 				.transitions(
 						transition(s1,s2, 
-							when(EnterS2.class, consumeWith(this::enterS2))
+							when(EnterS2.class, consumeWith((s,t) -> S2))
 						))
 				.build();
 	}
@@ -38,10 +39,18 @@ class ToStateBehaviorTest {
 		assertThat(s2Entered).isEqualTo(true);
 	}
 	
+	@Test
+	void doesntEnterS2() {
+		Data<String, Trigger> result = statemachine.actOn(data(S1, new DontEnterS2()));
+		assertThat(result.state()).isEqualTo(S1);
+		assertThat(s2Entered).isEqualTo(false);
+	}
+	
 	interface Trigger {}
 	class EnterS2 implements Trigger{};
+	class DontEnterS2 implements Trigger{};
 	
-	String enterS2(String state, EnterS2 event) {
+	String enterS2(String state, Trigger event) {
 		s2Entered = true;
 		return S2;
 	}
