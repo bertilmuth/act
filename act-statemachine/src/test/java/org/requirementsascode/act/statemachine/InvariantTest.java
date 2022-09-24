@@ -51,16 +51,33 @@ class InvariantTest {
 	
 	@Test
 	void exceptionIfStateBehaviorChangesState() {
-		State<String, String> stateWithBehaviorThatChangesState = 
+		State<String, String> state1 = 
 			state(STATE1, s -> s.equals(STATE1), d -> data(STATE2));
 
 		Statemachine<String,String> statemachine = 
 			Statemachine.builder()
-				.states(stateWithBehaviorThatChangesState)
+				.states(state1)
 				.transitions()
 				.build();
 		
-		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
-		assertThrows(IllegalStateException.class, () -> statemachine.actOn(anyEventInState1).state());
+		Data<String, String> eventInState1 = data(STATE1, "AnyEvent");
+		assertThrows(IllegalStateException.class, () -> statemachine.actOn(eventInState1));
+	}
+	
+	@Test
+	void exceptionIfStateBehaviorChangesStateInToState() {
+		State<String, String> state2 = 
+			state(STATE2, s -> s.equals(STATE2), d -> data(STATE1));
+
+		Statemachine<String,String> statemachine = 
+			Statemachine.builder()
+				.states(statemachineState1, state2)
+				.transitions(
+						transition(statemachineState1, state2, consumeWith((s,v) -> STATE2))
+				)
+				.build();
+		
+		Data<String, String> eventInState1 = data(STATE1, "AnyEvent");
+		assertThrows(IllegalStateException.class, () -> statemachine.actOn(eventInState1));
 	}
 }
