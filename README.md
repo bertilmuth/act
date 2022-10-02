@@ -9,14 +9,14 @@ If you are using Maven, include the following in your `pom.xml`:
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
     <artifactId>act-statemachine</artifactId>
-    <version>0.6</version>
+    <version>0.6.1</version>
   </dependency>
 ```
 
 If you are using Gradle, include the following in your `build.gradle` dependencies:
 
 ```
-implementation 'org.requirementsascode.act:act-statemachine:0.6'
+implementation 'org.requirementsascode.act:act-statemachine:0.6.1'
 ```
 
 # Example usage
@@ -67,6 +67,26 @@ As you can see in the code, the number of transitions is 3, instead of 4 on the 
 Since adding an item always leads to the `nonEmpty` state, you can specify `anyState()` as the source state.
 
 To learn more, see the [CartStateMachine](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java) class and the [CartStateMachineTest](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) class.
+
+# Property based testing
+The act-pbt subproject supports property based testing of state machines.
+If you are using Maven, include the following in your `pom.xml`:
+
+``` xml
+  <dependency>
+    <groupId>org.requirementsascode.act</groupId>
+    <artifactId>act-pbt</artifactId>
+    <version>0.6.1</version>
+  </dependency>
+```
+
+If you are using Gradle, include the following in your `build.gradle` dependencies:
+
+```
+implementation 'org.requirementsascode.act:act-pbt:0.6.1'
+```
+
+Have a look at the [examples](https://github.com/bertilmuth/act/tree/main/act-pbt/src/test/java/org/requirementsascode/act/statemachine/pbt) for details.
 
 # Hierarchical state machines (a.k.a. state charts)
 You can use Act to create hierarchical state machines as well.
