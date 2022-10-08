@@ -37,12 +37,12 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	}
 
 	@Override
-	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
-		Behavior<S, V0, V0> toStateBehavior = toState().asBehavior(owningStatemachine);
-		
+	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {		
 		return inCase(before -> fromState.matchesStateIn(before),
 				behavior.andHandleChangeWith(this::errorIfNotInToState)
-					.andThen(inCase(this::fromStateNotToState, toStateBehavior)));
+					.andThen(inCase(this::fromStateNotToState, 
+							d -> toStateActOn(d, owningStatemachine), 
+							Behavior.identity())));
 	}
 
 	private Data<S, V0> errorIfNotInToState(Change<S, V0, V0> c) {
@@ -51,6 +51,10 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 					+ ", but invariant was false!\nbefore: " + c.before() + "\nafter: " + c.after());
 		}
 		return c.after();
+	}
+	
+	private Data<S, V0> toStateActOn(Data<S, V0> data, Statemachine<S, V0> owningStatemachine){
+		return toState().asBehavior(owningStatemachine).actOn(data);
 	}
 	
 	private boolean fromStateNotToState(Data<?, ?> data) {
