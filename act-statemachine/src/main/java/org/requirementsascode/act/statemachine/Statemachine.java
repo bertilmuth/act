@@ -3,8 +3,10 @@ package org.requirementsascode.act.statemachine;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
+import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.State.state;
+import static org.requirementsascode.act.statemachine.Transition.hasFired;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
 import java.util.function.Predicate;
@@ -80,7 +82,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		Behavior<S, V0, V0> behavior = 
 			unitedBehavior(new FirstOneWhoActsWins<>(),
 				statesBehaviorOrIdentity().andThen(transitionsBehavior),
-				flowsBehavior);
+				flowsBehavior)
+			.andThen(recallStatemachine());
 
 		return behavior;
 	}
@@ -88,5 +91,14 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	public Behavior<S, V0, V0> statesBehaviorOrIdentity() {
 		Behavior<S, V0, V0> statesBehavior = states().asBehavior(this);
 		return unitedBehavior(new FirstOneWhoActsWins<>(), asList(statesBehavior, identity()));
+	}
+	
+	private Behavior<S, V0, V0> recallStatemachine() {
+		return inCase(d -> hasFiredAndNotInDefaultState(this, d), this, identity());
+	}
+
+	private boolean hasFiredAndNotInDefaultState(Statemachine<S, V0> owningStatemachine, Data<S, V0> d) {
+		State<S, V0> defaultState = owningStatemachine.defaultState();
+		return hasFired(d) && !defaultState.matchesStateIn(d);
 	}
 }

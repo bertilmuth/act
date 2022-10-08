@@ -26,8 +26,7 @@ public class Transitions<S, V0> implements AsBehavior<S, V0> {
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
-		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), transitionBehaviors(owningStatemachine))
-			.andThen(recallStatemachineIfFiredAndNotInDefaultState(owningStatemachine));
+		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), transitionBehaviors(owningStatemachine));
 	}
 
 	private Behavior<S, V0, V0> recallStatemachineIfFiredAndNotInDefaultState(
