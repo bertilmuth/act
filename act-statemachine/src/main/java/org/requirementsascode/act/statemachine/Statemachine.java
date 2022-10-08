@@ -94,11 +94,10 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 	
 	private Behavior<S, V0, V0> recallStatemachine() {
-		return inCase(d -> hasFiredAndNotInDefaultState(this, d), this, identity());
+		return inCase(this::hasFiredAndNotInDefaultState, this, identity());
 	}
 
-	private boolean hasFiredAndNotInDefaultState(Statemachine<S, V0> owningStatemachine, Data<S, V0> d) {
-		State<S, V0> defaultState = owningStatemachine.defaultState();
-		return hasFired(d) && !defaultState.matchesStateIn(d);
+	private boolean hasFiredAndNotInDefaultState(Data<S, V0> d) {
+		return hasFired(d) && !defaultState().matchesStateIn(d);
 	}
 }
