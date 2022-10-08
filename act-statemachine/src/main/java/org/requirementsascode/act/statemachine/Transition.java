@@ -41,16 +41,20 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 		Behavior<S, V0, V0> toStateBehavior = toState().asBehavior(owningStatemachine);
 		
 		return inCase(before -> fromState.matchesStateIn(before),
-				behavior.andHandleChangeWith(this::errorIfNotInToStateIfTransitionFired)
-					.andThen(toStateBehavior));
+				behavior.andHandleChangeWith(this::errorIfNotInToState)
+					.andThen(inCase(this::fromStateNotToState, toStateBehavior)));
 	}
 
-	private Data<S, V0> errorIfNotInToStateIfTransitionFired(Change<S, V0, V0> c) {
+	private Data<S, V0> errorIfNotInToState(Change<S, V0, V0> c) {
 		if (hasFired(c.after()) && !toState().matchesStateIn(c.after())) {
 			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
 					+ ", but invariant was false!\nbefore: " + c.before() + "\nafter: " + c.after());
 		}
 		return c.after();
+	}
+	
+	private boolean fromStateNotToState(Data<?, ?> data) {
+		return !fromState().equals(toState());
 	}
 
 	public static boolean hasFired(Data<?, ?> data) {
