@@ -29,7 +29,13 @@ class CartStateMachineTest {
 	}
 	
 	@Test
-	void removesItemFromCartThatsNotInIt() {
+	void removesItemFromEmptyCartThatsNotInIt() {		
+		stateMachine.actOn(new RemoveItem("ItemThatsNotInCart"));
+		assertTrue(stateMachine.items().isEmpty());
+	}
+	
+	@Test
+	void removesItemFromNonEmptyCartThatsNotInIt() {
 		String itemToBeAdded = "SomeItem";
 		
 		stateMachine.actOn(new AddItem(itemToBeAdded));

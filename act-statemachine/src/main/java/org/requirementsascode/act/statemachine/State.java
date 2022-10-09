@@ -1,6 +1,8 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.core.Behavior.identity;
+import static org.requirementsascode.act.core.InCase.inCase;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -42,12 +44,16 @@ public class State<S, V> implements AsBehavior<S, V> {
 
 	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStatemachine) {
-		return Transition.transition(this, this, stateInternalBehavior)
-			.asBehavior(owningStatemachine);
+		return inCase(this::matchesStateIn,
+				stateInternalBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
 		return invariant().test(data.state());
+	}
+
+	private Data<S, V> throwsIllegalStateException(Data<S, V> data) {
+		throw new IllegalStateException("After behavior of state " + name() + ", invariant is false. Data: " + data);
 	}
 
 	@Override

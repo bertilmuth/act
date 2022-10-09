@@ -40,9 +40,7 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {		
 		return inCase(before -> fromState.matchesStateIn(before),
 				behavior.andHandleChangeWith(this::errorIfNotInToState)
-					.andThen(inCase(this::fromStateNotToState, 
-							d -> toStateActOn(d, owningStatemachine), 
-							Behavior.identity())));
+					.andThen(d -> toStateActOn(d, owningStatemachine)));
 	}
 
 	private Data<S, V0> errorIfNotInToState(Change<S, V0, V0> c) {
@@ -55,10 +53,6 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	
 	private Data<S, V0> toStateActOn(Data<S, V0> data, Statemachine<S, V0> owningStatemachine){
 		return toState().asBehavior(owningStatemachine).actOn(data);
-	}
-	
-	private boolean fromStateNotToState(Data<?, ?> data) {
-		return !fromState().equals(toState());
 	}
 
 	public static boolean hasFired(Data<?, ?> data) {

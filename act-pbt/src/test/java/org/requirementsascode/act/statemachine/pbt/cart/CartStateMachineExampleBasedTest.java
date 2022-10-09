@@ -52,6 +52,22 @@ class CartStateMachineExampleBasedTest {
 	@Test
 	void removesOneItem() {
 		final String testString = "AAAAA";
+		Data<Cart, Value> remove = data(cart(asList(testString)), new RemoveItem(testString));
+		Data<Cart, Value> after = statemachine.actOn(remove);
+		assertThat(cartSize(after)).isEqualTo(0);
+	}
+	
+	@Test
+	void removesNonExistingItem() {
+		final String testString = "AAAAA";
+		Data<Cart, Value> remove = data(cart(asList()), new RemoveItem(testString));
+		Data<Cart, Value> after = statemachine.actOn(remove);
+		assertThat(cartSize(after)).isEqualTo(0);
+	}
+	
+	@Test
+	void removesItemThatDoesntExist() {
+		final String testString = "AAAAA";
 		Data<Cart, Value> add = data(cart(asList(testString)), new RemoveItem(testString));
 		Data<Cart, Value> after = statemachine.actOn(add);
 		assertThat(cartSize(after)).isEqualTo(0);
