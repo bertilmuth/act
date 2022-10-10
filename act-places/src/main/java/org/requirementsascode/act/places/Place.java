@@ -1,16 +1,19 @@
 package org.requirementsascode.act.places;
 
-import java.util.Arrays;
+import static java.util.Collections.unmodifiableList;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.requirementsascode.act.statemachine.State;
 
 public class Place<S, V> {
 	private State<S,V> state;
-	private V token;
+	private List<V> tokens;
 
 	public Place(State<S, V> state) {
 		this.state = state;
+		this.tokens = new ArrayList<>();
 	}
 
 	public static <S,V> Place<S, V> forState(State<S, V> state) {
@@ -18,7 +21,7 @@ public class Place<S, V> {
 	}
 	
 	public void put(V token) {	
-		this.token = token;
+		tokens.add(token);
 	}
 
 	public State<S,V> state() {
@@ -26,6 +29,6 @@ public class Place<S, V> {
 	}
 
 	public List<V> tokens() {
-		return Arrays.asList(token);
+		return unmodifiableList(tokens);
 	}
 }
