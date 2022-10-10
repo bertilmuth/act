@@ -11,7 +11,7 @@ public class Place<S, V> {
 	private State<S,V> state;
 	private List<V> tokens;
 
-	public Place(State<S, V> state) {
+	private Place(State<S, V> state) {
 		this.state = state;
 		this.tokens = new ArrayList<>();
 	}
