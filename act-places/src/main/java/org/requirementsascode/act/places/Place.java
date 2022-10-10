@@ -12,16 +12,22 @@ public class Place<S, V> {
 	private List<V> tokens;
 
 	private Place(State<S, V> state) {
+		this(state, new ArrayList<>());
+	}
+	
+	private Place(State<S, V> state, List<V> tokens) {
 		this.state = state;
-		this.tokens = new ArrayList<>();
+		this.tokens = tokens;
 	}
 
 	public static <S,V> Place<S, V> forState(State<S, V> state) {
 		return new Place<>(state);
 	}
 	
-	public void put(V token) {	
-		tokens.add(token);
+	public Place<S, V> put(V token) {	
+		List<V> updatedTokens = new ArrayList<>(tokens);
+		updatedTokens.add(token);		
+		return new Place<>(state, updatedTokens);
 	}
 
 	public State<S,V> state() {
