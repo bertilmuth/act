@@ -33,6 +33,12 @@ public class Place<S, V> {
 		tokenList.add(token);
 		return new Place<>(state, tokenList);
 	}
+	
+	public Optional<V> nextToken() {
+		Optional<V> nextToken = tokens.isEmpty() ? Optional.empty() : Optional.of(tokens.get(0));
+		nextToken.ifPresent(tokens::remove);
+		return nextToken;
+	}
 
 	public State<S, V> state() {
 		return state;
@@ -40,12 +46,6 @@ public class Place<S, V> {
 
 	public Integer size() {
 		return tokens.size();
-	}
-
-	public Optional<V> nextToken() {
-		Optional<V> nextToken = tokens.isEmpty() ? Optional.empty() : Optional.of(tokens.get(0));
-		nextToken.ifPresent(tokens::remove);
-		return nextToken;
 	}
 
 	public List<V> tokens() {
