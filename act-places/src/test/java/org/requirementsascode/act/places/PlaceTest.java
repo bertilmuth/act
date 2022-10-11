@@ -1,9 +1,8 @@
 package org.requirementsascode.act.places;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
@@ -32,6 +31,16 @@ class PlaceTest {
 		assertEquals(5, placeWithToken1.tokens().get(0));
 	}
 	
+	@Test
+	void putsTwoTokensOnPlace() {
+		State<Token, Token> state1 = state("State1", s -> true);
+		TokenType1 token1 = new TokenType1();
+		TokenType2 token2 = new TokenType2();
+		
+		Place<Token,Token> placeWithTwoTokens = Place.forState(state1).withTokens(token1, token2);
+		
+		assertEquals(asList(token1, token2), placeWithTwoTokens.tokens());
+	}
 
 	@Test
 	void putsTokenOnPlaceThatHasToken() {
