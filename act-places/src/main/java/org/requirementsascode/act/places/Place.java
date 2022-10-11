@@ -12,17 +12,13 @@ public class Place<S, V> {
 	private State<S,V> state;
 	private List<V> tokens;
 
-	private Place(State<S, V> state) {
-		this(state, new ArrayList<>());
-	}
-	
 	private Place(State<S, V> state, List<V> tokens) {
 		this.state = state;
 		this.tokens = tokens;
 	}
 
 	public static <S,V> Place<S, V> forState(State<S, V> state) {
-		return new Place<>(state);
+		return new Place<>(state, new ArrayList<>());
 	}
 
 	@SuppressWarnings("unchecked")
