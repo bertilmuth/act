@@ -34,19 +34,19 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 	public Data<S, V> actOn(Data<S, V> dataBefore) {
 		NoOpTest<S, V> noOpTest = noOpTest(dataBefore);
 
-		List<Data<S, V>> dataAfters = behaviors.stream()
+		List<Data<S, V>> datasAfter = behaviors.stream()
 				.map(b -> b.actOn(dataBefore))
 				.filter(noOpTest.negate())
 				.collect(Collectors.toList());
 
 		Data<S, V> mergedData;
 
-		if (dataAfters.isEmpty()) {
+		if (datasAfter.isEmpty()) {
 			mergedData = noOp(dataBefore);
-		} else if (dataAfters.size() == 1) {
-			mergedData = singleElementOf(dataAfters);
+		} else if (datasAfter.size() == 1) {
+			mergedData = singleElementOf(datasAfter);
 		} else {
-			mergedData = merge(dataBefore, dataAfters);
+			mergedData = merge(datasAfter);
 		}
 
 		return mergedData;
@@ -61,8 +61,8 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		return dataAfters.get(0);
 	}
 
-	private Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> dataAfters) {
-		return mergeStrategy.merge(dataBefore, dataAfters);
+	private Data<S, V> merge(List<Data<S, V>> datas) {
+		return mergeStrategy.merge(datas);
 	}
 
 	public List<Behavior<S, ? extends V, ? extends V>> behaviors() {
