@@ -1,5 +1,6 @@
 package org.requirementsascode.act.places;
 
+import static java.util.Objects.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -15,6 +16,8 @@ public class Place<S, V> {
 	private List<V> tokens;
 
 	private Place(State<S, V> state, List<V> tokens) {
+		requireNonNull(state, "state must be non-null!");
+		requireNonNull(tokens, "tokens must be non-null!");
 		this.state = state;
 		this.tokens = newTokenList(tokens);
 	}
@@ -29,7 +32,9 @@ public class Place<S, V> {
 	}
 
 	public Place<S, V> putToken(V token) {
-		List<V> tokenList = new ArrayList<>(tokens);
+		requireNonNull(token, "token must be non-null!");
+		List<V> tokenList = new ArrayList<>(tokens.size()+1);
+		tokenList.addAll(tokens);
 		tokenList.add(token);
 		return new Place<>(state, tokenList);
 	}
