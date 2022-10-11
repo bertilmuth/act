@@ -14,7 +14,7 @@ class PlaceTest {
 		State<String, String> state1 = state("State1", s -> true);
 		Place<String, String> place = Place.forState(state1);
 		assertEquals(state1, place.state());
-		assertTrue(place.tokens().isEmpty());
+		assertEquals(0, place.size());
 	}
 
 	@Test

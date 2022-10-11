@@ -36,6 +36,10 @@ public class Place<S, V> {
 	public State<S,V> state() {
 		return state;
 	}
+	
+	public Integer size() {
+		return tokens.size();
+	}
 
 	public List<V> tokens() {
 		return unmodifiableList(tokens);
