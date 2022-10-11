@@ -38,7 +38,7 @@ public class Place<S, V> {
 	}
 
 	public Optional<V> nextToken() {
-		Optional<V> nextToken = tokens.isEmpty() ? Optional.empty() : Optional.of(tokens.pop());
+		Optional<V> nextToken = Optional.ofNullable(tokens.poll());
 		return nextToken;
 	}
 
