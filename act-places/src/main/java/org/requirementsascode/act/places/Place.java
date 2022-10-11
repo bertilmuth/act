@@ -1,5 +1,6 @@
 package org.requirementsascode.act.places;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 import java.util.ArrayList;
@@ -23,11 +24,17 @@ public class Place<S, V> {
 	public static <S,V> Place<S, V> forState(State<S, V> state) {
 		return new Place<>(state);
 	}
+
+	@SuppressWarnings("unchecked")
+	public Place<S, V> withTokens(V... tokens) {
+		List<V> tokenList = new ArrayList<>(asList(tokens));
+		return new Place<>(state, tokenList);
+	}
 	
 	public Place<S, V> putToken(V token) {	
-		List<V> updatedTokens = new ArrayList<>(tokens);
-		updatedTokens.add(token);		
-		return new Place<>(state, updatedTokens);
+		List<V> tokenList = new ArrayList<>(tokens);
+		tokenList.add(token);		
+		return new Place<>(state, tokenList);
 	}
 
 	public State<S,V> state() {

@@ -34,17 +34,16 @@ class PlaceTest {
 	
 
 	@Test
-	void putsTwoTokensOnPlace() {
+	void putsTokenOnPlaceThatHasToken() {
 		State<Token, Token> state1 = state("State1", s -> true);
-		Place<Token,Token> place = Place.forState(state1);
 		TokenType1 token1 = new TokenType1();
 		TokenType2 token2 = new TokenType2();
-
-		Place<Token,Token> placeWithToken1 = place.putToken(token1);
-		Place<Token,Token> placeWithToken2 = placeWithToken1.putToken(token2);
 		
-		assertEquals(asList(token1, token2), placeWithToken2.tokens());
-		assertTrue(place.tokens().isEmpty());
+		Place<Token,Token> placeWithOneToken = Place.forState(state1).withTokens(token1);
+		Place<Token,Token> placeWithTwoTokens = placeWithOneToken.putToken(token2);
+		
+		assertEquals(asList(token1, token2), placeWithTwoTokens.tokens());
+		assertEquals(1, placeWithOneToken.tokens().size());
 	}
 	
 	private interface Token{};
