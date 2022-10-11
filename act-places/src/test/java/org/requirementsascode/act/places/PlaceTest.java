@@ -2,13 +2,15 @@ package org.requirementsascode.act.places;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
 
 class PlaceTest {
+	private static final String TOKEN1 = "Token1";
+
 	@Test
 	void createsPlaceForState() {
 		State<String, String> state1 = state("State1", s -> true);
@@ -21,8 +23,11 @@ class PlaceTest {
 	void putsTokenOnPlace() {
 		State<String, String> state1 = state("State1", s -> true);
 		Place<String, String> place = Place.forState(state1);
-		Place<String, String> placeWithToken1 = place.putToken("Token1");
-		assertEquals(asList("Token1"), placeWithToken1.tokens());
+		Place<String, String> placeWithToken1 = place.putToken(TOKEN1);
+		
+		assertEquals(1, placeWithToken1.size());
+		assertEquals(TOKEN1, placeWithToken1.nextToken().get());
+		assertFalse(placeWithToken1.nextToken().isPresent());
 	}
 
 	@Test
