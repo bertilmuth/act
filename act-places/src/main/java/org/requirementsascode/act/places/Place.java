@@ -24,7 +24,7 @@ public class Place<S, V> {
 		return new Place<>(state);
 	}
 	
-	public Place<S, V> put(V token) {	
+	public Place<S, V> putToken(V token) {	
 		List<V> updatedTokens = new ArrayList<>(tokens);
 		updatedTokens.add(token);		
 		return new Place<>(state, updatedTokens);

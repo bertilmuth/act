@@ -20,7 +20,7 @@ class PlaceTest {
 	void putsTokenOnPlace() {
 		State<String, String> state1 = state("State1", s -> true);
 		Place<String,String> place = Place.forState(state1);
-		Place<String,String> placeWithToken1 = place.put("Token1");
+		Place<String,String> placeWithToken1 = place.putToken("Token1");
 		assertEquals("Token1", placeWithToken1.tokens().get(0));
 	}
 	
@@ -28,7 +28,7 @@ class PlaceTest {
 	void putsDifferentTokenOnPlace() {
 		State<Number, Number> state1 = state("State1", s -> true);
 		Place<Number,Number> place = Place.forState(state1);
-		Place<Number,Number> placeWithToken1 = place.put(5);
+		Place<Number,Number> placeWithToken1 = place.putToken(5);
 		assertEquals(5, placeWithToken1.tokens().get(0));
 	}
 	
@@ -40,8 +40,8 @@ class PlaceTest {
 		TokenType1 token1 = new TokenType1();
 		TokenType2 token2 = new TokenType2();
 
-		Place<Token,Token> placeWithToken1 = place.put(token1);
-		Place<Token,Token> placeWithToken2 = placeWithToken1.put(token2);
+		Place<Token,Token> placeWithToken1 = place.putToken(token1);
+		Place<Token,Token> placeWithToken2 = placeWithToken1.putToken(token2);
 		
 		assertEquals(asList(token1, token2), placeWithToken2.tokens());
 		assertTrue(place.tokens().isEmpty());
