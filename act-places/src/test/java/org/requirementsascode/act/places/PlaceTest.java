@@ -35,7 +35,10 @@ class PlaceTest {
 		State<Number, Number> state1 = state("State1", s -> true);
 		Place<Number, Number> place = Place.forState(state1);
 		Place<Number, Number> placeWithToken1 = place.putToken(5);
-		assertEquals(asList(5), placeWithToken1.tokens());
+		
+		assertEquals(1, placeWithToken1.size());
+		assertEquals(5, placeWithToken1.nextToken().get());
+		assertFalse(placeWithToken1.nextToken().isPresent());
 	}
 
 	@Test
@@ -43,9 +46,12 @@ class PlaceTest {
 		State<Token, Token> state1 = state("State1", s -> true);
 		TokenType1 token1 = new TokenType1();
 		TokenType2 token2 = new TokenType2();
-
 		Place<Token, Token> placeWithTwoTokens = Place.forState(state1).withTokens(token1, token2);
-		assertEquals(asList(token1, token2), placeWithTwoTokens.tokens());
+		
+		assertEquals(2, placeWithTwoTokens.size());
+		assertEquals(token1, placeWithTwoTokens.nextToken().get());
+		assertEquals(token2, placeWithTwoTokens.nextToken().get());
+		assertFalse(placeWithTwoTokens.nextToken().isPresent());
 	}
 
 	@Test
@@ -57,7 +63,10 @@ class PlaceTest {
 		Place<Token, Token> placeWithOneToken = Place.forState(state1).withTokens(token1);
 		Place<Token, Token> placeWithTwoTokens = placeWithOneToken.putToken(token2);
 
-		assertEquals(asList(token1, token2), placeWithTwoTokens.tokens());
+		assertEquals(2, placeWithTwoTokens.size());
+		assertEquals(token1, placeWithTwoTokens.nextToken().get());
+		assertEquals(token2, placeWithTwoTokens.nextToken().get());
+		assertFalse(placeWithTwoTokens.nextToken().isPresent());
 		assertEquals(asList(token1), placeWithOneToken.tokens());
 	}
 
