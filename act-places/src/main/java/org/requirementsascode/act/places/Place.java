@@ -1,8 +1,7 @@
 package org.requirementsascode.act.places;
 
-import static java.util.Objects.*;
 import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,12 +48,8 @@ public class Place<S, V> {
 		return state;
 	}
 
-	public Integer size() {
+	public int size() {
 		return tokens.size();
-	}
-
-	public List<V> tokens() {
-		return unmodifiableList(tokens);
 	}
 	
 	private ArrayList<V> newTokenList(List<V> tokens) {
