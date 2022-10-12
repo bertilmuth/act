@@ -1,5 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
@@ -30,6 +31,6 @@ public class Flows<S, V0> implements AsBehavior<S, V0>{
 	}
 
 	public List<Flow<S, V0>> asList() {
-		return flows;
+		return unmodifiableList(flows);
 	}
 }
