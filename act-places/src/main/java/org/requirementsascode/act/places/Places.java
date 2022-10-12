@@ -39,7 +39,7 @@ public class Places<S, V> {
 		return findByState(state).flatMap(Place::nextToken);
 	}
 	
-	Optional<Place<S, V>> findByState(State<S, V> state) {
+	private Optional<Place<S, V>> findByState(State<S, V> state) {
 		Optional<Place<S, V>> place = Optional.ofNullable(stateToPlaceMap.get(state));
 		return place;
 	}
