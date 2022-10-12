@@ -18,6 +18,15 @@ class PlaceTest {
 		assertEquals(state1, place.state());
 		assertEquals(0, place.size());
 	}
+	
+	@Test
+	void ignoresNextForEmptyPlace() {
+		State<String, String> state1 = state("State1", s -> true);
+		Place<String, String> place = Place.forState(state1);
+		Place<String, String> newPlace = place.next();
+		assertEquals(state1, newPlace.state());
+		assertEquals(0, newPlace.size());
+	}
 
 	@Test
 	void putsTokenOnPlace() {

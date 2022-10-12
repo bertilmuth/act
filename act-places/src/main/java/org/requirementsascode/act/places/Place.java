@@ -45,7 +45,7 @@ public class Place<S, V> {
 	
 	Place<S,V> next() {
 		LinkedList<V> tokenList = new LinkedList<>(tokens);
-		tokenList.pop();
+		tokenList.poll();
 		return new Place<>(state, tokenList);
 	}
 
