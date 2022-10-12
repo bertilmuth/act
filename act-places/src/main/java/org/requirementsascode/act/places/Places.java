@@ -27,14 +27,6 @@ public class Places<S, V> {
 		return new Places<>(statemachine);
 	}
 	
-	public Optional<Place<S, V>> findByState(State<S, V> state) {
-		Optional<Place<S, V>> place = asList().stream()
-			.filter(p -> p.state().equals(state))
-			.findFirst();
-		
-		return place;
-	}
-	
 	public Places<S, V> placeTokens(State<S, V> state, List<V> tokenList) {
 		Place<S, V> updatedPlace = Place.forState(state).withTokens(tokenList);
 
@@ -46,6 +38,11 @@ public class Places<S, V> {
 
 	public List<Place<S,V>> asList() {
 		return new ArrayList<>(stateToPlaceMap.values());
+	}
+	
+	public Optional<Place<S, V>> findByState(State<S, V> state) {
+		Optional<Place<S, V>> place = Optional.ofNullable(stateToPlaceMap.get(state));
+		return place;
 	}
 
 	private static <S,V> Map<State<S,V>, Place<S, V>> mapStatesToPlaces(Statemachine<S, V> statemachine) {
