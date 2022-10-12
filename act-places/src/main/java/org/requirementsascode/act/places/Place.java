@@ -1,6 +1,5 @@
 package org.requirementsascode.act.places;
 
-import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collections;
@@ -25,9 +24,8 @@ public class Place<S, V> {
 		return new Place<>(state, Collections.emptyList());
 	}
 
-	@SuppressWarnings("unchecked")
-	public Place<S, V> withTokens(V... tokens) {
-		return new Place<>(state, asList(tokens));
+	public Place<S, V> withTokens(List<V> tokens) {
+		return new Place<>(state, tokens);
 	}
 
 	public Place<S, V> putToken(V token) {

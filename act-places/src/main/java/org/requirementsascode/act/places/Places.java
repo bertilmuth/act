@@ -27,6 +27,12 @@ public class Places<S, V> {
 		
 		return place;
 	}
+	
+	public Places<S, V> updatePlace(State<S, V> state, List<V> tokenList) {
+		/*Place<S, V> updatedPlace = findByState(state)
+			.map(p -> p.withTokens(tokenList));*/
+		return null;
+	}
 
 	public List<Place<S,V>> asList() {
 		return places;
