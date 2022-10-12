@@ -44,8 +44,7 @@ public class Place<S, V> {
 	}
 	
 	Optional<V> token() {
-		Optional<V> nextToken = Optional.ofNullable(tokens.peek());
-		return nextToken;
+		return Optional.ofNullable(tokens.peek());
 	}
 	
 	Place<S,V> next() {
