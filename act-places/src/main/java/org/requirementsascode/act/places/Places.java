@@ -33,7 +33,7 @@ public class Places<S, V> {
 	}
 	
 	public Optional<V> nextToken(State<S, V> state) {
-		return findByState(state).flatMap(Place::nextToken);
+		return findByState(state).flatMap(Place::token);
 	}
 	
 	public Places<S, V> addToken(State<S, V> state, V token) {

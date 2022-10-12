@@ -26,19 +26,19 @@ class PlaceTest {
 		Place<String, String> placeWithToken1 = place.addToken(TOKEN1);
 
 		assertEquals(1, placeWithToken1.size());
-		assertEquals(TOKEN1, placeWithToken1.nextToken().get());
-		assertFalse(placeWithToken1.nextToken().isPresent());
+		assertEquals(TOKEN1, placeWithToken1.token().get());
+		
+		assertFalse(placeWithToken1.next().token().isPresent());
 	}
 
 	@Test
 	void putsDifferentTokenOnPlace() {
 		State<Number, Number> state1 = state("State1", s -> true);
-		Place<Number, Number> place = Place.forState(state1);
-		Place<Number, Number> placeWithToken1 = place.addToken(5);
+		Place<Number, Number> placeWithToken1 = Place.forState(state1).addToken(5);
 
 		assertEquals(1, placeWithToken1.size());
-		assertEquals(5, placeWithToken1.nextToken().get());
-		assertFalse(placeWithToken1.nextToken().isPresent());
+		assertEquals(5, placeWithToken1.token().get());
+		assertFalse(placeWithToken1.next().token().isPresent());
 	}
 
 	@Test
@@ -49,9 +49,9 @@ class PlaceTest {
 		Place<Token, Token> placeWithTwoTokens = Place.forState(state1).withTokens(asList(token1, token2));
 
 		assertEquals(2, placeWithTwoTokens.size());
-		assertEquals(token1, placeWithTwoTokens.nextToken().get());
-		assertEquals(token2, placeWithTwoTokens.nextToken().get());
-		assertFalse(placeWithTwoTokens.nextToken().isPresent());
+		assertEquals(token1, placeWithTwoTokens.token().get());
+		assertEquals(token2, placeWithTwoTokens.next().token().get());
+		assertFalse(placeWithTwoTokens.next().next().token().isPresent());
 	}
 
 	@Test
@@ -64,12 +64,18 @@ class PlaceTest {
 		Place<Token, Token> placeWithTwoTokens = placeWithOneToken.addToken(token2);
 
 		assertEquals(2, placeWithTwoTokens.size());
-		assertEquals(token1, placeWithTwoTokens.nextToken().get());
-		assertEquals(token2, placeWithTwoTokens.nextToken().get());
-		assertFalse(placeWithTwoTokens.nextToken().isPresent());
-
-		assertEquals(1, placeWithOneToken.size());
-		assertEquals(token1, placeWithOneToken.nextToken().get());
+		assertEquals(token1, placeWithTwoTokens.token().get());
+		assertEquals(token2, placeWithTwoTokens.next().token().get());
+		assertFalse(placeWithTwoTokens.next().next().token().isPresent());
+	}
+	
+	@Test
+	void placeIsImmutable() {
+		State<String, String> state1 = state("State1", s -> true);
+		Place<String, String> place = Place.forState(state1)
+			.withTokens(asList(TOKEN1));
+		place.token();
+		//assertTrue(false);
 	}
 
 	private interface Token {

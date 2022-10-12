@@ -42,9 +42,15 @@ public class Place<S, V> {
 		tokenList.add(token);
 		return new Place<>(state, tokenList);
 	}
+	
+	Place<S,V> next() {
+		LinkedList<V> tokenList = new LinkedList<>(tokens);
+		tokenList.pop();
+		return new Place<>(state, tokenList);
+	}
 
-	Optional<V> nextToken() {
-		Optional<V> nextToken = Optional.ofNullable(tokens.poll());
+	Optional<V> token() {
+		Optional<V> nextToken = Optional.ofNullable(tokens.peek());
 		return nextToken;
 	}
 
