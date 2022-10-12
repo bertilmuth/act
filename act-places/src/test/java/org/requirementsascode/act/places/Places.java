@@ -20,7 +20,10 @@ public class Places<S, V> {
 		return new Places<>(statemachine);
 	}
 	
-	public Optional<Place<Object, Object>> findByState(State<Integer, Integer> state1) {
+	public Optional<Place<S, V>> findByState(State<S, V> state) {
+		if(places.size()>0) {
+			return Optional.of(places.get(0));
+		}
 		return Optional.empty();
 	}
 

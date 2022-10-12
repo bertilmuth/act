@@ -68,13 +68,27 @@ class PlacesTest {
 	}
 	
 	@Test
-	void doesntFindNonExistingState() {
-		State<Integer,Integer> state1 = state("State1", s -> true);
+	void doesntFindNonExistingPlace() {
+		State<Object,Object> state1 = state("State1", s -> true);
 		Statemachine<Object, Object> statemachine = Statemachine.builder()
 				.states().transitions().build();
 		
 		Places<Object,Object> places = Places.forStatemachine(statemachine);
-		Optional<Place<Object,Object>> state = places.findByState(state1);
-		assertTrue(state.isEmpty());
+		Optional<Place<Object,Object>> place = places.findByState(state1);
+		assertTrue(place.isEmpty());
+	}
+	
+	@Test
+	void findsPlaceByState() {
+		State<String,String> state1 = state("State1", s -> true);
+		State<String,String> state2 = state("State2", s -> true);
+		Statemachine<String, String> statemachine = Statemachine.builder()
+				.states(state1, state2)
+				.transitions()
+				.build();
+		
+		Places<String, String> places = Places.forStatemachine(statemachine);
+		Optional<Place<String, String>> place1 = places.findByState(state1);
+		assertEquals(state1, place1.get().state());
 	}
 }
