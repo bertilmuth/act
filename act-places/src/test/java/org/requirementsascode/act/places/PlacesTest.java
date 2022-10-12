@@ -5,10 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
-import java.util.Arrays;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -54,7 +52,6 @@ class PlacesTest {
 	}
 	
 	@Test
-	@Disabled
 	void updatesPlace() {
 		State<String,String> state1 = state("State1", s -> true);
 		State<String,String> state2 = state("State2", s -> true);
@@ -66,6 +63,7 @@ class PlacesTest {
 		
 		Places<String, String> places = Places.forStatemachine(statemachine);
 		Places<String, String> newPlaces = places.updatePlace(state1, asList("Token1"));
-		assertEquals("Token1", places.findByState(state1).flatMap(Place::nextToken).get());
+		
+		assertEquals("Token1", newPlaces.findByState(state1).flatMap(Place::nextToken).get());
 	}
 }
