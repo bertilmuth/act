@@ -21,10 +21,11 @@ public class Places<S, V> {
 	}
 	
 	public Optional<Place<S, V>> findByState(State<S, V> state) {
-		if(places.size()>0) {
-			return Optional.of(places.get(0));
-		}
-		return Optional.empty();
+		Optional<Place<S, V>> place = asList().stream()
+			.filter(p -> p.state().equals(state))
+			.findFirst();
+		
+		return place;
 	}
 
 	public List<Place<S,V>> asList() {
