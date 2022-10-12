@@ -25,6 +25,7 @@ class PlaceTest {
 		Place<String, String> place = Place.forState(state1);
 		Place<String, String> placeWithToken1 = place.addToken(TOKEN1);
 
+		assertEquals(0, place.size());
 		assertEquals(1, placeWithToken1.size());
 		assertEquals(TOKEN1, placeWithToken1.token().get());
 		
@@ -67,15 +68,6 @@ class PlaceTest {
 		assertEquals(token1, placeWithTwoTokens.token().get());
 		assertEquals(token2, placeWithTwoTokens.next().token().get());
 		assertFalse(placeWithTwoTokens.next().next().token().isPresent());
-	}
-	
-	@Test
-	void placeIsImmutable() {
-		State<String, String> state1 = state("State1", s -> true);
-		Place<String, String> place = Place.forState(state1)
-			.withTokens(asList(TOKEN1));
-		place.token();
-		//assertTrue(false);
 	}
 
 	private interface Token {
