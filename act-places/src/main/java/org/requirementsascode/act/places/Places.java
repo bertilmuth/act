@@ -26,7 +26,7 @@ public class Places<S, V> {
 		return new Places<>(statemachine);
 	}
 	
-	public Places<S, V> placeTokens(State<S, V> state, List<V> tokenList) {
+	public Places<S, V> setTokens(State<S, V> state, List<V> tokenList) {
 		Place<S, V> updatedPlace = Place.forState(state).withTokens(tokenList);
 
 		Map<State<S, V>, Place<S, V>> newStateToPlaceMap = new HashMap<>();
