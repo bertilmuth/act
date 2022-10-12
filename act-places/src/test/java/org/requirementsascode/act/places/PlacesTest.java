@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -63,7 +62,6 @@ class PlacesTest {
 	}
 	
 	@Test
-	@Disabled
 	void addsTokenToPlace() {
 		State<String, String> state1 = state("State1", s -> true);
 		Statemachine<String, String> statemachine = Statemachine.builder()
@@ -77,5 +75,21 @@ class PlacesTest {
 		
 		assertEquals(TOKEN1, newPlaces.nextToken(state1).get());
 		assertEquals(TOKEN2, newPlaces.nextToken(state1).get());
+	}
+	
+	@Test
+	void ignoresAddingTokenForStateThatsNotPartOfStatemachine() {
+		State<String, String> state1 = state("State1", s -> true);
+		State<String, String> state2 = state("State2", s -> true);
+
+		Statemachine<String, String> statemachine = Statemachine.builder()
+			.states(state1)
+			.transitions()
+			.build();
+
+		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
+			.addToken(state2, TOKEN2);
+
+		assertFalse(newPlaces.nextToken(state2).isPresent());
 	}
 }

@@ -28,7 +28,7 @@ public class Places<S, V> {
 	
 	public Places<S, V> setTokens(State<S, V> state, List<V> tokenList) {
 		Place<S, V> updatedPlace = Place.forState(state).withTokens(tokenList);
-		Places<S, V> newPlaces = updatePlaceForState(state, updatedPlace);
+		Places<S, V> newPlaces = updatePlaceForState(updatedPlace, state);
 		return newPlaces;
 	}
 	
@@ -37,12 +37,15 @@ public class Places<S, V> {
 	}
 	
 	public Places<S, V> addToken(State<S, V> state, V token) {
-		Optional<Place<S, V>> updatedPlace = findByState(state).map(p -> p.addToken(token));
-		Places<S, V> newPlaces = updatePlaceForState(state, updatedPlace.get());
+		Places<S, V> newPlaces =  findByState(state)
+			.map(place -> place.addToken(token))
+			.map(place -> updatePlaceForState(place, state))
+			.orElse(this);
+			
 		return newPlaces;
 	}
 	
-	private Places<S, V> updatePlaceForState(State<S, V> state, Place<S, V> updatedPlace) {
+	private Places<S, V> updatePlaceForState(Place<S, V> updatedPlace, State<S, V> state) {
 		Map<State<S, V>, Place<S, V>> newStateToPlaceMap = new HashMap<>();
 		newStateToPlaceMap.putAll(stateToPlaceMap);
 		newStateToPlaceMap.replace(state, updatedPlace);
