@@ -28,24 +28,24 @@ public class Place<S, V> {
 		return new Place<>(state, tokens);
 	}
 
-	public Place<S, V> addToken(V token) {
-		requireNonNull(token, "token must be non-null!");
-		List<V> tokenList = new LinkedList<>(tokens);
-		tokenList.add(token);
-		return new Place<>(state, tokenList);
-	}
-
-	public Optional<V> nextToken() {
-		Optional<V> nextToken = Optional.ofNullable(tokens.poll());
-		return nextToken;
-	}
-
 	public State<S, V> state() {
 		return state;
 	}
 
 	public int size() {
 		return tokens.size();
+	}
+	
+	Place<S, V> addToken(V token) {
+		requireNonNull(token, "token must be non-null!");
+		List<V> tokenList = new LinkedList<>(tokens);
+		tokenList.add(token);
+		return new Place<>(state, tokenList);
+	}
+
+	Optional<V> nextToken() {
+		Optional<V> nextToken = Optional.ofNullable(tokens.poll());
+		return nextToken;
 	}
 
 	private LinkedList<V> newTokenList(List<V> tokens) {
