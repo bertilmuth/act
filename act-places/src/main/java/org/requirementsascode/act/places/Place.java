@@ -28,7 +28,7 @@ public class Place<S, V> {
 		return new Place<>(state, tokens);
 	}
 
-	public Place<S, V> putToken(V token) {
+	public Place<S, V> addToken(V token) {
 		requireNonNull(token, "token must be non-null!");
 		List<V> tokenList = new LinkedList<>(tokens);
 		tokenList.add(token);

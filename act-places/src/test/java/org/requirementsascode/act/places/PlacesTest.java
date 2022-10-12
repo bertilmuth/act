@@ -15,11 +15,13 @@ class PlacesTest {
 	private static final String TOKEN1 = "Token1";
 
 	@Test
-	void updatesPlaceWithOneToken() {
+	void setsTokenOnPlace() {
 		State<String, String> state1 = state("State1", s -> true);
-		State<String, String> state2 = state("State2", s -> true);
 
-		Statemachine<String, String> statemachine = Statemachine.builder().states(state1, state2).transitions().build();
+		Statemachine<String, String> statemachine = Statemachine.builder()
+			.states(state1)
+			.transitions()
+			.build();
 
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
 			.setTokens(state1, asList(TOKEN1));
@@ -28,12 +30,11 @@ class PlacesTest {
 	}
 	
 	@Test
-	void updatesPlaceWithTwoTokens() {
+	void setsTwoTokensOnPlace() {
 		State<String, String> state1 = state("State1", s -> true);
-		State<String, String> state2 = state("State2", s -> true);
 
 		Statemachine<String, String> statemachine = Statemachine.builder()
-			.states(state1, state2)
+			.states(state1)
 			.transitions()
 			.build();
 
@@ -46,7 +47,7 @@ class PlacesTest {
 	}
 
 	@Test
-	void ignoresUpdatedOfPlaceForStateThatsNotPartOfStatemachine() {
+	void ignoresSettingTokensForStateThatsNotPartOfStatemachine() {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
 
@@ -63,15 +64,18 @@ class PlacesTest {
 	
 	@Test
 	@Disabled
-	void putsTokenOnPlace() {
+	void addsTokenToPlace() {
 		State<String, String> state1 = state("State1", s -> true);
 		Statemachine<String, String> statemachine = Statemachine.builder()
 			.states(state1)
 			.transitions()
 			.build();
 		
-		/*Places<String, String> newPlaces = Places.forStatemachine(statemachine)
-			.addToken();*/
+		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
+			.setTokens(state1, asList(TOKEN1))
+			.addToken(state1, TOKEN2);
 		
+		assertEquals(TOKEN1, newPlaces.nextToken(state1).get());
+		assertEquals(TOKEN2, newPlaces.nextToken(state1).get());
 	}
 }

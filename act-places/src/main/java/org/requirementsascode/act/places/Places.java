@@ -28,15 +28,26 @@ public class Places<S, V> {
 	
 	public Places<S, V> setTokens(State<S, V> state, List<V> tokenList) {
 		Place<S, V> updatedPlace = Place.forState(state).withTokens(tokenList);
-
-		Map<State<S, V>, Place<S, V>> newStateToPlaceMap = new HashMap<>();
-		newStateToPlaceMap.putAll(stateToPlaceMap);
-		newStateToPlaceMap.replace(state, updatedPlace);
-		return new Places<S,V>(newStateToPlaceMap);
+		Places<S, V> newPlaces = updatePlaceForState(state, updatedPlace);
+		return newPlaces;
 	}
 	
 	public Optional<V> nextToken(State<S, V> state) {
 		return findByState(state).flatMap(Place::nextToken);
+	}
+	
+	public Places<S, V> addToken(State<S, V> state, V token) {
+		Optional<Place<S, V>> updatedPlace = findByState(state).map(p -> p.addToken(token));
+		Places<S, V> newPlaces = updatePlaceForState(state, updatedPlace.get());
+		return newPlaces;
+	}
+	
+	private Places<S, V> updatePlaceForState(State<S, V> state, Place<S, V> updatedPlace) {
+		Map<State<S, V>, Place<S, V>> newStateToPlaceMap = new HashMap<>();
+		newStateToPlaceMap.putAll(stateToPlaceMap);
+		newStateToPlaceMap.replace(state, updatedPlace);
+		Places<S, V> newPlaces = new Places<S,V>(newStateToPlaceMap);
+		return newPlaces;
 	}
 	
 	private Optional<Place<S, V>> findByState(State<S, V> state) {
