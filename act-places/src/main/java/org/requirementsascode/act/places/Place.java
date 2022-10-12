@@ -38,20 +38,20 @@ public class Place<S, V> {
 	
 	Place<S, V> addToken(V token) {
 		requireNonNull(token, "token must be non-null!");
-		List<V> tokenList = new LinkedList<>(tokens);
+		List<V> tokenList = newTokenList(tokens);
 		tokenList.add(token);
 		return new Place<>(state, tokenList);
 	}
 	
-	Place<S,V> next() {
-		LinkedList<V> tokenList = new LinkedList<>(tokens);
-		tokenList.poll();
-		return new Place<>(state, tokenList);
-	}
-
 	Optional<V> token() {
 		Optional<V> nextToken = Optional.ofNullable(tokens.peek());
 		return nextToken;
+	}
+	
+	Place<S,V> next() {
+		LinkedList<V> tokenList = newTokenList(tokens);
+		tokenList.poll();
+		return new Place<>(state, tokenList);
 	}
 
 	private LinkedList<V> newTokenList(List<V> tokens) {

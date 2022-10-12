@@ -32,7 +32,15 @@ public class Places<S, V> {
 		return newPlaces;
 	}
 	
-	public Optional<V> nextToken(State<S, V> state) {
+	public Places<S,V> next(State<S, V> state) {
+		Places<S, V> newPlaces =  findByState(state)
+			.map(Place::next)
+			.map(place -> updatePlaceForState(place, state))
+			.orElse(this);
+		return newPlaces;
+	}
+	
+	public Optional<V> token(State<S, V> state) {
 		return findByState(state).flatMap(Place::token);
 	}
 	
