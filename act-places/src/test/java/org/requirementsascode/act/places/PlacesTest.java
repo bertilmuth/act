@@ -13,6 +13,9 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 
 class PlacesTest {
+	private static final String TOKEN2 = "Token2";
+	private static final String TOKEN1 = "Token1";
+
 	@Test
 	void doesntFindNonExistingPlace() {
 		State<Object, Object> state1 = state("State1", s -> true);
@@ -52,16 +55,30 @@ class PlacesTest {
 	}
 
 	@Test
-	void updatesPlace() {
+	void updatesPlaceWithOneToken() {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
 
 		Statemachine<String, String> statemachine = Statemachine.builder().states(state1, state2).transitions().build();
 
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
-			.placeTokens(state1, asList("Token1"));
+			.placeTokens(state1, asList(TOKEN1));
 
-		assertEquals("Token1", newPlaces.findByState(state1).flatMap(Place::nextToken).get());
+		assertEquals(TOKEN1, newPlaces.findByState(state1).flatMap(Place::nextToken).get());
+	}
+	
+	@Test
+	void updatesPlaceWithTwoTokens() {
+		State<String, String> state1 = state("State1", s -> true);
+		State<String, String> state2 = state("State2", s -> true);
+
+		Statemachine<String, String> statemachine = Statemachine.builder().states(state1, state2).transitions().build();
+
+		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
+			.placeTokens(state1, asList(TOKEN1, TOKEN2));
+
+		assertEquals(TOKEN1, newPlaces.findByState(state1).flatMap(Place::nextToken).get());
+		assertEquals(TOKEN2, newPlaces.findByState(state1).flatMap(Place::nextToken).get());
 	}
 
 	@Test
@@ -72,7 +89,7 @@ class PlacesTest {
 		Statemachine<String, String> statemachine = Statemachine.builder().states(state1).transitions().build();
 
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
-			.placeTokens(state2, asList("Token2"));
+			.placeTokens(state2, asList(TOKEN2));
 
 		assertFalse(newPlaces.findByState(state2).isPresent());
 	}
