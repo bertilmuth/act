@@ -1,19 +1,23 @@
 package org.requirementsascode.act.places;
 
+import static java.util.stream.Collectors.toMap;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 
 public class Places<S, V> {
-	private final List<Place<S, V>> places;
+	private final Map<State<S, V>, Place<S, V>> stateToPlaceMap;
 
 	private Places(Statemachine<S,V> statemachine) {
 		Objects.requireNonNull(statemachine, "statemachine must be non-null!");
-		this.places = createPlaces(statemachine);
+		this.stateToPlaceMap = mapStatesToPlaces(statemachine);
 	}
 
 	public static <S,V> Places<S, V> forStatemachine(Statemachine<S, V> statemachine) {
@@ -29,19 +33,20 @@ public class Places<S, V> {
 	}
 	
 	public Places<S, V> updatePlace(State<S, V> state, List<V> tokenList) {
-		/*Place<S, V> updatedPlace = findByState(state)
+		/*Optional<Place<S, V>> updatedPlace = findByState(state)
 			.map(p -> p.withTokens(tokenList));*/
 		return null;
 	}
 
 	public List<Place<S,V>> asList() {
-		return places;
+		return new ArrayList<>(stateToPlaceMap.values());
 	}
 
-	private List<Place<S, V>> createPlaces(Statemachine<S, V> statemachine) {
+	private Map<State<S,V>, Place<S, V>> mapStatesToPlaces(Statemachine<S, V> statemachine) {
 		List<State<S, V>> states = statemachine.states().asList();
-		return states.stream()
-			.map(Place::forState)
-			.collect(Collectors.toList());
+		Map<State<S, V>, Place<S, V>> stateToPlaceMap = states.stream()
+			.collect(toMap(Function.identity(), Place::forState));
+		
+		return stateToPlaceMap;
 	}
 }
