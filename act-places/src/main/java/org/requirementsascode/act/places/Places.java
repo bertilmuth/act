@@ -2,7 +2,6 @@ package org.requirementsascode.act.places;
 
 import static java.util.stream.Collectors.toMap;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +38,8 @@ public class Places<S, V> {
 	public V nextToken(State<S, V> state) {
 		return findByState(state).flatMap(Place::nextToken).get();
 	}
-
-	public List<Place<S,V>> asList() {
-		return new ArrayList<>(stateToPlaceMap.values());
-	}
 	
-	public Optional<Place<S, V>> findByState(State<S, V> state) {
+	Optional<Place<S, V>> findByState(State<S, V> state) {
 		Optional<Place<S, V>> place = Optional.ofNullable(stateToPlaceMap.get(state));
 		return place;
 	}
