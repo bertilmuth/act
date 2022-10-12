@@ -35,6 +35,10 @@ public class Places<S, V> {
 		newStateToPlaceMap.replace(state, updatedPlace);
 		return new Places<S,V>(newStateToPlaceMap);
 	}
+	
+	public V nextToken(State<S, V> state) {
+		return findByState(state).flatMap(Place::nextToken).get();
+	}
 
 	public List<Place<S,V>> asList() {
 		return new ArrayList<>(stateToPlaceMap.values());

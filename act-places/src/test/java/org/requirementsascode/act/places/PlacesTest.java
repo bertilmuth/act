@@ -64,7 +64,7 @@ class PlacesTest {
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
 			.placeTokens(state1, asList(TOKEN1));
 
-		assertEquals(TOKEN1, newPlaces.findByState(state1).flatMap(Place::nextToken).get());
+		assertEquals(TOKEN1, newPlaces.nextToken(state1));
 	}
 	
 	@Test
@@ -77,8 +77,8 @@ class PlacesTest {
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
 			.placeTokens(state1, asList(TOKEN1, TOKEN2));
 
-		assertEquals(TOKEN1, newPlaces.findByState(state1).flatMap(Place::nextToken).get());
-		assertEquals(TOKEN2, newPlaces.findByState(state1).flatMap(Place::nextToken).get());
+		assertEquals(TOKEN1, newPlaces.nextToken(state1));
+		assertEquals(TOKEN2, newPlaces.nextToken(state1));
 	}
 
 	@Test
