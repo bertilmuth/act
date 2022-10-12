@@ -2,6 +2,7 @@ package org.requirementsascode.act.places;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.requirementsascode.act.statemachine.State;
@@ -17,6 +18,10 @@ public class Places<S, V> {
 
 	public static <S,V> Places<S, V> forStatemachine(Statemachine<S, V> statemachine) {
 		return new Places<>(statemachine);
+	}
+	
+	public Optional<Place<Object, Object>> findByState(State<Integer, Integer> state1) {
+		return Optional.empty();
 	}
 
 	public List<Place<S,V>> asList() {

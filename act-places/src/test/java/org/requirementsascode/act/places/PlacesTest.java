@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
@@ -64,5 +65,16 @@ class PlacesTest {
 		assertEquals(2, placesList.size());
 		assertEquals(state1, placesList.get(0).state());
 		assertEquals(state2, placesList.get(1).state());
+	}
+	
+	@Test
+	void doesntFindNonExistingState() {
+		State<Integer,Integer> state1 = state("State1", s -> true);
+		Statemachine<Object, Object> statemachine = Statemachine.builder()
+				.states().transitions().build();
+		
+		Places<Object,Object> places = Places.forStatemachine(statemachine);
+		Optional<Place<Object,Object>> state = places.findByState(state1);
+		assertTrue(state.isEmpty());
 	}
 }
