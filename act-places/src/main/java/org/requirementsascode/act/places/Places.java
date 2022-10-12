@@ -40,7 +40,7 @@ public class Places<S, V> {
 
 		Map<State<S, V>, Place<S, V>> newStateToPlaceMap = new HashMap<>();
 		newStateToPlaceMap.putAll(stateToPlaceMap);
-		newStateToPlaceMap.put(state, updatedPlace);
+		newStateToPlaceMap.replace(state, updatedPlace);
 		return new Places<S,V>(newStateToPlaceMap);
 	}
 

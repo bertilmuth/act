@@ -2,6 +2,7 @@ package org.requirementsascode.act.places;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
@@ -65,5 +66,21 @@ class PlacesTest {
 		Places<String, String> newPlaces = places.updatePlace(state1, asList("Token1"));
 		
 		assertEquals("Token1", newPlaces.findByState(state1).flatMap(Place::nextToken).get());
+	}
+	
+	@Test
+	void ignoresUpdatedOfPlaceForStateThatsNotPartOfStatemachine() {
+		State<String,String> state1 = state("State1", s -> true);
+		State<String,String> state2 = state("State2", s -> true);
+		
+		Statemachine<String, String> statemachine = Statemachine.builder()
+				.states(state1)
+				.transitions()
+				.build();
+		
+		Places<String, String> places = Places.forStatemachine(statemachine);
+		Places<String, String> newPlaces = places.updatePlace(state2, asList("Token2"));
+		
+		assertFalse(newPlaces.findByState(state2).isPresent());
 	}
 }
