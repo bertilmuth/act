@@ -27,7 +27,10 @@ class PlacesTest {
 	void findsPlaceByState() {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
-		Statemachine<String, String> statemachine = Statemachine.builder().states(state1, state2).transitions().build();
+		Statemachine<String, String> statemachine = Statemachine.builder()
+			.states(state1, state2)
+			.transitions()
+			.build();
 
 		Places<String, String> places = Places.forStatemachine(statemachine);
 		Optional<Place<String, String>> place1 = places.findByState(state1);
@@ -38,7 +41,10 @@ class PlacesTest {
 	void findsDifferentPlaceByState() {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
-		Statemachine<String, String> statemachine = Statemachine.builder().states(state1, state2).transitions().build();
+		Statemachine<String, String> statemachine = Statemachine.builder()
+			.states(state1, state2)
+			.transitions()
+			.build();
 
 		Places<String, String> places = Places.forStatemachine(statemachine);
 		Optional<Place<String, String>> place2 = places.findByState(state2);
