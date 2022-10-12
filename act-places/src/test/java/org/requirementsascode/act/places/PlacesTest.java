@@ -23,7 +23,7 @@ class PlacesTest {
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
 			.placeTokens(state1, asList(TOKEN1));
 
-		assertEquals(TOKEN1, newPlaces.nextToken(state1));
+		assertEquals(TOKEN1, newPlaces.nextToken(state1).get());
 	}
 	
 	@Test
@@ -36,8 +36,8 @@ class PlacesTest {
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
 			.placeTokens(state1, asList(TOKEN1, TOKEN2));
 
-		assertEquals(TOKEN1, newPlaces.nextToken(state1));
-		assertEquals(TOKEN2, newPlaces.nextToken(state1));
+		assertEquals(TOKEN1, newPlaces.nextToken(state1).get());
+		assertEquals(TOKEN2, newPlaces.nextToken(state1).get());
 	}
 
 	@Test
@@ -50,6 +50,6 @@ class PlacesTest {
 		Places<String, String> newPlaces = Places.forStatemachine(statemachine)
 			.placeTokens(state2, asList(TOKEN2));
 
-		assertFalse(newPlaces.findByState(state2).isPresent());
+		assertFalse(newPlaces.nextToken(state2).isPresent());
 	}
 }

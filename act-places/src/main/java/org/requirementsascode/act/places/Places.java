@@ -35,8 +35,8 @@ public class Places<S, V> {
 		return new Places<S,V>(newStateToPlaceMap);
 	}
 	
-	public V nextToken(State<S, V> state) {
-		return findByState(state).flatMap(Place::nextToken).get();
+	public Optional<V> nextToken(State<S, V> state) {
+		return findByState(state).flatMap(Place::nextToken);
 	}
 	
 	Optional<Place<S, V>> findByState(State<S, V> state) {
