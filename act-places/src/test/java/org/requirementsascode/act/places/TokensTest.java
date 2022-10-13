@@ -48,5 +48,34 @@ class TokensTest {
 		
 		Stream<Token<String,String>> foundTokens = tokens.findByState(state2);
 		List<Token<String,String>> tokenList = foundTokens.toList();
+		assertTrue(tokenList.isEmpty());
+	}
+	
+	@Test
+	void findsTokenForStateWhereOneTokenHasBeenPlaced() {
+		State<String, String> state1 = state("State1", s -> true);
+		
+		Tokens<String,String> tokens = Tokens.of(
+			Token.create(state1, TOKEN1)
+		);
+		
+		Stream<Token<String,String>> foundTokens = tokens.findByState(state1);
+		List<Token<String,String>> tokenList = foundTokens.toList();
+		assertEquals(TOKEN1, tokenList.get(0).value());
+	}
+	
+	@Test
+	void findsTokensForStateWhereTwoTokensHaveBeenPlaced() {
+		State<String, String> state1 = state("State1", s -> true);
+		
+		Tokens<String,String> tokens = Tokens.of(
+			Token.create(state1, TOKEN1),
+			Token.create(state1, TOKEN2)
+		);
+		
+		Stream<Token<String,String>> foundTokens = tokens.findByState(state1);
+		List<Token<String,String>> tokenList = foundTokens.toList();
+		assertEquals(TOKEN1, tokenList.get(0).value());
+		assertEquals(TOKEN2, tokenList.get(1).value());
 	}
 }

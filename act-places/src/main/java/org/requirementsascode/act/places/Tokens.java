@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
@@ -26,6 +25,7 @@ public class Tokens<S, V> {
 	}
 
 	public Stream<Token<S, V>> findByState(State<S, V> state) {
-		return Stream.of();
+		return this.stream()
+			.filter(token -> token.state().equals(state));
 	}
 }
