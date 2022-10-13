@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
@@ -47,9 +46,8 @@ class TokensTest {
 			Token.create(state1, TOKEN1)
 		);
 		
-		Stream<Token<String,String>> foundTokens = tokens.inState(state2);
-		List<Token<String,String>> tokenList = foundTokens.toList();
-		assertTrue(tokenList.isEmpty());
+		List<Token<String, String>> tokensInState2 = tokens.inState(state2).toList();
+		assertTrue(tokensInState2.isEmpty());
 	}
 	
 	@Test
@@ -101,11 +99,11 @@ class TokensTest {
 		
 		Token<String, String> token1 = Token.create(state1, TOKEN1);
 		Token<String, String> token2 = Token.create(state2, TOKEN2);
-		Tokens<String,String> tokens = Tokens.of(token1);
+		Tokens<String,String> tokensBefore = Tokens.of(token1);
 		
-		Tokens<String,String> tokensAfterMove = tokens.moveToken(token2, state1);
+		Tokens<String,String> tokensAfter = tokensBefore.moveToken(token2, state1);
 		
-		assertEquals(asList(token1), tokensAfterMove.inState(state1).toList());
+		assertEquals(asList(token1), tokensAfter.inState(state1).toList());
 	}
 	
 	@Test
@@ -115,10 +113,10 @@ class TokensTest {
 		
 		Token<String, String> token1 = Token.create(state1, TOKEN1);
 		Token<String, String> token2 = Token.create(state2, TOKEN2);
-		Tokens<String,String> tokens = Tokens.of(token1, token2);
+		Tokens<String,String> tokensBefore = Tokens.of(token1, token2);
 		
-		Tokens<String,String> tokensAfterMove = tokens.moveToken(token2, state1);
+		Tokens<String,String> tokensAfter = tokensBefore.moveToken(token2, state1);
 		
-		assertEquals(asList(token1, token2), tokensAfterMove.inState(state1).toList());
+		assertEquals(asList(token1, token2), tokensAfter.inState(state1).toList());
 	}
 }
