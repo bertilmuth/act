@@ -6,6 +6,7 @@ import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
@@ -27,12 +28,13 @@ public class Transitions<S, V0> implements AsBehavior<S, V0> {
 	}
 
 	private List<Behavior<S, V0, V0>> transitionBehaviors(Statemachine<S, V0> owningStatemachine) {
-		List<Behavior<S, V0, V0>> behaviors = asList().stream().map(e -> e.asBehavior(owningStatemachine))
-				.collect(Collectors.toList());
+		List<Behavior<S, V0, V0>> behaviors = this.stream()
+			.map(e -> e.asBehavior(owningStatemachine))
+			.collect(Collectors.toList());
 		return behaviors;
 	}
 
-	public List<Transition<S, V0>> asList() {
-		return unmodifiableList(transitions);
+	public Stream<Transition<S, V0>> stream() {
+		return transitions.stream();
 	}
 }

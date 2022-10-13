@@ -2,10 +2,10 @@ package org.requirementsascode.act.statemachine.validate;
 
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -24,7 +24,7 @@ public class StatemachineValidator {
 		State<S, V0> definedState = statemachine.definedState();
 		State<S, V0> defaultState = statemachine.defaultState();
 		
-		List<State<S, ?>> statesNotInList = transitionsAndFlowsOf(statemachine).stream()
+		List<State<S, ?>> statesNotInList = transitionsAndFlowsOf(statemachine)
 			.map(transitionStateAccess)
 			.filter(s -> !definedState.equals(s) && 
 				!defaultState.equals(s) && !anyState().equals(s) && 
@@ -36,10 +36,13 @@ public class StatemachineValidator {
 		}
 	}
 
-	private static <V0, S> List<Transition<S, V0>> transitionsAndFlowsOf(Statemachine<S, V0> stateMachine) {
-		List<Transition<S, V0>> transitions = new ArrayList<>();
-		transitions.addAll(stateMachine.flows().asTransitions(stateMachine).asList());
-		transitions.addAll(stateMachine.transitions().asList());
+	private static <V0, S> Stream<Transition<S, V0>> transitionsAndFlowsOf(Statemachine<S, V0> stateMachine) {
+		Stream<Transition<S, V0>> transitions = 
+			Stream.concat(
+				stateMachine.flows().asTransitions(stateMachine).stream(),
+				stateMachine.transitions().stream()
+			);
+		
 		return transitions;
 	}
 }
