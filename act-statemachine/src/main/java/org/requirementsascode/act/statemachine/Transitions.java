@@ -1,6 +1,5 @@
 package org.requirementsascode.act.statemachine;
 
-import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 
