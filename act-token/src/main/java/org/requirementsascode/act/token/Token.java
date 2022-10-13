@@ -15,11 +15,11 @@ public class Token<S, V> {
 		this.value = requireNonNull(value, "value must be non-null!");
 	}
 
-	public static <S, V> Token<S, V> create(State<S, V> state, V value) {
+	static <S, V> Token<S, V> create(State<S, V> state, V value) {
 		return new Token<>(state, value);
 	}
 	
-	public Token<S, V> moveTo(State<S, V> state) {
+	Token<S, V> moveTo(State<S, V> state) {
 		return new Token<>(state, value);
 	}
 
