@@ -65,8 +65,10 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
-		return state(DEFINED_STATE, states.asList().stream().map(State::invariant).reduce(s -> false, Predicate::or),
-				identity());
+		return state(DEFINED_STATE, states.stream()
+			.map(State::invariant)
+			.reduce(s -> false, Predicate::or),
+			identity());
 	}
 
 	private State<S, V0> createDefaultState(State<S, V0> definedState) {

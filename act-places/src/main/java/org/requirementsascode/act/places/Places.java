@@ -67,9 +67,9 @@ public class Places<S, V> {
 	}
 
 	private static <S,V> Map<State<S,V>, Place<S, V>> mapStatesToPlaces(Statemachine<S, V> statemachine) {
-		List<State<S, V>> states = statemachine.states().asList();
-		Map<State<S, V>, Place<S, V>> stateToPlaceMap = states.stream()
-			.collect(toMap(Function.identity(), Place::forState));
+		Map<State<S, V>, Place<S, V>> stateToPlaceMap = 
+			statemachine.states().stream()
+				.collect(toMap(Function.identity(), Place::forState));
 		
 		return stateToPlaceMap;
 	}
