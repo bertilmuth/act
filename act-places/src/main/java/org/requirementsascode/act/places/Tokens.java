@@ -4,7 +4,10 @@ import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.requirementsascode.act.statemachine.State;
 
 public class Tokens<S, V> {
 	private final List<Token<S,V>> tokens;
@@ -20,5 +23,9 @@ public class Tokens<S, V> {
 
 	public Stream<Token<S,V>> stream() {
 		return tokens.stream();
+	}
+
+	public Stream<Token<S, V>> findByState(State<S, V> state) {
+		return Stream.of();
 	}
 }

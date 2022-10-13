@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
@@ -34,5 +35,18 @@ class TokensTest {
 		List<Token<String,String>> tokenList = tokens.stream().toList();
 		assertEquals(TOKEN1, tokenList.get(0).value());
 		assertEquals(TOKEN2, tokenList.get(1).value());
+	}
+	
+	@Test
+	void findsNoTokensForStateWhereNoTokensHaveBeenPlaced() {
+		State<String, String> state1 = state("State1", s -> true);
+		State<String, String> state2 = state("State2", s -> true);
+
+		Tokens<String,String> tokens = Tokens.of(
+			Token.create(state1, TOKEN1)
+		);
+		
+		Stream<Token<String,String>> foundTokens = tokens.findByState(state2);
+		List<Token<String,String>> tokenList = foundTokens.toList();
 	}
 }
