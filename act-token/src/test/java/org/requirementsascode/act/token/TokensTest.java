@@ -47,7 +47,7 @@ class TokensTest {
 			Token.create(state1, TOKEN1)
 		);
 		
-		Stream<Token<String,String>> foundTokens = tokens.findByState(state2);
+		Stream<Token<String,String>> foundTokens = tokens.inState(state2);
 		List<Token<String,String>> tokenList = foundTokens.toList();
 		assertTrue(tokenList.isEmpty());
 	}
@@ -60,9 +60,8 @@ class TokensTest {
 			Token.create(state1, TOKEN1)
 		);
 		
-		Stream<Token<String,String>> foundTokens = tokens.findByState(state1);
-		List<Token<String,String>> tokenList = foundTokens.toList();
-		assertEquals(TOKEN1, tokenList.get(0).value());
+		List<Token<String, String>> tokensInState1 = tokens.inState(state1).toList();
+		assertEquals(TOKEN1, tokensInState1.get(0).value());
 	}
 	
 	@Test
@@ -74,10 +73,9 @@ class TokensTest {
 			Token.create(state1, TOKEN2)
 		);
 		
-		Stream<Token<String,String>> foundTokens = tokens.findByState(state1);
-		List<Token<String,String>> tokenList = foundTokens.toList();
-		assertEquals(TOKEN1, tokenList.get(0).value());
-		assertEquals(TOKEN2, tokenList.get(1).value());
+		List<Token<String, String>> tokensInState1 = tokens.inState(state1).toList();
+		assertEquals(TOKEN1, tokensInState1.get(0).value());
+		assertEquals(TOKEN2, tokensInState1.get(1).value());
 	}
 	
 	@Test
@@ -91,10 +89,9 @@ class TokensTest {
 			Token.create(state2, TOKEN1)
 		);
 		
-		Stream<Token<String,String>> foundTokens = tokens.findByState(state2);
-		List<Token<String,String>> tokenList = foundTokens.toList();
-		assertEquals(TOKEN2, tokenList.get(0).value());
-		assertEquals(TOKEN1, tokenList.get(1).value());
+		List<Token<String, String>> tokensInState2 = tokens.inState(state2).toList();
+		assertEquals(TOKEN2, tokensInState2.get(0).value());
+		assertEquals(TOKEN1, tokensInState2.get(1).value());
 	}
 	
 	@Test
@@ -108,7 +105,7 @@ class TokensTest {
 		
 		Tokens<String,String> tokensAfterMove = tokens.moveToken(token2, state1);
 		
-		assertEquals(asList(token1), tokensAfterMove.findByState(state1).toList());
+		assertEquals(asList(token1), tokensAfterMove.inState(state1).toList());
 	}
 	
 	@Test
@@ -122,6 +119,6 @@ class TokensTest {
 		
 		Tokens<String,String> tokensAfterMove = tokens.moveToken(token2, state1);
 		
-		assertEquals(asList(token1, token2), tokensAfterMove.findByState(state1).toList());
+		assertEquals(asList(token1, token2), tokensAfterMove.inState(state1).toList());
 	}
 }

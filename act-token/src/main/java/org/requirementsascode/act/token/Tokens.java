@@ -25,7 +25,7 @@ public class Tokens<S, V> {
 		return tokens.stream();
 	}
 
-	public Stream<Token<S, V>> findByState(State<S, V> state) {
+	public Stream<Token<S, V>> inState(State<S, V> state) {
 		return this.stream()
 			.filter(token -> token.state().equals(state));
 	}
