@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -101,15 +102,16 @@ class TokensTest {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
 		
+		Token<String, String> token2 = Token.create(state2, TOKEN2);
 		Tokens<String,String> tokensBeforeMove = Tokens.of(
-			Token.create(state1, TOKEN1)
+			token2
 		);
 		
-		Token<String, String> token2 = Token.create(state1, TOKEN2);
+		Token<String, String> token1 = Token.create(state1, TOKEN1);
 		Tokens<String,String> tokensAfterMove =
-				tokensBeforeMove.moveToken(token2, state2);
+			tokensBeforeMove.moveToken(token1, state2);
 		
-		assertEquals(state1, token2.state());
-		assertEquals(tokensAfterMove, tokensBeforeMove);
+		assertEquals(state1, token1.state());
+		assertEquals(Arrays.asList(token2), tokensAfterMove.findByState(state2).toList());
 	}
 }
