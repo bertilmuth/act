@@ -118,10 +118,10 @@ class TokensTest {
 		
 		Token<String, String> token1 = Token.create(state1, TOKEN1);
 		Token<String, String> token2 = Token.create(state2, TOKEN2);
-		Tokens<String,String> tokens = Tokens.of(token1);
+		Tokens<String,String> tokens = Tokens.of(token1, token2);
 		
 		Tokens<String,String> tokensAfterMove = tokens.moveToken(token2, state1);
 		
-		assertEquals(asList(token1), tokensAfterMove.findByState(state1).toList());
+		assertEquals(asList(token1, token2), tokensAfterMove.findByState(state1).toList());
 	}
 }

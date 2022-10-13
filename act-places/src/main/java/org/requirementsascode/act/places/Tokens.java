@@ -3,6 +3,7 @@ package org.requirementsascode.act.places;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,6 +31,13 @@ public class Tokens<S, V> {
 	}
 
 	public Tokens<S, V> moveToken(Token<S, V> token, State<S, V> state) {
-		return this;
+		Token<S, V> movedToken = token.moveTo(state);
+		
+		List<Token<S,V>> newTokens = new ArrayList<>(tokens);
+		if(newTokens.remove(token)) {
+			newTokens.add(movedToken);
+		}
+		
+		return new Tokens<>(newTokens);
 	}
 }

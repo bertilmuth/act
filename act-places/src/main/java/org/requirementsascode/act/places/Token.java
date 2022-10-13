@@ -2,6 +2,8 @@ package org.requirementsascode.act.places;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
+
 import org.requirementsascode.act.statemachine.State;
 
 public class Token<S, V> {
@@ -27,5 +29,27 @@ public class Token<S, V> {
 	
 	public V value() {
 		return value;
+	}
+
+	@Override
+	public String toString() {
+		return "Token [state=" + state + ", value=" + value + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Token<?,?> other = (Token<?,?>) obj;
+		return Objects.equals(value, other.value);
 	}
 }
