@@ -14,6 +14,10 @@ public class Token<S, V> {
 	public static <S, V> Token<S, V> inState(State<S, V> state) {
 		return new Token<>(state);
 	}
+	
+	public Token<S, V> moveTo(State<S, V> state) {
+		return new Token<>(state);
+	}
 
 	public State<S, V> state() {
 		return state;
