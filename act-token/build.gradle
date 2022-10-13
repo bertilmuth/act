@@ -17,7 +17,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'act-places',
+        attributes 'Implementation-Title': 'act-token',
                    'Implementation-Version': archiveVersion
 	}
 }
@@ -58,7 +58,7 @@ if (project.hasProperty("signing.keyId")) {
 		publications {
 			mavenJava(MavenPublication) {
 				pom{
-					name = 'act-places'
+					name = 'act-token'
 					description = 'Petri net like semantics for act.'
 					url = 'http://requirementsascode.org/'
 					packaging = 'jar'
