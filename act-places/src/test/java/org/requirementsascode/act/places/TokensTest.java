@@ -95,4 +95,21 @@ class TokensTest {
 		assertEquals(TOKEN2, tokenList.get(0).value());
 		assertEquals(TOKEN1, tokenList.get(1).value());
 	}
+	
+	@Test
+	void doesntMoveTokenThatIsntOneOfTheTokens() {
+		State<String, String> state1 = state("State1", s -> true);
+		State<String, String> state2 = state("State2", s -> true);
+		
+		Tokens<String,String> tokensBeforeMove = Tokens.of(
+			Token.create(state1, TOKEN1)
+		);
+		
+		Token<String, String> token2 = Token.create(state1, TOKEN2);
+		Tokens<String,String> tokensAfterMove =
+				tokensBeforeMove.moveToken(token2, state2);
+		
+		assertEquals(state1, token2.state());
+		assertEquals(tokensAfterMove, tokensBeforeMove);
+	}
 }

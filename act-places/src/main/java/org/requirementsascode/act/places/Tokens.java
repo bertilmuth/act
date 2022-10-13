@@ -28,4 +28,8 @@ public class Tokens<S, V> {
 		return this.stream()
 			.filter(token -> token.state().equals(state));
 	}
+
+	public Tokens<S, V> moveToken(Token<S, V> token, State<S, V> state) {
+		return this;
+	}
 }
