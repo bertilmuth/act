@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.token.Token.token;
 
 import java.util.List;
 
@@ -28,8 +29,8 @@ class TokensTest {
 		State<String, String> state2 = state("State2", s -> true);
 
 		Tokens<String,String> tokens = Tokens.of(
-			Token.token(TOKEN1, state1),
-			Token.token(TOKEN2, state2)
+			token(TOKEN1, state1),
+			token(TOKEN2, state2)
 		);
 		
 		List<Token<String,String>> tokenList = tokens.stream().toList();
@@ -43,7 +44,7 @@ class TokensTest {
 		State<String, String> state2 = state("State2", s -> true);
 
 		Tokens<String,String> tokens = Tokens.of(
-			Token.token(TOKEN1, state1)
+			token(TOKEN1, state1)
 		);
 		
 		List<Token<String, String>> tokensInState2 = tokens.inState(state2).toList();
@@ -55,7 +56,7 @@ class TokensTest {
 		State<String, String> state1 = state("State1", s -> true);
 		
 		Tokens<String,String> tokens = Tokens.of(
-			Token.token(TOKEN1, state1)
+			token(TOKEN1, state1)
 		);
 		
 		List<Token<String, String>> tokensInState1 = tokens.inState(state1).toList();
@@ -67,8 +68,8 @@ class TokensTest {
 		State<String, String> state1 = state("State1", s -> true);
 		
 		Tokens<String,String> tokens = Tokens.of(
-			Token.token(TOKEN1, state1),
-			Token.token(TOKEN2, state1)
+			token(TOKEN1, state1),
+			token(TOKEN2, state1)
 		);
 		
 		List<Token<String, String>> tokensInState1 = tokens.inState(state1).toList();
@@ -82,9 +83,9 @@ class TokensTest {
 		State<String, String> state2 = state("State2", s -> true);
 		
 		Tokens<String,String> tokens = Tokens.of(
-			Token.token(TOKEN1, state1),
-			Token.token(TOKEN2, state2),
-			Token.token(TOKEN1, state2)
+			token(TOKEN1, state1),
+			token(TOKEN2, state2),
+			token(TOKEN1, state2)
 		);
 		
 		List<Token<String, String>> tokensInState2 = tokens.inState(state2).toList();
@@ -97,8 +98,8 @@ class TokensTest {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
 		
-		Token<String, String> token1 = Token.token(TOKEN1, state1);
-		Token<String, String> token2 = Token.token(TOKEN2, state2);
+		Token<String, String> token1 = token(TOKEN1, state1);
+		Token<String, String> token2 = token(TOKEN2, state2);
 		Tokens<String,String> tokensBefore = Tokens.of(token1);
 		
 		Tokens<String,String> tokensAfter = tokensBefore.moveToken(token2, state1);
@@ -111,8 +112,8 @@ class TokensTest {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
 		
-		Token<String, String> token1 = Token.token(TOKEN1, state1);
-		Token<String, String> token2 = Token.token(TOKEN2, state2);
+		Token<String, String> token1 = token(TOKEN1, state1);
+		Token<String, String> token2 = token(TOKEN2, state2);
 		Tokens<String,String> tokensBefore = Tokens.of(token1, token2);
 		
 		Tokens<String,String> tokensAfter = tokensBefore.moveToken(token2, state1);
