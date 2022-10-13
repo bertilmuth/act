@@ -1,4 +1,4 @@
-package org.requirementsascode.act.places;
+package org.requirementsascode.act.token;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;

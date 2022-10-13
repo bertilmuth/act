@@ -1,6 +1,6 @@
-package org.requirementsascode.act.places;
+package org.requirementsascode.act.token;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import org.junit.jupiter.api.Test;
