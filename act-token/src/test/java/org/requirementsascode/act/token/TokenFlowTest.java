@@ -1,7 +1,8 @@
 package org.requirementsascode.act.token;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.State;
@@ -13,17 +14,24 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<Tokens<Trigger>, Trigger> state1 = state(STATE1, tokens -> tokens.inState(STATE1).count() != 0);
-		State<Tokens<Trigger>, Trigger> state2 = state(STATE2, tokens -> tokens.inState(STATE2).count() != 0);
+		State<Tokens<String>, String> state1 = state(STATE1, tokens -> tokens.inState(STATE1).count() != 0);
+		State<Tokens<String>, String> state2 = state(STATE2, tokens -> tokens.inState(STATE2).count() != 0);
 		
-		Statemachine<Tokens<Trigger>, Trigger> statemachine =
+		Statemachine<Tokens<String>, String> statemachine =
 			Statemachine.builder()
 				.states(state1, state2)
 				.transitions(
-					transition(state1, state2, consumeWith((s,v) -> s))
+					transition(state1, state2, 
+						consumeWith((tokens,value) -> {
+							Token<String> token = Token.token(value, state1);
+							Tokens<String> newTokens = tokens.moveToken(token, state2);
+							return newTokens;
+						}))
 				)
 				.build();
+		
+		Tokens<String> tokens = Tokens.tokens(
+				Token.token("Token1", state1)
+		);
 	}
-
-	private static interface Trigger{};
 }
