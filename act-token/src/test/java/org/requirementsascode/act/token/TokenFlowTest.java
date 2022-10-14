@@ -1,5 +1,6 @@
 package org.requirementsascode.act.token;
 
+import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
@@ -38,7 +39,7 @@ class TokenFlowTest {
 				Token.token(new Value(), state1)
 		);
 		
-		statemachine.actOn(Data.data(tokens, new Tick()));
+		Data<Tokens<Value>, Value> dataAfter = statemachine.actOn(data(tokens, new Tick()));
 	}
 
 	private <V> Data<Tokens<V>, V> publishToken(String stateName, Data<Tokens<V>, V> data) {
@@ -46,7 +47,7 @@ class TokenFlowTest {
 				.findFirst()
 				.map(t -> t.value())
 				.orElse(null);
-			return Data.data(data.state(), firstTokenValue);
+			return data(data.state(), firstTokenValue);
 	}
 	
 	private static class Value{};
