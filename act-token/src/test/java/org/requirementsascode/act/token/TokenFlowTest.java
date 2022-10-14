@@ -3,7 +3,6 @@ package org.requirementsascode.act.token;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.token.Token.token;
@@ -36,7 +35,7 @@ class TokenFlowTest {
 				.states(state1, state2)
 				.transitions(
 					transition(state1, state2, 
-						consumeWith(transmitTokens(state1, state2)))
+						transmitTokens(state1, state2))
 				)
 				.build();
 		
