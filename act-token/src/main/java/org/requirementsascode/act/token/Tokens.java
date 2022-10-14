@@ -17,7 +17,7 @@ public class Tokens<V> {
 	}
 
 	@SafeVarargs
-	public static <S,V> Tokens<V> of(Token<V>... tokens) {
+	public static <S,V> Tokens<V> tokens(Token<V>... tokens) {
 		return new Tokens<>(asList(tokens));
 	}
 
