@@ -10,6 +10,8 @@ import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.Tokens.tokens;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
@@ -34,11 +36,7 @@ class TokenFlowTest {
 				.states(state1, state2)
 				.transitions(
 					transition(state1, state2, 
-						consumeWith((tokens,value) -> {
-							Tokens<Trigger> newTokens = 
-								tokens.moveToken(token(value, state1), state2);
-							return newTokens;
-						}))
+						consumeWith(transmitTokens(state1, state2)))
 				)
 				.build();
 		
@@ -49,8 +47,15 @@ class TokenFlowTest {
 		);
 		
 		Data<Tokens<Trigger>, Trigger> dataAfter = statemachine.actOn(data(tokens));
-		assertFalse(dataAfter.state().inState(STATE1).findAny().isPresent());
-		assertEquals(token(value1, state2), dataAfter.state().inState(STATE2).findFirst().get());
+		Tokens<Trigger> tokensAfter = dataAfter.state();
+		
+		assertFalse(isAnyTokenInState(tokensAfter, STATE1));
+		assertEquals(token(value1, state2), firstTokenInState(tokensAfter, STATE2).get());
+	}
+
+	private <V> BiFunction<Tokens<V>, V, Tokens<V>> transmitTokens(State<?, V> sourceState, State<?, V> targetState) {
+		return (tokens,value) -> 
+			tokens.moveToken(token(value, sourceState), targetState);
 	}
 
 	private <V> boolean isAnyTokenInState(Tokens<Trigger> tokens, String stateName) {
@@ -58,11 +63,14 @@ class TokenFlowTest {
 	}
 
 	private <V> Data<Tokens<V>, V> publishToken(String stateName, Data<Tokens<V>, V> data) {
-			V firstTokenValue = data.state().inState(stateName)
-				.findFirst()
+			V firstTokenValue = firstTokenInState(data.state(), stateName)
 				.map(t -> t.value())
 				.orElse(null);
 			return data(data.state(), firstTokenValue);
+	}
+
+	private <V> Optional<Token<V>> firstTokenInState(Tokens<V> tokens, String stateName) {
+		return tokens.inState(stateName).findFirst();
 	}
 	
 	private static interface Trigger {};
