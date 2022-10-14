@@ -1,11 +1,13 @@
 package org.requirementsascode.act.token;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.token.Tokens.tokens;
 
 import java.util.Objects;
 
@@ -33,18 +35,19 @@ class TokenFlowTest {
 				.transitions(
 					transition(state1, state2, 
 						consumeWith((tokens,value) -> {
-							Token<Trigger> token = token(value, state1);
-							Tokens<Trigger> newTokens = tokens.moveToken(token, state2);
+							Tokens<Trigger> newTokens = 
+								tokens.moveToken(token(value, state1), state2);
 							return newTokens;
 						}))
 				)
 				.build();
 		
-		Tokens<Trigger> tokens = Tokens.tokens(
+		Tokens<Trigger> tokens = tokens(
 				token(new Value(VALUE1), state1)
 		);
 		
 		Data<Tokens<Trigger>, Trigger> dataAfter = statemachine.actOn(data(tokens, new Tick()));
+		assertFalse(dataAfter.state().inState(STATE1).findAny().isPresent());
 		assertEquals(token(new Value(VALUE1), state2), dataAfter.state().inState(STATE2).findFirst().get());
 	}
 
@@ -57,13 +60,12 @@ class TokenFlowTest {
 	}
 	
 	private static interface Trigger {};
+	private static class Tick implements Trigger{};
+
 	private static class Value implements Trigger{
-		private final String string;
+		public final String string;
 		public Value(String string) {
 			this.string = string;
-		}
-		public String string() {
-			return string;
 		}
 		@Override
 		public int hashCode() {
@@ -81,5 +83,4 @@ class TokenFlowTest {
 			return Objects.equals(string, other.string);
 		}
 	};
-	private static class Tick implements Trigger{};
 }
