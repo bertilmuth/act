@@ -3,13 +3,13 @@ package org.requirementsascode.act.token;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.token.Action.action;
+import static org.requirementsascode.act.token.Action.isAnyTokenInState;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.Tokens.tokens;
 import static org.requirementsascode.act.token.TransmitTokens.transmitTokens;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
@@ -45,27 +45,7 @@ class TokenFlowTest {
 		Tokens<Trigger> tokensAfter = dataAfter.state();
 		
 		assertFalse(isAnyTokenInState(tokensAfter, STATE1));
-		assertEquals(token(value1, action2), firstTokenInState(tokensAfter, STATE2).get());
-	}
-
-	private <V> State<Tokens<V>, V> action(String stateName) {
-		return state(stateName, tokens -> isAnyTokenInState(tokens, stateName), 
-			d -> publishToken(stateName, d));
-	}
-
-	private <V> boolean isAnyTokenInState(Tokens<V> tokens, String stateName) {
-		return tokens.inState(stateName).count() != 0;
-	}
-
-	private <V> Data<Tokens<V>, V> publishToken(String stateName, Data<Tokens<V>, V> data) {
-			V firstTokenValue = firstTokenInState(data.state(), stateName)
-				.map(t -> t.value())
-				.orElse(null);
-			return data(data.state(), firstTokenValue);
-	}
-
-	private <V> Optional<Token<V>> firstTokenInState(Tokens<V> tokens, String stateName) {
-		return tokens.inState(stateName).findFirst();
+		assertEquals(token(value1, action2), tokensAfter.firstTokenInState(STATE2).get());
 	}
 	
 	private static interface Trigger {};

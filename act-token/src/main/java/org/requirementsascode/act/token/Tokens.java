@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
@@ -28,6 +29,10 @@ public class Tokens<V> {
 	public Stream<Token<V>> inState(String stateName) {
 		return this.stream()
 			.filter(token -> token.state().name().equals(stateName));
+	}
+	
+	public Optional<Token<V>> firstTokenInState(String stateName) {
+		return inState(stateName).findFirst();
 	}
 
 	public Tokens<V> moveToken(Token<V> token, State<?, V> state) {
