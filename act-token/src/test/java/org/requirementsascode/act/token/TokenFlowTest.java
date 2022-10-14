@@ -26,8 +26,7 @@ class TokenFlowTest {
 		State<Tokens<Trigger>, Trigger> state1 = state(STATE1, tokens -> isAnyTokenInState(tokens, STATE1), 
 			d -> publishToken(STATE1, d));
 		
-		State<Tokens<Trigger>, Trigger> state2 = state(STATE2, tokens -> isAnyTokenInState(tokens, STATE2), 
-			d -> publishToken(STATE2, d));
+		State<Tokens<Trigger>, Trigger> state2 = action(STATE2);
 		
 		Statemachine<Tokens<Trigger>, Trigger> statemachine =
 			Statemachine.builder()
@@ -50,7 +49,12 @@ class TokenFlowTest {
 		assertEquals(token(value1, state2), firstTokenInState(tokensAfter, STATE2).get());
 	}
 
-	private <V> boolean isAnyTokenInState(Tokens<Trigger> tokens, String stateName) {
+	private <V> State<Tokens<V>, V> action(String stateName) {
+		return state(stateName, tokens -> isAnyTokenInState(tokens, stateName), 
+			d -> publishToken(stateName, d));
+	}
+
+	private <V> boolean isAnyTokenInState(Tokens<V> tokens, String stateName) {
 		return tokens.inState(stateName).count() != 0;
 	}
 
