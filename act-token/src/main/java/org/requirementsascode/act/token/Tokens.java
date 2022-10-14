@@ -25,9 +25,9 @@ public class Tokens<V> {
 		return tokens.stream();
 	}
 
-	public Stream<Token<V>> inState(State<?, V> state) {
+	public Stream<Token<V>> inState(String stateName) {
 		return this.stream()
-			.filter(token -> token.state().equals(state));
+			.filter(token -> token.state().name().equals(stateName));
 	}
 
 	public Tokens<V> moveToken(Token<V> token, State<?, V> state) {
