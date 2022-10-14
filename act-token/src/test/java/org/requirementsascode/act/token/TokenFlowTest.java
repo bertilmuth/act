@@ -8,10 +8,10 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.Tokens.tokens;
+import static org.requirementsascode.act.token.TransmitTokens.transmitTokens;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
@@ -51,11 +51,6 @@ class TokenFlowTest {
 		
 		assertFalse(isAnyTokenInState(tokensAfter, STATE1));
 		assertEquals(token(value1, state2), firstTokenInState(tokensAfter, STATE2).get());
-	}
-
-	private <V> BiFunction<Tokens<V>, V, Tokens<V>> transmitTokens(State<?, V> sourceState, State<?, V> targetState) {
-		return (tokens,value) -> 
-			tokens.moveToken(token(value, sourceState), targetState);
 	}
 
 	private <V> boolean isAnyTokenInState(Tokens<Trigger> tokens, String stateName) {
