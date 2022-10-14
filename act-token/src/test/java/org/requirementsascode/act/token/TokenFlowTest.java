@@ -23,30 +23,29 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<Tokens<Trigger>, Trigger> state1 = state(STATE1, tokens -> isAnyTokenInState(tokens, STATE1), 
-			d -> publishToken(STATE1, d));
+		State<Tokens<Trigger>, Trigger> action1 = action(STATE1);
 		
-		State<Tokens<Trigger>, Trigger> state2 = action(STATE2);
+		State<Tokens<Trigger>, Trigger> action2 = action(STATE2);
 		
 		Statemachine<Tokens<Trigger>, Trigger> statemachine =
 			Statemachine.builder()
-				.states(state1, state2)
+				.states(action1, action2)
 				.transitions(
-						transmitTokens(state1, state2)
+						transmitTokens(action1, action2)
 				)
 				.build();
 		
 		Value value1 = new Value(VALUE1);
 		
 		Tokens<Trigger> tokens = tokens(
-				token(value1, state1)
+				token(value1, action1)
 		);
 		
 		Data<Tokens<Trigger>, Trigger> dataAfter = statemachine.actOn(data(tokens));
 		Tokens<Trigger> tokensAfter = dataAfter.state();
 		
 		assertFalse(isAnyTokenInState(tokensAfter, STATE1));
-		assertEquals(token(value1, state2), firstTokenInState(tokensAfter, STATE2).get());
+		assertEquals(token(value1, action2), firstTokenInState(tokensAfter, STATE2).get());
 	}
 
 	private <V> State<Tokens<V>, V> action(String stateName) {
