@@ -31,6 +31,10 @@ public class Tokens<V> {
 			.filter(token -> token.state().name().equals(stateName));
 	}
 	
+	public boolean isAnyTokenInState(String stateName) {
+		return inState(stateName).count() != 0;
+	}
+	
 	public Optional<Token<V>> firstTokenInState(String stateName) {
 		return inState(stateName).findFirst();
 	}

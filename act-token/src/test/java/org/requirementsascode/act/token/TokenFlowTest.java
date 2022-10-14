@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Action.action;
-import static org.requirementsascode.act.token.Action.isAnyTokenInState;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.Tokens.tokens;
 import static org.requirementsascode.act.token.TransmitTokens.transmitTokens;
@@ -44,7 +43,7 @@ class TokenFlowTest {
 		Data<Tokens<Trigger>, Trigger> dataAfter = statemachine.actOn(data(tokens));
 		Tokens<Trigger> tokensAfter = dataAfter.state();
 		
-		assertFalse(isAnyTokenInState(tokensAfter, STATE1));
+		assertFalse(tokensAfter.isAnyTokenInState(STATE1));
 		assertEquals(token(value1, action2), tokensAfter.firstTokenInState(STATE2).get());
 	}
 	
