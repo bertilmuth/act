@@ -1,11 +1,13 @@
 package org.requirementsascode.act.token;
 
 import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.token.Token.token;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
+import org.requirementsascode.act.statemachine.Transition;
 
 public class TransmitTokens<V> implements Behavior<Tokens<V>, V, V>{
 	private final State<?, V> sourceState;
@@ -16,12 +18,8 @@ public class TransmitTokens<V> implements Behavior<Tokens<V>, V, V>{
 		this.targetState = targetState;
 	}
 
-	public static <V> TransmitTokens<V> transmitTokens(State<?, V> sourceState, State<?, V> targetState) {
-		return new TransmitTokens<>(sourceState, targetState);
-	}
-	
-	public Tokens<V> apply(Tokens<V> tokens, V value) {
-		return tokens.moveToken(token(value, sourceState), targetState);
+	public static <V> Transition<Tokens<V>,V> transmitTokens(State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {
+		return transition(sourceState, targetState, new TransmitTokens<>(sourceState, targetState));
 	}
 
 	@Override
