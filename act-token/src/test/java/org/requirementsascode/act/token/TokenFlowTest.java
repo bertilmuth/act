@@ -4,6 +4,7 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.token.Token.token;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
@@ -28,7 +29,7 @@ class TokenFlowTest {
 				.transitions(
 					transition(state1, state2, 
 						consumeWith((tokens,value) -> {
-							Token<Value> token = Token.token(value, state1);
+							Token<Value> token = token(value, state1);
 							Tokens<Value> newTokens = tokens.moveToken(token, state2);
 							return newTokens;
 						}))
@@ -36,7 +37,7 @@ class TokenFlowTest {
 				.build();
 		
 		Tokens<Value> tokens = Tokens.tokens(
-				Token.token(new Value(), state1)
+				token(new Value(), state1)
 		);
 		
 		Data<Tokens<Value>, Value> dataAfter = statemachine.actOn(data(tokens, new Tick()));
