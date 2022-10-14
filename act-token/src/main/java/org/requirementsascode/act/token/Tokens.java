@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
 
-public class Tokens<S, V> {
+public class Tokens<V> {
 	private final List<Token<V>> tokens;
 
 	public Tokens(List<Token<V>> tokens) {
@@ -17,7 +17,7 @@ public class Tokens<S, V> {
 	}
 
 	@SafeVarargs
-	public static <S,V> Tokens<S, V> of(Token<V>... tokens) {
+	public static <S,V> Tokens<V> of(Token<V>... tokens) {
 		return new Tokens<>(asList(tokens));
 	}
 
@@ -25,12 +25,12 @@ public class Tokens<S, V> {
 		return tokens.stream();
 	}
 
-	public Stream<Token<V>> inState(State<S, V> state) {
+	public Stream<Token<V>> inState(State<?, V> state) {
 		return this.stream()
 			.filter(token -> token.state().equals(state));
 	}
 
-	public Tokens<S, V> moveToken(Token<V> token, State<S, V> state) {
+	public Tokens<V> moveToken(Token<V> token, State<?, V> state) {
 		Token<V> movedToken = token.moveTo(state);
 		
 		List<Token<V>> newTokens = new ArrayList<>(tokens);
