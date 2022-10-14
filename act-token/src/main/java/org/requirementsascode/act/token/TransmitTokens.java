@@ -1,5 +1,6 @@
 package org.requirementsascode.act.token;
 
+import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Token.token;
 
 import org.requirementsascode.act.core.Behavior;
@@ -29,6 +30,6 @@ public class TransmitTokens<V> implements Behavior<Tokens<V>, V, V>{
 		Tokens<V> tokensBefore = before.state();
 		V beforeValue = before.value().get();
 		Tokens<V> tokensAfter = tokensBefore.moveToken(token(beforeValue, sourceState), targetState);
-		return Data.data(tokensAfter, beforeValue);
+		return data(tokensAfter, beforeValue);
 	}
 }
