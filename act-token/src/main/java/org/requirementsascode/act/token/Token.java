@@ -6,24 +6,24 @@ import java.util.Objects;
 
 import org.requirementsascode.act.statemachine.State;
 
-public class Token<S, V> {
-	private final State<S, V> state;
+public class Token<V> {
+	private final State<?, V> state;
 	private final V value;
 
-	private Token(State<S, V> state, V value) {
+	private Token(State<?, V> state, V value) {
 		this.state = requireNonNull(state, "state must be non-null!");
 		this.value = requireNonNull(value, "value must be non-null!");
 	}
 
-	static <S, V> Token<S, V> token(V value, State<S, V> state) {
+	static <S, V> Token<V> token(V value, State<?, V> state) {
 		return new Token<>(state, value);
 	}
 	
-	Token<S, V> moveTo(State<S, V> state) {
+	Token<V> moveTo(State<?, V> state) {
 		return new Token<>(state, value);
 	}
 
-	public State<S, V> state() {
+	public State<?, V> state() {
 		return state;
 	}
 	
@@ -49,7 +49,7 @@ public class Token<S, V> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Token<?,?> other = (Token<?,?>) obj;
+		Token<?> other = (Token<?>) obj;
 		return Objects.equals(value, other.value);
 	}
 }
