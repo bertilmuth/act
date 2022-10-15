@@ -15,6 +15,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
+import static org.requirementsascode.act.token.WorkflowState.workflowState;
 
 class TokenFlowTest {
 	private static final String VALUE1 = "Value1";
@@ -41,7 +42,7 @@ class TokenFlowTest {
 		Tokens<Value> tokens = tokens(
 				token(value1, action1)
 		);
-		WorkflowState<Value> workflowState = WorkflowState.workflowState(tokens);
+		WorkflowState<Value> workflowState = workflowState(tokens);
 		
 		Data<WorkflowState<Value>, Value> dataAfter = statemachine.actOn(data(workflowState));
 		Tokens<Value> tokensAfter = dataAfter.state().tokens();
