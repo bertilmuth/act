@@ -13,6 +13,7 @@ import static org.requirementsascode.act.token.Workflow.workflow;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -29,9 +30,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(StringValue.class, d -> {action1Performed++;return d;}));
-		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(StringValue.class,d -> {action2Performed++;return d;}));
-		State<Workflow<ActionData>, ActionData> action3 = action(STATE3, when(StringValue.class,d -> {action3Performed++;return d;}));
+		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(StringValue.class, this::action1Performed));
+		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(StringValue.class, this::action2Performed));
+		State<Workflow<ActionData>, ActionData> action3 = action(STATE3, when(StringValue.class, this::action3Performed));
 		
 		Statemachine<Workflow<ActionData>, ActionData> statemachine =
 			Statemachine.builder()
@@ -68,6 +69,19 @@ class TokenFlowTest {
 		assertEquals(0, action3Performed);
 		assertFalse(tokensAfterStep2.isAnyTokenInState(STATE2));
 		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenInState(STATE3).get());
+	}
+
+	private Data<Workflow<ActionData>,StringValue> action1Performed(Data<Workflow<ActionData>,StringValue> inputData) {
+		action1Performed++;
+		return inputData;
+	}
+	private Data<Workflow<ActionData>,StringValue> action2Performed(Data<Workflow<ActionData>,StringValue> inputData) {
+		action2Performed++;
+		return inputData;
+	}
+	private Data<Workflow<ActionData>,StringValue> action3Performed(Data<Workflow<ActionData>,StringValue> inputData) {
+		action2Performed++;
+		return inputData;
 	}
 	
 	private static class StringValue implements ActionData{
