@@ -23,10 +23,10 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<Tokens<Value>, Value> action1 = action(STATE1, Behavior.identity());
-		State<Tokens<Value>, Value> action2 = action(STATE2, Behavior.identity());
+		State<WorkflowState<Value>, Value> action1 = action(STATE1, Behavior.identity());
+		State<WorkflowState<Value>, Value> action2 = action(STATE2, Behavior.identity());
 		
-		Statemachine<Tokens<Value>, Value> statemachine =
+		Statemachine<WorkflowState<Value>, Value> statemachine =
 			Statemachine.builder()
 				.states(action1, action2)
 				.transitions(
@@ -41,9 +41,10 @@ class TokenFlowTest {
 		Tokens<Value> tokens = tokens(
 				token(value1, action1)
 		);
+		WorkflowState<Value> workflowState = WorkflowState.workflowState(tokens);
 		
-		Data<Tokens<Value>, Value> dataAfter = statemachine.actOn(data(tokens));
-		Tokens<Value> tokensAfter = dataAfter.state();
+		Data<WorkflowState<Value>, Value> dataAfter = statemachine.actOn(data(workflowState));
+		Tokens<Value> tokensAfter = dataAfter.state().tokens();
 		
 		assertFalse(tokensAfter.isAnyTokenInState(STATE1));
 		assertEquals(token(value1, action2), tokensAfter.firstTokenInState(STATE2).get());

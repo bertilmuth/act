@@ -10,29 +10,29 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class TokenFlow<V> implements Flow<Tokens<V>, V>{
-	private final State<Tokens<V>, V> sourceState;
-	private final State<Tokens<V>, V> targetState;
+public class TokenFlow<V> implements Flow<WorkflowState<V>, V>{
+	private final State<WorkflowState<V>, V> sourceState;
+	private final State<WorkflowState<V>, V> targetState;
 
-	private TokenFlow(State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {
+	private TokenFlow(State<WorkflowState<V>, V> sourceState, State<WorkflowState<V>, V> targetState) {
 		this.sourceState = sourceState;
 		this.targetState = targetState;
 	}
 	
-	public static <V> TokenFlow<V> tokenFlow(State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {		
+	public static <V> TokenFlow<V> tokenFlow(State<WorkflowState<V>, V> sourceState, State<WorkflowState<V>, V> targetState) {		
 		return new TokenFlow<>(sourceState, targetState);
 	}
 
 	@Override
-	public Transition<Tokens<V>, V> asTransition(Statemachine<Tokens<V>, V> owningStatemachine) {
+	public Transition<WorkflowState<V>, V> asTransition(Statemachine<WorkflowState<V>, V> owningStatemachine) {
 		return transition(sourceState, targetState, d -> transmit(d, sourceState, targetState));
 	}
 	
-	private static <V> Data<Tokens<V>, V> transmit(Data<Tokens<V>, V> d, State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {
+	private static <V> Data<WorkflowState<V>, V> transmit(Data<WorkflowState<V>, V> d, State<WorkflowState<V>, V> sourceState, State<WorkflowState<V>, V> targetState) {
 		assert(d.value().isPresent());
-		Tokens<V> tokensBefore = d.state();
+		Tokens<V> tokensBefore = d.state().tokens();
 		V beforeValue = d.value().get();
 		Tokens<V> tokensAfter = tokensBefore.moveToken(token(beforeValue, sourceState), targetState);
-		return data(tokensAfter, beforeValue);
+		return data(WorkflowState.workflowState(tokensAfter), beforeValue);
 	}
 }
