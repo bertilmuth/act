@@ -13,7 +13,6 @@ import static org.requirementsascode.act.token.Workflow.workflow;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
