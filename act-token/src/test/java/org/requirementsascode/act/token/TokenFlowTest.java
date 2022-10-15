@@ -17,6 +17,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import static org.requirementsascode.act.token.Workflow.workflow;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 class TokenFlowTest {
 	private static final String VALUE1 = "Value1";
@@ -28,8 +29,8 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, d -> {action1Performed++;return d;});
-		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, d -> {action2Performed++;return d;});
+		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(RunStep.class, d -> {action1Performed++;return d;}));
+		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(RunStep.class,d -> {action2Performed++;return d;}));
 		
 		Statemachine<Workflow<ActionData>, ActionData> statemachine =
 			Statemachine.builder()
@@ -48,7 +49,7 @@ class TokenFlowTest {
 		);
 		Workflow<ActionData> workflow = workflow(tokens);
 		
-		Data<Workflow<ActionData>, ActionData> dataAfter = statemachine.actOn(data(workflow));
+		Data<Workflow<ActionData>, ActionData> dataAfter = statemachine.actOn(data(workflow, RunStep.runStep()));
 		Tokens<ActionData> tokensAfter = dataAfter.state().tokens();
 		
 		assertEquals(1, action1Performed);
@@ -58,6 +59,13 @@ class TokenFlowTest {
 	}
 	
 	private interface ActionData{ };
+	private static class RunStep implements ActionData{
+		private static final RunStep runStep = new RunStep();
+		public static RunStep runStep() {
+			return runStep;
+		}
+	}
+	
 	private static class StringValue implements ActionData{
 		public final String string;
 		public StringValue(String string) {
