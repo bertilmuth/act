@@ -15,7 +15,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
-import static org.requirementsascode.act.token.WorkflowState.workflowState;
+import static org.requirementsascode.act.token.Workflow.workflow;
 
 class TokenFlowTest {
 	private static final String VALUE1 = "Value1";
@@ -24,10 +24,10 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<WorkflowState<Value>, Value> action1 = action(STATE1, Behavior.identity());
-		State<WorkflowState<Value>, Value> action2 = action(STATE2, Behavior.identity());
+		State<Workflow<Value>, Value> action1 = action(STATE1, Behavior.identity());
+		State<Workflow<Value>, Value> action2 = action(STATE2, Behavior.identity());
 		
-		Statemachine<WorkflowState<Value>, Value> statemachine =
+		Statemachine<Workflow<Value>, Value> statemachine =
 			Statemachine.builder()
 				.states(action1, action2)
 				.transitions(
@@ -42,9 +42,9 @@ class TokenFlowTest {
 		Tokens<Value> tokens = tokens(
 				token(value1, action1)
 		);
-		WorkflowState<Value> workflowState = workflowState(tokens);
+		Workflow<Value> workflow = workflow(tokens);
 		
-		Data<WorkflowState<Value>, Value> dataAfter = statemachine.actOn(data(workflowState));
+		Data<Workflow<Value>, Value> dataAfter = statemachine.actOn(data(workflow));
 		Tokens<Value> tokensAfter = dataAfter.state().tokens();
 		
 		assertFalse(tokensAfter.isAnyTokenInState(STATE1));
