@@ -53,7 +53,7 @@ class TokenFlowTest {
 		Tokens<ActionData> tokensAfter = dataAfter.state().tokens();
 		
 		assertEquals(1, action1Performed);
-		//assertEquals(0, action2Performed);
+		assertEquals(0, action2Performed);
 		assertFalse(tokensAfter.isAnyTokenInState(STATE1));
 		assertEquals(token(value1, action2), tokensAfter.firstTokenInState(STATE2).get());
 	}
