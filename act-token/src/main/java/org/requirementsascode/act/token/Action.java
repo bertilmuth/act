@@ -32,10 +32,6 @@ public class Action {
 			.orElse(null);	
 		Data<Workflow<ActionData>, ActionData> actionInput = data(workflow(tokens), firstTokenValue);
 		Data<Workflow<ActionData>, ActionData> actionOutput = actionBehavior.actOn(actionInput);
-		
-		System.out.println("actionInput: " + actionInput);
-		System.out.println("actionOutput: " + actionOutput);
-
 		return actionOutput;
 	}
 }

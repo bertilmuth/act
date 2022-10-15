@@ -31,12 +31,10 @@ public class TokenFlow<V> implements Flow<Workflow<V>, V>{
 	}
 	
 	private static <V> Data<Workflow<V>, V> transmit(Data<Workflow<V>, V> d, State<Workflow<V>, V> sourceState, State<Workflow<V>, V> targetState) {
-		System.out.println("Input to transmit: " + d);
 		assert(d.value().isPresent());
 		Tokens<V> tokensBefore = d.state().tokens();
 		V beforeValue = d.value().get();
 		Tokens<V> tokensAfter = tokensBefore.moveToken(token(sourceState, beforeValue), targetState);
-		System.out.println("Source state: "  + sourceState + " Target state: "  + targetState + " tokensBefore: " + tokensBefore + " tokensAfter: " + tokensAfter);
 		return data(workflow(tokensAfter));
 	}
 }
