@@ -14,4 +14,9 @@ public class Workflow<V> {
 	public Tokens<V> tokens(){
 		return tokens;
 	}
+
+	@Override
+	public String toString() {
+		return "Workflow [" + tokens + "]";
+	}
 }

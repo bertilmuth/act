@@ -49,4 +49,9 @@ public class Tokens<V> {
 		
 		return new Tokens<>(newTokens);
 	}
+
+	@Override
+	public String toString() {
+		return "Tokens [" + tokens + "]";
+	}
 }
