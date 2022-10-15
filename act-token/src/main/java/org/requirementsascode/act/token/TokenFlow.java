@@ -10,17 +10,17 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class TransmitTokens<V> implements Flow<Tokens<V>, V>{
+public class TokenFlow<V> implements Flow<Tokens<V>, V>{
 	private final State<Tokens<V>, V> sourceState;
 	private final State<Tokens<V>, V> targetState;
 
-	private TransmitTokens(State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {
+	private TokenFlow(State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {
 		this.sourceState = sourceState;
 		this.targetState = targetState;
 	}
 	
-	public static <V> TransmitTokens<V> transmitTokens(State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {		
-		return new TransmitTokens<>(sourceState, targetState);
+	public static <V> TokenFlow<V> tokenFlow(State<Tokens<V>, V> sourceState, State<Tokens<V>, V> targetState) {		
+		return new TokenFlow<>(sourceState, targetState);
 	}
 
 	@Override

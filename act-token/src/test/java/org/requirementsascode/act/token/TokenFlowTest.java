@@ -6,7 +6,7 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.Tokens.tokens;
-import static org.requirementsascode.act.token.TransmitTokens.transmitTokens;
+import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 
 import java.util.Objects;
 
@@ -22,35 +22,33 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<Tokens<Trigger>, Trigger> action1 = action(STATE1);
+		State<Tokens<Value>, Value> action1 = action(STATE1);
+		State<Tokens<Value>, Value> action2 = action(STATE2);
 		
-		State<Tokens<Trigger>, Trigger> action2 = action(STATE2);
-		
-		Statemachine<Tokens<Trigger>, Trigger> statemachine =
+		Statemachine<Tokens<Value>, Value> statemachine =
 			Statemachine.builder()
 				.states(action1, action2)
 				.transitions(
 				)
 				.flows(						
-					transmitTokens(action1, action2)
+					tokenFlow(action1, action2)
 				)
 				.build();
 		
 		Value value1 = new Value(VALUE1);
 		
-		Tokens<Trigger> tokens = tokens(
+		Tokens<Value> tokens = tokens(
 				token(value1, action1)
 		);
 		
-		Data<Tokens<Trigger>, Trigger> dataAfter = statemachine.actOn(data(tokens));
-		Tokens<Trigger> tokensAfter = dataAfter.state();
+		Data<Tokens<Value>, Value> dataAfter = statemachine.actOn(data(tokens));
+		Tokens<Value> tokensAfter = dataAfter.state();
 		
 		assertFalse(tokensAfter.isAnyTokenInState(STATE1));
 		assertEquals(token(value1, action2), tokensAfter.firstTokenInState(STATE2).get());
 	}
 	
-	private static interface Trigger {};
-	private static class Value implements Trigger{
+	private static class Value{
 		public final String string;
 		public Value(String string) {
 			this.string = string;

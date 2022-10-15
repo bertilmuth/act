@@ -2,5 +2,5 @@ subprojects {
 	apply plugin: 'java'
 
 	group = 'org.requirementsascode.act'
-	version = '0.6.5-SNAPSHOT'	
+	version = '0.6.5'	
 }
