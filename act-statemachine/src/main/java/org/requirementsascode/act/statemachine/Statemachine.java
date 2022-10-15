@@ -79,16 +79,19 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private Behavior<S, V0, V0> createStatemachineBehavior() {
 		validate(this);
 
-		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
-		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
-		UnitedBehavior<S, V0> stateChangingBehavior = unitedBehavior(new FirstOneWhoActsWins<>(), transitionsBehavior, flowsBehavior);
-
 		Behavior<S, V0, V0> behavior = 
 			unitedBehavior(new FirstOneWhoActsWins<>(),
-				statesBehaviorOrIdentity().andThen(stateChangingBehavior))
+				statesBehaviorOrIdentity().andThen(transitBehavior()))
 			.andThen(recallStatemachine());
 
 		return behavior;
+	}
+
+	private UnitedBehavior<S, V0> transitBehavior() {
+		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
+		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
+		UnitedBehavior<S, V0> transitBehavior = unitedBehavior(new FirstOneWhoActsWins<>(), transitionsBehavior, flowsBehavior);
+		return transitBehavior;
 	}
 	
 	public Behavior<S, V0, V0> statesBehaviorOrIdentity() {
