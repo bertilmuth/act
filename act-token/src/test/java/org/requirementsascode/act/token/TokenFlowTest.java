@@ -11,6 +11,7 @@ import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -22,8 +23,8 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<Tokens<Value>, Value> action1 = action(STATE1);
-		State<Tokens<Value>, Value> action2 = action(STATE2);
+		State<Tokens<Value>, Value> action1 = action(STATE1, Behavior.identity());
+		State<Tokens<Value>, Value> action2 = action(STATE2, Behavior.identity());
 		
 		Statemachine<Tokens<Value>, Value> statemachine =
 			Statemachine.builder()
