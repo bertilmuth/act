@@ -29,9 +29,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(ActionData.class, d -> {action1Performed++;System.out.println("a1:"+d);return d;}));
-		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(ActionData.class,d -> {action2Performed++;System.out.println("a2:"+d);return d;}));
-		State<Workflow<ActionData>, ActionData> action3 = action(STATE3, when(ActionData.class,d -> {action3Performed++;System.out.println("a3:"+d);return d;}));
+		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(StringValue.class, d -> {action1Performed++;System.out.println("a1:"+d);return d;}));
+		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(StringValue.class,d -> {action2Performed++;System.out.println("a2:"+d);return d;}));
+		State<Workflow<ActionData>, ActionData> action3 = action(STATE3, when(StringValue.class,d -> {action3Performed++;System.out.println("a3:"+d);return d;}));
 		
 		Statemachine<Workflow<ActionData>, ActionData> statemachine =
 			Statemachine.builder()
