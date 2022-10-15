@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.UnitedBehavior;
 import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
 
 public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
@@ -80,11 +81,11 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
 		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
+		UnitedBehavior<S, V0> stateChangingBehavior = unitedBehavior(new FirstOneWhoActsWins<>(), transitionsBehavior, flowsBehavior);
 
 		Behavior<S, V0, V0> behavior = 
 			unitedBehavior(new FirstOneWhoActsWins<>(),
-				statesBehaviorOrIdentity().andThen(transitionsBehavior),
-				flowsBehavior)
+				statesBehaviorOrIdentity().andThen(stateChangingBehavior))
 			.andThen(recallStatemachine());
 
 		return behavior;

@@ -30,7 +30,9 @@ class TokenFlowTest {
 			Statemachine.builder()
 				.states(action1, action2)
 				.transitions(
-						transmitTokens(action1, action2)
+				)
+				.flows(						
+					transmitTokens(action1, action2)
 				)
 				.build();
 		
