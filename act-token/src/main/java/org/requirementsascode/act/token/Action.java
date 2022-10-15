@@ -15,12 +15,12 @@ public class Action {
 		requireNonNull(stateName, "stateName must be non-null!");
 		requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 
-		return state(stateName, workflowState -> isAnyTokenInState(workflowState, stateName), 
+		return state(stateName, workflow -> isAnyTokenInState(workflow, stateName), 
 			d -> act(stateName, d, actionBehavior));
 	}
 	
-	public static <V> boolean isAnyTokenInState(Workflow<V> workflowState, String stateName) {
-		return workflowState.tokens().inState(stateName).count() != 0;
+	public static <V> boolean isAnyTokenInState(Workflow<V> workflow, String stateName) {
+		return workflow.tokens().inState(stateName).count() != 0;
 	}
 
 	private static <V> Data<Workflow<V>, V> act(String stateName, Data<Workflow<V>, V> data, Behavior<Workflow<V>, V, V> actionBehavior) {
