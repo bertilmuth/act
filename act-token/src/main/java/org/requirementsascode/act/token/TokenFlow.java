@@ -35,6 +35,6 @@ public class TokenFlow<V> implements Flow<Workflow<V>, V>{
 		Tokens<V> tokensBefore = d.state().tokens();
 		V beforeValue = d.value().get();
 		Tokens<V> tokensAfter = tokensBefore.moveToken(token(beforeValue, sourceState), targetState);
-		return data(workflow(tokensAfter), beforeValue);
+		return data(workflow(tokensAfter));
 	}
 }
