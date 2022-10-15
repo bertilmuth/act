@@ -2,6 +2,7 @@ package org.requirementsascode.act.token;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
@@ -21,11 +22,14 @@ class TokenFlowTest {
 	private static final String VALUE1 = "Value1";
 	private static final String STATE1 = "State1";
 	private static final String STATE2 = "State2";
+	
+	private int action1Performed = 0;
+	private int action2Performed = 0;
 
 	@Test
 	void test() {
-		State<Workflow<Value>, Value> action1 = action(STATE1, Behavior.identity());
-		State<Workflow<Value>, Value> action2 = action(STATE2, Behavior.identity());
+		State<Workflow<Value>, Value> action1 = action(STATE1, d -> {action1Performed++;return d;});
+		State<Workflow<Value>, Value> action2 = action(STATE2, d -> {action2Performed++;return d;});
 		
 		Statemachine<Workflow<Value>, Value> statemachine =
 			Statemachine.builder()
@@ -47,6 +51,8 @@ class TokenFlowTest {
 		Data<Workflow<Value>, Value> dataAfter = statemachine.actOn(data(workflow));
 		Tokens<Value> tokensAfter = dataAfter.state().tokens();
 		
+		assertEquals(1, action1Performed);
+		//assertEquals(0, action2Performed);
 		assertFalse(tokensAfter.isAnyTokenInState(STATE1));
 		assertEquals(token(value1, action2), tokensAfter.firstTokenInState(STATE2).get());
 	}
