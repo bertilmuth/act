@@ -70,14 +70,6 @@ class TokenFlowTest {
 		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenInState(STATE3).get());
 	}
 	
-	private interface ActionData{ };
-	private static class RunStep implements ActionData{
-		private static final RunStep runStep = new RunStep();
-		public static RunStep runStep() {
-			return runStep;
-		}
-	}
-	
 	private static class StringValue implements ActionData{
 		public final String string;
 		public StringValue(String string) {
