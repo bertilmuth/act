@@ -25,6 +25,7 @@ public class Action {
 
 	private static <V> Data<Workflow<V>, V> act(String stateName, Data<Workflow<V>, V> data, Behavior<Workflow<V>, V, V> actionBehavior) {
 			Data<Workflow<V>, V> actionOutput = actionBehavior.actOn(data);
+			System.out.println("actionOutput: " + actionOutput);
 			Tokens<V> tokens = actionOutput.state().tokens();
 			V firstTokenValue = tokens.firstTokenInState(stateName)
 				.map(t -> t.value())

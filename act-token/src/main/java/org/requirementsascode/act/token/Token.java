@@ -15,7 +15,7 @@ public class Token<V> {
 		this.value = requireNonNull(value, "value must be non-null!");
 	}
 
-	static <S, V> Token<V> token(V value, State<?, V> state) {
+	static <S, V> Token<V> token(State<?, V> state, V value) {
 		return new Token<>(state, value);
 	}
 	

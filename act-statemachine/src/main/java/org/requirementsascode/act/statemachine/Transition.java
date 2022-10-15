@@ -52,6 +52,7 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	}
 	
 	private Data<S, V0> toStateActOn(Data<S, V0> data, Statemachine<S, V0> owningStatemachine){
+		System.out.println(toState().name() + " acting on: " + data);
 		return toState().asBehavior(owningStatemachine).actOn(data);
 	}
 

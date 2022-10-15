@@ -102,6 +102,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 
 	private boolean hasFiredAndNotInDefaultState(Data<S, V0> d) {
-		return hasFired(d) && !defaultState().matchesStateIn(d);
+		boolean b = hasFired(d) && !defaultState().matchesStateIn(d);
+		if(b) System.out.println("Recall! d: " + d);
+		return b;
 	}
 }

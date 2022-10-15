@@ -12,7 +12,7 @@ class TokenTest {
 	@Test
 	void createsTokenInState() {
 		State<String, String> state1 = state("State1", s -> true);
-		Token<String> token = Token.token(TOKEN1, state1);
+		Token<String> token = Token.token(state1, TOKEN1);
 		assertEquals(state1, token.state());
 		assertEquals(TOKEN1, token.value());
 	}
@@ -21,7 +21,7 @@ class TokenTest {
 	void movesTokenToAnotherState() {
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
-		Token<String> tokenInState1 = Token.token(TOKEN1, state1);
+		Token<String> tokenInState1 = Token.token(state1, TOKEN1);
 		Token<String> tokenInState2 = tokenInState1.moveTo(state2);
 		
 		assertEquals(state1, tokenInState1.state());

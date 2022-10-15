@@ -29,9 +29,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(RunStep.class, d -> {action1Performed++;return d;}));
-		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(RunStep.class,d -> {action2Performed++;return d;}));
-		State<Workflow<ActionData>, ActionData> action3 = action(STATE3, when(RunStep.class,d -> {action3Performed++;return d;}));
+		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(ActionData.class, d -> {action1Performed++;System.out.println("a1:"+d);return d;}));
+		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(ActionData.class,d -> {action2Performed++;System.out.println("a2:"+d);return d;}));
+		State<Workflow<ActionData>, ActionData> action3 = action(STATE3, when(ActionData.class,d -> {action3Performed++;System.out.println("a3:"+d);return d;}));
 		
 		Statemachine<Workflow<ActionData>, ActionData> statemachine =
 			Statemachine.builder()
@@ -44,10 +44,10 @@ class TokenFlowTest {
 				)
 				.build();
 		
-		StringValue value1 = new StringValue(VALUE1);
+		StringValue actionData1 = new StringValue(VALUE1);
 		
 		Tokens<ActionData> tokens = tokens(
-				token(value1, action1)
+				token(action1, actionData1)
 		);
 		Workflow<ActionData> workflow = workflow(tokens);
 		Data<Workflow<ActionData>, ActionData> dataAfterStep1 = statemachine.actOn(data(workflow, RunStep.runStep()));
@@ -57,7 +57,7 @@ class TokenFlowTest {
 		assertEquals(0, action2Performed);
 		assertEquals(0, action3Performed);
 		assertFalse(tokensAfterStep1.isAnyTokenInState(STATE1));
-		assertEquals(token(value1, action2), tokensAfterStep1.firstTokenInState(STATE2).get());
+		assertEquals(token(action2, actionData1), tokensAfterStep1.firstTokenInState(STATE2).get());
 		
 		Workflow<ActionData> workflowAfterStep1 = workflow(tokensAfterStep1);
 		Data<Workflow<ActionData>, ActionData> dataAfterStep2 = statemachine.actOn(data(workflowAfterStep1, RunStep.runStep()));
@@ -67,7 +67,7 @@ class TokenFlowTest {
 		assertEquals(1, action2Performed);
 		assertEquals(0, action3Performed);
 		assertFalse(tokensAfterStep2.isAnyTokenInState(STATE2));
-		assertEquals(token(value1, action3), tokensAfterStep2.firstTokenInState(STATE3).get());
+		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenInState(STATE3).get());
 	}
 	
 	private interface ActionData{ };
@@ -100,7 +100,7 @@ class TokenFlowTest {
 		}
 		@Override
 		public String toString() {
-			return "StringValue [string=" + string + "]";
+			return "StringValue [" + string + "]";
 		}
 	};
 }
