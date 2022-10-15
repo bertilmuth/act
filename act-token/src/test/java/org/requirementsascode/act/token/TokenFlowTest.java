@@ -28,10 +28,10 @@ class TokenFlowTest {
 
 	@Test
 	void test() {
-		State<Workflow<Value>, Value> action1 = action(STATE1, d -> {action1Performed++;return d;});
-		State<Workflow<Value>, Value> action2 = action(STATE2, d -> {action2Performed++;return d;});
+		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, d -> {action1Performed++;return d;});
+		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, d -> {action2Performed++;return d;});
 		
-		Statemachine<Workflow<Value>, Value> statemachine =
+		Statemachine<Workflow<ActionData>, ActionData> statemachine =
 			Statemachine.builder()
 				.states(action1, action2)
 				.transitions(
@@ -41,15 +41,15 @@ class TokenFlowTest {
 				)
 				.build();
 		
-		Value value1 = new Value(VALUE1);
+		StringValue value1 = new StringValue(VALUE1);
 		
-		Tokens<Value> tokens = tokens(
+		Tokens<ActionData> tokens = tokens(
 				token(value1, action1)
 		);
-		Workflow<Value> workflow = workflow(tokens);
+		Workflow<ActionData> workflow = workflow(tokens);
 		
-		Data<Workflow<Value>, Value> dataAfter = statemachine.actOn(data(workflow));
-		Tokens<Value> tokensAfter = dataAfter.state().tokens();
+		Data<Workflow<ActionData>, ActionData> dataAfter = statemachine.actOn(data(workflow));
+		Tokens<ActionData> tokensAfter = dataAfter.state().tokens();
 		
 		assertEquals(1, action1Performed);
 		//assertEquals(0, action2Performed);
@@ -57,9 +57,10 @@ class TokenFlowTest {
 		assertEquals(token(value1, action2), tokensAfter.firstTokenInState(STATE2).get());
 	}
 	
-	private static class Value{
+	private interface ActionData{ };
+	private static class StringValue implements ActionData{
 		public final String string;
-		public Value(String string) {
+		public StringValue(String string) {
 			this.string = string;
 		}
 		@Override
@@ -74,7 +75,7 @@ class TokenFlowTest {
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			Value other = (Value) obj;
+			StringValue other = (StringValue) obj;
 			return Objects.equals(string, other.string);
 		}
 	};
