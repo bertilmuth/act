@@ -30,7 +30,7 @@ public class Action {
 		ActionData firstTokenValue = tokens.firstTokenInState(stateName)
 			.map(t -> t.value())
 			.orElse(null);	
-		Data<Workflow, ActionData> actionInput = data(workflow(data.state().statemachine(), tokens), firstTokenValue);
+		Data<Workflow, ActionData> actionInput = data(data.state(), firstTokenValue);
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
 		return actionOutput;
 	}
