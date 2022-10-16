@@ -1,14 +1,13 @@
 package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
-
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
-import static org.requirementsascode.act.token.Workflow.workflow;
 
 public class Action {
 	public static State<Workflow, ActionData> action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
