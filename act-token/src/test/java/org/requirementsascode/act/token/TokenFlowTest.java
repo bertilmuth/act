@@ -58,7 +58,7 @@ class TokenFlowTest {
 		assertFalse(tokens1.isAnyTokenInState(STATE1));
 		assertEquals(token(action2, actionData1), tokens1.firstTokenInState(STATE2).get());
 		
-		AfterStep afterStep2 = afterStep1.runStep();
+		AfterStep afterStep2 = afterStep1.nextStep();
 		Tokens tokensAfterStep2 = afterStep2.tokens();
 
 		assertEquals(1, action1Performed);

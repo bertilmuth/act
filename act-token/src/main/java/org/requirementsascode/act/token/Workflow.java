@@ -51,7 +51,7 @@ public class Workflow {
 			this.actionOutput = actionOutput;
 		}
 		
-		public AfterStep runStep() {
+		public AfterStep nextStep() {
 			return workflow.nextStep();
 		}
 		
