@@ -11,7 +11,7 @@ import org.requirementsascode.act.statemachine.State;
 import static org.requirementsascode.act.token.Workflow.workflow;
 
 public class Action {
-	public static <V> State<Workflow, ActionData> action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+	public static State<Workflow, ActionData> action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
 		requireNonNull(stateName, "stateName must be non-null!");
 		requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 
@@ -21,11 +21,11 @@ public class Action {
 		return state;
 	}
 	
-	public static <V> boolean isAnyTokenInState(Workflow workflow, String stateName) {
+	public static boolean isAnyTokenInState(Workflow workflow, String stateName) {
 		return workflow.tokens().inState(stateName).count() != 0;
 	}
 
-	private static <V> Data<Workflow, ActionData> act(String stateName, Data<Workflow, RunStep> data, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+	private static Data<Workflow, ActionData> act(String stateName, Data<Workflow, RunStep> data, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
 		Tokens tokens = data.state().tokens();
 		ActionData firstTokenValue = tokens.firstTokenInState(stateName)
 			.map(t -> t.value())

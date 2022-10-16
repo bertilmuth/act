@@ -18,7 +18,7 @@ public class Tokens {
 	}
 
 	@SafeVarargs
-	public static <S,V> Tokens tokens(Token... tokens) {
+	public static Tokens tokens(Token... tokens) {
 		return new Tokens(asList(tokens));
 	}
 
