@@ -48,9 +48,9 @@ class TokenFlowTest {
 		Tokens tokens = tokens(
 				token(action1, actionData1)
 		);
-		Workflow workflow = workflow(statemachine, tokens);
-		Data<Workflow, ActionData> dataAfterStep1 = workflow.runStep();
-		Tokens tokensAfterStep1 = dataAfterStep1.state().tokens();
+		Data<Workflow, ActionData> dataAfterStep1 = workflow(statemachine, tokens).runStep();
+		Workflow workflowAfterStep1 = dataAfterStep1.state();
+		Tokens tokensAfterStep1 = workflowAfterStep1.tokens();
 		
 		assertEquals(1, action1Performed);
 		assertEquals(0, action2Performed);
@@ -58,7 +58,6 @@ class TokenFlowTest {
 		assertFalse(tokensAfterStep1.isAnyTokenInState(STATE1));
 		assertEquals(token(action2, actionData1), tokensAfterStep1.firstTokenInState(STATE2).get());
 		
-		Workflow workflowAfterStep1 = dataAfterStep1.state();
 		Data<Workflow, ActionData> dataAfterStep2 = workflowAfterStep1.runStep();
 		Tokens tokensAfterStep2 = dataAfterStep2.state().tokens();
 
