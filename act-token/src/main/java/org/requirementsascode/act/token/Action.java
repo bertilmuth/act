@@ -21,7 +21,7 @@ public class Action {
 		return state;
 	}
 	
-	public static boolean isAnyTokenInState(Workflow workflow, String stateName) {
+	private static boolean isAnyTokenInState(Workflow workflow, String stateName) {
 		return workflow.tokens().inState(stateName).count() != 0;
 	}
 
