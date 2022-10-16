@@ -1,5 +1,6 @@
 package org.requirementsascode.act.token;
 
+import static org.requirementsascode.act.token.RunStep.runStep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.core.Data.data;
@@ -50,7 +51,7 @@ class TokenFlowTest {
 				token(action1, actionData1)
 		);
 		Workflow workflow = workflow(tokens);
-		Data<Workflow, ActionData> dataAfterStep1 = statemachine.actOn(data(workflow, RunStep.runStep()));
+		Data<Workflow, ActionData> dataAfterStep1 = statemachine.actOn(data(workflow, runStep()));
 		Tokens tokensAfterStep1 = dataAfterStep1.state().tokens();
 		
 		assertEquals(1, action1Performed);
@@ -60,7 +61,7 @@ class TokenFlowTest {
 		assertEquals(token(action2, actionData1), tokensAfterStep1.firstTokenInState(STATE2).get());
 		
 		Workflow workflowAfterStep1 = workflow(tokensAfterStep1);
-		Data<Workflow, ActionData> dataAfterStep2 = statemachine.actOn(data(workflowAfterStep1, RunStep.runStep()));
+		Data<Workflow, ActionData> dataAfterStep2 = statemachine.actOn(data(workflowAfterStep1, runStep()));
 		Tokens tokensAfterStep2 = dataAfterStep2.state().tokens();
 
 		assertEquals(1, action1Performed);
