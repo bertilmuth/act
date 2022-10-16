@@ -79,7 +79,7 @@ class TokenFlowTest {
 		return inputData;
 	}
 	private Data<Workflow,StringValue> action3Performed(Data<Workflow,StringValue> inputData) {
-		action2Performed++;
+		action3Performed++;
 		return inputData;
 	}
 	
