@@ -1,5 +1,11 @@
 package org.requirementsascode.act.token;
 
+import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.token.TriggerStep.triggerStep;
+
+import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.statemachine.Statemachine;
+
 public class Workflow {
 	private final Tokens tokens;
 	
@@ -18,5 +24,9 @@ public class Workflow {
 	@Override
 	public String toString() {
 		return "Workflow [" + tokens + "]";
+	}
+
+	public Data<Workflow, ActionData> runStep(Statemachine<Workflow, ActionData> statemachine) {
+		return statemachine.actOn(data(this, triggerStep()));
 	}
 }
