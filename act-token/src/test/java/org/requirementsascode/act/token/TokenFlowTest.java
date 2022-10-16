@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
-import org.requirementsascode.act.token.Workflow.WorkflowStep;
+import org.requirementsascode.act.token.Workflow.AfterStep;
 
 class TokenFlowTest {
 	private static final String VALUE1 = "Value1";
@@ -49,8 +49,8 @@ class TokenFlowTest {
 		Tokens tokens = tokens(
 				token(action1, actionData1)
 		);
-		WorkflowStep workflowAfterStep1 = workflow(statemachine, tokens).runStep();
-		Tokens tokens1 = workflowAfterStep1.tokens();
+		AfterStep afterStep1 = workflow(statemachine, tokens).nextStep();
+		Tokens tokens1 = afterStep1.tokens();
 		
 		assertEquals(1, action1Performed);
 		assertEquals(0, action2Performed);
@@ -58,8 +58,8 @@ class TokenFlowTest {
 		assertFalse(tokens1.isAnyTokenInState(STATE1));
 		assertEquals(token(action2, actionData1), tokens1.firstTokenInState(STATE2).get());
 		
-		WorkflowStep workflowAfterStep2 = workflowAfterStep1.runStep();
-		Tokens tokensAfterStep2 = workflowAfterStep2.tokens();
+		AfterStep afterStep2 = afterStep1.runStep();
+		Tokens tokensAfterStep2 = afterStep2.tokens();
 
 		assertEquals(1, action1Performed);
 		assertEquals(1, action2Performed);

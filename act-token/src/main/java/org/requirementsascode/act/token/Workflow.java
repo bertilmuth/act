@@ -35,24 +35,24 @@ public class Workflow {
 		return "Workflow [" + tokens + "]";
 	}
 
-	public WorkflowStep runStep() {
+	public AfterStep nextStep() {
 		Data<Workflow, ActionData> output = statemachine.actOn(data(this, triggerStep()));
-		return new WorkflowStep(statemachine(), output.state().tokens(), output.value().orElse(null));
+		return new AfterStep(statemachine(), output.state().tokens(), output.value().orElse(null));
 	}
 	
-	public static class WorkflowStep{
+	public static class AfterStep{
 		private final Workflow workflow;
 		private final Tokens tokens;
 		private final ActionData actionOutput;
 		
-		private WorkflowStep(Statemachine<Workflow, ActionData> statemachine, Tokens tokens, ActionData actionOutput) {
+		private AfterStep(Statemachine<Workflow, ActionData> statemachine, Tokens tokens, ActionData actionOutput) {
 			this.workflow = workflow(statemachine, tokens);
 			this.tokens = tokens;
 			this.actionOutput = actionOutput;
 		}
 		
-		public WorkflowStep runStep() {
-			return workflow.runStep();
+		public AfterStep runStep() {
+			return workflow.nextStep();
 		}
 		
 		public Tokens tokens() {
