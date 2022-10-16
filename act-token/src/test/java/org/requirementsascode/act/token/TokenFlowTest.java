@@ -29,11 +29,11 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		State<Workflow<ActionData>, ActionData> action1 = action(STATE1, when(StringValue.class, this::action1Performed));
-		State<Workflow<ActionData>, ActionData> action2 = action(STATE2, when(StringValue.class, this::action2Performed));
-		State<Workflow<ActionData>, ActionData> action3 = action(STATE3, when(StringValue.class, this::action3Performed));
+		State<Workflow, ActionData> action1 = action(STATE1, when(StringValue.class, this::action1Performed));
+		State<Workflow, ActionData> action2 = action(STATE2, when(StringValue.class, this::action2Performed));
+		State<Workflow, ActionData> action3 = action(STATE3, when(StringValue.class, this::action3Performed));
 		
-		Statemachine<Workflow<ActionData>, ActionData> statemachine =
+		Statemachine<Workflow, ActionData> statemachine =
 			Statemachine.builder()
 				.states(action1, action2, action3)
 				.transitions(
@@ -46,12 +46,12 @@ class TokenFlowTest {
 		
 		StringValue actionData1 = new StringValue(VALUE1);
 		
-		Tokens<ActionData> tokens = tokens(
+		Tokens tokens = tokens(
 				token(action1, actionData1)
 		);
-		Workflow<ActionData> workflow = workflow(tokens);
-		Data<Workflow<ActionData>, ActionData> dataAfterStep1 = statemachine.actOn(data(workflow, RunStep.runStep()));
-		Tokens<ActionData> tokensAfterStep1 = dataAfterStep1.state().tokens();
+		Workflow workflow = workflow(tokens);
+		Data<Workflow, ActionData> dataAfterStep1 = statemachine.actOn(data(workflow, RunStep.runStep()));
+		Tokens tokensAfterStep1 = dataAfterStep1.state().tokens();
 		
 		assertEquals(1, action1Performed);
 		assertEquals(0, action2Performed);
@@ -59,9 +59,9 @@ class TokenFlowTest {
 		assertFalse(tokensAfterStep1.isAnyTokenInState(STATE1));
 		assertEquals(token(action2, actionData1), tokensAfterStep1.firstTokenInState(STATE2).get());
 		
-		Workflow<ActionData> workflowAfterStep1 = workflow(tokensAfterStep1);
-		Data<Workflow<ActionData>, ActionData> dataAfterStep2 = statemachine.actOn(data(workflowAfterStep1, RunStep.runStep()));
-		Tokens<ActionData> tokensAfterStep2 = dataAfterStep2.state().tokens();
+		Workflow workflowAfterStep1 = workflow(tokensAfterStep1);
+		Data<Workflow, ActionData> dataAfterStep2 = statemachine.actOn(data(workflowAfterStep1, RunStep.runStep()));
+		Tokens tokensAfterStep2 = dataAfterStep2.state().tokens();
 
 		assertEquals(1, action1Performed);
 		assertEquals(1, action2Performed);
@@ -70,15 +70,15 @@ class TokenFlowTest {
 		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenInState(STATE3).get());
 	}
 
-	private Data<Workflow<ActionData>,StringValue> action1Performed(Data<Workflow<ActionData>,StringValue> inputData) {
+	private Data<Workflow,StringValue> action1Performed(Data<Workflow,StringValue> inputData) {
 		action1Performed++;
 		return inputData;
 	}
-	private Data<Workflow<ActionData>,StringValue> action2Performed(Data<Workflow<ActionData>,StringValue> inputData) {
+	private Data<Workflow,StringValue> action2Performed(Data<Workflow,StringValue> inputData) {
 		action2Performed++;
 		return inputData;
 	}
-	private Data<Workflow<ActionData>,StringValue> action3Performed(Data<Workflow<ActionData>,StringValue> inputData) {
+	private Data<Workflow,StringValue> action3Performed(Data<Workflow,StringValue> inputData) {
 		action2Performed++;
 		return inputData;
 	}

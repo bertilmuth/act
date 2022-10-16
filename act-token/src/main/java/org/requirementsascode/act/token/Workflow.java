@@ -1,17 +1,17 @@
 package org.requirementsascode.act.token;
 
-public class Workflow<V> {
-	private final Tokens<V> tokens;
+public class Workflow {
+	private final Tokens tokens;
 	
-	private Workflow(Tokens<V> tokens) {
+	private Workflow(Tokens tokens) {
 		this.tokens = tokens;
 	}
 
-	public static <V> Workflow<V> workflow(Tokens<V> tokens){
-		return new Workflow<>(tokens);
+	public static  Workflow workflow(Tokens tokens){
+		return new Workflow(tokens);
 	}
 	
-	public Tokens<V> tokens(){
+	public Tokens tokens(){
 		return tokens;
 	}
 

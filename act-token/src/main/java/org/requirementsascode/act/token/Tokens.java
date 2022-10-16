@@ -10,23 +10,23 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
 
-public class Tokens<V> {
-	private final List<Token<V>> tokens;
+public class Tokens {
+	private final List<Token> tokens;
 
-	public Tokens(List<Token<V>> tokens) {
+	public Tokens(List<Token> tokens) {
 		this.tokens = requireNonNull(tokens);
 	}
 
 	@SafeVarargs
-	public static <S,V> Tokens<V> tokens(Token<V>... tokens) {
-		return new Tokens<>(asList(tokens));
+	public static <S,V> Tokens tokens(Token... tokens) {
+		return new Tokens(asList(tokens));
 	}
 
-	public Stream<Token<V>> stream() {
+	public Stream<Token> stream() {
 		return tokens.stream();
 	}
 
-	public Stream<Token<V>> inState(String stateName) {
+	public Stream<Token> inState(String stateName) {
 		return this.stream()
 			.filter(token -> token.state().name().equals(stateName));
 	}
@@ -35,19 +35,19 @@ public class Tokens<V> {
 		return inState(stateName).count() != 0;
 	}
 	
-	public Optional<Token<V>> firstTokenInState(String stateName) {
+	public Optional<Token> firstTokenInState(String stateName) {
 		return inState(stateName).findFirst();
 	}
 
-	public Tokens<V> moveToken(Token<V> token, State<?, V> state) {
-		Token<V> movedToken = token.moveTo(state);
+	public Tokens moveToken(Token token, State<?, ActionData> state) {
+		Token movedToken = token.moveTo(state);
 		
-		List<Token<V>> newTokens = new ArrayList<>(tokens);
+		List<Token> newTokens = new ArrayList<>(tokens);
 		if(newTokens.remove(token)) {
 			newTokens.add(movedToken);
 		}
 		
-		return new Tokens<>(newTokens);
+		return new Tokens(newTokens);
 	}
 
 	@Override

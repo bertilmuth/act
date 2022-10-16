@@ -12,29 +12,29 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class TokenFlow<V> implements Flow<Workflow<V>, V>{
-	private final State<Workflow<V>, V> sourceState;
-	private final State<Workflow<V>, V> targetState;
+public class TokenFlow implements Flow<Workflow, ActionData>{
+	private final State<Workflow, ActionData> sourceState;
+	private final State<Workflow, ActionData> targetState;
 
-	private TokenFlow(State<Workflow<V>, V> sourceState, State<Workflow<V>, V> targetState) {
+	private TokenFlow(State<Workflow, ActionData> sourceState, State<Workflow, ActionData> targetState) {
 		this.sourceState = requireNonNull(sourceState, "sourceState must be non-null!");
 		this.targetState = requireNonNull(targetState, "targetState must be non-null!");
 	}
 	
-	public static <V> TokenFlow<V> tokenFlow(State<Workflow<V>, V> sourceState, State<Workflow<V>, V> targetState) {		
-		return new TokenFlow<>(sourceState, targetState);
+	public static TokenFlow tokenFlow(State<Workflow, ActionData> sourceState, State<Workflow, ActionData> targetState) {		
+		return new TokenFlow(sourceState, targetState);
 	}
 
 	@Override
-	public Transition<Workflow<V>, V> asTransition(Statemachine<Workflow<V>, V> owningStatemachine) {
+	public Transition<Workflow, ActionData> asTransition(Statemachine<Workflow, ActionData> owningStatemachine) {
 		return transition(sourceState, targetState, d -> transmit(d, sourceState, targetState));
 	}
 	
-	private static <V> Data<Workflow<V>, V> transmit(Data<Workflow<V>, V> d, State<Workflow<V>, V> sourceState, State<Workflow<V>, V> targetState) {
+	private static Data<Workflow, ActionData> transmit(Data<Workflow, ActionData> d, State<Workflow, ActionData> sourceState, State<Workflow, ActionData> targetState) {
 		assert(d.value().isPresent());
-		Tokens<V> tokensBefore = d.state().tokens();
-		V beforeValue = d.value().get();
-		Tokens<V> tokensAfter = tokensBefore.moveToken(token(sourceState, beforeValue), targetState);
+		Tokens tokensBefore = d.state().tokens();
+		ActionData beforeValue = d.value().get();
+		Tokens tokensAfter = tokensBefore.moveToken(token(sourceState, beforeValue), targetState);
 		return data(workflow(tokensAfter));
 	}
 }
