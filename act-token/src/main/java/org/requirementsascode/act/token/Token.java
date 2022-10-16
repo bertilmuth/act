@@ -38,7 +38,7 @@ public class Token {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(value);
+		return Objects.hash(state, value);
 	}
 
 	@Override
@@ -50,6 +50,6 @@ public class Token {
 		if (getClass() != obj.getClass())
 			return false;
 		Token other = (Token) obj;
-		return Objects.equals(value, other.value);
+		return Objects.equals(state, other.state) && Objects.equals(value, other.value);
 	}
 }
