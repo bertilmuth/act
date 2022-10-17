@@ -11,10 +11,21 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
 public class Action {
-	public static State<Workflow, Token> action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+	private final String stateName;
+	private final Behavior<Workflow, ActionData, ActionData> actionBehavior;
+	
+	private Action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+		this.stateName = stateName;
+		this.actionBehavior = actionBehavior;
+	}
+	
+	public static Action action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
 		requireNonNull(stateName, "stateName must be non-null!");
 		requireNonNull(actionBehavior, "actionBehavior must be non-null!");
+		return new Action(stateName, actionBehavior);
+	}
 
+	public State<Workflow, Token> asState() {
 		Behavior<Workflow, Token, Token> stateBehavior = d -> act(stateName, d.state(), actionBehavior);
 		
 		State<Workflow, Token> state = state(stateName, workflow -> isAnyTokenInState(workflow, stateName), 

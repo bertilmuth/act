@@ -29,9 +29,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		State<Workflow, Token> action1 = action(STATE1, when(StringValue.class, this::action1Performed));
-		State<Workflow, Token> action2 = action(STATE2, when(StringValue.class, this::action2Performed));
-		State<Workflow, Token> action3 = action(STATE3, when(StringValue.class, this::action3Performed));
+		State<Workflow, Token> action1 = action(STATE1, when(StringValue.class, this::action1Performed)).asState();
+		State<Workflow, Token> action2 = action(STATE2, when(StringValue.class, this::action2Performed)).asState();
+		State<Workflow, Token> action3 = action(STATE3, when(StringValue.class, this::action3Performed)).asState();
 		
 		Statemachine<Workflow, Token> statemachine =
 			Statemachine.builder()
