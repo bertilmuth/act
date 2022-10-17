@@ -20,6 +20,10 @@ public class Token {
 	Token moveTo(Node node) {
 		return new Token(node, actionData);
 	}
+	
+	boolean isTriggerOfNextStep() {
+		return actionData() instanceof TriggerNextStep;
+	}
 
 	public Node node() {
 		return node;

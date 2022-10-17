@@ -35,13 +35,13 @@ public class Action implements Node{
 	@Override
 	public State<Workflow, Token> asState() {		
 		State<Workflow, Token> state = state(name(), wf -> wf.tokens().areSufficientForNode(name()), 
-			whenInCase(Token.class, Action::isTriggerNextStep,this::triggerNextStep));
+			whenInCase(Token.class, Action::isTriggerOfNextStep,this::triggerNextStep));
 		return state;
 	}
 	
-	private static boolean isTriggerNextStep(Data<Workflow, Token> data) {
+	private static boolean isTriggerOfNextStep(Data<Workflow, Token> data) {
 		Optional<Token> token = data.value();
-		return token.filter(t -> t.actionData() instanceof TriggerNextStep).isPresent();
+		return token.map(Token::isTriggerOfNextStep).orElse(false);
 	}
 	
 	private Data<Workflow, Token> triggerNextStep(Data<Workflow, Token> inputData){
