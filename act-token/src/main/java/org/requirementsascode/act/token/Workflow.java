@@ -2,7 +2,7 @@ package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.token.TriggerStep.triggerStep;
+import static org.requirementsascode.act.token.TriggerNextStep.triggerNextStep;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class Workflow {
 	}
 
 	public AfterStep nextStep() {
-		Data<Workflow, Token> output = statemachine().actOn(data(this, triggerStep()));
+		Data<Workflow, Token> output = statemachine().actOn(data(this, triggerNextStep()));
 		return new AfterStep(statemachine(), output.state().tokens(), 
 			output.value().map(token -> token.actionData()).orElse(null));
 	}

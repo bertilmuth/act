@@ -7,7 +7,6 @@ import static org.requirementsascode.act.token.Workflow.workflow;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Flow;
-import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
@@ -26,16 +25,14 @@ public class TokenFlow implements Flow<Workflow, Token>{
 
 	@Override
 	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
-		State<Workflow, Token> fromActionState = fromAction.asState();
-		State<Workflow, Token> toActionState = toAction.asState();
-		return transition(fromActionState, toActionState, d -> transmit(d, fromActionState, toActionState));
+		return transition(fromAction.asState(), toAction.asState(), d -> transmit(d, fromAction, toAction));
 	}
 	
-	private static Data<Workflow, Token> transmit(Data<Workflow, Token> d, State<Workflow, Token> sourceState, State<Workflow, Token> targetState) {
+	private static Data<Workflow, Token> transmit(Data<Workflow, Token> d, Node fromNode, Node toNode) {
 		assert(d.value().isPresent());
 		Tokens tokensBefore = d.state().tokens();
 		Token token = d.value().get();
-		Tokens tokensAfter = tokensBefore.moveToken(token, targetState);
+		Tokens tokensAfter = tokensBefore.moveToken(token, toNode);
 		return data(workflow(d.state().statemachine(), tokensAfter));
 	}
 }

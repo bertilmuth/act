@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.requirementsascode.act.statemachine.State;
-
 public class Tokens {
 	private final List<Token> tokens;
 
@@ -28,7 +26,7 @@ public class Tokens {
 
 	public Stream<Token> inState(String stateName) {
 		return this.stream()
-			.filter(token -> token.state().name().equals(stateName));
+			.filter(token -> token.node().name().equals(stateName));
 	}
 	
 	public boolean isAnyTokenInState(String stateName) {
@@ -39,8 +37,8 @@ public class Tokens {
 		return inState(stateName).findFirst();
 	}
 
-	public Tokens moveToken(Token token, State<?, Token> state) {
-		Token movedToken = token.moveTo(state);
+	public Tokens moveToken(Token token, Node node) {
+		Token movedToken = token.moveTo(node);
 		
 		List<Token> newTokens = new ArrayList<>(tokens);
 		if(newTokens.remove(token)) {

@@ -4,27 +4,25 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
 
-import org.requirementsascode.act.statemachine.State;
-
 public class Token {
-	private final State<?, Token> state;
+	private final Node node;
 	private final ActionData actionData;
 
-	private Token(State<?, Token> state, ActionData actionData) {
-		this.state = state;
+	private Token(Node node, ActionData actionData) {
+		this.node = node;
 		this.actionData = requireNonNull(actionData, "actionData must be non-null!");
 	}
 
-	static Token token(State<?, Token> state, ActionData actionData) {
-		return new Token(state, actionData);
+	static Token token(Node node, ActionData actionData) {
+		return new Token(node, actionData);
 	}
 	
-	Token moveTo(State<?, Token> state) {
-		return new Token(state, actionData);
+	Token moveTo(Node node) {
+		return new Token(node, actionData);
 	}
 
-	public State<?, Token> state() {
-		return state;
+	public Node node() {
+		return node;
 	}
 	
 	public ActionData actionData() {
@@ -33,12 +31,12 @@ public class Token {
 
 	@Override
 	public String toString() {
-		return "Token [state=" + state + ", value=" + actionData + "]";
+		return "Token [node=" + node + ", actionData=" + actionData + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(state, actionData);
+		return Objects.hash(node, actionData);
 	}
 
 	@Override
@@ -50,6 +48,6 @@ public class Token {
 		if (getClass() != obj.getClass())
 			return false;
 		Token other = (Token) obj;
-		return Objects.equals(state, other.state) && Objects.equals(actionData, other.actionData);
+		return Objects.equals(node, other.node) && Objects.equals(actionData, other.actionData);
 	}
 }

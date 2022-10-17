@@ -10,25 +10,31 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
-public class Action {
-	private final String stateName;
+public class Action implements Node{
+	private final String name;
 	private final Behavior<Workflow, ActionData, ActionData> actionBehavior;
 	
 	private Action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
-		this.stateName = stateName;
+		this.name = stateName;
 		this.actionBehavior = actionBehavior;
 	}
 	
-	public static Action action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
-		requireNonNull(stateName, "stateName must be non-null!");
+	public static Action action(String name, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+		requireNonNull(name, "name must be non-null!");
 		requireNonNull(actionBehavior, "actionBehavior must be non-null!");
-		return new Action(stateName, actionBehavior);
+		return new Action(name, actionBehavior);
+	}
+	
+	@Override
+	public String name() {
+		return name;
 	}
 
+	@Override
 	public State<Workflow, Token> asState() {
-		Behavior<Workflow, Token, Token> stateBehavior = d -> act(stateName, d.state(), actionBehavior);
+		Behavior<Workflow, Token, Token> stateBehavior = d -> act(name, d.state(), actionBehavior);
 		
-		State<Workflow, Token> state = state(stateName, workflow -> isAnyTokenInState(workflow, stateName), 
+		State<Workflow, Token> state = state(name, workflow -> isAnyTokenInState(workflow, name), 
 			whenInCase(Token.class, Action::isTriggerStepToken,stateBehavior));
 		return state;
 	}
@@ -38,13 +44,13 @@ public class Action {
 	}
 	
 	private static boolean isTriggerStepToken(Data<Workflow, Token> data) {
-		return data.value().filter(t -> t.actionData() instanceof TriggerStep).isPresent();
+		return data.value().filter(t -> t.actionData() instanceof TriggerNextStep).isPresent();
 	}
 
 	private static Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
 		Token firstToken = workflow.tokens().firstTokenInState(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
-		return data(actionOutput.state(), token(firstToken.state(), actionOutput.value().orElse(null)));
+		return data(actionOutput.state(), token(firstToken.node(), actionOutput.value().orElse(null)));
 	}
 }
