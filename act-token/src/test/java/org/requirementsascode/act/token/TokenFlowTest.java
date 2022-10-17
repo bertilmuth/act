@@ -51,8 +51,8 @@ class TokenFlowTest {
 		assertEquals(1, action1Performed);
 		assertEquals(0, action2Performed);
 		assertEquals(0, action3Performed);
-		assertFalse(tokens1.areSufficientForNode(STATE1));
-		assertEquals(token(action2, actionData1), tokens1.firstTokenInNode(STATE2).get());
+		assertFalse(tokens1.isAnyTokenIn(STATE1));
+		assertEquals(token(action2, actionData1), tokens1.firstTokenIn(STATE2).get());
 		
 		AfterStep afterStep2 = afterStep1.nextStep();
 		Tokens tokensAfterStep2 = afterStep2.tokens();
@@ -60,8 +60,8 @@ class TokenFlowTest {
 		assertEquals(1, action1Performed);
 		assertEquals(1, action2Performed);
 		assertEquals(0, action3Performed);
-		assertFalse(tokensAfterStep2.areSufficientForNode(STATE2));
-		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenInNode(STATE3).get());
+		assertFalse(tokensAfterStep2.isAnyTokenIn(STATE2));
+		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenIn(STATE3).get());
 	}
 
 	private Data<Workflow,StringValue> action1Performed(Data<Workflow,StringValue> inputData) {

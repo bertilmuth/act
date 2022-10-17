@@ -27,11 +27,11 @@ public class Tokens {
 			.filter(token -> token.node().name().equals(nodeName));
 	}
 	
-	public boolean areSufficientForNode(String nodeName) {
+	public boolean isAnyTokenIn(String nodeName) {
 		return inNode(nodeName).count() >= 1;
 	}
 	
-	public Optional<Token> firstTokenInNode(String nodeName) {
+	public Optional<Token> firstTokenIn(String nodeName) {
 		return inNode(nodeName).findFirst();
 	}
 

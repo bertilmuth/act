@@ -34,7 +34,7 @@ public class Action implements Node{
 
 	@Override
 	public State<Workflow, Token> asState() {		
-		State<Workflow, Token> state = state(name(), wf -> wf.tokens().areSufficientForNode(name()), 
+		State<Workflow, Token> state = state(name(), wf -> wf.tokens().isAnyTokenIn(name()), 
 			whenInCase(Token.class, Action::isTriggerOfNextStep,this::triggerNextStep));
 		return state;
 	}
@@ -50,7 +50,7 @@ public class Action implements Node{
 	}
 
 	private static Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
-		Token firstToken = workflow.tokens().firstTokenInNode(stateName).get();	
+		Token firstToken = workflow.tokens().firstTokenIn(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
 		return data(actionOutput.state(), token(firstToken.node(), actionOutput.value().orElse(null)));
