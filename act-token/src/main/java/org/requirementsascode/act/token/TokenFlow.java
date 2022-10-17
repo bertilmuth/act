@@ -12,21 +12,21 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class TokenFlow implements Flow<Workflow, Token>{
-	private final State<Workflow, Token> sourceState;
-	private final State<Workflow, Token> targetState;
+	private final State<Workflow, Token> fromAction;
+	private final State<Workflow, Token> toAction;
 
-	private TokenFlow(State<Workflow, Token> sourceState, State<Workflow, Token> targetState) {
-		this.sourceState = requireNonNull(sourceState, "sourceState must be non-null!");
-		this.targetState = requireNonNull(targetState, "targetState must be non-null!");
+	private TokenFlow(State<Workflow, Token> fromAction, State<Workflow, Token> toAction) {
+		this.fromAction = requireNonNull(fromAction, "fromAction must be non-null!");
+		this.toAction = requireNonNull(toAction, "toAction must be non-null!");
 	}
 	
-	public static TokenFlow tokenFlow(State<Workflow, Token> sourceState, State<Workflow, Token> targetState) {		
-		return new TokenFlow(sourceState, targetState);
+	public static TokenFlow tokenFlow(State<Workflow, Token> fromAction, State<Workflow, Token> toAction) {		
+		return new TokenFlow(fromAction, toAction);
 	}
 
 	@Override
 	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
-		return transition(sourceState, targetState, d -> transmit(d, sourceState, targetState));
+		return transition(fromAction, toAction, d -> transmit(d, fromAction, toAction));
 	}
 	
 	private static Data<Workflow, Token> transmit(Data<Workflow, Token> d, State<Workflow, Token> sourceState, State<Workflow, Token> targetState) {
