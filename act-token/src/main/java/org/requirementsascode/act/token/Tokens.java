@@ -39,7 +39,7 @@ public class Tokens {
 		return inState(stateName).findFirst();
 	}
 
-	public Tokens moveToken(Token token, State<?, ActionData> state) {
+	public Tokens moveToken(Token token, State<?, Token> state) {
 		Token movedToken = token.moveTo(state);
 		
 		List<Token> newTokens = new ArrayList<>(tokens);

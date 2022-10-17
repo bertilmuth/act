@@ -29,11 +29,11 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		State<Workflow, ActionData> action1 = action(STATE1, when(StringValue.class, this::action1Performed));
-		State<Workflow, ActionData> action2 = action(STATE2, when(StringValue.class, this::action2Performed));
-		State<Workflow, ActionData> action3 = action(STATE3, when(StringValue.class, this::action3Performed));
+		State<Workflow, Token> action1 = action(STATE1, when(StringValue.class, this::action1Performed));
+		State<Workflow, Token> action2 = action(STATE2, when(StringValue.class, this::action2Performed));
+		State<Workflow, Token> action3 = action(STATE3, when(StringValue.class, this::action3Performed));
 		
-		Statemachine<Workflow, ActionData> statemachine =
+		Statemachine<Workflow, Token> statemachine =
 			Statemachine.builder()
 				.states(action1, action2, action3)
 				.transitions(

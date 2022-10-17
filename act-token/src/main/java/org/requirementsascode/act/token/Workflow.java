@@ -11,14 +11,14 @@ import org.requirementsascode.act.statemachine.Statemachine;
 
 public class Workflow {
 	private final Tokens tokens;
-	private final Statemachine<Workflow, ActionData> statemachine;
+	private final Statemachine<Workflow, Token> statemachine;
 	
-	private Workflow(Tokens tokens, Statemachine<Workflow, ActionData> statemachine) {
+	private Workflow(Tokens tokens, Statemachine<Workflow, Token> statemachine) {
 		this.tokens = requireNonNull(tokens, "tokens must be non-null!");
 		this.statemachine = requireNonNull(statemachine, "statemachine must be non-null!");
 	}
 
-	public static  Workflow workflow(Statemachine<Workflow, ActionData> statemachine, Tokens tokens){
+	public static  Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens){
 		return new Workflow(tokens, statemachine);
 	}
 	
@@ -26,7 +26,7 @@ public class Workflow {
 		return tokens;
 	}
 
-	public Statemachine<Workflow, ActionData> statemachine() {
+	public Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
 	}
 
@@ -36,8 +36,9 @@ public class Workflow {
 	}
 
 	public AfterStep nextStep() {
-		Data<Workflow, ActionData> output = statemachine.actOn(data(this, triggerStep()));
-		return new AfterStep(statemachine(), output.state().tokens(), output.value().orElse(null));
+		Data<Workflow, Token> output = statemachine.actOn(data(this, triggerStep()));
+		return new AfterStep(statemachine(), output.state().tokens(), 
+			output.value().map(token -> token.value()).orElse(null));
 	}
 	
 	public static class AfterStep{
@@ -45,7 +46,7 @@ public class Workflow {
 		private final Tokens tokens;
 		private final ActionData actionOutput;
 		
-		private AfterStep(Statemachine<Workflow, ActionData> statemachine, Tokens tokens, ActionData actionOutput) {
+		private AfterStep(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
 			this.workflow = workflow(statemachine, tokens);
 			this.tokens = tokens;
 			this.actionOutput = actionOutput;

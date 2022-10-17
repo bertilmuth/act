@@ -7,23 +7,24 @@ import java.util.Objects;
 import org.requirementsascode.act.statemachine.State;
 
 public class Token {
-	private final State<?, ActionData> state;
+	private final State<?, Token> state;
 	private final ActionData value;
 
-	private Token(State<?, ActionData> state, ActionData value) {
-		this.state = requireNonNull(state, "state must be non-null!");
+	private Token(State<?, Token> state, ActionData value) {
+		//this.state = requireNonNull(state, "state must be non-null!");
+		this.state = state;
 		this.value = requireNonNull(value, "value must be non-null!");
 	}
 
-	static Token token(State<?, ActionData> state, ActionData value) {
+	static Token token(State<?, Token> state, ActionData value) {
 		return new Token(state, value);
 	}
 	
-	Token moveTo(State<?, ActionData> state) {
+	Token moveTo(State<?, Token> state) {
 		return new Token(state, value);
 	}
 
-	public State<?, ActionData> state() {
+	public State<?, Token> state() {
 		return state;
 	}
 	
