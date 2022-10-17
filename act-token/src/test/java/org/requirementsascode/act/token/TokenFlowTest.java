@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.token.Action.action;
+import static org.requirementsascode.act.token.Actions.actions;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import static org.requirementsascode.act.token.Tokens.tokens;
 import static org.requirementsascode.act.token.Workflow.workflow;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
@@ -33,22 +33,18 @@ class TokenFlowTest {
 		Action action2 = action(STATE2, when(StringValue.class, this::action2Performed));
 		Action action3 = action(STATE3, when(StringValue.class, this::action3Performed));
 		
-		Actions actions = Actions.actions(
-				asList(action1,action2,action3)
-		);
-
-		List<TokenFlow> tokenFlows = asList(
-						tokenFlow(action1, action2),
-						tokenFlow(action2, action3)
-		);	
-		
 		StringValue actionData1 = new StringValue(VALUE1);
 		
-		Tokens tokens = tokens(
-				token(action1.asState(), actionData1)
-		);
+		AfterStep afterStep1 = workflow(
+				tokens(token(action1.asState(), actionData1)), 
+				actions(asList(action1,action2,action3)), 
+				asList(
+					tokenFlow(action1, action2),
+					tokenFlow(action2, action3)
+				)
+			)
+			.nextStep();
 		
-		AfterStep afterStep1 = workflow(tokens, actions, tokenFlows).nextStep();
 		Tokens tokens1 = afterStep1.tokens();
 		
 		assertEquals(1, action1Performed);
