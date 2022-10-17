@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
+import static org.requirementsascode.act.token.Token.token;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -34,6 +35,6 @@ public class Action {
 		Token firstToken = tokens.firstTokenInState(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(data.state(), firstToken.value());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
-		return data(actionOutput.state(), Token.token(firstToken.state(), actionOutput.value().orElse(null)));
+		return data(actionOutput.state(), token(firstToken.state(), actionOutput.value().orElse(null)));
 	}
 }
