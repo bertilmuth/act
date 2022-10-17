@@ -50,7 +50,7 @@ class TokenFlowTest {
 		assertEquals(1, action1Performed);
 		assertEquals(0, action2Performed);
 		assertEquals(0, action3Performed);
-		assertFalse(tokens1.isAnyTokenInNode(STATE1));
+		assertFalse(tokens1.areSufficientForNode(STATE1));
 		assertEquals(token(action2, actionData1), tokens1.firstTokenInNode(STATE2).get());
 		
 		AfterStep afterStep2 = afterStep1.nextStep();
@@ -59,7 +59,7 @@ class TokenFlowTest {
 		assertEquals(1, action1Performed);
 		assertEquals(1, action2Performed);
 		assertEquals(0, action3Performed);
-		assertFalse(tokensAfterStep2.isAnyTokenInNode(STATE2));
+		assertFalse(tokensAfterStep2.areSufficientForNode(STATE2));
 		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenInNode(STATE3).get());
 	}
 

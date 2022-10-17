@@ -29,7 +29,7 @@ public class Tokens {
 			.filter(token -> token.node().name().equals(nodeName));
 	}
 	
-	public boolean isAnyTokenInNode(String nodeName) {
+	public boolean areSufficientForNode(String nodeName) {
 		return inNode(nodeName).count() >= 1;
 	}
 	
