@@ -31,7 +31,7 @@ public class Action {
 
 	private static Data<Workflow, Token> act(String stateName, Data<Workflow, Token> data, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
 		Tokens tokens = data.state().tokens();
-		Token firstToken = tokens.firstTokenInState(stateName).orElse(null);	
+		Token firstToken = tokens.firstTokenInState(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(data.state(), firstToken.value());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
 		return data(actionOutput.state(), Token.token(firstToken.state(), actionOutput.value().orElse(null)));
