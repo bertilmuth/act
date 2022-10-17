@@ -61,7 +61,7 @@ class TokenFlowTest {
 				token(action1.asState(), actionData1)
 		);
 		
-		AfterStep afterStep1 = workflow(statemachine, tokens, actions).nextStep();
+		AfterStep afterStep1 = workflow(tokens, actions, tokenFlows).nextStep();
 		Tokens tokens1 = afterStep1.tokens();
 		
 		assertEquals(1, action1Performed);
