@@ -18,7 +18,7 @@ public class Actions{
 		return new Actions(actions);
 	}
 
-	public Stream<State<Workflow, Token>> asStates() {
+	Stream<State<Workflow, Token>> asStates() {
 		Stream<State<Workflow, Token>> statesStream = this.stream()
 				.map(e -> e.asState());
 		return statesStream;
