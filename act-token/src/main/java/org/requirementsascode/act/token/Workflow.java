@@ -16,36 +16,34 @@ public class Workflow {
 	private final Statemachine<Workflow, Token> statemachine;
 	
 	public Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
-		this.statemachine = requireNonNull(statemachine, "statemachine must be non-null!");
-		this.tokens = requireNonNull(tokens, "tokens must be non-null!");
+		this.statemachine = statemachine;
+		this.tokens = tokens;
 	}
 
 	public static  Workflow workflow(Tokens tokens, Actions actions, TokenFlows tokenFlows){
-		Statemachine<Workflow, Token> statemachine = createStatemachine(actions, tokenFlows);
-		return workflow(statemachine, tokens);
+		requireNonNull(tokens, "tokens must be non-null!");
+		requireNonNull(actions, "actions must be non-null!");
+		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
+
+		return workflow(statemachineWith(actions, tokenFlows), tokens);
 	}
 
 	static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
 		return new Workflow(statemachine, tokens);
 	}
 	
+	public AfterStep nextStep() {
+		Data<Workflow, Token> outputOfStep = statemachine().actOn(triggerNextStepOfWorkflow());
+		return new AfterStep(statemachine(), outputOfStep);
+	}
+	
 	public Tokens tokens(){
 		return tokens;
 	}
-
-	Statemachine<Workflow, Token> statemachine() {
-		return statemachine;
-	}
-
+	
 	@Override
 	public String toString() {
 		return "Workflow [" + tokens + "]";
-	}
-
-	public AfterStep nextStep() {
-		Data<Workflow, Token> output = statemachine().actOn(data(this, triggerNextStep()));
-		return new AfterStep(statemachine(), output.state().tokens(), 
-			output.value().map(token -> token.actionData()).orElse(null));
 	}
 	
 	public static class AfterStep{
@@ -53,10 +51,10 @@ public class Workflow {
 		private final Tokens tokens;
 		private final ActionData actionOutput;
 		
-		private AfterStep(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+		private AfterStep(Statemachine<Workflow, Token> statemachine, Data<Workflow, Token> outputOfStep) {
+			this.tokens = outputOfStep.state().tokens();
 			this.workflow = workflow(statemachine, tokens);
-			this.tokens = tokens;
-			this.actionOutput = actionOutput;
+			this.actionOutput = outputOfStep.value().map(token -> token.actionData()).orElse(null);
 		}
 		
 		public AfterStep nextStep() {
@@ -72,8 +70,16 @@ public class Workflow {
 		}
 	}
 	
+	Statemachine<Workflow, Token> statemachine() {
+		return statemachine;
+	}
+	
+	private Data<Workflow, Token> triggerNextStepOfWorkflow() {
+		return data(this, triggerNextStep());
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<Workflow, Token> createStatemachine(Actions actions, TokenFlows tokenFlows) {
+	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows) {
 		Flow[] tokenFlowsArray = tokenFlows.stream().toArray(Flow[]::new);
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
 		Statemachine<Workflow, Token> statemachine = 
