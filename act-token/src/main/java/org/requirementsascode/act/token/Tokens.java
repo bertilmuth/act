@@ -37,8 +37,8 @@ public class Tokens {
 		return inNode(nodeName).findFirst();
 	}
 
-	public Tokens moveToken(Token token, Node node) {
-		Token movedToken = token.moveTo(node);
+	public Tokens moveToken(Token token, Node toNode) {
+		Token movedToken = token.moveTo(toNode);
 		
 		List<Token> newTokens = new ArrayList<>(tokens);
 		if(newTokens.remove(token)) {
