@@ -14,6 +14,7 @@ import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
@@ -33,9 +34,13 @@ class TokenFlowTest {
 		Action action2 = action(STATE2, when(StringValue.class, this::action2Performed));
 		Action action3 = action(STATE3, when(StringValue.class, this::action3Performed));
 		
+		Actions actions = Actions.actions(
+				Arrays.asList(action1,action2,action3)
+		);
+		@SuppressWarnings("unchecked")
 		Statemachine<Workflow, Token> statemachine =
 			Statemachine.builder()
-				.states(action1.asState(), action2.asState(), action3.asState())
+				.states(actions.asStates().toArray(new State[0]))
 				.transitions(
 				)
 				.flows(						
@@ -49,9 +54,7 @@ class TokenFlowTest {
 		Tokens tokens = tokens(
 				token(action1.asState(), actionData1)
 		);
-		Actions actions = Actions.actions(
-				Arrays.asList(action1,action2,action3)
-		);
+
 		
 		AfterStep afterStep1 = workflow(statemachine, tokens, actions).nextStep();
 		Tokens tokens1 = afterStep1.tokens();
