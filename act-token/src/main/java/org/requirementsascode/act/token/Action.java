@@ -31,11 +31,9 @@ public class Action implements Node{
 	}
 
 	@Override
-	public State<Workflow, Token> asState() {
-		Behavior<Workflow, Token, Token> callAction = d -> act(name, d.state(), actionBehavior);
-		
+	public State<Workflow, Token> asState() {		
 		State<Workflow, Token> state = state(name(), workflow -> isAnyTokenInState(workflow, name()), 
-			whenInCase(Token.class, Action::isTriggerNextStep,callAction));
+			whenInCase(Token.class, Action::isTriggerNextStep,this::triggerNextStep));
 		return state;
 	}
 	
@@ -45,6 +43,10 @@ public class Action implements Node{
 	
 	private static boolean isTriggerNextStep(Data<Workflow, Token> data) {
 		return data.value().filter(t -> t.actionData() instanceof TriggerNextStep).isPresent();
+	}
+	
+	private Data<Workflow, Token> triggerNextStep(Data<Workflow, Token> inputData){
+		return act(name, inputData.state(), actionBehavior);
 	}
 
 	private static Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
