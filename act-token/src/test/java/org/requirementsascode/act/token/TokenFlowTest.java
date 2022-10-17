@@ -1,5 +1,6 @@
 package org.requirementsascode.act.token;
 
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
@@ -9,15 +10,11 @@ import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import static org.requirementsascode.act.token.Tokens.tokens;
 import static org.requirementsascode.act.token.Workflow.workflow;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.statemachine.Flow;
-import org.requirementsascode.act.statemachine.State;
-import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
 class TokenFlowTest {
@@ -30,7 +27,6 @@ class TokenFlowTest {
 	private int action2Performed = 0;
 	private int action3Performed = 0;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	void runTwoWorkflowSteps() {
 		Action action1 = action(STATE1, when(StringValue.class, this::action1Performed));
@@ -38,22 +34,13 @@ class TokenFlowTest {
 		Action action3 = action(STATE3, when(StringValue.class, this::action3Performed));
 		
 		Actions actions = Actions.actions(
-				Arrays.asList(action1,action2,action3)
+				asList(action1,action2,action3)
 		);
-		State[] actionsArray = actions.asStates().toArray(new State[0]);
 
-		List<TokenFlow> tokenFlows = Arrays.asList(
+		List<TokenFlow> tokenFlows = asList(
 						tokenFlow(action1, action2),
 						tokenFlow(action2, action3)
-		);
-		Flow[] tokenFlowsArray = tokenFlows.toArray(new Flow[0]);
-		
-		Statemachine<Workflow, Token> statemachine =
-			Statemachine.builder()
-				.states(actionsArray)
-				.transitions()
-				.flows(tokenFlowsArray)
-				.build();
+		);	
 		
 		StringValue actionData1 = new StringValue(VALUE1);
 		
