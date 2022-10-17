@@ -18,7 +18,7 @@ public class Workflow {
 		this.statemachine = requireNonNull(statemachine, "statemachine must be non-null!");
 	}
 
-	public static  Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens){
+	public static  Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, Actions actions){
 		return new Workflow(tokens, statemachine);
 	}
 	
@@ -47,7 +47,7 @@ public class Workflow {
 		private final ActionData actionOutput;
 		
 		private AfterStep(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
-			this.workflow = workflow(statemachine, tokens);
+			this.workflow = workflow(statemachine, tokens, null);
 			this.tokens = tokens;
 			this.actionOutput = actionOutput;
 		}

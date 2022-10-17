@@ -9,6 +9,7 @@ import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import static org.requirementsascode.act.token.Tokens.tokens;
 import static org.requirementsascode.act.token.Workflow.workflow;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,11 @@ class TokenFlowTest {
 		Tokens tokens = tokens(
 				token(action1.asState(), actionData1)
 		);
-		AfterStep afterStep1 = workflow(statemachine, tokens).nextStep();
+		Actions actions = Actions.actions(
+				Arrays.asList(action1,action2,action3)
+		);
+		
+		AfterStep afterStep1 = workflow(statemachine, tokens, actions).nextStep();
 		Tokens tokens1 = afterStep1.tokens();
 		
 		assertEquals(1, action1Performed);
