@@ -24,17 +24,17 @@ public class Tokens {
 		return tokens.stream();
 	}
 
-	public Stream<Token> inState(String stateName) {
+	public Stream<Token> inNode(String nodeName) {
 		return this.stream()
-			.filter(token -> token.node().name().equals(stateName));
+			.filter(token -> token.node().name().equals(nodeName));
 	}
 	
-	public boolean isAnyTokenInState(String stateName) {
-		return inState(stateName).count() != 0;
+	public boolean isAnyTokenInNode(String nodeName) {
+		return inNode(nodeName).count() >= 1;
 	}
 	
-	public Optional<Token> firstTokenInState(String stateName) {
-		return inState(stateName).findFirst();
+	public Optional<Token> firstTokenInNode(String nodeName) {
+		return inNode(nodeName).findFirst();
 	}
 
 	public Tokens moveToken(Token token, Node node) {

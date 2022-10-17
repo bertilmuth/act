@@ -40,7 +40,7 @@ public class Action implements Node{
 	}
 	
 	private static boolean isAnyTokenInState(Workflow workflow, String stateName) {
-		return workflow.tokens().inState(stateName).count() != 0;
+		return workflow.tokens().inNode(stateName).count() != 0;
 	}
 	
 	private static boolean isTriggerStepToken(Data<Workflow, Token> data) {
@@ -48,7 +48,7 @@ public class Action implements Node{
 	}
 
 	private static Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
-		Token firstToken = workflow.tokens().firstTokenInState(stateName).get();	
+		Token firstToken = workflow.tokens().firstTokenInNode(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
 		return data(actionOutput.state(), token(firstToken.node(), actionOutput.value().orElse(null)));
