@@ -49,12 +49,12 @@ public class Workflow {
 	public static class AfterStep{
 		private final Workflow workflow;
 		private final Tokens tokens;
-		private final ActionData actionOutput;
+		private final Optional<ActionData> actionOutput;
 		
 		private AfterStep(Statemachine<Workflow, Token> statemachine, Data<Workflow, Token> outputOfStep) {
 			this.tokens = outputOfStep.state().tokens();
 			this.workflow = workflow(statemachine, tokens);
-			this.actionOutput = outputOfStep.value().map(token -> token.actionData()).orElse(null);
+			this.actionOutput = outputOfStep.value().map(token -> token.actionData());
 		}
 		
 		public AfterStep nextStep() {
@@ -66,7 +66,7 @@ public class Workflow {
 		}
 		
 		public Optional<ActionData> actionOutput() {
-			return Optional.ofNullable(actionOutput);
+			return actionOutput;
 		}
 	}
 	
