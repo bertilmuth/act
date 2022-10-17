@@ -36,7 +36,7 @@ class TokenFlowTest {
 		StringValue actionData1 = new StringValue(VALUE1);
 		
 		AfterStep afterStep1 = workflow(
-				tokens(token(action1, actionData1)), 
+				tokens(asList(token(action1, actionData1))), 
 				actions(asList(action1,action2,action3)), 
 				asList(
 					tokenFlow(action1, action2),

@@ -1,6 +1,5 @@
 package org.requirementsascode.act.token;
 
-import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
@@ -15,9 +14,8 @@ public class Tokens {
 		this.tokens = requireNonNull(tokens);
 	}
 
-	@SafeVarargs
-	public static Tokens tokens(Token... tokens) {
-		return new Tokens(asList(tokens));
+	public static Tokens tokens(List<Token> tokens) {
+		return new Tokens(tokens);
 	}
 
 	public Stream<Token> stream() {
