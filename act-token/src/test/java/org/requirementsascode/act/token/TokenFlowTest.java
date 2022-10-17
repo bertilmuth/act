@@ -28,6 +28,7 @@ class TokenFlowTest {
 	private int action2Performed = 0;
 	private int action3Performed = 0;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	void runTwoWorkflowSteps() {
 		Action action1 = action(STATE1, when(StringValue.class, this::action1Performed));
@@ -37,15 +38,16 @@ class TokenFlowTest {
 		Actions actions = Actions.actions(
 				Arrays.asList(action1,action2,action3)
 		);
-		@SuppressWarnings("unchecked")
+		
+		State[] actionsArray = actions.asStates().toArray(new State[0]);
 		Statemachine<Workflow, Token> statemachine =
 			Statemachine.builder()
-				.states(actions.asStates().toArray(new State[0]))
+				.states(actionsArray)
 				.transitions(
 				)
 				.flows(						
-					tokenFlow(action1.asState(), action2.asState()),
-					tokenFlow(action2.asState(), action3.asState())
+					tokenFlow(action1, action2),
+					tokenFlow(action2, action3)
 				)
 				.build();
 		
@@ -54,7 +56,6 @@ class TokenFlowTest {
 		Tokens tokens = tokens(
 				token(action1.asState(), actionData1)
 		);
-
 		
 		AfterStep afterStep1 = workflow(statemachine, tokens, actions).nextStep();
 		Tokens tokens1 = afterStep1.tokens();
