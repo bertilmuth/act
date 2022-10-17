@@ -15,7 +15,7 @@ public class Action {
 		requireNonNull(stateName, "stateName must be non-null!");
 		requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 
-		Behavior<Workflow, Token, Token> stateBehavior = d -> act(stateName, d, actionBehavior);
+		Behavior<Workflow, Token, Token> stateBehavior = d -> act(stateName, d.state(), actionBehavior);
 		
 		State<Workflow, Token> state = state(stateName, workflow -> isAnyTokenInState(workflow, stateName), 
 			whenInCase(Token.class, Action::isTriggerStepToken,stateBehavior));
@@ -27,13 +27,12 @@ public class Action {
 	}
 	
 	private static boolean isTriggerStepToken(Data<Workflow, Token> data) {
-		return data.value().filter(t -> t.value() instanceof TriggerStep).isPresent();
+		return data.value().filter(t -> t.actionData() instanceof TriggerStep).isPresent();
 	}
 
-	private static Data<Workflow, Token> act(String stateName, Data<Workflow, Token> data, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
-		Tokens tokens = data.state().tokens();
-		Token firstToken = tokens.firstTokenInState(stateName).get();	
-		Data<Workflow, ActionData> actionInput = data(data.state(), firstToken.value());
+	private static Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+		Token firstToken = workflow.tokens().firstTokenInState(stateName).get();	
+		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
 		return data(actionOutput.state(), token(firstToken.state(), actionOutput.value().orElse(null)));
 	}

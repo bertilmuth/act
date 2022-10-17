@@ -38,7 +38,7 @@ public class Workflow {
 	public AfterStep nextStep() {
 		Data<Workflow, Token> output = statemachine.actOn(data(this, triggerStep()));
 		return new AfterStep(statemachine(), output.state().tokens(), 
-			output.value().map(token -> token.value()).orElse(null));
+			output.value().map(token -> token.actionData()).orElse(null));
 	}
 	
 	public static class AfterStep{
