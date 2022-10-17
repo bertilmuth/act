@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.TriggerNextStep.triggerNextStep;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
@@ -21,7 +20,7 @@ public class Workflow {
 		this.tokens = requireNonNull(tokens, "tokens must be non-null!");
 	}
 
-	public static  Workflow workflow(Tokens tokens, Actions actions, List<TokenFlow> tokenFlows){
+	public static  Workflow workflow(Tokens tokens, Actions actions, TokenFlows tokenFlows){
 		Statemachine<Workflow, Token> statemachine = createStatemachine(actions, tokenFlows);
 		return workflow(statemachine, tokens);
 	}
@@ -74,9 +73,9 @@ public class Workflow {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<Workflow, Token> createStatemachine(Actions actions, List<TokenFlow> tokenFlows) {
-		Flow[] tokenFlowsArray = tokenFlows.toArray(new Flow[0]);
-		State[] actionsArray = actions.asStates().toArray(new State[0]);
+	private static Statemachine<Workflow, Token> createStatemachine(Actions actions, TokenFlows tokenFlows) {
+		Flow[] tokenFlowsArray = tokenFlows.stream().toArray(Flow[]::new);
+		State[] actionsArray = actions.asStates().toArray(State[]::new);
 		Statemachine<Workflow, Token> statemachine = 
 				Statemachine.builder()
 					.states(actionsArray)

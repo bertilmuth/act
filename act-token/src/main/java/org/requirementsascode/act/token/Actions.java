@@ -3,7 +3,6 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
@@ -19,11 +18,10 @@ public class Actions{
 		return new Actions(actions);
 	}
 
-	public List<State<Workflow, Token>> asStates() {
-		List<State<Workflow, Token>> statesList = this.stream()
-				.map(e -> e.asState())
-				.collect(Collectors.toList());
-		return statesList;
+	public Stream<State<Workflow, Token>> asStates() {
+		Stream<State<Workflow, Token>> statesStream = this.stream()
+				.map(e -> e.asState());
+		return statesStream;
 	}
 
 	public Stream<Action> stream() {
