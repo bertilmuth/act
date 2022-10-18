@@ -8,9 +8,9 @@ import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Actions.actions;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
+import static org.requirementsascode.act.token.TokenFlows.tokenFlows;
 import static org.requirementsascode.act.token.Tokens.tokens;
 import static org.requirementsascode.act.token.Workflow.workflow;
-import static org.requirementsascode.act.token.TokenFlows.tokenFlows;
 
 import java.util.Objects;
 
@@ -42,7 +42,8 @@ class TokenFlowTest {
 				tokenFlows(asList(
 					tokenFlow(action1, action2),
 					tokenFlow(action2, action3)
-				))
+				)),
+				InitialActions.initialActions(asList(action1))
 			)
 			.nextStep();
 		

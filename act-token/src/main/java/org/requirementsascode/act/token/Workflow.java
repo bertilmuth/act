@@ -20,12 +20,13 @@ public class Workflow {
 		this.tokens = tokens;
 	}
 
-	public static  Workflow workflow(Tokens tokens, Actions actions, TokenFlows tokenFlows){
+	public static  Workflow workflow(Tokens tokens, Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(tokens, "tokens must be non-null!");
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
+		requireNonNull(initialActions, "initialActions must be non-null!");
 
-		return workflow(statemachineWith(actions, tokenFlows), tokens);
+		return workflow(statemachineWith(actions, tokenFlows, initialActions), tokens);
 	}
 
 	static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
@@ -79,7 +80,7 @@ public class Workflow {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows) {
+	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		Flow[] tokenFlowsArray = tokenFlows.stream().toArray(Flow[]::new);
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
 		Statemachine<Workflow, Token> statemachine = 
