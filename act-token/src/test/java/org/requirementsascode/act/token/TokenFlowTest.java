@@ -20,9 +20,9 @@ import org.requirementsascode.act.token.Workflow.AfterStep;
 
 class TokenFlowTest {
 	private static final String VALUE1 = "Value1";
-	private static final String STATE1 = "State1";
-	private static final String STATE2 = "State2";
-	private static final String STATE3 = "State3";
+	private static final String ACTION1 = "Action1";
+	private static final String ACTION2 = "Action2";
+	private static final String ACTION3 = "Action3";
 	
 	private int action1Performed = 0;
 	private int action2Performed = 0;
@@ -30,9 +30,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		Action action1 = action(STATE1, when(StringValue.class, this::action1Performed));
-		Action action2 = action(STATE2, when(StringValue.class, this::action2Performed));
-		Action action3 = action(STATE3, when(StringValue.class, this::action3Performed));
+		Action action1 = action(ACTION1, when(StringValue.class, this::action1Performed));
+		Action action2 = action(ACTION2, when(StringValue.class, this::action2Performed));
+		Action action3 = action(ACTION3, when(StringValue.class, this::action3Performed));
 		
 		StringValue actionData1 = new StringValue(VALUE1);
 		
@@ -51,8 +51,8 @@ class TokenFlowTest {
 		assertEquals(1, action1Performed);
 		assertEquals(0, action2Performed);
 		assertEquals(0, action3Performed);
-		assertFalse(tokens1.isAnyTokenIn(STATE1));
-		assertEquals(token(action2, actionData1), tokens1.firstTokenIn(STATE2).get());
+		assertFalse(tokens1.isAnyTokenIn(ACTION1));
+		assertEquals(token(action2, actionData1), tokens1.firstTokenIn(ACTION2).get());
 		
 		AfterStep afterStep2 = afterStep1.nextStep();
 		Tokens tokensAfterStep2 = afterStep2.tokens();
@@ -60,8 +60,8 @@ class TokenFlowTest {
 		assertEquals(1, action1Performed);
 		assertEquals(1, action2Performed);
 		assertEquals(0, action3Performed);
-		assertFalse(tokensAfterStep2.isAnyTokenIn(STATE2));
-		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenIn(STATE3).get());
+		assertFalse(tokensAfterStep2.isAnyTokenIn(ACTION2));
+		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenIn(ACTION3).get());
 	}
 
 	private Data<Workflow,StringValue> action1Performed(Data<Workflow,StringValue> inputData) {
