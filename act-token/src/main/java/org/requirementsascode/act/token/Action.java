@@ -14,22 +14,24 @@ import org.requirementsascode.act.statemachine.State;
 
 public class Action implements Node{
 	private final String name;
-	private final Behavior<Workflow, ActionData, ActionData> actionBehavior;
+	private final Behavior<Workflow, ActionData, ActionData> behavior;
 	
-	private Action(String stateName, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
-		this.name = stateName;
-		this.actionBehavior = actionBehavior;
+	private Action(String name, Behavior<Workflow, ActionData, ActionData> behavior) {
+		this.name = requireNonNull(name, "name must be non-null!");
+		this.behavior = requireNonNull(behavior, "behavior must be non-null!");
 	}
 	
-	public static Action action(String name, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
-		requireNonNull(name, "name must be non-null!");
-		requireNonNull(actionBehavior, "actionBehavior must be non-null!");
-		return new Action(name, actionBehavior);
+	public static Action action(String name, Behavior<Workflow, ActionData, ActionData> behavior) {
+		return new Action(name, behavior);
 	}
 	
 	@Override
 	public String name() {
 		return name;
+	}
+	
+	public Behavior<Workflow, ActionData, ActionData> behavior(){
+		return behavior;
 	}
 
 	@Override
@@ -39,14 +41,14 @@ public class Action implements Node{
 		return state;
 	}
 	
-	private static boolean isTriggerOfNextStep(Data<Workflow, Token> data) {
-		Optional<Token> token = data.value();
+	private static boolean isTriggerOfNextStep(Data<Workflow, Token> inputData) {
+		Optional<Token> token = inputData.value();
 		return token.map(Token::isTriggerOfNextStep).orElse(false);
 	}
 	
 	private Data<Workflow, Token> triggerNextStep(Data<Workflow, Token> inputData){
 		Workflow workflow = inputData.state();
-		return act(name, workflow, actionBehavior);
+		return act(name(), workflow, behavior);
 	}
 
 	private Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
