@@ -1,17 +1,12 @@
 package org.requirementsascode.act.token;
 
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.token.Action.action;
-import static org.requirementsascode.act.token.Actions.actions;
 import static org.requirementsascode.act.token.InitialAction.initialAction;
-import static org.requirementsascode.act.token.InitialActions.initialActions;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
-import static org.requirementsascode.act.token.TokenFlows.tokenFlows;
-import static org.requirementsascode.act.token.Workflow.workflow;
 
 import java.util.Objects;
 
@@ -36,16 +31,14 @@ class TokenFlowTest {
 		Action action3 = action(ACTION3, when(StringValue.class, this::action3Performed));
 		
 		
-		Workflow workflow = workflow(
-				actions(asList(action1,action2,action3)), 
-				tokenFlows(asList(
-					tokenFlow(action1, action2),
-					tokenFlow(action2, action3)
-				)), 
-				initialActions(
-					asList(initialAction(action1))
-				)
-			);
+		Workflow workflow = Workflow.builder()
+			.actions(action1,action2,action3)
+			.tokenFlows(
+				tokenFlow(action1, action2),
+				tokenFlow(action2, action3)
+			) 
+			.initialActions(initialAction(action1))
+			.build();
 		
 		StringValue actionData1 = new StringValue(VALUE1);
 		AfterStep afterStep1 = workflow.firstStep(actionData1);
