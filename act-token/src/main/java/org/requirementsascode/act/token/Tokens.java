@@ -39,9 +39,8 @@ public class Tokens {
 		Token movedToken = token.moveTo(toNode);
 		
 		List<Token> newTokens = new ArrayList<>(tokens);
-		if(newTokens.remove(token)) {
-			newTokens.add(movedToken);
-		}
+		newTokens.remove(token);
+		newTokens.add(movedToken);
 		
 		return new Tokens(newTokens);
 	}

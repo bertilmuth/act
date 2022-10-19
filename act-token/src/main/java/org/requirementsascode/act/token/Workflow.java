@@ -35,6 +35,11 @@ public class Workflow {
 		return new Workflow(statemachine, tokens);
 	}
 	
+	public AfterStep startWith(ActionData actionData) {
+		return nextStep(actionData);
+	}
+
+	
 	public AfterStep nextStep() {
 		return nextStep(triggerNextStep());
 	}
