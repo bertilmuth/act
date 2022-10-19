@@ -1,13 +1,20 @@
 package org.requirementsascode.act.token;
 
+import static java.util.Objects.requireNonNull;
+
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 
 class DefaultNode implements Node {
 		private final State<Workflow, Token> defaultState;
 
-		DefaultNode(Statemachine<Workflow, Token> owningStatemachine) {
+		private DefaultNode(Statemachine<Workflow, Token> owningStatemachine) {
+			requireNonNull(owningStatemachine, "owningStatemachine must be non-null!");
 			this.defaultState = owningStatemachine.defaultState();
+		}
+		
+		public static DefaultNode defaultNode(Statemachine<Workflow, Token> owningStatemachine) {
+			return new DefaultNode(owningStatemachine);
 		}
 
 		@Override
