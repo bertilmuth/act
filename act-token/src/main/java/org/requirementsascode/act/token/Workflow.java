@@ -3,8 +3,10 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.TriggerNextStep.triggerNextStep;
+import static org.requirementsascode.act.token.Token.token;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Flow;
@@ -34,8 +36,18 @@ public class Workflow {
 	}
 	
 	public AfterStep nextStep() {
-		Data<Workflow, Token> outputOfStep = statemachine().actOn(triggerNextStepOfWorkflow());
+		return nextStep(triggerNextStep());
+	}
+	
+	public AfterStep nextStep(ActionData actionData) {
+		Data<Workflow, Token> trigger = actionTrigger(actionData);
+		Data<Workflow, Token> outputOfStep = statemachine().actOn(trigger);
 		return new AfterStep(statemachine(), outputOfStep);
+	}
+
+	private Data<Workflow, Token> actionTrigger(ActionData actionData) {
+		Data<Workflow, Token> trigger = data(this, token(null, actionData));
+		return trigger;
 	}
 	
 	public Tokens tokens(){
@@ -75,19 +87,15 @@ public class Workflow {
 		return statemachine;
 	}
 	
-	private Data<Workflow, Token> triggerNextStepOfWorkflow() {
-		return data(this, triggerNextStep());
-	}
-	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
-		Flow[] tokenFlowsArray = tokenFlows.stream().toArray(Flow[]::new);
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
+		Flow[] flowsArray = Stream.concat(initialActions.stream(), tokenFlows.stream()).toArray(Flow[]::new);
 		Statemachine<Workflow, Token> statemachine = 
 				Statemachine.builder()
 					.states(actionsArray)
 					.transitions()
-					.flows(tokenFlowsArray)
+					.flows(flowsArray)
 					.build();
 		return statemachine;
 	}
