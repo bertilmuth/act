@@ -35,7 +35,7 @@ public class Workflow {
 		return new Workflow(statemachine, tokens);
 	}
 	
-	public AfterStep startWith(ActionData actionData) {
+	public AfterStep firstStep(ActionData actionData) {
 		return nextStep(actionData);
 	}
 
