@@ -11,7 +11,6 @@ import static org.requirementsascode.act.token.InitialActions.initialActions;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import static org.requirementsascode.act.token.TokenFlows.tokenFlows;
-import static org.requirementsascode.act.token.Tokens.tokens;
 import static org.requirementsascode.act.token.Workflow.workflow;
 
 import java.util.Objects;
@@ -39,12 +38,11 @@ class TokenFlowTest {
 		StringValue actionData1 = new StringValue(VALUE1);
 		
 		AfterStep afterStart = workflow(
-				tokens(asList(/*token(action1, actionData1)*/)), 
 				actions(asList(action1,action2,action3)), 
 				tokenFlows(asList(
 					tokenFlow(action1, action2),
 					tokenFlow(action2, action3)
-				)),
+				)), 
 				initialActions(
 					asList(initialAction(action1))
 				)

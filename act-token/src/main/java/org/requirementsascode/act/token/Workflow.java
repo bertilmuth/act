@@ -5,6 +5,7 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.TriggerNextStep.triggerNextStep;
 import static org.requirementsascode.act.token.Token.token;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -22,13 +23,12 @@ public class Workflow {
 		this.tokens = tokens;
 	}
 
-	public static  Workflow workflow(Tokens tokens, Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
-		requireNonNull(tokens, "tokens must be non-null!");
+	public static  Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
-		return workflow(statemachineWith(actions, tokenFlows, initialActions), tokens);
+		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
 	}
 
 	static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
@@ -39,12 +39,11 @@ public class Workflow {
 		return nextStep(actionData);
 	}
 
-	
-	public AfterStep nextStep() {
+	private AfterStep nextStep() {
 		return nextStep(triggerNextStep());
 	}
 	
-	public AfterStep nextStep(ActionData actionData) {
+	private AfterStep nextStep(ActionData actionData) {
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
 		Data<Workflow, Token> outputOfStep = statemachine().actOn(trigger);
 		return new AfterStep(statemachine(), outputOfStep);
@@ -55,13 +54,26 @@ public class Workflow {
 		return trigger;
 	}
 	
-	public Tokens tokens(){
+	Tokens tokens(){
 		return tokens;
 	}
 	
 	@Override
 	public String toString() {
 		return "Workflow[" + tokens + "]";
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
+		State[] actionsArray = actions.asStates().toArray(State[]::new);
+		Flow[] flowsArray = Stream.concat(initialActions.stream(), tokenFlows.stream()).toArray(Flow[]::new);
+		Statemachine<Workflow, Token> statemachine = 
+				Statemachine.builder()
+					.states(actionsArray)
+					.transitions()
+					.flows(flowsArray)
+					.build();
+		return statemachine;
 	}
 	
 	public static class AfterStep{
@@ -89,19 +101,6 @@ public class Workflow {
 	}
 	
 	Statemachine<Workflow, Token> statemachine() {
-		return statemachine;
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
-		State[] actionsArray = actions.asStates().toArray(State[]::new);
-		Flow[] flowsArray = Stream.concat(initialActions.stream(), tokenFlows.stream()).toArray(Flow[]::new);
-		Statemachine<Workflow, Token> statemachine = 
-				Statemachine.builder()
-					.states(actionsArray)
-					.transitions()
-					.flows(flowsArray)
-					.build();
 		return statemachine;
 	}
 }
