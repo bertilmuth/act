@@ -44,6 +44,7 @@ public class Workflow {
 	}
 	
 	private AfterStep nextStep(ActionData actionData) {
+		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
 		Data<Workflow, Token> outputOfStep = statemachine().actOn(trigger);
 		return new AfterStep(statemachine(), outputOfStep);

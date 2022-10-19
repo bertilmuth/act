@@ -36,6 +36,9 @@ public class Tokens {
 	}
 
 	public Tokens moveToken(Token token, Node toNode) {
+		requireNonNull(token, "token must be non-null!");
+		requireNonNull(toNode, "toNode must be non-null!");
+		
 		Token movedToken = token.moveTo(toNode);
 		
 		List<Token> newTokens = new ArrayList<>(tokens);
