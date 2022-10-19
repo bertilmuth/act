@@ -36,7 +36,7 @@ public class Workflow {
 	}
 	
 	public AfterStep firstStep(ActionData actionData) {
-		return nextStep(actionData);
+		return nextStep(actionData).nextStep();
 	}
 
 	private AfterStep nextStep() {
