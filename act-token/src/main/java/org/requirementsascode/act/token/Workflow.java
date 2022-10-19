@@ -2,8 +2,8 @@ package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.token.TriggerNextStep.triggerNextStep;
 import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.token.TriggerNextStep.triggerNextStep;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -22,8 +22,12 @@ public class Workflow {
 		this.statemachine = statemachine;
 		this.tokens = tokens;
 	}
-
-	public static  Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
+	
+	public final static WorkflowBuilder builder() {
+		return new WorkflowBuilder();
+	}
+	
+	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
