@@ -51,7 +51,8 @@ public class Workflow {
 	}
 
 	private Data<Workflow, Token> actionTrigger(ActionData actionData) {
-		Data<Workflow, Token> trigger = data(this, token(null, actionData));
+		DefaultNode defaultNode = DefaultNode.defaultNode(statemachine());
+		Data<Workflow, Token> trigger = data(this, token(defaultNode, actionData));
 		return trigger;
 	}
 	

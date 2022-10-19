@@ -8,13 +8,13 @@ import org.requirementsascode.act.statemachine.Statemachine;
 class DefaultNode implements Node {
 		private final State<Workflow, Token> defaultState;
 
-		private DefaultNode(Statemachine<Workflow, Token> owningStatemachine) {
-			requireNonNull(owningStatemachine, "owningStatemachine must be non-null!");
-			this.defaultState = owningStatemachine.defaultState();
+		private DefaultNode(Statemachine<Workflow, Token> statemachine) {
+			requireNonNull(statemachine, "statemachine must be non-null!");
+			this.defaultState = statemachine.defaultState();
 		}
 		
-		public static DefaultNode defaultNode(Statemachine<Workflow, Token> owningStatemachine) {
-			return new DefaultNode(owningStatemachine);
+		public static DefaultNode defaultNode(Statemachine<Workflow, Token> statemachine) {
+			return new DefaultNode(statemachine);
 		}
 
 		@Override
