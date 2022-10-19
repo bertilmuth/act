@@ -43,7 +43,9 @@ class TokenFlowTest {
 					tokenFlow(action1, action2),
 					tokenFlow(action2, action3)
 				)),
-				InitialActions.initialActions(asList(action1))
+				InitialActions.initialActions(
+					asList(InitialAction.initialAction(action1))
+				)
 			)
 			.nextStep();
 		
