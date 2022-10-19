@@ -48,6 +48,6 @@ public class Tokens {
 
 	@Override
 	public String toString() {
-		return "Tokens [" + tokens + "]";
+		return "Tokens[" + tokens + "]";
 	}
 }

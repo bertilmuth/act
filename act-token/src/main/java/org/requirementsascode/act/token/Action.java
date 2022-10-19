@@ -55,4 +55,9 @@ public class Action implements Node{
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
 		return data(actionOutput.state(), token(firstToken.node(), actionOutput.value().orElse(null)));
 	}
+
+	@Override
+	public String toString() {
+		return "Action[" + name + "]";
+	}
 }

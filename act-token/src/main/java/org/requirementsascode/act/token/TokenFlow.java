@@ -30,6 +30,7 @@ public class TokenFlow implements Flow<Workflow, Token>{
 	
 	private static Data<Workflow, Token> transmit(Data<Workflow, Token> d, Node fromNode, Node toNode) {
 		assert(d.value().isPresent());
+		System.out.println("Token flow from: " + fromNode + " to: " + toNode);
 		Tokens tokensBefore = d.state().tokens();
 		Token token = d.value().get();
 		Tokens tokensAfter = tokensBefore.moveToken(token, toNode);

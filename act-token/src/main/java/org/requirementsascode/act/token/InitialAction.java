@@ -33,7 +33,7 @@ public class InitialAction implements Flow<Workflow, Token> {
 
 		@Override
 		public String name() {
-			return "InitialAction";
+			return defaultState.name();
 		}
 
 		@Override

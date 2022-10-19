@@ -56,7 +56,7 @@ public class Workflow {
 	
 	@Override
 	public String toString() {
-		return "Workflow [" + tokens + "]";
+		return "Workflow[" + tokens + "]";
 	}
 	
 	public static class AfterStep{

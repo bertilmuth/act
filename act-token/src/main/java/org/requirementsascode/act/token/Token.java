@@ -35,7 +35,7 @@ public class Token {
 
 	@Override
 	public String toString() {
-		return "Token [node=" + node + ", actionData=" + actionData + "]";
+		return "Token[node=" + node + ", actionData=" + actionData + "]";
 	}
 
 	@Override
