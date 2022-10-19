@@ -49,11 +49,15 @@ public class Action implements Node{
 		return act(name, workflow, actionBehavior);
 	}
 
-	private static Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+	private Data<Workflow, Token> act(String stateName, Workflow workflow, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
 		Token firstToken = workflow.tokens().firstTokenIn(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
-		return data(actionOutput.state(), token(firstToken.node(), actionOutput.value().orElse(null)));
+		return data(actionOutput.state(), tokenForNodeAndOutput(firstToken, actionOutput));
+	}
+
+	private Token tokenForNodeAndOutput(Token firstToken, Data<Workflow, ActionData> actionData) {
+		return token(firstToken.node(), actionData.value().orElse(null));
 	}
 
 	@Override
