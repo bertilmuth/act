@@ -39,7 +39,7 @@ class TokenFlowTest {
 		StringValue actionData1 = new StringValue(VALUE1);
 		
 		AfterStep afterStep1 = workflow(
-				tokens(asList(/*token(action1, actionData1)*/)), 
+				tokens(asList(token(action1, actionData1))), 
 				actions(asList(action1,action2,action3)), 
 				tokenFlows(asList(
 					tokenFlow(action1, action2),
@@ -49,7 +49,7 @@ class TokenFlowTest {
 					asList(initialAction(action1))
 				)
 			)
-			.nextStep(actionData1);
+			.nextStep();
 		
 		Tokens tokens1 = afterStep1.tokens();
 		

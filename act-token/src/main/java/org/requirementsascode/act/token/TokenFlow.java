@@ -11,15 +11,15 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class TokenFlow implements Flow<Workflow, Token>{
-	private final Action fromAction;
-	private final Action toAction;
+	private final Node fromAction;
+	private final Node toAction;
 
-	private TokenFlow(Action fromAction, Action toAction) {
+	private TokenFlow(Node fromAction, Node toAction) {
 		this.fromAction = requireNonNull(fromAction, "fromAction must be non-null!");
 		this.toAction = requireNonNull(toAction, "toAction must be non-null!");
 	}
 	
-	public static TokenFlow tokenFlow(Action fromAction, Action toAction) {		
+	public static TokenFlow tokenFlow(Node fromAction, Node toAction) {		
 		return new TokenFlow(fromAction, toAction);
 	}
 
