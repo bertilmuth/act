@@ -55,11 +55,10 @@ public class Action implements Node{
 		Token firstToken = workflow.tokens().firstTokenIn(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
-		return data(workflowOf(actionOutput), 
-			tokenForNodeAndOutput(firstToken.node(), actionOutput));
+		return data(workflowOf(actionOutput), tokenFor(firstToken.node(), actionOutput));
 	}
 
-	private Token tokenForNodeAndOutput(Node node, Data<Workflow, ActionData> actionData) {
+	private Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {
 		return token(node, actionData.value().orElse(null));
 	}
 
