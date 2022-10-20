@@ -1,4 +1,4 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.token.function;
 
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Token.token;
@@ -8,6 +8,12 @@ import java.util.Optional;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.InCase;
+import org.requirementsascode.act.token.Action;
+import org.requirementsascode.act.token.ActionBehavior;
+import org.requirementsascode.act.token.ActionData;
+import org.requirementsascode.act.token.Node;
+import org.requirementsascode.act.token.Token;
+import org.requirementsascode.act.token.Workflow;
 
 public class AtomicSystemFunction implements ActionBehavior{
 	private final Behavior<Workflow, ActionData, ActionData> function;
@@ -27,7 +33,7 @@ public class AtomicSystemFunction implements ActionBehavior{
 	
 	private boolean isTriggered(Data<Workflow, Token> inputData) {
 		Optional<Token> token = inputData.value();
-		return token.map(Token::isTriggerOfNextStep).orElse(false);
+		return token.map(Token::triggersSystemFunction).orElse(false);
 	}
 	
 	private Data<Workflow, Token> triggerNextStep(Action action, Data<Workflow, Token> inputData){

@@ -13,7 +13,7 @@ public class Token {
 		this.actionData = requireNonNull(actionData, "actionData must be non-null!");
 	}
 
-	static Token token(Node node, ActionData actionData) {
+	public static Token token(Node node, ActionData actionData) {
 		return new Token(node, actionData);
 	}
 	
@@ -21,8 +21,8 @@ public class Token {
 		return new Token(node, actionData);
 	}
 	
-	boolean isTriggerOfNextStep() {
-		return actionData() instanceof TriggerNextStep;
+	public boolean triggersSystemFunction() {
+		return actionData() instanceof TriggerSystemFunction;
 	}
 
 	public Node node() {

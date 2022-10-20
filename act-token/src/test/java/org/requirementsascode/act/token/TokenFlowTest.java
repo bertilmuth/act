@@ -6,7 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
-import static org.requirementsascode.act.token.AtomicSystemFunction.*;
+import static org.requirementsascode.act.token.function.AtomicSystemFunction.*;
 
 import java.util.Objects;
 

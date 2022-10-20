@@ -1,3 +1,3 @@
 package org.requirementsascode.act.token;
 
-interface ActionData{ };
+public interface ActionData{ };

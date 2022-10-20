@@ -3,7 +3,7 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.TriggerNextStep.triggerNextStep;
+import static org.requirementsascode.act.token.TriggerSystemFunction.triggerNextStep;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -25,6 +25,10 @@ public class Workflow {
 	
 	public final static WorkflowBuilder builder() {
 		return new WorkflowBuilder();
+	}
+	
+	public Tokens tokens(){
+		return tokens;
 	}
 	
 	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
@@ -58,10 +62,6 @@ public class Workflow {
 		DefaultNode defaultNode = DefaultNode.defaultNode(statemachine());
 		Data<Workflow, Token> trigger = data(this, token(defaultNode, actionData));
 		return trigger;
-	}
-	
-	Tokens tokens(){
-		return tokens;
 	}
 	
 	@Override
