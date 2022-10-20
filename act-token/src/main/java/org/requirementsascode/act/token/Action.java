@@ -47,14 +47,14 @@ public class Action implements Node{
 	}
 	
 	private Data<Workflow, Token> triggerNextStep(Data<Workflow, Token> inputData){
-		return act(name(), inputData, behavior());
+		return act(this, inputData);
 	}
 
-	private Data<Workflow, Token> act(String action, Data<Workflow, Token> inputData, Behavior<Workflow, ActionData, ActionData> actionBehavior) {
+	private Data<Workflow, Token> act(Action action, Data<Workflow, Token> inputData) {
 		Workflow workflow = workflowOf(inputData);
-		Token firstToken = workflow.tokens().firstTokenIn(action).get();	
+		Token firstToken = workflow.tokens().firstTokenIn(action.name()).get();	
 		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
-		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
+		Data<Workflow, ActionData> actionOutput = action.behavior().actOn(actionInput);
 		return data(workflowOf(actionOutput), tokenFor(firstToken.node(), actionOutput));
 	}
 
