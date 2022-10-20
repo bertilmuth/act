@@ -32,7 +32,7 @@ public class Action implements Node{
 	@Override
 	public State<Workflow, Token> asState() {		
 		State<Workflow, Token> state = state(name(), wf -> wf.tokens().isAnyTokenIn(name()), 
-			when(Token.class, SystemFunction.systemFunction().asBehavior(this)));
+			when(Token.class, AtomicSystemFunction.atomicSystemFunction().asBehavior(this)));
 		return state;
 	}
 

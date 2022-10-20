@@ -9,12 +9,12 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.InCase;
 
-public class SystemFunction implements AsBehavior{
-	private SystemFunction() {
+public class AtomicSystemFunction implements AsBehavior{
+	private AtomicSystemFunction() {
 	}
 	
-	public static SystemFunction systemFunction() {
-		return new SystemFunction();
+	public static AtomicSystemFunction atomicSystemFunction() {
+		return new AtomicSystemFunction();
 	}
 	
 	@Override
