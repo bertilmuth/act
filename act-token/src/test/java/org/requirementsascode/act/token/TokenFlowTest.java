@@ -41,7 +41,8 @@ class TokenFlowTest {
 			.build();
 		
 		StringValue actionData1 = new StringValue(VALUE1);
-		AfterStep afterStep1 = workflow.firstStep(actionData1);
+		AfterStep initialStep = workflow.nextStep(actionData1);
+		AfterStep afterStep1 = initialStep.nextStep();
 		
 		Tokens tokens1 = afterStep1.tokens();
 		

@@ -42,16 +42,12 @@ public class Workflow {
 	static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
 		return new Workflow(statemachine, tokens);
 	}
-	
-	public AfterStep firstStep(ActionData actionData) {
-		return nextStep(actionData).nextStep();
-	}
 
-	private AfterStep nextStep() {
+	AfterStep nextStep() {
 		return nextStep(triggerNextStep());
 	}
 	
-	private AfterStep nextStep(ActionData actionData) {
+	public AfterStep nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
 		Data<Workflow, Token> outputOfStep = statemachine().actOn(trigger);
