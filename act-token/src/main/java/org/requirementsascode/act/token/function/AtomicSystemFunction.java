@@ -1,13 +1,13 @@
 package org.requirementsascode.act.token.function;
 
 import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.token.Token.token;
 
 import java.util.Optional;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.InCase;
 import org.requirementsascode.act.token.Action;
 import org.requirementsascode.act.token.ActionBehavior;
 import org.requirementsascode.act.token.ActionData;
@@ -28,7 +28,7 @@ public class AtomicSystemFunction implements ActionBehavior{
 	
 	@Override
 	public Behavior<Workflow, Token, Token> asBehavior(Action callingAction) {
-		return InCase.inCase(this::isTriggered, d -> triggerNextStep(callingAction, d));
+		return inCase(this::isTriggered, d -> triggerNextStep(callingAction, d));
 	}
 	
 	private boolean isTriggered(Data<Workflow, Token> inputData) {
