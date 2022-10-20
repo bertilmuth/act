@@ -41,7 +41,7 @@ public class AtomicSystemFunction implements ActionBehavior{
 		Token firstToken = workflow.tokens().firstTokenIn(action.name()).get();	
 		Data<Workflow, ActionData> functionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> functionOutput = function.actOn(functionInput);
-		return data(workflowOf(functionOutput), tokenFor(firstToken.node(), functionOutput));
+		return data(workflow, tokenFor(firstToken.node(), functionOutput));
 	}
 	
 	private Workflow workflowOf(Data<Workflow, ?> data) {
