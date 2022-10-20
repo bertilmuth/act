@@ -9,12 +9,15 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.InCase;
 
-public class AtomicSystemFunction implements AsBehavior{
-	private AtomicSystemFunction() {
+public class AtomicSystemFunction implements ActionBehavior{
+	private final Behavior<Workflow, ActionData, ActionData> function;
+
+	private AtomicSystemFunction(Behavior<Workflow, ActionData, ActionData> function) {
+		this.function = function;
 	}
 	
-	public static AtomicSystemFunction atomicSystemFunction() {
-		return new AtomicSystemFunction();
+	public static AtomicSystemFunction atomicSystemFunction(Behavior<Workflow, ActionData, ActionData> function) {
+		return new AtomicSystemFunction(function);
 	}
 	
 	@Override
@@ -31,7 +34,7 @@ public class AtomicSystemFunction implements AsBehavior{
 		Workflow workflow = workflowOf(inputData);
 		Token firstToken = workflow.tokens().firstTokenIn(action.name()).get();	
 		Data<Workflow, ActionData> functionInput = data(workflow, firstToken.actionData());
-		Data<Workflow, ActionData> functionOutput = action.behavior().actOn(functionInput);
+		Data<Workflow, ActionData> functionOutput = function.actOn(functionInput);
 		return data(workflowOf(functionOutput), tokenFor(firstToken.node(), functionOutput));
 	}
 	

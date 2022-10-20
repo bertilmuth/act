@@ -4,35 +4,30 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
-import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
 
 public class Action implements Node{
 	private final String name;
-	private final Behavior<Workflow, ActionData, ActionData> behavior;
+	private final ActionBehavior actionBehavior;
 	
-	private Action(String name, Behavior<Workflow, ActionData, ActionData> behavior) {
+	private Action(String name, ActionBehavior actionBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
-		this.behavior = requireNonNull(behavior, "behavior must be non-null!");
-	}
+		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
+	}	
 	
-	public static Action action(String name, Behavior<Workflow, ActionData, ActionData> behavior) {
-		return new Action(name, behavior);
+	public static Action action(String name, ActionBehavior actionBehavior) {
+		return new Action(name, actionBehavior);
 	}
 	
 	@Override
 	public String name() {
 		return name;
 	}
-	
-	public Behavior<Workflow, ActionData, ActionData> behavior(){
-		return behavior;
-	}
 
 	@Override
 	public State<Workflow, Token> asState() {		
 		State<Workflow, Token> state = state(name(), wf -> wf.tokens().isAnyTokenIn(name()), 
-			when(Token.class, AtomicSystemFunction.atomicSystemFunction().asBehavior(this)));
+			when(Token.class, actionBehavior.asBehavior(this)));
 		return state;
 	}
 
