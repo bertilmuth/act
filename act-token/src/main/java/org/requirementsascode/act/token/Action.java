@@ -47,7 +47,7 @@ public class Action implements Node{
 	}
 	
 	private Data<Workflow, Token> triggerNextStep(Data<Workflow, Token> inputData){
-		Workflow workflow = inputData.state();
+		Workflow workflow = workflowOf(inputData);
 		return act(name(), workflow, behavior);
 	}
 
@@ -55,15 +55,20 @@ public class Action implements Node{
 		Token firstToken = workflow.tokens().firstTokenIn(stateName).get();	
 		Data<Workflow, ActionData> actionInput = data(workflow, firstToken.actionData());
 		Data<Workflow, ActionData> actionOutput = actionBehavior.actOn(actionInput);
-		return data(actionOutput.state(), tokenForNodeAndOutput(firstToken, actionOutput));
+		return data(workflowOf(actionOutput), 
+			tokenForNodeAndOutput(firstToken.node(), actionOutput));
 	}
 
-	private Token tokenForNodeAndOutput(Token firstToken, Data<Workflow, ActionData> actionData) {
-		return token(firstToken.node(), actionData.value().orElse(null));
+	private Token tokenForNodeAndOutput(Node node, Data<Workflow, ActionData> actionData) {
+		return token(node, actionData.value().orElse(null));
 	}
 
 	@Override
 	public String toString() {
 		return "Action[" + name + "]";
+	}
+	
+	private Workflow workflowOf(Data<Workflow, ?> data) {
+		return data.state();
 	}
 }
