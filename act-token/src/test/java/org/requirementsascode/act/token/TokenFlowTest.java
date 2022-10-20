@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.token.Action.action;
-import static org.requirementsascode.act.token.InitialAction.initialAction;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 
@@ -37,7 +36,7 @@ class TokenFlowTest {
 				tokenFlow(action1, action2),
 				tokenFlow(action2, action3)
 			) 
-			.initialActions(initialAction(action1))
+			.initialActions(action1)
 			.build();
 		
 		StringValue actionData1 = new StringValue(VALUE1);
