@@ -2,6 +2,7 @@ package org.requirementsascode.act.token;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
@@ -40,24 +41,19 @@ class TokenFlowTest {
 		
 		StringValue startWorkflow = new StringValue(START_WORKFLOW);
 		AfterStep workflowStarted = workflow.nextStep(startWorkflow);
+		assertTrue(workflowStarted.tokens().isAnyTokenIn(ACTION1));
 		
-		AfterStep afterStep1 = workflowStarted.nextStep();
-		Tokens tokens1 = afterStep1.tokens();
+		AfterStep after1 = workflowStarted.nextStep();
+		Tokens tokensAfter1 = after1.tokens();
+		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
+		assertFalse(tokensAfter1.isAnyTokenIn(ACTION3));
+		assertEquals(token(action2, startWorkflow), tokensAfter1.firstTokenIn(ACTION2).get());
 		
-		assertEquals(1, action1Performed);
-		assertEquals(0, action2Performed);
-		assertEquals(0, action3Performed);
-		assertFalse(tokens1.isAnyTokenIn(ACTION1));
-		assertEquals(token(action2, startWorkflow), tokens1.firstTokenIn(ACTION2).get());
-		
-		AfterStep afterStep2 = afterStep1.nextStep();
-		Tokens tokensAfterStep2 = afterStep2.tokens();
-
-		assertEquals(1, action1Performed);
-		assertEquals(1, action2Performed);
-		assertEquals(0, action3Performed);
-		assertFalse(tokensAfterStep2.isAnyTokenIn(ACTION2));
-		assertEquals(token(action3, startWorkflow), tokensAfterStep2.firstTokenIn(ACTION3).get());
+		AfterStep after2 = after1.nextStep();
+		Tokens tokensAfter2 = after2.tokens();
+		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
+		assertFalse(tokensAfter2.isAnyTokenIn(ACTION2));
+		assertEquals(token(action3, startWorkflow), tokensAfter2.firstTokenIn(ACTION3).get());
 	}
 
 	private StringValue action1Performed(Workflow workflow, StringValue input) {
