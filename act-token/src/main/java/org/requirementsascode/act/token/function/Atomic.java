@@ -15,15 +15,15 @@ import org.requirementsascode.act.token.Node;
 import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
-public class SingleStep implements ActionBehavior{
+public class Atomic implements ActionBehavior{
 	private final Behavior<Workflow, ActionData, ActionData> function;
 
-	private SingleStep(Behavior<Workflow, ActionData, ActionData> function) {
+	private Atomic(Behavior<Workflow, ActionData, ActionData> function) {
 		this.function = function;
 	}
 	
-	public static SingleStep singleStep(Behavior<Workflow, ActionData, ActionData> function) {
-		return new SingleStep(function);
+	public static Atomic atomic(Behavior<Workflow, ActionData, ActionData> function) {
+		return new Atomic(function);
 	}
 	
 	@Override

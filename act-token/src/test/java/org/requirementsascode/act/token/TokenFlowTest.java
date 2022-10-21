@@ -6,7 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
-import static org.requirementsascode.act.token.function.SingleStep.*;
+import static org.requirementsascode.act.token.function.Atomic.*;
 
 import java.util.Objects;
 
@@ -26,9 +26,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		Action action1 = action(ACTION1, singleStep(when(StringValue.class, this::action1Performed)));
-		Action action2 = action(ACTION2, singleStep(when(StringValue.class, this::action2Performed)));
-		Action action3 = action(ACTION3, singleStep(when(StringValue.class, this::action3Performed)));
+		Action action1 = action(ACTION1, atomic(when(StringValue.class, this::action1Performed)));
+		Action action2 = action(ACTION2, atomic(when(StringValue.class, this::action2Performed)));
+		Action action3 = action(ACTION3, atomic(when(StringValue.class, this::action3Performed)));
 		
 		
 		Workflow workflow = Workflow.builder()
