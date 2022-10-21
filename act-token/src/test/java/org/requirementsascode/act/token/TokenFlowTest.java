@@ -2,16 +2,15 @@ package org.requirementsascode.act.token;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
-import static org.requirementsascode.act.token.function.Atomic.*;
+import static org.requirementsascode.act.token.function.Atomic.atomic;
+import static org.requirementsascode.act.token.function.SystemFunction.systemFunction;
 
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
@@ -61,10 +60,6 @@ class TokenFlowTest {
 		assertEquals(0, action3Performed);
 		assertFalse(tokensAfterStep2.isAnyTokenIn(ACTION2));
 		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenIn(ACTION3).get());
-	}
-
-	private <T extends ActionData, U extends ActionData> Behavior<Workflow, ActionData, ActionData> systemFunction(Class<T> inputClass, Behavior<Workflow, T, U> function) {
-		return when(inputClass, function);
 	}
 
 	private Data<Workflow,StringValue> action1Performed(Data<Workflow,StringValue> inputData) {
