@@ -45,7 +45,7 @@ public class Tokens {
 		return newTokens;
 	}
 
-	public Tokens replaceToken(Token tokenToBeReplaced, Token tokenToReplace) {
+	Tokens replaceToken(Token tokenToBeReplaced, Token tokenToReplace) {
 		List<Token> newTokensList = new ArrayList<>(tokens);
 		newTokensList.remove(tokenToBeReplaced);
 		newTokensList.add(tokenToReplace);
