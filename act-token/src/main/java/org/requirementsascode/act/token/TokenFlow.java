@@ -3,7 +3,6 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
-import static org.requirementsascode.act.token.Workflow.workflow;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Flow;
@@ -28,15 +27,21 @@ public class TokenFlow implements Flow<Workflow, Token>{
 		return transition(fromAction.asState(), toAction.asState(), d -> transmit(d, fromAction, toAction));
 	}
 	
-	private static Data<Workflow, Token> transmit(Data<Workflow, Token> d, Node fromNode, Node toNode) {
+	private Data<Workflow, Token> transmit(Data<Workflow, Token> d, Node fromNode, Node toNode) {
 		assert(d.value().isPresent());
-		Tokens tokensBefore = d.state().tokens();
+		Workflow workflow = workflowOf(d);
 		Token token = d.value().get();
-		Tokens tokensAfter = tokensBefore.moveToken(token, toNode);
-		return data(newWorkflow(d, tokensAfter), token);
+		Tokens tokensAfter = workflow.tokens().moveToken(token, toNode);
+		return dataAfter(d, tokensAfter, token);
 	}
-
-	private static Workflow newWorkflow(Data<Workflow, ?> d, Tokens tokensAfter) {
-		return workflow(d.state().statemachine(), tokensAfter);
+	
+	private Data<Workflow, Token> dataAfter(Data<Workflow, ?> functionOutput, Tokens tokensAfter,
+			Token tokenAfter) {
+		Workflow newWorkflow = Workflow.workflow(functionOutput.state().statemachine(), tokensAfter);
+		return data(newWorkflow, tokenAfter);
+	}
+	
+	private Workflow workflowOf(Data<Workflow, ?> data) {
+		return data.state();
 	}
 }
