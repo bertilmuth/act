@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
 class TokenFlowTest {
-	private static final String VALUE1 = "Value1";
+	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
 	private static final String ACTION2 = "Action2";
 	private static final String ACTION3 = "Action3";
@@ -38,7 +38,7 @@ class TokenFlowTest {
 			.initialActions(action1)
 			.build();
 		
-		StringValue actionData1 = new StringValue(VALUE1);
+		StringValue actionData1 = new StringValue(START_WORKFLOW);
 		AfterStep initialStep = workflow.nextStep(actionData1);
 		AfterStep afterStep1 = initialStep.nextStep();
 		
