@@ -32,13 +32,12 @@ public class TokenFlow implements Flow<Workflow, Token>{
 		Workflow workflow = workflowOf(d);
 		Token token = d.value().get();
 		Tokens tokensAfter = workflow.tokens().moveToken(token, toNode);
-		return dataAfter(d, tokensAfter, token);
+		return updateTokens(workflow, tokensAfter, token);
 	}
 	
-	private Data<Workflow, Token> dataAfter(Data<Workflow, ?> functionOutput, Tokens tokensAfter,
-			Token tokenAfter) {
-		Workflow newWorkflow = Workflow.workflow(functionOutput.state().statemachine(), tokensAfter);
-		return data(newWorkflow, tokenAfter);
+	private Data<Workflow, Token> updateTokens(Workflow workflow, Tokens tokens, Token token) {
+		Workflow newWorkflow = Workflow.workflow(workflow.statemachine(), tokens);
+		return data(newWorkflow, token);
 	}
 	
 	private Workflow workflowOf(Data<Workflow, ?> data) {
