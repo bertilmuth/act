@@ -51,6 +51,11 @@ public class Workflow {
 		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
 		return updateWith(tokensAfter, tokenAfter);
 	}
+	
+	public Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
+		Tokens tokensAfter = tokens().moveToken(Token.from(d), toNode);
+		return updateWith(tokensAfter, Token.from(d));
+	}
 
 	AfterStep nextStep() {
 		return nextStep(triggerNextStep());
@@ -118,10 +123,5 @@ public class Workflow {
 	
 	private Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
-	}
-
-	public Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
-		Tokens tokensAfter = tokens().moveToken(Token.from(d), toNode);
-		return updateWith(tokensAfter, Token.from(d));
 	}
 }
