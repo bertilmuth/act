@@ -46,6 +46,11 @@ public class Workflow {
 	public static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
 		return new Workflow(statemachine, tokens);
 	}
+	
+	public Data<Workflow, Token> updateWith(Tokens tokens, Token token) {
+		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
+		return data(newWorkflow, token);
+	}
 
 	AfterStep nextStep() {
 		return nextStep(triggerNextStep());
