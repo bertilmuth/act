@@ -17,7 +17,7 @@ public class SystemFunction{
 	}
 	
 	private static <T extends ActionData, U extends ActionData> Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
-		Workflow workflow = input.state();
+		Workflow workflow = Workflow.from(input);
 		T inputActionData = input.value().orElse(null);
 		U outputActionData = function.apply(workflow, inputActionData);
 		return data(workflow, outputActionData);
