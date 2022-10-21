@@ -1,7 +1,6 @@
 package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import org.requirementsascode.act.core.Data;
@@ -30,13 +29,12 @@ public class TokenFlow implements Flow<Workflow, Token>{
 	private Data<Workflow, Token> transmit(Data<Workflow, Token> d, Node fromNode, Node toNode) {
 		assert(d.value().isPresent());
 		Workflow workflow = Workflow.from(d);
-		Token token = d.value().get();
+		Token token = tokenFrom(d);
 		Tokens tokensAfter = workflow.tokens().moveToken(token, toNode);
-		return updateTokens(workflow, tokensAfter, token);
+		return workflow.updateWith(tokensAfter, token);
 	}
-	
-	private Data<Workflow, Token> updateTokens(Workflow workflow, Tokens tokens, Token token) {
-		Workflow newWorkflow = Workflow.workflow(workflow.statemachine(), tokens);
-		return data(newWorkflow, token);
+
+	private Token tokenFrom(Data<Workflow, Token> d) {
+		return d.value().orElse(null);
 	}
 }
