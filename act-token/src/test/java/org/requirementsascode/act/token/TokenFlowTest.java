@@ -43,25 +43,25 @@ class TokenFlowTest {
 		
 		AfterStep after1 = workflowStarted.nextStep();
 		Tokens tokensAfter1 = after1.tokens();
-		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
+		//assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
 		assertFalse(tokensAfter1.isAnyTokenIn(ACTION3));
-		assertEquals(token(action2, startWorkflow), tokensAfter1.firstTokenIn(ACTION2).get());
+		assertEquals(token(action2, new StringValue(ACTION1)), tokensAfter1.firstTokenIn(ACTION2).get());
 		
 		AfterStep after2 = after1.nextStep();
 		Tokens tokensAfter2 = after2.tokens();
 		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
 		assertFalse(tokensAfter2.isAnyTokenIn(ACTION2));
-		assertEquals(token(action3, startWorkflow), tokensAfter2.firstTokenIn(ACTION3).get());
+		assertEquals(token(action3, new StringValue(ACTION2)), tokensAfter2.firstTokenIn(ACTION3).get());
 	}
 
 	private StringValue action1Performed(Workflow workflow, StringValue input) {
-		return input;
+		return new StringValue(ACTION1);
 	}
 	private StringValue action2Performed(Workflow workflow, StringValue input) {
-		return input;
+		return new StringValue(ACTION2);
 	}
 	private StringValue action3Performed(Workflow workflow, StringValue input) {
-		return input;
+		return new StringValue(ACTION3);
 	}
 	
 	private static class StringValue implements ActionData{
