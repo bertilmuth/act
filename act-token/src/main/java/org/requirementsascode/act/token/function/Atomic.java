@@ -46,12 +46,7 @@ public class Atomic implements ActionBehavior {
 		Token tokenAfter = tokenFor(tokenBefore.node(), functionOutput);
 
 		Tokens tokensAfter = workflow.tokens().replaceToken(tokenBefore, tokenAfter);
-		return updateTokens(Workflow.from(functionOutput), tokensAfter, tokenAfter);
-	}
-
-	private Data<Workflow, Token> updateTokens(Workflow workflow, Tokens tokens, Token token) {
-		Workflow newWorkflow = Workflow.workflow(workflow.statemachine(), tokens);
-		return data(newWorkflow, token);
+		return workflow.updateWith(tokensAfter, tokenAfter);
 	}
 
 	private Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {
