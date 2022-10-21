@@ -13,7 +13,6 @@ import org.requirementsascode.act.token.ActionBehavior;
 import org.requirementsascode.act.token.ActionData;
 import org.requirementsascode.act.token.Node;
 import org.requirementsascode.act.token.Token;
-import org.requirementsascode.act.token.Tokens;
 import org.requirementsascode.act.token.Workflow;
 
 public class Atomic implements ActionBehavior {
@@ -45,8 +44,7 @@ public class Atomic implements ActionBehavior {
 		Data<Workflow, ActionData> functionOutput = function.actOn(functionInput);
 		Token tokenAfter = tokenFor(tokenBefore.node(), functionOutput);
 
-		Tokens tokensAfter = workflow.tokens().replaceToken(tokenBefore, tokenAfter);
-		return workflow.updateWith(tokensAfter, tokenAfter);
+		return workflow.replaceToken(tokenBefore, tokenAfter);
 	}
 
 	private Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {

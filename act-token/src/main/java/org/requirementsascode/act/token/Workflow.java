@@ -27,21 +27,16 @@ public class Workflow {
 		return new WorkflowBuilder();
 	}
 	
-	public Tokens tokens(){
-		return tokens;
-	}
-	
 	public static Workflow from(Data<Workflow, ?> data) {
 		return data.state();
+	}
+	
+	public Tokens tokens(){
+		return tokens;
 	}
 
 	public static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
 		return new Workflow(statemachine, tokens);
-	}
-	
-	public Data<Workflow, Token> updateWith(Tokens tokens, Token token) {
-		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
-		return data(newWorkflow, token);
 	}
 	
 	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
@@ -50,6 +45,11 @@ public class Workflow {
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
 		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
+	}
+	
+	public Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
+		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
+		return updateWith(tokensAfter, tokenAfter);
 	}
 
 	AfterStep nextStep() {
@@ -72,6 +72,11 @@ public class Workflow {
 	@Override
 	public String toString() {
 		return "Workflow[" + tokens + "]";
+	}
+	
+	Data<Workflow, Token> updateWith(Tokens tokens, Token token) {
+		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
+		return data(newWorkflow, token);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -111,7 +116,12 @@ public class Workflow {
 		}
 	}
 	
-	public Statemachine<Workflow, Token> statemachine() {
+	private Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
+	}
+
+	public Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
+		Tokens tokensAfter = tokens().moveToken(Token.from(d), toNode);
+		return updateWith(tokensAfter, Token.from(d));
 	}
 }
