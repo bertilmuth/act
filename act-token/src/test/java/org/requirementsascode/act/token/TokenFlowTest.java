@@ -43,7 +43,7 @@ class TokenFlowTest {
 		
 		AfterStep after1 = workflowStarted.nextStep();
 		Tokens tokensAfter1 = after1.tokens();
-		//assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
+		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
 		assertFalse(tokensAfter1.isAnyTokenIn(ACTION3));
 		assertEquals(token(action2, new StringValue(ACTION1)), tokensAfter1.firstTokenIn(ACTION2).get());
 		
