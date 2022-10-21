@@ -11,6 +11,7 @@ import static org.requirementsascode.act.token.function.Atomic.*;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
@@ -26,7 +27,7 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		Action action1 = action(ACTION1, atomic(when(StringValue.class, this::action1Performed)));
+		Action action1 = action(ACTION1, atomic(systemFunction(StringValue.class, this::action1Performed)));
 		Action action2 = action(ACTION2, atomic(when(StringValue.class, this::action2Performed)));
 		Action action3 = action(ACTION3, atomic(when(StringValue.class, this::action3Performed)));
 		
@@ -60,6 +61,10 @@ class TokenFlowTest {
 		assertEquals(0, action3Performed);
 		assertFalse(tokensAfterStep2.isAnyTokenIn(ACTION2));
 		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenIn(ACTION3).get());
+	}
+
+	private <T extends ActionData, U extends ActionData> Behavior<Workflow, ActionData, ActionData> systemFunction(Class<T> inputClass, Behavior<Workflow, T, U> function) {
+		return when(inputClass, function);
 	}
 
 	private Data<Workflow,StringValue> action1Performed(Data<Workflow,StringValue> inputData) {
