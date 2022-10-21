@@ -31,14 +31,6 @@ public class Workflow {
 		return tokens;
 	}
 	
-	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
-		requireNonNull(actions, "actions must be non-null!");
-		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
-		requireNonNull(initialActions, "initialActions must be non-null!");
-
-		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
-	}
-	
 	public static Workflow from(Data<Workflow, ?> data) {
 		return data.state();
 	}
@@ -50,6 +42,14 @@ public class Workflow {
 	public Data<Workflow, Token> updateWith(Tokens tokens, Token token) {
 		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
 		return data(newWorkflow, token);
+	}
+	
+	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
+		requireNonNull(actions, "actions must be non-null!");
+		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
+		requireNonNull(initialActions, "initialActions must be non-null!");
+
+		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
 	}
 
 	AfterStep nextStep() {
