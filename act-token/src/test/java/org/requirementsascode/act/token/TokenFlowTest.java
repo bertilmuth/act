@@ -11,7 +11,6 @@ import static org.requirementsascode.act.token.function.SystemFunction.systemFun
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
 class TokenFlowTest {
@@ -29,7 +28,6 @@ class TokenFlowTest {
 		Action action1 = action(ACTION1, atomic(systemFunction(StringValue.class, this::action1Performed)));
 		Action action2 = action(ACTION2, atomic(systemFunction(StringValue.class, this::action2Performed)));
 		Action action3 = action(ACTION3, atomic(systemFunction(StringValue.class, this::action3Performed)));
-		
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1,action2,action3)
@@ -62,17 +60,17 @@ class TokenFlowTest {
 		assertEquals(token(action3, actionData1), tokensAfterStep2.firstTokenIn(ACTION3).get());
 	}
 
-	private Data<Workflow,StringValue> action1Performed(Data<Workflow,StringValue> inputData) {
+	private StringValue action1Performed(Workflow workflow, StringValue input) {
 		action1Performed++;
-		return inputData;
+		return input;
 	}
-	private Data<Workflow,StringValue> action2Performed(Data<Workflow,StringValue> inputData) {
+	private StringValue action2Performed(Workflow workflow, StringValue input) {
 		action2Performed++;
-		return inputData;
+		return input;
 	}
-	private Data<Workflow,StringValue> action3Performed(Data<Workflow,StringValue> inputData) {
+	private StringValue action3Performed(Workflow workflow, StringValue input) {
 		action3Performed++;
-		return inputData;
+		return input;
 	}
 	
 	private static class StringValue implements ActionData{
