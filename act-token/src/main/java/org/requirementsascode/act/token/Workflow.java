@@ -49,12 +49,12 @@ public class Workflow {
 	
 	public Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
-		return updateWith(tokensAfter, tokenAfter);
+		return updatedData(tokensAfter, tokenAfter);
 	}
 	
 	public Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
 		Tokens tokensAfter = tokens().moveToken(Token.from(d), toNode);
-		return updateWith(tokensAfter, Token.from(d));
+		return updatedData(tokensAfter, Token.from(d));
 	}
 
 	private AfterStep nextStep() {
@@ -120,7 +120,7 @@ public class Workflow {
 		return statemachine;
 	}
 	
-	private Data<Workflow, Token> updateWith(Tokens tokens, Token token) {
+	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
 		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
 		return data(newWorkflow, token);
 	}
