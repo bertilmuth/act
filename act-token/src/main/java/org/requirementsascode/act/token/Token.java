@@ -3,6 +3,7 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
 
@@ -19,8 +20,8 @@ public class Token {
 		return new Token(node, actionData);
 	}
 	
-	public static Token from(Data<Workflow, Token> data) {
-		return data.value().orElse(null);
+	public static Optional<Token> from(Data<Workflow, Token> data) {
+		return data.value();
 	}
 	
 	Token moveTo(Node node) {

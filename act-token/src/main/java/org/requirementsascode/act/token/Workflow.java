@@ -53,8 +53,10 @@ public class Workflow {
 	}
 	
 	public Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
-		Tokens tokensAfter = tokens().moveToken(Token.from(d), toNode);
-		return updatedData(tokensAfter, Token.from(d));
+		return Token.from(d).map(t -> {
+			Tokens tokensAfter = tokens().moveToken(t, toNode);
+			return updatedData(tokensAfter, t);
+		}).orElse(d);
 	}
 
 	private AfterStep nextStep() {

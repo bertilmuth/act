@@ -32,7 +32,7 @@ public class Atomic implements ActionBehavior {
 	}
 
 	private boolean isTriggered(Data<Workflow, Token> inputData) {
-		Optional<Token> token = inputData.value();
+		Optional<Token> token = Token.from(inputData);
 		return token.map(Token::triggersSystemFunction).orElse(false);
 	}
 
