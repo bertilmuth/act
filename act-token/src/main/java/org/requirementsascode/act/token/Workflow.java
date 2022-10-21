@@ -38,6 +38,10 @@ public class Workflow {
 
 		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
 	}
+	
+	public static Workflow from(Data<Workflow, ?> data) {
+		return data.state();
+	}
 
 	public static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
 		return new Workflow(statemachine, tokens);
