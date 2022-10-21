@@ -79,11 +79,6 @@ public class Workflow {
 		return "Workflow[" + tokens + "]";
 	}
 	
-	Data<Workflow, Token> updateWith(Tokens tokens, Token token) {
-		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
-		return data(newWorkflow, token);
-	}
-	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
@@ -123,5 +118,10 @@ public class Workflow {
 	
 	private Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
+	}
+	
+	private Data<Workflow, Token> updateWith(Tokens tokens, Token token) {
+		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
+		return data(newWorkflow, token);
 	}
 }
