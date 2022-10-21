@@ -2,7 +2,6 @@ package org.requirementsascode.act.token;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
@@ -19,10 +18,6 @@ class TokenFlowTest {
 	private static final String ACTION1 = "Action1";
 	private static final String ACTION2 = "Action2";
 	private static final String ACTION3 = "Action3";
-	
-	private int action1Performed = 0;
-	private int action2Performed = 0;
-	private int action3Performed = 0;
 
 	@Test
 	void runTwoWorkflowSteps() {
@@ -41,7 +36,10 @@ class TokenFlowTest {
 		
 		StringValue startWorkflow = new StringValue(START_WORKFLOW);
 		AfterStep workflowStarted = workflow.nextStep(startWorkflow);
-		assertTrue(workflowStarted.tokens().isAnyTokenIn(ACTION1));
+		Tokens tokensAtStart = workflowStarted.tokens();
+		assertFalse(tokensAtStart.isAnyTokenIn(ACTION2));
+		assertFalse(tokensAtStart.isAnyTokenIn(ACTION3));
+		assertEquals(token(action1, startWorkflow), tokensAtStart.firstTokenIn(ACTION1).get());
 		
 		AfterStep after1 = workflowStarted.nextStep();
 		Tokens tokensAfter1 = after1.tokens();
@@ -57,15 +55,12 @@ class TokenFlowTest {
 	}
 
 	private StringValue action1Performed(Workflow workflow, StringValue input) {
-		action1Performed++;
 		return input;
 	}
 	private StringValue action2Performed(Workflow workflow, StringValue input) {
-		action2Performed++;
 		return input;
 	}
 	private StringValue action3Performed(Workflow workflow, StringValue input) {
-		action3Performed++;
 		return input;
 	}
 	
