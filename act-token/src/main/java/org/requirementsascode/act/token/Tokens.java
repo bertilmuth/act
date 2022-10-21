@@ -35,7 +35,7 @@ public class Tokens {
 		return inNode(nodeName).findFirst();
 	}
 
-	public Tokens moveToken(Token token, Node toNode) {
+	Tokens moveToken(Token token, Node toNode) {
 		requireNonNull(token, "token must be non-null!");
 		requireNonNull(toNode, "toNode must be non-null!");
 		
