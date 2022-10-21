@@ -29,12 +29,7 @@ public class TokenFlow implements Flow<Workflow, Token>{
 	private Data<Workflow, Token> transmit(Data<Workflow, Token> d, Node fromNode, Node toNode) {
 		assert(d.value().isPresent());
 		Workflow workflow = Workflow.from(d);
-		Token token = tokenFrom(d);
-		Tokens tokensAfter = workflow.tokens().moveToken(token, toNode);
-		return workflow.updateWith(tokensAfter, token);
-	}
-
-	private Token tokenFrom(Data<Workflow, Token> d) {
-		return d.value().orElse(null);
+		Tokens tokensAfter = workflow.tokens().moveToken(Token.from(d), toNode);
+		return workflow.updateWith(tokensAfter, Token.from(d));
 	}
 }

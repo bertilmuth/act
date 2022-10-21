@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
 
+import org.requirementsascode.act.core.Data;
+
 public class Token {
 	private final Node node;
 	private final ActionData actionData;
@@ -15,6 +17,10 @@ public class Token {
 
 	public static Token token(Node node, ActionData actionData) {
 		return new Token(node, actionData);
+	}
+	
+	public static Token from(Data<Workflow, Token> data) {
+		return data.value().orElse(null);
 	}
 	
 	Token moveTo(Node node) {
