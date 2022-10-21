@@ -35,7 +35,7 @@ public class Workflow {
 		return tokens;
 	}
 
-	public static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
+	private static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
 		return new Workflow(statemachine, tokens);
 	}
 	
@@ -57,7 +57,7 @@ public class Workflow {
 		return updateWith(tokensAfter, Token.from(d));
 	}
 
-	AfterStep nextStep() {
+	private AfterStep nextStep() {
 		return nextStep(triggerNextStep());
 	}
 	
