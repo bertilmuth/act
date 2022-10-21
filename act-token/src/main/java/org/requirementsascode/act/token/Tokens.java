@@ -40,17 +40,17 @@ public class Tokens {
 		requireNonNull(toNode, "toNode must be non-null!");
 		
 		Token movedToken = token.moveTo(toNode);
+		Tokens newTokens = replaceToken(token, movedToken);
 		
-		List<Token> newTokens = new ArrayList<>(tokens);
-		newTokens.remove(token);
-		newTokens.add(movedToken);
-		
-		return new Tokens(newTokens);
+		return newTokens;
 	}
-	
-	public void removeToken(Token token) {
-		requireNonNull(token, "token must be non-null!");
-		tokens.remove(token);
+
+	public Tokens replaceToken(Token tokenToBeReplaced, Token tokenToReplace) {
+		List<Token> newTokensList = new ArrayList<>(tokens);
+		newTokensList.remove(tokenToBeReplaced);
+		newTokensList.add(tokenToReplace);
+		Tokens newTokens = new Tokens(newTokensList);
+		return newTokens;
 	}
 
 	@Override

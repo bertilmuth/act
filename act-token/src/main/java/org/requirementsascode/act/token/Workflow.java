@@ -39,7 +39,7 @@ public class Workflow {
 		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
 	}
 
-	static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
+	public static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
 		return new Workflow(statemachine, tokens);
 	}
 
@@ -102,7 +102,7 @@ public class Workflow {
 		}
 	}
 	
-	Statemachine<Workflow, Token> statemachine() {
+	public Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
 	}
 }

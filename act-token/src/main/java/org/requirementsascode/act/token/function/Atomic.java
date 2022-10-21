@@ -13,6 +13,7 @@ import org.requirementsascode.act.token.ActionBehavior;
 import org.requirementsascode.act.token.ActionData;
 import org.requirementsascode.act.token.Node;
 import org.requirementsascode.act.token.Token;
+import org.requirementsascode.act.token.Tokens;
 import org.requirementsascode.act.token.Workflow;
 
 public class Atomic implements ActionBehavior{
@@ -38,14 +39,18 @@ public class Atomic implements ActionBehavior{
 	
 	private Data<Workflow, Token> triggerNextStep(Action action, Data<Workflow, Token> inputData){
 		Workflow workflow = workflowOf(inputData);
-		Token inputToken = workflow.tokens().firstTokenIn(action.name()).get();	
+		Token tokenBefore = workflow.tokens().firstTokenIn(action.name()).get();	
 		
-		Data<Workflow, ActionData> functionInput = data(workflow, inputToken.actionData());
+		Data<Workflow, ActionData> functionInput = data(workflow, tokenBefore.actionData());
 		Data<Workflow, ActionData> functionOutput = function.actOn(functionInput);
-		Token outputToken = tokenFor(inputToken.node(), functionOutput);
+		Token tokenAfter = tokenFor(tokenBefore.node(), functionOutput);
 		
-		workflow.tokens().removeToken(inputToken);
-		return data(workflow, outputToken);
+		Tokens tokensAfter = workflow.tokens().replaceToken(tokenBefore, tokenAfter);
+		return data(newWorkflow(functionOutput, tokensAfter), tokenAfter);
+	}
+	
+	private static Workflow newWorkflow(Data<Workflow, ?> d, Tokens tokensAfter) {
+		return Workflow.workflow(d.state().statemachine(), tokensAfter);
 	}
 	
 	private Workflow workflowOf(Data<Workflow, ?> data) {
