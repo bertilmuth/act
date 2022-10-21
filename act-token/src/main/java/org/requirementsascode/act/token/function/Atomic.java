@@ -38,10 +38,14 @@ public class Atomic implements ActionBehavior{
 	
 	private Data<Workflow, Token> triggerNextStep(Action action, Data<Workflow, Token> inputData){
 		Workflow workflow = workflowOf(inputData);
-		Token firstToken = workflow.tokens().firstTokenIn(action.name()).get();	
-		Data<Workflow, ActionData> functionInput = data(workflow, firstToken.actionData());
+		Token inputToken = workflow.tokens().firstTokenIn(action.name()).get();	
+		
+		Data<Workflow, ActionData> functionInput = data(workflow, inputToken.actionData());
 		Data<Workflow, ActionData> functionOutput = function.actOn(functionInput);
-		return data(workflow, tokenFor(firstToken.node(), functionOutput));
+		Token outputToken = tokenFor(inputToken.node(), functionOutput);
+		
+		workflow.tokens().removeToken(inputToken);
+		return data(workflow, outputToken);
 	}
 	
 	private Workflow workflowOf(Data<Workflow, ?> data) {

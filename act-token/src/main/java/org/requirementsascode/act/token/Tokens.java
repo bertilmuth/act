@@ -47,6 +47,11 @@ public class Tokens {
 		
 		return new Tokens(newTokens);
 	}
+	
+	public void removeToken(Token token) {
+		requireNonNull(token, "token must be non-null!");
+		tokens.remove(token);
+	}
 
 	@Override
 	public String toString() {
