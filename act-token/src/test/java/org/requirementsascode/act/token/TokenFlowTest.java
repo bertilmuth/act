@@ -28,8 +28,8 @@ class TokenFlowTest {
 	@Test
 	void runTwoWorkflowSteps() {
 		Action action1 = action(ACTION1, atomic(systemFunction(StringValue.class, this::action1Performed)));
-		Action action2 = action(ACTION2, atomic(when(StringValue.class, this::action2Performed)));
-		Action action3 = action(ACTION3, atomic(when(StringValue.class, this::action3Performed)));
+		Action action2 = action(ACTION2, atomic(systemFunction(StringValue.class, this::action2Performed)));
+		Action action3 = action(ACTION3, atomic(systemFunction(StringValue.class, this::action3Performed)));
 		
 		
 		Workflow workflow = Workflow.builder()
