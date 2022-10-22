@@ -36,11 +36,11 @@ public class SystemFunction{
 		return data(workflow, outputActionData);
 	}
 	
-	Data<Workflow, Token> executeFunction(Behavior<Workflow, ActionData, ActionData> function, Data<Workflow, Token> inputDataWithTokenInAction) {
+	Data<Workflow, Token> executeFunction(Behavior<Workflow, ActionData, ActionData> functionBehavior, Data<Workflow, Token> inputDataWithTokenInAction) {
 		Workflow workflow = Workflow.from(inputDataWithTokenInAction);
 		Token token = Token.from(inputDataWithTokenInAction).orElseThrow(() -> new IllegalStateException("Token missing!"));
 		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData());
-		Data<Workflow, ActionData> functionOutput = function.actOn(functionInput);
+		Data<Workflow, ActionData> functionOutput = functionBehavior.actOn(functionInput);
 		Token tokenAfter = tokenFor(token.node(), functionOutput);
 
 		return workflow.replaceToken(token, tokenAfter);
