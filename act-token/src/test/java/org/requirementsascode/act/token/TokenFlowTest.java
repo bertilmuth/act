@@ -6,7 +6,6 @@ import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import static org.requirementsascode.act.token.function.Atomic.atomic;
-import static org.requirementsascode.act.token.function.SystemFunction.systemFunction;
 
 import java.util.Objects;
 
@@ -21,9 +20,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		Action action1 = action(ACTION1, atomic(systemFunction(StringValue.class, this::action1Performed)));
-		Action action2 = action(ACTION2, atomic(systemFunction(StringValue.class, this::action2Performed)));
-		Action action3 = action(ACTION3, atomic(systemFunction(StringValue.class, this::action3Performed)));
+		Action action1 = action(ACTION1, atomic(StringValue.class, this::action1Performed));
+		Action action2 = action(ACTION2, atomic(StringValue.class, this::action2Performed));
+		Action action3 = action(ACTION3, atomic(StringValue.class, this::action3Performed));
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1,action2,action3)

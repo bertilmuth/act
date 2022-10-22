@@ -3,8 +3,10 @@ package org.requirementsascode.act.token.function;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.token.function.SystemFunction.systemFunction;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -22,8 +24,8 @@ public class Atomic implements ActionBehavior {
 		this.function = function;
 	}
 
-	public static Atomic atomic(Behavior<Workflow, ActionData, ActionData> function) {
-		return new Atomic(function);
+	public static <T extends ActionData, U extends ActionData> Atomic atomic(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
+		return new Atomic(systemFunction(inputClass, function));
 	}
 
 	@Override
