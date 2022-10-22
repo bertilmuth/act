@@ -36,7 +36,7 @@ public class SystemFunction{
 		return data(workflow, outputActionData);
 	}
 	
-	static Data<Workflow, Token> executeFunction(Behavior<Workflow, ActionData, ActionData> function, Data<Workflow, Token> inputDataWithTokenInAction) {
+	Data<Workflow, Token> executeFunction(Behavior<Workflow, ActionData, ActionData> function, Data<Workflow, Token> inputDataWithTokenInAction) {
 		Workflow workflow = Workflow.from(inputDataWithTokenInAction);
 		Token token = Token.from(inputDataWithTokenInAction).orElseThrow(() -> new IllegalStateException("Token missing!"));
 		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData());
