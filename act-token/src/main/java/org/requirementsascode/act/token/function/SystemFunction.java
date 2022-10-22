@@ -13,23 +13,22 @@ import org.requirementsascode.act.token.Node;
 import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
-public class SystemFunction{		
+public class SystemFunction<T extends ActionData, U extends ActionData>{		
 	private Behavior<Workflow, ActionData, ActionData> functionBehavior;
 
-	public SystemFunction(Behavior<Workflow, ActionData, ActionData> functionBehavior) {
-		this.functionBehavior = functionBehavior;
+	public SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
+		this.functionBehavior = when(inputClass, d -> apply(function, d));
 	}
 	
-	public static <T extends ActionData, U extends ActionData> SystemFunction systemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
-		Behavior<Workflow, ActionData, ActionData> functionBehavior = when(inputClass, d -> apply(function, d));
-		return new SystemFunction(functionBehavior);
+	public static <T extends ActionData, U extends ActionData> SystemFunction<T,U> systemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
+		return new SystemFunction<>(inputClass, function);
 	}
 	
 	public Behavior<Workflow, ActionData, ActionData> functionBehavior(){
 		return functionBehavior;
 	}
 	
-	private static <T extends ActionData, U extends ActionData> Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
+	private Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
 		Workflow workflow = Workflow.from(input);
 		T inputActionData = input.value().orElse(null);
 		U outputActionData = function.apply(workflow, inputActionData);
