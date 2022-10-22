@@ -15,15 +15,15 @@ import org.requirementsascode.act.token.ActionData;
 import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
-public class Atomic implements ActionBehavior {
-	private final SystemFunction systemFunction;
+public class Atomic<T extends ActionData, U extends ActionData> implements ActionBehavior {
+	private final SystemFunction<T, U> systemFunction;
 
-	private Atomic(SystemFunction systemFunction) {
+	private Atomic(SystemFunction<T,U> systemFunction) {
 		this.systemFunction = systemFunction;
 	}
 
-	public static <T extends ActionData, U extends ActionData> Atomic atomic(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
-		return new Atomic(systemFunction(inputClass, function));
+	public static <T extends ActionData, U extends ActionData> Atomic<T,U> atomic(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
+		return new Atomic<>(systemFunction(inputClass, function));
 	}
 
 	@Override
@@ -40,7 +40,8 @@ public class Atomic implements ActionBehavior {
 		Workflow workflow = Workflow.from(inputData);
 		Token tokenInAction = workflow.tokens().firstTokenIn(owningAction.name()).get();
 		Data<Workflow, Token> inputDataWithTokenInAction = data(workflow, tokenInAction);
-		return systemFunction.executeFunction(inputDataWithTokenInAction);
+		Data<Workflow,Token> outputData = systemFunction.executeFunction(inputDataWithTokenInAction);
+		return outputData;
 	}
 	
 	private boolean triggersAtomicSystemFunction(Token token) {

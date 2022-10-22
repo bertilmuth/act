@@ -14,19 +14,15 @@ import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
 public class SystemFunction<T extends ActionData, U extends ActionData>{		
-	private Behavior<Workflow, ActionData, ActionData> functionBehavior;
+	private final Behavior<Workflow, ActionData, ActionData> functionBehavior;
 
-	public SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
+	private SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
 		Behavior<Workflow, T, U> behavior = d -> apply(function, d);
 		this.functionBehavior = when(inputClass, behavior);
 	}
 	
 	public static <T extends ActionData, U extends ActionData> SystemFunction<T,U> systemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
 		return new SystemFunction<>(inputClass, function);
-	}
-	
-	public Behavior<Workflow, ActionData, ActionData> functionBehavior(){
-		return functionBehavior;
 	}
 	
 	private Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
@@ -42,11 +38,11 @@ public class SystemFunction<T extends ActionData, U extends ActionData>{
 		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData());
 		Data<Workflow, ActionData> functionOutput = functionBehavior.actOn(functionInput);
 		Token tokenAfter = tokenFor(token.node(), functionOutput);
-
-		return workflow.replaceToken(token, tokenAfter);
+		Data<Workflow, Token> resultWorkflow = workflow.replaceToken(token, tokenAfter);
+		return resultWorkflow;
 	}
 	
-	private static Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {
+	private Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {
 		return token(node, actionData.value().orElse(null));
 	}
 }
