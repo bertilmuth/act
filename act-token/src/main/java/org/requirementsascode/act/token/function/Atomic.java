@@ -40,16 +40,19 @@ public class Atomic implements ActionBehavior {
 
 	private Data<Workflow, Token> triggerAtomicSystemFunction(Action action, Data<Workflow, Token> inputData) {
 		Workflow workflow = Workflow.from(inputData);
-		Token tokenBefore = workflow.tokens().firstTokenIn(action.name()).get();
-		return executeFunction(workflow, tokenBefore);
+		Token tokenInAction = workflow.tokens().firstTokenIn(action.name()).get();
+		Data<Workflow, Token> inputDataWithTokenInAction = data(workflow, tokenInAction);
+		return executeFunction(inputDataWithTokenInAction);
 	}
 
-	private Data<Workflow, Token> executeFunction(Workflow workflow, Token tokenBefore) {
-		Data<Workflow, ActionData> functionInput = data(workflow, tokenBefore.actionData());
+	private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputDataWithTokenInAction) {
+		Workflow workflow = Workflow.from(inputDataWithTokenInAction);
+		Token token = Token.from(inputDataWithTokenInAction).orElseThrow(() -> new IllegalStateException("Token missing!"));
+		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData());
 		Data<Workflow, ActionData> functionOutput = function.actOn(functionInput);
-		Token tokenAfter = tokenFor(tokenBefore.node(), functionOutput);
+		Token tokenAfter = tokenFor(token.node(), functionOutput);
 
-		return workflow.replaceToken(tokenBefore, tokenAfter);
+		return workflow.replaceToken(token, tokenAfter);
 	}
 	
 	private boolean triggersAtomicSystemFunction(Token token) {
