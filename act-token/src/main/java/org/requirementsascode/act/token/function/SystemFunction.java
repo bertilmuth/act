@@ -8,12 +8,14 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.token.Action;
+import org.requirementsascode.act.token.ActionBehavior;
 import org.requirementsascode.act.token.ActionData;
 import org.requirementsascode.act.token.Node;
 import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
-public class SystemFunction<T extends ActionData, U extends ActionData>{		
+public class SystemFunction<T extends ActionData, U extends ActionData> implements ActionBehavior{		
 	private final Behavior<Workflow, ActionData, ActionData> functionBehavior;
 
 	private SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
@@ -25,11 +27,9 @@ public class SystemFunction<T extends ActionData, U extends ActionData>{
 		return new SystemFunction<>(inputClass, function);
 	}
 	
-	private Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
-		Workflow workflow = Workflow.from(input);
-		T inputActionData = input.value().orElse(null);
-		U outputActionData = function.apply(workflow, inputActionData);
-		return data(workflow, outputActionData);
+	@Override
+	public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
+		return this::executeFunction;
 	}
 	
 	Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
@@ -40,6 +40,13 @@ public class SystemFunction<T extends ActionData, U extends ActionData>{
 		Token tokenAfter = tokenFor(token.node(), functionOutput);
 		Data<Workflow, Token> resultWorkflow = workflow.replaceToken(token, tokenAfter);
 		return resultWorkflow;
+	}
+	
+	private Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
+		Workflow workflow = Workflow.from(input);
+		T inputActionData = input.value().orElse(null);
+		U outputActionData = function.apply(workflow, inputActionData);
+		return data(workflow, outputActionData);
 	}
 	
 	private Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {
