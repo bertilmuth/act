@@ -13,10 +13,16 @@ import org.requirementsascode.act.token.Node;
 import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
-public class SystemFunction{	
+public class SystemFunction{		
+	private Behavior<Workflow, ActionData, ActionData> functionBehavior;
+
+	public SystemFunction(Behavior<Workflow, ActionData, ActionData> functionBehavior) {
+		this.functionBehavior = functionBehavior;
+	}
+	
 	public static <T extends ActionData, U extends ActionData> Behavior<Workflow, ActionData, ActionData> systemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
-		Behavior<Workflow, T, U> functionBehavior = d -> apply(function, d);
-		return when(inputClass, functionBehavior);
+		Behavior<Workflow, ActionData, ActionData> functionBehavior = when(inputClass, d -> apply(function, d));
+		return new SystemFunction(functionBehavior).functionBehavior;
 	}
 	
 	private static <T extends ActionData, U extends ActionData> Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
