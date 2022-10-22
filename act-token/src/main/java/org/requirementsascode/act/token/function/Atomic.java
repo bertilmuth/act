@@ -28,10 +28,10 @@ public class Atomic<T extends ActionData, U extends ActionData> implements Actio
 
 	@Override
 	public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
-		return inCase(this::triggersAtomicSystemBehavior, d -> atomicSystemFunction(owningAction, d));
+		return inCase(this::triggersAtomicSystemFunction, d -> atomicSystemFunction(owningAction, d));
 	}
 
-	private boolean triggersAtomicSystemBehavior(Data<Workflow, Token> inputData) {
+	private boolean triggersAtomicSystemFunction(Data<Workflow, Token> inputData) {
 		return Token.from(inputData).map(t -> triggersAtomicSystemFunction(t)).orElse(false);
 	}
 
