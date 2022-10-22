@@ -42,10 +42,10 @@ public class Atomic implements ActionBehavior {
 		Workflow workflow = Workflow.from(inputData);
 		Token tokenInAction = workflow.tokens().firstTokenIn(action.name()).get();
 		Data<Workflow, Token> inputDataWithTokenInAction = data(workflow, tokenInAction);
-		return executeFunction(inputDataWithTokenInAction);
+		return executeFunction(function, inputDataWithTokenInAction);
 	}
 
-	private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputDataWithTokenInAction) {
+	private Data<Workflow, Token> executeFunction(Behavior<Workflow, ActionData, ActionData> function, Data<Workflow, Token> inputDataWithTokenInAction) {
 		Workflow workflow = Workflow.from(inputDataWithTokenInAction);
 		Token token = Token.from(inputDataWithTokenInAction).orElseThrow(() -> new IllegalStateException("Token missing!"));
 		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData());
