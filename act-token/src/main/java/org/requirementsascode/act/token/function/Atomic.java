@@ -40,7 +40,7 @@ public class Atomic implements ActionBehavior {
 		Workflow workflow = Workflow.from(inputData);
 		Token tokenInAction = workflow.tokens().firstTokenIn(action.name()).get();
 		Data<Workflow, Token> inputDataWithTokenInAction = data(workflow, tokenInAction);
-		return systemFunction.executeFunction(systemFunction.functionBehavior(), inputDataWithTokenInAction);
+		return systemFunction.executeFunction(inputDataWithTokenInAction);
 	}
 	
 	private boolean triggersAtomicSystemFunction(Token token) {
