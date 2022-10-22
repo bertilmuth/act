@@ -40,7 +40,7 @@ public class Atomic<T extends ActionData, U extends ActionData> implements Actio
 		Workflow workflow = Workflow.from(inputData);
 		Token tokenInAction = workflow.tokens().firstTokenIn(owningAction.name()).get();
 		Data<Workflow, Token> inputDataWithTokenInAction = data(workflow, tokenInAction);
-		Data<Workflow, Token> outputData = systemFunction.executeFunction(inputDataWithTokenInAction);
+		Data<Workflow, Token> outputData = systemFunction.asBehavior(owningAction).actOn(inputDataWithTokenInAction);
 		return outputData;
 	}
 
