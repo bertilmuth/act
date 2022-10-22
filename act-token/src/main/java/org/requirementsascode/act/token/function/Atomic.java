@@ -4,7 +4,6 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.token.function.SystemFunction.systemFunction;
 
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;

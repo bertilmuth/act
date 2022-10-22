@@ -32,7 +32,7 @@ public class SystemFunction<T extends ActionData, U extends ActionData> implemen
 		return this::executeFunction;
 	}
 	
-	Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
+	private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
 		Workflow workflow = Workflow.from(inputData);
 		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
 		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData());
