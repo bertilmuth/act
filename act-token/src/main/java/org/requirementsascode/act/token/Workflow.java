@@ -3,7 +3,7 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.TriggerSystemFunction.triggerNextStep;
+import static org.requirementsascode.act.token.function.AtomicSystemFunction.atomicSystemFunction;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -60,7 +60,7 @@ public class Workflow {
 	}
 
 	private AfterStep nextStep() {
-		return nextStep(triggerNextStep());
+		return nextStep(atomicSystemFunction());
 	}
 	
 	public AfterStep nextStep(ActionData actionData) {

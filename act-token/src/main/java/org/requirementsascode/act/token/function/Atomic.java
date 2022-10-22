@@ -27,16 +27,16 @@ public class Atomic implements ActionBehavior {
 	}
 
 	@Override
-	public Behavior<Workflow, Token, Token> asBehavior(Action callingAction) {
-		return inCase(this::isTriggered, d -> triggerNextStep(callingAction, d));
+	public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
+		return inCase(this::isTriggered, d -> triggerAtomicSystemFunction(owningAction, d));
 	}
 
 	private boolean isTriggered(Data<Workflow, Token> inputData) {
 		Optional<Token> token = Token.from(inputData);
-		return token.map(Token::triggersSystemFunction).orElse(false);
+		return token.map(t -> triggersAtomicSystemFunction(t)).orElse(false);
 	}
 
-	private Data<Workflow, Token> triggerNextStep(Action action, Data<Workflow, Token> inputData) {
+	private Data<Workflow, Token> triggerAtomicSystemFunction(Action action, Data<Workflow, Token> inputData) {
 		Workflow workflow = Workflow.from(inputData);
 		Token tokenBefore = workflow.tokens().firstTokenIn(action.name()).get();
 		return executeFunction(workflow, tokenBefore);
@@ -48,6 +48,10 @@ public class Atomic implements ActionBehavior {
 		Token tokenAfter = tokenFor(tokenBefore.node(), functionOutput);
 
 		return workflow.replaceToken(tokenBefore, tokenAfter);
+	}
+	
+	private boolean triggersAtomicSystemFunction(Token token) {
+		return token.actionData() instanceof AtomicSystemFunction;
 	}
 
 	private Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {

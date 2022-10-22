@@ -27,10 +27,6 @@ public class Token {
 	Token moveTo(Node node) {
 		return new Token(node, actionData);
 	}
-	
-	public boolean triggersSystemFunction() {
-		return actionData() instanceof TriggerSystemFunction;
-	}
 
 	public Node node() {
 		return node;
