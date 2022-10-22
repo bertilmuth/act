@@ -16,10 +16,10 @@ import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
 public class Atomic implements ActionBehavior {
-	private final Behavior<Workflow, ActionData, ActionData> functionBehavior;
+	private final SystemFunction systemFunction;
 
-	private Atomic(Behavior<Workflow, ActionData, ActionData> functionBehavior) {
-		this.functionBehavior = functionBehavior;
+	private Atomic(SystemFunction systemFunction) {
+		this.systemFunction = systemFunction;
 	}
 
 	public static <T extends ActionData, U extends ActionData> Atomic atomic(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
@@ -40,7 +40,7 @@ public class Atomic implements ActionBehavior {
 		Workflow workflow = Workflow.from(inputData);
 		Token tokenInAction = workflow.tokens().firstTokenIn(action.name()).get();
 		Data<Workflow, Token> inputDataWithTokenInAction = data(workflow, tokenInAction);
-		return SystemFunction.executeFunction(functionBehavior, inputDataWithTokenInAction);
+		return SystemFunction.executeFunction(systemFunction.functionBehavior(), inputDataWithTokenInAction);
 	}
 	
 	private boolean triggersAtomicSystemFunction(Token token) {

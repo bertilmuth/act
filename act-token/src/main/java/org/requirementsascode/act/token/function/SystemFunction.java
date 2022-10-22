@@ -20,9 +20,13 @@ public class SystemFunction{
 		this.functionBehavior = functionBehavior;
 	}
 	
-	public static <T extends ActionData, U extends ActionData> Behavior<Workflow, ActionData, ActionData> systemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
+	public static <T extends ActionData, U extends ActionData> SystemFunction systemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
 		Behavior<Workflow, ActionData, ActionData> functionBehavior = when(inputClass, d -> apply(function, d));
-		return new SystemFunction(functionBehavior).functionBehavior;
+		return new SystemFunction(functionBehavior);
+	}
+	
+	public Behavior<Workflow, ActionData, ActionData> functionBehavior(){
+		return functionBehavior;
 	}
 	
 	private static <T extends ActionData, U extends ActionData> Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input){
