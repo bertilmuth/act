@@ -1,10 +1,8 @@
 @startuml
-[*] -right-> CartEmpty
-CartEmpty -right-> CartNotEmpty : AddItem
-CartNotEmpty --> CartEmpty : RemoveItem [cartSize == 1 && itemIsInCart]
-CartNotEmpty -left-> CartNotEmpty : AddItem
-CartNotEmpty -right-> CartNotEmpty : RemoveItem[cartSize > 1 && itemIsInCart]
+[*] -right-> OFF
+OFF -right-> ON: TurnOn
+ON -left-> OFF: TurnOff
 
-note left of CartNotEmpty : Invariant Condition:\ncartSize > 0
-note right of CartEmpty : Invariant Condition:\ncartSize == 0
+note top of OFF: Invariant Condition:\ns.equals(LightState.OFF)
+note right of ON: Invariant Condition:\ns.equals(LightState.ON)
 @enduml

@@ -25,52 +25,44 @@ implementation 'org.requirementsascode.act:act-statemachine:0.6.5'
 
 # Example usage
 
-As an example, look at the following simplified state machine for a shopping cart.
+Look at the following state machine for a light.
 
-It represents its two fundamental states of being either empty, or non-empty.
+It represents its two fundamental states of being either OFF, or ON.
 
-The AddItem trigger causes a change to the non-empty cart state.
+The `TurnOn` trigger causes a change to the ON state.
 
-The RemoveItem trigger causes a change to the empty cart state, if the cart only contains 1 item.
+The `TurnOff` trigger causes a change to the OFF state.
 
-![Image of a statemachine of a shopping cart, with two states](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_without_invariants_diagram.png)
+![Image of a statemachine of a light, with two states](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_without_invariants_diagram.png)
 
 Act uses invariant conditions to be able to check if the state machine is in a certain state.
 
 Here's the state machine diagram with the states' invariants (yellow sticky notes).
 
-![Image of a statemachine of a shopping cart, with two states and invariants](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_diagram_withInvariants.png)
+![Image of a statemachine of a light, with two states and invariants](https://github.com/bertilmuth/act/blob/main/doc/flat_statemachine_diagram_withInvariants.png)
 
 And here's how the state machine is presented in code.
 
 ``` java
-State<Cart, Trigger> empty = state("Empty", cart -> cart != null && cart.items().size() == 0);
-State<Cart, Trigger> nonEmpty = state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
+interface Trigger{ }
+class TurnOn implements Trigger{ }
+class TurnOff implements Trigger{ }
 
-Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
-	.states(empty,nonEmpty)
+enum LightState{ON, OFF};
+...
+State<LightState, Trigger> on = state("On", s -> s.equals(LightState.ON));
+State<LightState, Trigger> off = state("Off", s -> s.equals(LightState.OFF));
+
+Statemachine<LightState, Trigger> statemachine = Statemachine.builder()
+	.states(on, off)
 	.transitions(
-		transition(anyState(), nonEmpty, 
-			when(AddItem.class, 
-				consumeWith(Cart::addItem))),	
-		
-		transition(nonEmpty, nonEmpty, 
-			whenInCase(RemoveItem.class, d -> cartSize(d) > 1 && itemIsInCart(d), 
-				consumeWith(Cart::removeItem))),
-		
-		transition(nonEmpty, empty, 
-			whenInCase(RemoveItem.class, d -> cartSize(d) == 1 && itemIsInCart(d), 
-				consumeWith(Cart::removeItem)))
-	)
-	.flows(
-		entryFlow(when(CreateCart.class, init(Cart::createCart)))
+		transition(off, on, when(TurnOn.class, consumeWith(this::turnOn))),
+		transition(on, off, when(TurnOff.class, consumeWith(this::turnOff)))
 	)
 	.build();
 ```
-As you can see in the code, the number of transitions is 3, instead of 4 on the diagram.
-Since adding an item always leads to the `nonEmpty` state, you can specify `anyState()` as the source state.
 
-To learn more, see the [CartStateMachine](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/testdata/CartStateMachine.java) class and the [CartStateMachineTest](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/CartStateMachineTest.java) class.
+To learn more, see the [LightExample](https://github.com/bertilmuth/act-examples/blob/main/light/src/main/java/example/act/light/LightExample.javaa) class.
 
 # Property based testing
 The act-pbt subproject supports property based testing of state machines.
