@@ -12,6 +12,10 @@ If you are using Maven, include the following in your `pom.xml`:
     <version>0.6.5</version>
   </dependency>
 ```
+Here's a minimal [POM file](https://github.com/bertilmuth/act-examples/blob/main/light/pom.xml) that you can use in your own projects.
+Make sure to adapt `groupId` and `artifactId`.
+
+Another way to get started is to clone the [act-examples](https://github.com/bertilmuth/act-examples/) project.
 
 If you are using Gradle, include the following in your `build.gradle` dependencies:
 
