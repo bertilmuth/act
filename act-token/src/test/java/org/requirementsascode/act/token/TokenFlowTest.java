@@ -31,12 +31,12 @@ class TokenFlowTest {
 			.initialActions(action1)
 			.build();
 		
-		StringValue startWorkflow = new StringValue(START_WORKFLOW);
-		AfterStep workflowStarted = workflow.nextStep(startWorkflow);
+		StringValue startData = new StringValue(START_WORKFLOW);
+		AfterStep workflowStarted = workflow.start(startData);
 		Tokens tokensAtStart = workflowStarted.tokens();
 		assertFalse(tokensAtStart.isAnyTokenIn(ACTION2));
 		assertFalse(tokensAtStart.isAnyTokenIn(ACTION3));
-		assertEquals(token(action1, startWorkflow), tokensAtStart.firstTokenIn(ACTION1).get());
+		assertEquals(token(action1, startData), tokensAtStart.firstTokenIn(ACTION1).get());
 		
 		AfterStep after1 = workflowStarted.nextStep();
 		Tokens tokensAfter1 = after1.tokens();

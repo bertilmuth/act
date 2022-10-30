@@ -1,7 +1,6 @@
 package org.requirementsascode.act.token;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
@@ -22,7 +21,7 @@ class WorkflowTest {
 			.initialActions()
 			.build();
 		
-		AfterStep workflowStarted = workflow.nextStep(s(""));
+		AfterStep workflowStarted = workflow.start(s(""));
 		assertTrue(workflowStarted.actionOutput().isEmpty());
 		assertTrue(workflowStarted.tokens().stream().toList().isEmpty());
 	}
@@ -37,10 +36,10 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		Tokens tokensAtStart = workflow.nextStep(s(START_WORKFLOW)).tokens();
+		Tokens tokensAtStart = workflow.start(s(START_WORKFLOW)).tokens();
 		assertEquals(token(action1, s(START_WORKFLOW)), tokensAtStart.firstTokenIn(ACTION1).get());
 
-		Tokens tokensAfter1 = workflow.nextStep(s(START_WORKFLOW)).nextStep().tokens();
+		Tokens tokensAfter1 = workflow.start(s(START_WORKFLOW)).nextStep().tokens();
 		assertEquals(token(action1, s(ACTION1)), tokensAfter1.firstTokenIn(ACTION1).get());
 	}
 

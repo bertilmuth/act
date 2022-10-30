@@ -58,12 +58,16 @@ public class Workflow {
 			return updatedData(tokensAfter, t);
 		}).orElse(d);
 	}
+	
+	public AfterStep start(ActionData actionData) {
+		return nextStep(actionData);
+	}
 
 	private AfterStep nextStep() {
 		return nextStep(atomicSystemFunction());
 	}
 	
-	public AfterStep nextStep(ActionData actionData) {
+	private AfterStep nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
 		Data<Workflow, Token> outputOfStep = statemachine().actOn(trigger);
