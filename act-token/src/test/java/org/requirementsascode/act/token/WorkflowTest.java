@@ -28,7 +28,7 @@ class WorkflowTest {
 	
 	@Test
 	void runsSingleAction() {
-		Action action1 = action(ACTION1, atomic(StringValue.class, this::action1Performed));
+		Action action1 = action(ACTION1, atomic(StringData.class, this::action1Performed));
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
@@ -43,11 +43,11 @@ class WorkflowTest {
 		assertEquals(token(action1, s(ACTION1)), tokensAfter1.firstTokenIn(ACTION1).get());
 	}
 
-	private StringValue s(String stringValue) {
-		return new StringValue(stringValue);
+	private StringData s(String str) {
+		return new StringData(str);
 	}
 	
-	private StringValue action1Performed(Workflow workflow, StringValue input) {
-		return new StringValue(ACTION1);
+	private StringData action1Performed(Workflow workflow, StringData input) {
+		return new StringData(ACTION1);
 	}
 }

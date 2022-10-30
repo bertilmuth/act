@@ -2,9 +2,9 @@ package org.requirementsascode.act.token;
 
 import java.util.Objects;
 
-class StringValue implements ActionData{
+class StringData implements ActionData{
 		public final String string;
-		public StringValue(String string) {
+		public StringData(String string) {
 			this.string = string;
 		}
 		@Override
@@ -19,7 +19,7 @@ class StringValue implements ActionData{
 				return false;
 			if (getClass() != obj.getClass())
 				return false;
-			StringValue other = (StringValue) obj;
+			StringData other = (StringData) obj;
 			return Objects.equals(string, other.string);
 		}
 		@Override

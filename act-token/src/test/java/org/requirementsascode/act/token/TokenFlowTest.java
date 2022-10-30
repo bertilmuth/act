@@ -18,9 +18,9 @@ class TokenFlowTest {
 
 	@Test
 	void runTwoWorkflowSteps() {
-		Action action1 = action(ACTION1, atomic(StringValue.class, this::action1Performed));
-		Action action2 = action(ACTION2, atomic(StringValue.class, this::action2Performed));
-		Action action3 = action(ACTION3, atomic(StringValue.class, this::action3Performed));
+		Action action1 = action(ACTION1, atomic(StringData.class, this::action1Performed));
+		Action action2 = action(ACTION2, atomic(StringData.class, this::action2Performed));
+		Action action3 = action(ACTION3, atomic(StringData.class, this::action3Performed));
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1,action2,action3)
@@ -31,7 +31,7 @@ class TokenFlowTest {
 			.initialActions(action1)
 			.build();
 		
-		StringValue startData = new StringValue(START_WORKFLOW);
+		StringData startData = new StringData(START_WORKFLOW);
 		AfterStep workflowStarted = workflow.start(startData);
 		Tokens tokensAtStart = workflowStarted.tokens();
 		assertFalse(tokensAtStart.isAnyTokenIn(ACTION2));
@@ -42,22 +42,22 @@ class TokenFlowTest {
 		Tokens tokensAfter1 = after1.tokens();
 		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
 		assertFalse(tokensAfter1.isAnyTokenIn(ACTION3));
-		assertEquals(token(action2, new StringValue(ACTION1)), tokensAfter1.firstTokenIn(ACTION2).get());
+		assertEquals(token(action2, new StringData(ACTION1)), tokensAfter1.firstTokenIn(ACTION2).get());
 		
 		AfterStep after2 = after1.nextStep();
 		Tokens tokensAfter2 = after2.tokens();
 		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
 		assertFalse(tokensAfter2.isAnyTokenIn(ACTION2));
-		assertEquals(token(action3, new StringValue(ACTION2)), tokensAfter2.firstTokenIn(ACTION3).get());
+		assertEquals(token(action3, new StringData(ACTION2)), tokensAfter2.firstTokenIn(ACTION3).get());
 	}
 
-	private StringValue action1Performed(Workflow workflow, StringValue input) {
-		return new StringValue(ACTION1);
+	private StringData action1Performed(Workflow workflow, StringData input) {
+		return new StringData(ACTION1);
 	}
-	private StringValue action2Performed(Workflow workflow, StringValue input) {
-		return new StringValue(ACTION2);
+	private StringData action2Performed(Workflow workflow, StringData input) {
+		return new StringData(ACTION2);
 	}
-	private StringValue action3Performed(Workflow workflow, StringValue input) {
-		return new StringValue(ACTION3);
+	private StringData action3Performed(Workflow workflow, StringData input) {
+		return new StringData(ACTION3);
 	}
 }
