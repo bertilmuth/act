@@ -34,19 +34,12 @@ class TokenFlowTest {
 		StringData startData = new StringData(START_WORKFLOW);
 		AfterStep workflowStarted = workflow.start(startData);
 		Tokens tokensAtStart = workflowStarted.tokens();
-		assertFalse(tokensAtStart.isAnyTokenIn(ACTION2));
+		assertFalse(tokensAtStart.isAnyTokenIn(ACTION1));
 		assertFalse(tokensAtStart.isAnyTokenIn(ACTION3));
-		assertEquals(token(action1, startData), tokensAtStart.firstTokenIn(ACTION1).get());
+		assertEquals(token(action2, new StringData(ACTION1)), tokensAtStart.firstTokenIn(ACTION2).get());
 		
-		AfterStep after1 = workflowStarted.nextStep();
-		Tokens tokensAfter1 = after1.tokens();
-		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
-		assertFalse(tokensAfter1.isAnyTokenIn(ACTION3));
-		assertEquals(token(action2, new StringData(ACTION1)), tokensAfter1.firstTokenIn(ACTION2).get());
-		
-		AfterStep after2 = after1.nextStep();
-		Tokens tokensAfter2 = after2.tokens();
-		assertFalse(tokensAfter1.isAnyTokenIn(ACTION1));
+		Tokens tokensAfter2 = workflowStarted.nextStep().tokens();
+		assertFalse(tokensAfter2.isAnyTokenIn(ACTION1));
 		assertFalse(tokensAfter2.isAnyTokenIn(ACTION2));
 		assertEquals(token(action3, new StringData(ACTION2)), tokensAfter2.firstTokenIn(ACTION3).get());
 	}

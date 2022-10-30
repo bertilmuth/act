@@ -60,7 +60,7 @@ public class Workflow {
 	}
 	
 	public AfterStep start(ActionData actionData) {
-		return nextStep(actionData);
+		return nextStep(actionData).nextStep();
 	}
 
 	private AfterStep nextStep() {
