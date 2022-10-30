@@ -40,10 +40,12 @@ class WorkflowTest {
 		
 		StringValue startWorkflow = new StringValue(START_WORKFLOW);
 		AfterStep workflowStarted = workflow.nextStep(startWorkflow);
-	
 		Tokens tokensAtStart = workflowStarted.tokens();
 		assertEquals(token(action1, startWorkflow), tokensAtStart.firstTokenIn(ACTION1).get());
 
+		AfterStep after1 = workflowStarted.nextStep();
+		Tokens tokensAfter1 = after1.tokens();
+		assertEquals(token(action1, new StringValue(ACTION1)), tokensAfter1.firstTokenIn(ACTION1).get());
 	}
 	
 	private StringValue action1Performed(Workflow workflow, StringValue input) {
