@@ -21,11 +21,10 @@ class WorkflowTest {
 			.tokenFlows()
 			.initialActions()
 			.build();
-		StringValue emptyString = new StringValue("");
-		AfterStep workflowStarted = workflow.nextStep(emptyString);
 		
+		AfterStep workflowStarted = workflow.nextStep(s(""));
 		assertTrue(workflowStarted.actionOutput().isEmpty());
-		assertFalse(workflowStarted.tokens().isAnyTokenIn(""));
+		assertTrue(workflowStarted.tokens().stream().toList().isEmpty());
 	}
 	
 	@Test
@@ -38,14 +37,15 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		StringValue startWorkflow = new StringValue(START_WORKFLOW);
-		AfterStep workflowStarted = workflow.nextStep(startWorkflow);
-		Tokens tokensAtStart = workflowStarted.tokens();
-		assertEquals(token(action1, startWorkflow), tokensAtStart.firstTokenIn(ACTION1).get());
+		Tokens tokensAtStart = workflow.nextStep(s(START_WORKFLOW)).tokens();
+		assertEquals(token(action1, s(START_WORKFLOW)), tokensAtStart.firstTokenIn(ACTION1).get());
 
-		AfterStep after1 = workflowStarted.nextStep();
-		Tokens tokensAfter1 = after1.tokens();
-		assertEquals(token(action1, new StringValue(ACTION1)), tokensAfter1.firstTokenIn(ACTION1).get());
+		Tokens tokensAfter1 = workflow.nextStep(s(START_WORKFLOW)).nextStep().tokens();
+		assertEquals(token(action1, s(ACTION1)), tokensAfter1.firstTokenIn(ACTION1).get());
+	}
+
+	private StringValue s(String stringValue) {
+		return new StringValue(stringValue);
 	}
 	
 	private StringValue action1Performed(Workflow workflow, StringValue input) {
