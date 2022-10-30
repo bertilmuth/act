@@ -62,7 +62,7 @@ Statemachine<LightState, Trigger> statemachine = Statemachine.builder()
 	.build();
 ```
 
-To learn more, see the [LightExample](https://github.com/bertilmuth/act-examples/blob/main/light/src/main/java/example/act/light/LightExample.javaa) class.
+To learn more, see the [LightExample](https://github.com/bertilmuth/act-examples/blob/main/light/src/main/java/example/act/light/LightExample.java) class.
 
 # Property based testing
 The act-pbt subproject supports property based testing of state machines.
