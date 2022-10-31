@@ -64,7 +64,8 @@ class SystemFunction<T extends ActionData, U extends ActionData> implements Acti
 	private final Behavior<Workflow, ActionData, ActionData> functionBehavior;
 
 	private SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
-		this.functionBehavior = when(inputClass, d -> apply(function, d));
+		Behavior<Workflow, T, U> behavior = d -> apply(function, d);
+		this.functionBehavior = when(inputClass, behavior);
 	}
 
 	public static <T extends ActionData, U extends ActionData> SystemFunction<T, U> systemFunction(Class<T> inputClass,
