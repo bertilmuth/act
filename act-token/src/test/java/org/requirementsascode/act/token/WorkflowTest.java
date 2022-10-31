@@ -39,6 +39,20 @@ class WorkflowTest {
 		Tokens tokensAtStart = workflow.start(s(START_WORKFLOW)).tokens();
 		assertEquals(token(action1, s(ACTION1)), tokensAtStart.firstTokenIn(ACTION1).get());
 	}
+	
+	@Test
+	void doesntRunActionForUnknownData() {
+		Action action1 = action(ACTION1, atomic(StringData.class, this::action1Performed));
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1)
+			.tokenFlows()
+			.initialActions(action1)
+			.build();
+		
+		Tokens tokensAtStart = workflow.start(new UnknownData()).tokens();
+		assertEquals(token(action1, null), tokensAtStart.firstTokenIn(ACTION1).get());
+	}
 
 	private StringData s(String str) {
 		return new StringData(str);
@@ -48,3 +62,5 @@ class WorkflowTest {
 		return new StringData(ACTION1);
 	}
 }
+
+class UnknownData implements ActionData{ }

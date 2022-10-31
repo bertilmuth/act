@@ -44,6 +44,8 @@ public class Atomic<T extends ActionData, U extends ActionData> implements Actio
 	}
 
 	private boolean triggersAtomicSystemFunction(Token token) {
-		return token.actionData() instanceof AtomicSystemFunction;
+		return token.actionData()
+			.map(ad -> ad instanceof AtomicSystemFunction)
+			.orElse(false);
 	}
 }

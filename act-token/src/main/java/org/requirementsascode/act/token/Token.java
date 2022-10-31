@@ -1,7 +1,5 @@
 package org.requirementsascode.act.token;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.Objects;
 import java.util.Optional;
 
@@ -13,7 +11,7 @@ public class Token {
 
 	private Token(Node node, ActionData actionData) {
 		this.node = node;
-		this.actionData = requireNonNull(actionData, "actionData must be non-null!");
+		this.actionData = actionData;
 	}
 
 	public static Token token(Node node, ActionData actionData) {
@@ -32,8 +30,8 @@ public class Token {
 		return node;
 	}
 	
-	public ActionData actionData() {
-		return actionData;
+	public Optional<ActionData> actionData() {
+		return Optional.ofNullable(actionData);
 	}
 
 	@Override

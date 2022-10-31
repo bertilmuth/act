@@ -35,7 +35,7 @@ public class SystemFunction<T extends ActionData, U extends ActionData> implemen
 	private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
 		Workflow workflow = Workflow.from(inputData);
 		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
-		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData());
+		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData().get());
 		Data<Workflow, ActionData> functionOutput = functionBehavior.actOn(functionInput);
 		Token tokenAfter = tokenFor(token.node(), functionOutput);
 		Data<Workflow, Token> resultWorkflow = workflow.replaceToken(token, tokenAfter);

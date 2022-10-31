@@ -106,7 +106,7 @@ public class Workflow {
 		private AfterStep(Statemachine<Workflow, Token> statemachine, Data<Workflow, Token> outputOfStep) {
 			this.workflow = outputOfStep.state();
 			this.tokens = workflow.tokens();
-			this.actionOutput = outputOfStep.value().map(Token::actionData);
+			this.actionOutput = outputOfStep.value().flatMap(Token::actionData);
 		}
 		
 		public AfterStep nextStep() {
