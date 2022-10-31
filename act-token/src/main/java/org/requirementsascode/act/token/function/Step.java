@@ -14,28 +14,28 @@ import org.requirementsascode.act.token.ActionData;
 import org.requirementsascode.act.token.Token;
 import org.requirementsascode.act.token.Workflow;
 
-public class Atomic<T extends ActionData, U extends ActionData> implements ActionBehavior {
+public class Step<T extends ActionData, U extends ActionData> implements ActionBehavior {
 	private final SystemFunction<T, U> systemFunction;
 
-	private Atomic(SystemFunction<T, U> systemFunction) {
+	private Step(SystemFunction<T, U> systemFunction) {
 		this.systemFunction = systemFunction;
 	}
 
-	public static <T extends ActionData, U extends ActionData> Atomic<T, U> atomic(Class<T> inputClass,
+	public static <T extends ActionData, U extends ActionData> Step<T, U> step(Class<T> inputClass,
 			BiFunction<Workflow, T, U> function) {
-		return new Atomic<>(systemFunction(inputClass, function));
+		return new Step<>(systemFunction(inputClass, function));
 	}
 
 	@Override
 	public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
-		return inCase(this::triggersAtomicSystemFunction, d -> atomicSystemFunction(owningAction, d));
+		return inCase(this::triggersStep, d -> runStep(owningAction, d));
 	}
 
-	private boolean triggersAtomicSystemFunction(Data<Workflow, Token> inputData) {
-		return Token.from(inputData).map(t -> triggersAtomicSystemFunction(t)).orElse(false);
+	private boolean triggersStep(Data<Workflow, Token> inputData) {
+		return Token.from(inputData).map(t -> triggersStep(t)).orElse(false);
 	}
 
-	private Data<Workflow, Token> atomicSystemFunction(Action owningAction, Data<Workflow, Token> inputData) {
+	private Data<Workflow, Token> runStep(Action owningAction, Data<Workflow, Token> inputData) {
 		Workflow workflow = Workflow.from(inputData);
 		Token tokenInAction = workflow.tokens().firstTokenIn(owningAction.name()).get();
 		Data<Workflow, Token> inputDataWithTokenInAction = data(workflow, tokenInAction);
@@ -43,9 +43,9 @@ public class Atomic<T extends ActionData, U extends ActionData> implements Actio
 		return outputData;
 	}
 
-	private boolean triggersAtomicSystemFunction(Token token) {
+	private boolean triggersStep(Token token) {
 		return token.actionData()
-			.map(ad -> ad instanceof AtomicSystemFunction)
+			.map(ad -> ad instanceof StepTrigger)
 			.orElse(false);
 	}
 }

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.function.Atomic.atomic;
+import static org.requirementsascode.act.token.function.Step.step;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ class WorkflowTest {
 	
 	@Test
 	void runsSingleAction() {
-		Action action1 = action(ACTION1, atomic(StringData.class, this::action1Performed));
+		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
@@ -44,7 +44,7 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData() {
-		Action action1 = action(ACTION1, atomic(StringData.class, this::action1Performed));
+		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
@@ -59,7 +59,7 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData_nextStep() {
-		Action action1 = action(ACTION1, atomic(StringData.class, this::action1Performed));
+		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
