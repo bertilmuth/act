@@ -67,8 +67,8 @@ public class Workflow {
 	
 	Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
 		return Token.from(d).map(t -> {
-			Tokens tokensAfter = tokens().moveToken(t, toNode);
-			return updatedData(tokensAfter, t);
+			Tokens tokensAfterMove = tokens().moveToken(t, toNode);
+			return updatedData(tokensAfterMove, t);
 		}).orElse(d);
 	}
 	
@@ -86,8 +86,7 @@ public class Workflow {
 	}
 	
 	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
-		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
-		return data(newWorkflow, token);
+		return data(workflow(statemachine(), tokens), token);
 	}
 	
 	@Override
