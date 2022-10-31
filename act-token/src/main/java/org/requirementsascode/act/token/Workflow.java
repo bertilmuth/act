@@ -7,6 +7,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase
 import static org.requirementsascode.act.token.RemoveEmptyTokens.removeEmptyTokens;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.token.DefaultNode.defaultNode;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -72,6 +73,10 @@ public class Workflow {
 		}).orElse(d);
 	}
 	
+	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
+		return data(workflow(statemachine(), tokens), token);
+	}
+	
 	private AfterStep nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
@@ -80,13 +85,9 @@ public class Workflow {
 	}
 
 	private Data<Workflow, Token> actionTrigger(ActionData actionData) {
-		DefaultNode defaultNode = DefaultNode.defaultNode(statemachine());
+		DefaultNode defaultNode = defaultNode(statemachine());
 		Data<Workflow, Token> trigger = data(this, token(defaultNode, actionData));
 		return trigger;
-	}
-	
-	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
-		return data(workflow(statemachine(), tokens), token);
 	}
 	
 	@Override
