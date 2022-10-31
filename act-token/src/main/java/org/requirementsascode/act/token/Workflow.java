@@ -3,7 +3,7 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.function.StepTrigger.stepTrigger;
+import static org.requirementsascode.act.token.function.Step.stepTrigger;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -69,7 +69,7 @@ public class Workflow {
 	}
 
 	private AfterStep nextStep() {
-		return nextStep(stepTrigger());
+		return nextStep(stepTrigger);
 	}
 	
 	private AfterStep nextStep(ActionData actionData) {

@@ -16,6 +16,7 @@ import org.requirementsascode.act.token.Workflow;
 
 public class Step<T extends ActionData, U extends ActionData> implements ActionBehavior {
 	private final SystemFunction<T, U> systemFunction;
+	public static final StepTrigger stepTrigger = new StepTrigger();
 
 	private Step(SystemFunction<T, U> systemFunction) {
 		this.systemFunction = systemFunction;
@@ -47,5 +48,9 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		return token.actionData()
 			.map(ad -> ad instanceof StepTrigger)
 			.orElse(false);
+	}
+	
+	public static class StepTrigger implements ActionData{
+		private StepTrigger() {};
 	}
 }
