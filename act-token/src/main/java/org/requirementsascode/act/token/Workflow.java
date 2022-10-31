@@ -39,6 +39,10 @@ public class Workflow {
 		return tokens;
 	}
 	
+	public AfterStep start(ActionData actionData) {
+		return nextStep(actionData).nextStep();
+	}
+	
 	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
@@ -66,10 +70,6 @@ public class Workflow {
 			Tokens tokensAfter = tokens().moveToken(t, toNode);
 			return updatedData(tokensAfter, t);
 		}).orElse(d);
-	}
-	
-	public AfterStep start(ActionData actionData) {
-		return nextStep(actionData).nextStep();
 	}
 
 	private AfterStep nextStep() {
