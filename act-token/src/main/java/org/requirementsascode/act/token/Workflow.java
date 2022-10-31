@@ -99,10 +99,11 @@ public class Workflow {
 	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
 		
-		
+		Stream<Flow<Workflow, Token>> removeEmptyTokens = Stream.of(RemoveEmptyTokens.removeEmptyTokens());
 		Flow[] flowsArray = Stream.concat(
-			initialActions.stream(), 
-			tokenFlows.stream()).toArray(Flow[]::new);
+			Stream.concat(initialActions.stream(), tokenFlows.stream()),
+			removeEmptyTokens)
+		.toArray(Flow[]::new);
 		
 		Statemachine<Workflow, Token> statemachine = 
 				Statemachine.builder()
