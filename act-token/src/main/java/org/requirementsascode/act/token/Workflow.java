@@ -34,10 +34,6 @@ public class Workflow {
 	public Tokens tokens(){
 		return tokens;
 	}
-
-	private static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
-		return new Workflow(statemachine, tokens);
-	}
 	
 	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
@@ -46,18 +42,22 @@ public class Workflow {
 
 		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
 	}
+
+	private static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
+		return new Workflow(statemachine, tokens);
+	}
 	
-	public Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
+	Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
 		return updatedData(tokensAfter, tokenAfter);
 	}
 	
-	public Data<Workflow, Token> removeToken(Token tokenBefore) {
+	Data<Workflow, Token> removeToken(Token tokenBefore) {
 		Tokens tokensAfter = tokens().removeToken(tokenBefore);
 		return updatedData(tokensAfter, null);
 	}
 	
-	public Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
+	Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
 		return Token.from(d).map(t -> {
 			Tokens tokensAfter = tokens().moveToken(t, toNode);
 			return updatedData(tokensAfter, t);
