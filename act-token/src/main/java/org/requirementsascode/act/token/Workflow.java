@@ -4,9 +4,9 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
+import static org.requirementsascode.act.token.RemoveEmptyTokens.removeEmptyTokens;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.RemoveEmptyTokens.removeEmptyTokens;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -71,10 +71,6 @@ public class Workflow {
 			return updatedData(tokensAfter, t);
 		}).orElse(d);
 	}
-
-	private AfterStep nextStep() {
-		return nextStep(stepTrigger);
-	}
 	
 	private AfterStep nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
@@ -117,7 +113,7 @@ public class Workflow {
 		return statemachine;
 	}
 	
-	public static class AfterStep{
+	public static class AfterStep{		
 		private final Workflow workflow;
 		private final Tokens tokens;
 		private final Optional<ActionData> actionOutput;
@@ -129,7 +125,7 @@ public class Workflow {
 		}
 		
 		public AfterStep nextStep() {
-			return workflow.nextStep();
+			return workflow.nextStep(stepTrigger);
 		}
 		
 		public Tokens tokens() {
