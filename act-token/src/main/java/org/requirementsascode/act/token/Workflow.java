@@ -13,7 +13,6 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
-import org.requirementsascode.act.statemachine.StatemachineApi;
 
 public class Workflow {
 	private final Tokens tokens;
