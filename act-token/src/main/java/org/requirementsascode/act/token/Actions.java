@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
 
-public class Actions{
+public class Actions {
 	private final List<Action> actions;
 
 	private Actions(List<Action> actions) {
@@ -19,8 +19,7 @@ public class Actions{
 	}
 
 	Stream<State<Workflow, Token>> asStates() {
-		Stream<State<Workflow, Token>> statesStream = this.stream()
-				.map(e -> e.asState());
+		Stream<State<Workflow, Token>> statesStream = this.stream().map(e -> e.asState());
 		return statesStream;
 	}
 
