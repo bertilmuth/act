@@ -2,8 +2,11 @@ package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.token.RemoveEmptyTokens.removeEmptyTokens;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -13,6 +16,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
+import org.requirementsascode.act.statemachine.Transition;
 
 public class Workflow {
 	private final Tokens tokens;
@@ -99,18 +103,17 @@ public class Workflow {
 	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
 		
-		Stream<Flow<Workflow, Token>> removeEmptyTokens = Stream.of(RemoveEmptyTokens.removeEmptyTokens());
 		Flow[] flowsArray = Stream.concat(
 			Stream.concat(initialActions.stream(), tokenFlows.stream()),
-			removeEmptyTokens)
-		.toArray(Flow[]::new);
+			Stream.of(removeEmptyTokens()))
+			.toArray(Flow[]::new);
 		
 		Statemachine<Workflow, Token> statemachine = 
-				Statemachine.builder()
-					.states(actionsArray)
-					.transitions()
-					.flows(flowsArray)
-					.build();
+			Statemachine.builder()
+				.states(actionsArray)
+				.transitions()
+				.flows(flowsArray)
+				.build();
 		return statemachine;
 	}
 	
@@ -140,5 +143,28 @@ public class Workflow {
 	
 	private Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
+	}
+}
+
+class RemoveEmptyTokens implements Flow<Workflow, Token> {
+	public static RemoveEmptyTokens removeEmptyTokens() {
+		return new RemoveEmptyTokens();
+	}
+
+	@Override
+	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
+		return transition(owningStatemachine.definedState(), owningStatemachine.definedState(), 
+			whenInCase(Token.class, this::tokenIsEmpty, this::removeToken));
+	}
+
+	private boolean tokenIsEmpty(Data<Workflow, Token> d) {
+		return d.value().map(t -> !t.actionData().isPresent()).orElse(false);
+	}
+
+	private Data<Workflow, Token> removeToken(Data<Workflow, Token> inputData) {
+		Workflow workflow = Workflow.from(inputData);
+		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
+		Data<Workflow, Token> resultWorkflowWithRemovedToken = workflow.removeToken(token);
+		return resultWorkflowWithRemovedToken;
 	}
 }
