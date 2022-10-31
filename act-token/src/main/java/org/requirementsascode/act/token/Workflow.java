@@ -13,6 +13,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
+import org.requirementsascode.act.statemachine.StatemachineApi;
 
 public class Workflow {
 	private final Tokens tokens;
@@ -52,6 +53,11 @@ public class Workflow {
 		return updatedData(tokensAfter, tokenAfter);
 	}
 	
+	public Data<Workflow, Token> removeToken(Token tokenBefore) {
+		Tokens tokensAfter = tokens().removeToken(tokenBefore);
+		return updatedData(tokensAfter, null);
+	}
+	
 	public Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
 		return Token.from(d).map(t -> {
 			Tokens tokensAfter = tokens().moveToken(t, toNode);
@@ -80,6 +86,11 @@ public class Workflow {
 		return trigger;
 	}
 	
+	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
+		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
+		return data(newWorkflow, token);
+	}
+	
 	@Override
 	public String toString() {
 		return "Workflow[" + tokens + "]";
@@ -88,7 +99,12 @@ public class Workflow {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
-		Flow[] flowsArray = Stream.concat(initialActions.stream(), tokenFlows.stream()).toArray(Flow[]::new);
+		
+		
+		Flow[] flowsArray = Stream.concat(
+			initialActions.stream(), 
+			tokenFlows.stream()).toArray(Flow[]::new);
+		
 		Statemachine<Workflow, Token> statemachine = 
 				Statemachine.builder()
 					.states(actionsArray)
@@ -124,10 +140,5 @@ public class Workflow {
 	
 	private Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
-	}
-	
-	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
-		Workflow newWorkflow = Workflow.workflow(this.statemachine(), tokens);
-		return data(newWorkflow, token);
 	}
 }

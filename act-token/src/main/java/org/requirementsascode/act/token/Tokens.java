@@ -46,11 +46,22 @@ public class Tokens {
 	}
 
 	Tokens replaceToken(Token tokenToBeReplaced, Token tokenToReplace) {
-		List<Token> newTokensList = new ArrayList<>(tokens);
-		newTokensList.remove(tokenToBeReplaced);
+		List<Token> newTokensList = removeTokenFromList(tokenToBeReplaced);
 		newTokensList.add(tokenToReplace);
 		Tokens newTokens = new Tokens(newTokensList);
 		return newTokens;
+	}
+	
+	Tokens removeToken(Token tokenToBeRemoved) {
+		List<Token> newTokensList = removeTokenFromList(tokenToBeRemoved);
+		Tokens newTokens = new Tokens(newTokensList);
+		return newTokens;
+	}
+
+	private List<Token> removeTokenFromList(Token tokenToBeReplaced) {
+		List<Token> newTokensList = new ArrayList<>(tokens);
+		newTokensList.remove(tokenToBeReplaced);
+		return newTokensList;
 	}
 
 	@Override

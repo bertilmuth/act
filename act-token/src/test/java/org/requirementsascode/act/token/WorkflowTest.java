@@ -54,8 +54,7 @@ class WorkflowTest {
 		
 		Tokens tokensAtStart = workflow.start(new UnknownData()).tokens();
 		List<Token> tokenList = tokensAtStart.stream().toList();
-		assertEquals(1, tokenList.size());
-		assertEquals(token(action1, null), tokensAtStart.firstTokenIn(ACTION1).get());
+		assertTrue(tokenList.isEmpty());
 	}
 	
 	@Test
@@ -70,8 +69,7 @@ class WorkflowTest {
 		
 		Tokens tokensAtStart = workflow.start(new UnknownData()).nextStep().tokens();
 		List<Token> tokenList = tokensAtStart.stream().toList();
-		assertEquals(1, tokenList.size());
-		assertEquals(token(action1, null), tokensAtStart.firstTokenIn(ACTION1).get());
+		assertTrue(tokenList.isEmpty());
 	}
 
 	private StringData s(String str) {
