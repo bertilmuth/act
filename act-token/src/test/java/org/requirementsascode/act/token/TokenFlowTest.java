@@ -3,9 +3,9 @@ package org.requirementsascode.act.token;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.token.Action.action;
+import static org.requirementsascode.act.token.Step.step;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
-import static org.requirementsascode.act.token.function.Step.step;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.token.Workflow.AfterStep;

@@ -2,8 +2,8 @@ package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.function.Step.stepTrigger;
 
 import java.util.Collections;
 import java.util.Optional;

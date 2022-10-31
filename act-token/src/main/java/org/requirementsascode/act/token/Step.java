@@ -1,18 +1,13 @@
-package org.requirementsascode.act.token.function;
+package org.requirementsascode.act.token;
 
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.token.function.SystemFunction.systemFunction;
+import static org.requirementsascode.act.token.SystemFunction.systemFunction;
 
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.token.Action;
-import org.requirementsascode.act.token.ActionBehavior;
-import org.requirementsascode.act.token.ActionData;
-import org.requirementsascode.act.token.Token;
-import org.requirementsascode.act.token.Workflow;
 
 public class Step<T extends ActionData, U extends ActionData> implements ActionBehavior {
 	private final SystemFunction<T, U> systemFunction;

@@ -3,8 +3,8 @@ package org.requirementsascode.act.token;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.token.Action.action;
+import static org.requirementsascode.act.token.Step.step;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.function.Step.step;
 
 import java.util.List;
 

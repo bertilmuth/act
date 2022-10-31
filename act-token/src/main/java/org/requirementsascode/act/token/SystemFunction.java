@@ -1,4 +1,4 @@
-package org.requirementsascode.act.token.function;
+package org.requirementsascode.act.token;
 
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
@@ -8,12 +8,6 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.token.Action;
-import org.requirementsascode.act.token.ActionBehavior;
-import org.requirementsascode.act.token.ActionData;
-import org.requirementsascode.act.token.Node;
-import org.requirementsascode.act.token.Token;
-import org.requirementsascode.act.token.Workflow;
 
 public class SystemFunction<T extends ActionData, U extends ActionData> implements ActionBehavior{		
 	private final Behavior<Workflow, ActionData, ActionData> functionBehavior;
