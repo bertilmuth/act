@@ -30,7 +30,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	}
 
 	private boolean isStepTriggering(Data<Workflow, Token> inputData) {
-		return Token.from(inputData).map(t -> containsStepTrigger(t)).orElse(false);
+		return Token.from(inputData).map(this::containsStepTrigger).orElse(false);
 	}
 	
 	private boolean containsStepTrigger(Token token) {
