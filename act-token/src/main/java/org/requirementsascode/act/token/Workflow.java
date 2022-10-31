@@ -4,10 +4,9 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
-import static org.requirementsascode.act.token.RemoveTokensWithoutActionData.removeTokensWithoutActionData;
+import static org.requirementsascode.act.token.DefaultNode.defaultNode;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.DefaultNode.defaultNode;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -101,7 +100,7 @@ public class Workflow {
 		
 		Flow[] flowsArray = Stream.concat(
 			Stream.concat(initialActions.stream(), tokenFlows.stream()),
-			Stream.of(removeTokensWithoutActionData()))
+			Stream.of(new RemoveTokensWithoutActionData()))
 			.toArray(Flow[]::new);
 		
 		Statemachine<Workflow, Token> statemachine = 
@@ -140,27 +139,26 @@ public class Workflow {
 	private Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
 	}
-}
+	
+	private static class RemoveTokensWithoutActionData implements Flow<Workflow, Token> {
+		@Override
+		public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
+			return transition(owningStatemachine.definedState(), owningStatemachine.definedState(), 
+				whenInCase(Token.class, this::hasNoActionData, this::removeToken));
+		}
 
-class RemoveTokensWithoutActionData implements Flow<Workflow, Token> {
-	public static RemoveTokensWithoutActionData removeTokensWithoutActionData() {
-		return new RemoveTokensWithoutActionData();
-	}
+		private boolean hasNoActionData(Data<Workflow, Token> d) {
+			return d.value().map(t -> !t.actionData().isPresent()).orElse(false);
+		}
 
-	@Override
-	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
-		return transition(owningStatemachine.definedState(), owningStatemachine.definedState(), 
-			whenInCase(Token.class, this::hasNoActionData, this::removeToken));
-	}
-
-	private boolean hasNoActionData(Data<Workflow, Token> d) {
-		return d.value().map(t -> !t.actionData().isPresent()).orElse(false);
-	}
-
-	private Data<Workflow, Token> removeToken(Data<Workflow, Token> inputData) {
-		Workflow workflow = Workflow.from(inputData);
-		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
-		Data<Workflow, Token> resultWorkflowWithRemovedToken = workflow.removeToken(token);
-		return resultWorkflowWithRemovedToken;
+		private Data<Workflow, Token> removeToken(Data<Workflow, Token> inputData) {
+			Workflow workflow = Workflow.from(inputData);
+			Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
+			Tokens tokensAfterRemove = workflow.tokens().removeToken(token);
+			Data<Workflow, Token> workflowWithRemovedToken = workflow.updatedData(tokensAfterRemove, null);
+			return workflowWithRemovedToken;
+		}
 	}
 }
+
+
