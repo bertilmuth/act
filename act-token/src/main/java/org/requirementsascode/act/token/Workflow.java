@@ -35,7 +35,7 @@ public class Workflow {
 		return data.state();
 	}
 	
-	public Tokens tokens(){
+	Tokens tokens(){
 		return tokens;
 	}
 	
