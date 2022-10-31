@@ -23,9 +23,9 @@ class WorkflowTest {
 			.initialActions()
 			.build();
 		
-		AfterStep workflowStarted = workflow.start(s(""));
-		assertTrue(workflowStarted.actionOutput().isEmpty());
-		assertTrue(workflowStarted.tokens().stream().toList().isEmpty());
+		AfterStep afterStart = workflow.start(s(""));
+		assertTrue(afterStart.actionOutput().isEmpty());
+		assertTrue(afterStart.tokens().stream().toList().isEmpty());
 	}
 	
 	@Test
@@ -39,7 +39,6 @@ class WorkflowTest {
 			.build();
 		
 		AfterStep afterStart = workflow.start(s(START_WORKFLOW));
-		
 		Tokens tokensAtStart = afterStart.tokens();
 		assertEquals(token(action1, s(ACTION1)), tokensAtStart.firstTokenIn(ACTION1).get());
 	}
@@ -54,8 +53,8 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		Tokens tokensAtStart = workflow.start(new UnknownData()).tokens();
-		List<Token> tokenList = tokensAtStart.stream().toList();
+		Tokens tokensAfterStart = workflow.start(new UnknownData()).tokens();
+		List<Token> tokenList = tokensAfterStart.stream().toList();
 		assertTrue(tokenList.isEmpty());
 	}
 	
@@ -69,8 +68,8 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		Tokens tokensAtStart = workflow.start(new UnknownData()).nextStep().tokens();
-		List<Token> tokenList = tokensAtStart.stream().toList();
+		Tokens tokensAfterNextStep = workflow.start(new UnknownData()).nextStep().tokens();
+		List<Token> tokenList = tokensAfterNextStep.stream().toList();
 		assertTrue(tokenList.isEmpty());
 	}
 
