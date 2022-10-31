@@ -6,6 +6,8 @@ import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Token.token;
 import static org.requirementsascode.act.token.function.Atomic.atomic;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
@@ -51,6 +53,24 @@ class WorkflowTest {
 			.build();
 		
 		Tokens tokensAtStart = workflow.start(new UnknownData()).tokens();
+		List<Token> tokenList = tokensAtStart.stream().toList();
+		assertEquals(1, tokenList.size());
+		assertEquals(token(action1, null), tokensAtStart.firstTokenIn(ACTION1).get());
+	}
+	
+	@Test
+	void doesntRunActionForUnknownData_nextStep() {
+		Action action1 = action(ACTION1, atomic(StringData.class, this::action1Performed));
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1)
+			.tokenFlows()
+			.initialActions(action1)
+			.build();
+		
+		Tokens tokensAtStart = workflow.start(new UnknownData()).nextStep().tokens();
+		List<Token> tokenList = tokensAtStart.stream().toList();
+		assertEquals(1, tokenList.size());
 		assertEquals(token(action1, null), tokensAtStart.firstTokenIn(ACTION1).get());
 	}
 
