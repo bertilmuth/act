@@ -40,7 +40,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	}
 
 	private Token firstTokenIn(Workflow workflow, Action owningAction) {
-		return workflow.tokens().firstTokenIn(owningAction.name()).get();
+		return workflow.state().tokens().firstTokenIn(owningAction.name()).get();
 	}
 
 	static class StepTrigger implements ActionData {

@@ -64,12 +64,12 @@ public class Workflow {
 	}
 	
 	Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
-		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
+		Tokens tokensAfter = state().tokens().replaceToken(tokenBefore, tokenAfter);
 		return updatedData(tokensAfter, tokenAfter);
 	}
 	
 	Data<Workflow, Token> removeToken(Token tokenBefore) {
-		Tokens tokensAfter = tokens().removeToken(tokenBefore);
+		Tokens tokensAfter = state().tokens().removeToken(tokenBefore);
 		return updatedData(tokensAfter, null);
 	}
 	
@@ -133,8 +133,8 @@ public class Workflow {
 		
 		private AfterStep(Statemachine<Workflow, Token> statemachine, Workflow workflow) {
 			this.workflow = workflow;
-			this.tokens = workflow.tokens();
-			this.actionOutput = workflow.actionOutput();
+			this.tokens = workflow.state().tokens();
+			this.actionOutput = workflow.state().actionOutput();
 		}
 		
 		public AfterStep nextStep() {
