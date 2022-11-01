@@ -60,11 +60,11 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 }
 
 class SystemFunction<T extends ActionData, U extends ActionData> implements ActionBehavior {
-	private final Behavior<Workflow, ActionData, ActionData> functionBehavior;
+	private final Behavior<Workflow, ActionData, ActionData> functionOnActionData;
 
-	private SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
-		Behavior<Workflow, T, U> behavior = d -> apply(function, d);
-		this.functionBehavior = when(inputClass, behavior);
+	private SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> functionOnActionData) {
+		Behavior<Workflow, T, U> behavior = d -> apply(functionOnActionData, d);
+		this.functionOnActionData = when(inputClass, behavior);
 	}
 
 	public static <T extends ActionData, U extends ActionData> SystemFunction<T, U> systemFunction(Class<T> inputClass,
@@ -78,8 +78,8 @@ class SystemFunction<T extends ActionData, U extends ActionData> implements Acti
 	}
 
 	private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
-		Data<Workflow, ActionData> functionInput = unboxActionData(inputData);
-		Data<Workflow, ActionData> functionOutput = functionBehavior.actOn(functionInput);
+		Data<Workflow, ActionData> unboxedActionData = unboxActionData(inputData);
+		Data<Workflow, ActionData> functionOutput = functionOnActionData.actOn(unboxedActionData);
 		Token tokenAfter = tokenFor(Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!")).node(), functionOutput);
 		Data<Workflow, Token> resultWorkflow = Workflow.from(inputData).replaceToken(Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!")), tokenAfter);
 		return resultWorkflow;
