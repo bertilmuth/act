@@ -43,7 +43,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		return workflow.tokens().firstTokenIn(owningAction.name()).get();
 	}
 
-	public static class StepTrigger implements ActionData {
+	static class StepTrigger implements ActionData {
 		private StepTrigger() {
 		};
 	}
