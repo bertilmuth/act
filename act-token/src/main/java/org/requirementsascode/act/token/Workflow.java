@@ -54,7 +54,7 @@ public class Workflow {
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
-		return createWorkflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(emptyList()), null);
+		return createWorkflow(statemachineWith(actions, tokenFlows, initialActions), new Tokens(emptyList()), null);
 	}
 
 	private static Workflow createWorkflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData outputActionData) {

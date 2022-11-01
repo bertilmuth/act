@@ -10,12 +10,8 @@ import java.util.stream.Stream;
 public class Tokens {
 	private final List<Token> tokens;
 
-	public Tokens(List<Token> tokens) {
+	Tokens(List<Token> tokens) {
 		this.tokens = requireNonNull(tokens);
-	}
-
-	public static Tokens tokens(List<Token> tokens) {
-		return new Tokens(tokens);
 	}
 
 	public Stream<Token> stream() {
