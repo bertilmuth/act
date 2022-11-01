@@ -41,7 +41,7 @@ public class Workflow {
 		return nextStep(actionData).nextStep();
 	}
 	
-	public Optional<ActionData> actionOutput(){
+	Optional<ActionData> actionOutput(){
 		return Optional.ofNullable(actionOutput);
 	}
 	
