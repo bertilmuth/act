@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.token.Step.StepTrigger;
 
 public class Token {
 	private final Node node;
@@ -13,25 +14,33 @@ public class Token {
 		this.node = node;
 		this.actionData = actionData;
 	}
-
-	public static Token token(Node node, ActionData actionData) {
-		return new Token(node, actionData);
-	}
 	
 	public static Optional<Token> from(Data<Workflow, Token> data) {
 		return data.value();
 	}
 	
-	Token moveTo(Node node) {
-		return new Token(node, actionData);
-	}
-
 	public Node node() {
 		return node;
 	}
 	
 	public Optional<ActionData> actionData() {
 		return Optional.ofNullable(actionData);
+	}
+	
+	static Token token(Node node, ActionData actionData) {
+		return new Token(node, actionData);
+	}
+	
+	public static boolean isStepTriggering(Data<Workflow, Token> inputData) {
+		return Token.from(inputData).map(Token::containsStepTrigger).orElse(false);
+	}
+
+	private static boolean containsStepTrigger(Token token) {
+		return token.actionData().map(ad -> ad instanceof StepTrigger).orElse(false);
+	}
+	
+	Token moveTo(Node node) {
+		return new Token(node, actionData);
 	}
 
 	@Override

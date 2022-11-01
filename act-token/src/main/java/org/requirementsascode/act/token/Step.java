@@ -26,26 +26,17 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	@Override
 	public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
-		return inCase(this::isStepTriggering, d -> runStep(owningAction, d));
-	}
-
-	private boolean isStepTriggering(Data<Workflow, Token> inputData) {
-		return Token.from(inputData).map(this::containsStepTrigger).orElse(false);
-	}
-
-	private boolean containsStepTrigger(Token token) {
-		return token.actionData().map(ad -> ad instanceof StepTrigger).orElse(false);
+		return inCase(Token::isStepTriggering, d -> runStep(owningAction, d));
 	}
 
 	private Data<Workflow, Token> runStep(Action owningAction, Data<Workflow, Token> inputData) {
-		Data<Workflow, Token> workflowWithFirstTokenInAction = workflowWithFirstTokenInAction(inputData, owningAction);
+		Data<Workflow, Token> workflowWithFirstTokenInAction = workflowWithFirstTokenInAction(Workflow.from(inputData), owningAction);
 		Data<Workflow, Token> outputData = systemFunction.asBehavior(owningAction)
 			.actOn(workflowWithFirstTokenInAction);
 		return outputData;
 	}
 
-	private Data<Workflow, Token> workflowWithFirstTokenInAction(Data<Workflow, Token> inputData, Action owningAction) {
-		Workflow workflow = Workflow.from(inputData);
+	private Data<Workflow, Token> workflowWithFirstTokenInAction(Workflow workflow, Action owningAction) {
 		Data<Workflow, Token> workflowWithFirstTokenInAction = data(workflow,
 			firstTokenInAction(workflow, owningAction));
 		return workflowWithFirstTokenInAction;
