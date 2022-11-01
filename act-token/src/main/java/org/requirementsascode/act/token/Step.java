@@ -68,7 +68,8 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 			Token inputToken = tokenFrom(inputData);
 			Token outputToken = updateActionData(inputToken, outputActionData);
 			
-			return Workflow.from(inputData).replaceToken(inputToken, outputToken);
+			Data<Workflow, Token> updatedWorkflow = Workflow.from(inputData).state().replaceToken(inputToken, outputToken);
+			return updatedWorkflow;
 		}
 
 		private Data<Workflow, ActionData> unboxActionData(Data<Workflow, Token> inputData) {

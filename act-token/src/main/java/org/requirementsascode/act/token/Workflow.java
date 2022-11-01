@@ -23,7 +23,7 @@ public class Workflow {
 	
 	private Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
 		this.statemachine = statemachine;
-		this.state = new WorkflowState(tokens, actionOutput);
+		this.state = new WorkflowState(this, tokens, actionOutput);
 	}
 	
 	public final static WorkflowBuilder builder() {
@@ -54,13 +54,8 @@ public class Workflow {
 		return createWorkflow(statemachineWith(actions, tokenFlows, initialActions), new Tokens(emptyList()), null);
 	}
 
-	private static Workflow createWorkflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData outputActionData) {
+	static Workflow createWorkflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData outputActionData) {
 		return new Workflow(statemachine, tokens, outputActionData);
-	}
-	
-	Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
-		Tokens tokensAfter = state().tokens().replaceToken(tokenBefore, tokenAfter);
-		return updatedData(tokensAfter, tokenAfter);
 	}
 	
 	Data<Workflow, Token> removeToken(Token tokenBefore) {
@@ -99,7 +94,7 @@ public class Workflow {
 		return "Workflow[" + state().tokens() + "]";
 	}
 	
-	private Statemachine<Workflow, Token> statemachine() {
+	Statemachine<Workflow, Token> statemachine() {
 		return statemachine;
 	}
 	
