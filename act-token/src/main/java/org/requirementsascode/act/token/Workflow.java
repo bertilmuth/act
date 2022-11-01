@@ -43,10 +43,6 @@ public class Workflow {
 		return nextStep(actionData).nextStep();
 	}
 	
-	Optional<ActionData> actionOutput(){
-		return state().actionOutput();
-	}
-	
 	static Workflow initialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
