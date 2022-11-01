@@ -9,7 +9,6 @@ import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
@@ -32,7 +31,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void runsSingleAction() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		

@@ -88,8 +88,8 @@ public class Workflow {
 	private AfterStep nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
-		Data<Workflow, Token> outputOfStep = statemachine().actOn(trigger);
-		return new AfterStep(statemachine(), outputOfStep);
+		Workflow updatedWorkflow = statemachine().actOn(trigger).state();
+		return new AfterStep(statemachine(), updatedWorkflow);
 	}
 
 	private Data<Workflow, Token> actionTrigger(ActionData actionData) {
@@ -130,10 +130,10 @@ public class Workflow {
 		private final Tokens tokens;
 		private final Optional<ActionData> actionOutput;
 		
-		private AfterStep(Statemachine<Workflow, Token> statemachine, Data<Workflow, Token> outputOfStep) {
-			this.workflow = outputOfStep.state();
+		private AfterStep(Statemachine<Workflow, Token> statemachine, Workflow workflow) {
+			this.workflow = workflow;
 			this.tokens = workflow.tokens();
-			this.actionOutput = outputOfStep.value().flatMap(Token::actionData);
+			this.actionOutput = workflow.actionOutput();
 		}
 		
 		public AfterStep nextStep() {
