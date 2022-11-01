@@ -26,23 +26,19 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	@Override
 	public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
-		return inCase(Token::isStepTriggering, d -> runStep(owningAction, d));
+		return inCase(Token::isStepTriggering, d -> runStep(Workflow.from(d), owningAction));
 	}
 
-	private Data<Workflow, Token> runStep(Action owningAction, Data<Workflow, Token> inputData) {
-		Data<Workflow, Token> workflowWithFirstTokenInAction = workflowWithFirstTokenInAction(Workflow.from(inputData), owningAction);
-		Data<Workflow, Token> outputData = systemFunction.asBehavior(owningAction)
-			.actOn(workflowWithFirstTokenInAction);
-		return outputData;
+	private Data<Workflow, Token> runStep(Workflow workflow, Action owningAction) {
+		Behavior<Workflow, Token, Token> stepBehavior = systemFunction.asBehavior(owningAction);
+		return stepBehavior.actOn(firstTokenInAction(workflow, owningAction));
 	}
 
-	private Data<Workflow, Token> workflowWithFirstTokenInAction(Workflow workflow, Action owningAction) {
-		Data<Workflow, Token> workflowWithFirstTokenInAction = data(workflow,
-			firstTokenInAction(workflow, owningAction));
-		return workflowWithFirstTokenInAction;
+	private Data<Workflow, Token> firstTokenInAction(Workflow workflow, Action owningAction) {
+		return data(workflow, firstTokenIn(workflow, owningAction));
 	}
 
-	private Token firstTokenInAction(Workflow workflow, Action owningAction) {
+	private Token firstTokenIn(Workflow workflow, Action owningAction) {
 		return workflow.tokens().firstTokenIn(owningAction.name()).get();
 	}
 
