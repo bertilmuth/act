@@ -10,12 +10,8 @@ import org.requirementsascode.act.statemachine.State;
 public class Actions {
 	private final List<Action> actions;
 
-	private Actions(List<Action> actions) {
+	Actions(List<Action> actions) {
 		this.actions = requireNonNull(actions, "actions must be non-null!");
-	}
-
-	static <S, V0> Actions actions(List<Action> actions) {
-		return new Actions(actions);
 	}
 
 	Stream<State<Workflow, Token>> asStates() {

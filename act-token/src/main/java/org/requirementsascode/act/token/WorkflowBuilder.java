@@ -15,13 +15,13 @@ public class WorkflowBuilder {
 	}
 
 	public class ActionsBuilder {
-		private Actions builderActions = Actions.actions(Collections.emptyList());		
+		private Actions builderActions = new Actions(Collections.emptyList());		
 		private TokenFlows builderTokenFlows = TokenFlows.tokenFlows(Collections.emptyList());
 		private InitialActions builderInitialActions = InitialActions.initialActions(Collections.emptyList());
 
 		private ActionsBuilder(Action[] actions) {
 			requireNonNull(actions, "actions must be non-null!");
-			this.builderActions = Actions.actions(asList(actions));
+			this.builderActions = new Actions(asList(actions));
 		}
 
 		@SafeVarargs
