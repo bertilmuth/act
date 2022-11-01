@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
-import static org.requirementsascode.act.token.RemoveTokensWithoutActionData.removeTokensWithoutActionData;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
 
@@ -89,7 +88,7 @@ public class Workflow {
 		
 		Flow[] flowsArray = Stream.concat(
 			Stream.concat(initialActions.stream(), tokenFlows.stream()),
-			Stream.of(removeTokensWithoutActionData()))
+			RemoveTokensWithoutActionData.stream())
 			.toArray(Flow[]::new);
 		
 		Statemachine<Workflow, Token> statemachine = 
@@ -103,13 +102,13 @@ public class Workflow {
 }
 
 class RemoveTokensWithoutActionData implements Flow<Workflow, Token> {
-	public static RemoveTokensWithoutActionData removeTokensWithoutActionData() {
-		return new RemoveTokensWithoutActionData();
+	public static Stream<RemoveTokensWithoutActionData> stream() {
+		return Stream.of(new RemoveTokensWithoutActionData());
 	}
-
+	
 	@Override
-	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
-		return transition(owningStatemachine.definedState(), owningStatemachine.definedState(), 
+	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> statemachine) {
+		return transition(statemachine.definedState(), statemachine.definedState(), 
 			whenInCase(Token.class, this::hasNoActionData, this::removeToken));
 	}
 
