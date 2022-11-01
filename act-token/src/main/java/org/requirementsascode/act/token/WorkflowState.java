@@ -1,5 +1,7 @@
 package org.requirementsascode.act.token;
 
+import java.util.Optional;
+
 public class WorkflowState {
 	private final Tokens tokens;
 	private final ActionData actionOutput;
@@ -13,7 +15,7 @@ public class WorkflowState {
 		return tokens;
 	}
 
-	public ActionData actionOutput() {
-		return actionOutput;
+	public Optional<ActionData> actionOutput() {
+		return Optional.ofNullable(actionOutput);
 	}
 }
