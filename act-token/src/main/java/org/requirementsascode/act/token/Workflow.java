@@ -22,10 +22,12 @@ import org.requirementsascode.act.statemachine.Transition;
 public class Workflow {
 	private final Tokens tokens;
 	private final Statemachine<Workflow, Token> statemachine;
+	private final ActionData actionOutput;
 	
-	public Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
+	public Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
 		this.statemachine = statemachine;
 		this.tokens = tokens;
+		this.actionOutput = actionOutput;
 	}
 	
 	public final static WorkflowBuilder builder() {
@@ -36,12 +38,16 @@ public class Workflow {
 		return data.state();
 	}
 	
-	Tokens tokens(){
-		return tokens;
-	}
-	
 	public AfterStep start(ActionData actionData) {
 		return nextStep(actionData).nextStep();
+	}
+	
+	public Optional<ActionData> actionOutput(){
+		return Optional.ofNullable(actionOutput);
+	}
+	
+	Tokens tokens(){
+		return tokens;
 	}
 	
 	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
@@ -53,7 +59,7 @@ public class Workflow {
 	}
 
 	private static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
-		return new Workflow(statemachine, tokens);
+		return new Workflow(statemachine, tokens, null);
 	}
 	
 	Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {

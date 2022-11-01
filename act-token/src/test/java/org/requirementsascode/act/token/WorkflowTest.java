@@ -9,6 +9,7 @@ import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.token.Workflow.AfterStep;
 
@@ -31,6 +32,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void runsSingleAction() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		
@@ -41,6 +43,7 @@ class WorkflowTest {
 			.build();
 		
 		AfterStep afterStart = workflow.start(s(START_WORKFLOW));
+		assertEquals(new StringData(ACTION1), afterStart.actionOutput().get());
 		assertEquals(token(action1, s(ACTION1)), afterStart.tokens().firstTokenIn(ACTION1).get());
 	}
 	
