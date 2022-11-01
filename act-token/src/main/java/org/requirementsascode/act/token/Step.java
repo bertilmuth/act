@@ -32,20 +32,22 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	private boolean isStepTriggering(Data<Workflow, Token> inputData) {
 		return Token.from(inputData).map(this::containsStepTrigger).orElse(false);
 	}
-	
+
 	private boolean containsStepTrigger(Token token) {
 		return token.actionData().map(ad -> ad instanceof StepTrigger).orElse(false);
 	}
 
 	private Data<Workflow, Token> runStep(Action owningAction, Data<Workflow, Token> inputData) {
 		Data<Workflow, Token> workflowWithFirstTokenInAction = workflowWithFirstTokenInAction(inputData, owningAction);
-		Data<Workflow, Token> outputData = systemFunction.asBehavior(owningAction).actOn(workflowWithFirstTokenInAction);
+		Data<Workflow, Token> outputData = systemFunction.asBehavior(owningAction)
+				.actOn(workflowWithFirstTokenInAction);
 		return outputData;
 	}
 
 	private Data<Workflow, Token> workflowWithFirstTokenInAction(Data<Workflow, Token> inputData, Action owningAction) {
 		Workflow workflow = Workflow.from(inputData);
-		Data<Workflow, Token> workflowWithFirstTokenInAction = data(workflow, firstTokenInAction(workflow, owningAction));
+		Data<Workflow, Token> workflowWithFirstTokenInAction = data(workflow,
+				firstTokenInAction(workflow, owningAction));
 		return workflowWithFirstTokenInAction;
 	}
 
@@ -78,15 +80,25 @@ class SystemFunction<T extends ActionData, U extends ActionData> implements Acti
 	}
 
 	private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
-		Data<Workflow, ActionData> unboxedActionData = unboxActionData(inputData);
-		Data<Workflow, ActionData> functionOutput = functionOnActionData.actOn(unboxedActionData);
-		Token tokenAfter = tokenFor(Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!")).node(), functionOutput);
-		Data<Workflow, Token> resultWorkflow = Workflow.from(inputData).replaceToken(Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!")), tokenAfter);
-		return resultWorkflow;
+		Data<Workflow, ActionData> inputActionData = unboxActionData(inputData);
+		Data<Workflow, ActionData> outputActionData = functionOnActionData.actOn(inputActionData);
+		
+		Token inputToken = tokenFrom(inputData);
+		Token outputToken = updateActionData(inputToken, outputActionData);
+		
+		return Workflow.from(inputData).replaceToken(inputToken, outputToken);
 	}
 
 	private Data<Workflow, ActionData> unboxActionData(Data<Workflow, Token> inputData) {
 		return data(Workflow.from(inputData), actionDataFrom(inputData));
+	}
+
+	private Token tokenFrom(Data<Workflow, Token> inputData) {
+		return Token.from(inputData).orElseThrow(() -> new IllegalArgumentException("No token present!"));
+	}
+
+	private Token updateActionData(Token token, Data<Workflow, ActionData> data) {
+		return token(token.node(), data.value().orElse(null));
 	}
 
 	private ActionData actionDataFrom(Data<Workflow, Token> inputData) {
@@ -98,9 +110,5 @@ class SystemFunction<T extends ActionData, U extends ActionData> implements Acti
 		T inputActionData = input.value().orElse(null);
 		U outputActionData = function.apply(workflow, inputActionData);
 		return data(workflow, outputActionData);
-	}
-
-	private Token tokenFor(Node node, Data<Workflow, ActionData> actionData) {
-		return token(node, actionData.value().orElse(null));
 	}
 }
