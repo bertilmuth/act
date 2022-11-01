@@ -9,13 +9,9 @@ import java.util.stream.Stream;
 public class InitialActions{
 	private final List<InitialAction> initialActions;
 
-	private InitialActions(List<Action> actions) {
-		requireNonNull(actions, "initialActions must be non-null!");
+	InitialActions(List<Action> actions) {
+		requireNonNull(actions, "actions must be non-null!");
 		this.initialActions = createInitialActions(actions);
-	}
-
-	static InitialActions initialActions(List<Action> actions) {
-		return new InitialActions(actions);
 	}
 
 	public Stream<InitialAction> stream() {

@@ -17,7 +17,7 @@ public class WorkflowBuilder {
 	public class ActionsBuilder {
 		private Actions builderActions = new Actions(Collections.emptyList());		
 		private TokenFlows builderTokenFlows = TokenFlows.tokenFlows(Collections.emptyList());
-		private InitialActions builderInitialActions = InitialActions.initialActions(Collections.emptyList());
+		private InitialActions builderInitialActions = new InitialActions(Collections.emptyList());
 
 		private ActionsBuilder(Action[] actions) {
 			requireNonNull(actions, "actions must be non-null!");
@@ -37,7 +37,7 @@ public class WorkflowBuilder {
 			@SafeVarargs
 			public final InitialActionsBuilder initialActions(Action... actionsArray) {
 				requireNonNull(actionsArray, "initialActionsArray must be non-null!");
-				builderInitialActions = InitialActions.initialActions(asList(actionsArray));
+				builderInitialActions = new InitialActions(asList(actionsArray));
 				return new InitialActionsBuilder();
 			}
 		}
