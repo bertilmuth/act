@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
+import static org.requirementsascode.act.token.DefaultNode.defaultNode;
 import static org.requirementsascode.act.token.RemoveTokensWithoutActionData.removeTokensWithoutActionData;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
@@ -92,7 +93,9 @@ public class Workflow {
 	}
 
 	private Data<Workflow, Token> actionTrigger(ActionData actionData) {
-		return data(this, token(null, actionData));
+		DefaultNode defaultNode = defaultNode(statemachine());
+		Data<Workflow, Token> trigger = data(this, token(defaultNode, actionData));
+		return trigger;
 	}
 	
 	@Override
