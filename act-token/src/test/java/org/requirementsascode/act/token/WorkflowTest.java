@@ -10,7 +10,6 @@ import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.token.Workflow.AfterStep;
 
 class WorkflowTest {
 	private static final String START_WORKFLOW = "";
@@ -25,7 +24,7 @@ class WorkflowTest {
 			.initialActions()
 			.build();
 		
-		AfterStep afterStart = workflow.start(s(""));
+		WorkflowState afterStart = workflow.start(s("")).state();
 		assertTrue(afterStart.actionOutput().isEmpty());
 		assertTrue(afterStart.tokens().stream().toList().isEmpty());
 	}
@@ -40,7 +39,7 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		AfterStep afterStart = workflow.start(s(START_WORKFLOW));
+		WorkflowState afterStart = workflow.start(s(START_WORKFLOW)).state();
 		assertEquals(new StringData(ACTION1), afterStart.actionOutput().get());
 		assertEquals(token(action1, s(ACTION1)), afterStart.tokens().firstTokenIn(ACTION1).get());
 	}
@@ -58,7 +57,7 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		AfterStep afterAction1 = workflow.start(s(START_WORKFLOW)).nextStep();
+		WorkflowState afterAction1 = workflow.start(s(START_WORKFLOW)).nextStep().state();
 		assertEquals(new StringData(ACTION2), afterAction1.actionOutput().get());
 		assertEquals(token(action2, s(ACTION2)), afterAction1.tokens().firstTokenIn(ACTION2).get());
 	}
@@ -73,7 +72,7 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		Tokens tokensAfterStart = workflow.start(new UnknownData()).tokens();
+		Tokens tokensAfterStart = workflow.start(new UnknownData()).state().tokens();
 		List<Token> tokenList = tokensAfterStart.stream().toList();
 		assertTrue(tokenList.isEmpty());
 	}
@@ -88,7 +87,7 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		Tokens tokensAfterNextStep = workflow.start(new UnknownData()).nextStep().tokens();
+		Tokens tokensAfterNextStep = workflow.start(new UnknownData()).nextStep().state().tokens();
 		List<Token> tokenList = tokensAfterNextStep.stream().toList();
 		assertTrue(tokenList.isEmpty());
 	}

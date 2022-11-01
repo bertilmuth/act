@@ -9,7 +9,6 @@ import static org.requirementsascode.act.token.RemoveTokensWithoutActionData.rem
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Data;
@@ -39,8 +38,12 @@ public class Workflow {
 		return state;
 	}
 	
-	public AfterStep start(ActionData actionData) {
+	public Workflow start(ActionData actionData) {
 		return nextStep(actionData).nextStep();
+	}
+	
+	public Workflow nextStep() {
+		return nextStep(stepTrigger);
 	}
 	
 	static Workflow initialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
@@ -78,11 +81,11 @@ public class Workflow {
 		return data(workflow, token);
 	}
 	
-	private AfterStep nextStep(ActionData actionData) {
+	private Workflow nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
 		Workflow updatedWorkflow = statemachine().actOn(trigger).state();
-		return new AfterStep(statemachine(), updatedWorkflow);
+		return updatedWorkflow;
 	}
 
 	private Data<Workflow, Token> actionTrigger(ActionData actionData) {
@@ -116,30 +119,6 @@ public class Workflow {
 				.flows(flowsArray)
 				.build();
 		return statemachine;
-	}
-	
-	public static class AfterStep{		
-		private final Workflow workflow;
-		private final Tokens tokens;
-		private final Optional<ActionData> actionOutput;
-		
-		private AfterStep(Statemachine<Workflow, Token> statemachine, Workflow workflow) {
-			this.workflow = workflow;
-			this.tokens = workflow.state().tokens();
-			this.actionOutput = workflow.state().actionOutput();
-		}
-		
-		public AfterStep nextStep() {
-			return workflow.nextStep(stepTrigger);
-		}
-		
-		public Tokens tokens() {
-			return tokens;
-		}
-		
-		public Optional<ActionData> actionOutput() {
-			return actionOutput;
-		}
 	}
 }
 
