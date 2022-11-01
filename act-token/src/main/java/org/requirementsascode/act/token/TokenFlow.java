@@ -22,6 +22,6 @@ public class TokenFlow implements Flow<Workflow, Token>{
 
 	@Override
 	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
-		return transition(fromNode.asState(), toNode.asState(), d -> Workflow.from(d).moveToken(d, toNode));
+		return transition(fromNode.asState(), toNode.asState(), d -> Workflow.from(d).state().moveToken(d, toNode));
 	}
 }

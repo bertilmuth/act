@@ -22,6 +22,13 @@ public class WorkflowState {
 		return updatedData(tokensAfter, tokenAfter);
 	}
 	
+	Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
+		return Token.from(d).map(t -> {
+			Tokens tokensAfterMove = tokens().moveToken(t, toNode);
+			return updatedData(tokensAfterMove, t);
+		}).orElse(d);
+	}
+	
 	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
 		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
 		Workflow updatedWorkflow = Workflow.createWorkflow(workflow.statemachine(), tokens, outputActionData);
