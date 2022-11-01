@@ -29,6 +29,11 @@ public class WorkflowState {
 		}).orElse(d);
 	}
 	
+	Data<Workflow, Token> removeToken(Token tokenBefore) {
+		Tokens tokensAfter = tokens().removeToken(tokenBefore);
+		return updatedData(tokensAfter, null);
+	}
+	
 	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
 		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
 		Workflow updatedWorkflow = Workflow.createWorkflow(workflow.statemachine(), tokens, outputActionData);

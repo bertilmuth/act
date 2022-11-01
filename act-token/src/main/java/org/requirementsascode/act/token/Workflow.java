@@ -58,17 +58,6 @@ public class Workflow {
 		return new Workflow(statemachine, tokens, outputActionData);
 	}
 	
-	Data<Workflow, Token> removeToken(Token tokenBefore) {
-		Tokens tokensAfter = state().tokens().removeToken(tokenBefore);
-		return updatedData(tokensAfter, null);
-	}
-	
-	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
-		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
-		Workflow workflow = createWorkflow(statemachine(), tokens, outputActionData);
-		return data(workflow, token);
-	}
-	
 	private Workflow nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
@@ -126,9 +115,9 @@ class RemoveTokensWithoutActionData implements Flow<Workflow, Token> {
 	}
 
 	private Data<Workflow, Token> removeToken(Data<Workflow, Token> inputData) {
-		Workflow workflow = Workflow.from(inputData);
+		WorkflowState workflowState = Workflow.from(inputData).state();
 		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
-		Data<Workflow, Token> resultWorkflowWithRemovedToken = workflow.removeToken(token);
+		Data<Workflow, Token> resultWorkflowWithRemovedToken = workflowState.removeToken(token);
 		return resultWorkflowWithRemovedToken;
 	}
 }
