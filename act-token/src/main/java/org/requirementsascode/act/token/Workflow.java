@@ -95,6 +95,10 @@ public class Workflow {
 		return "Workflow[" + tokens + "]";
 	}
 	
+	private Statemachine<Workflow, Token> statemachine() {
+		return statemachine;
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
@@ -135,10 +139,6 @@ public class Workflow {
 		public Optional<ActionData> actionOutput() {
 			return actionOutput;
 		}
-	}
-	
-	private Statemachine<Workflow, Token> statemachine() {
-		return statemachine;
 	}
 }
 
