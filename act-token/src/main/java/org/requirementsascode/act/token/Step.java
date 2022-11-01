@@ -40,14 +40,14 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	private Data<Workflow, Token> runStep(Action owningAction, Data<Workflow, Token> inputData) {
 		Data<Workflow, Token> workflowWithFirstTokenInAction = workflowWithFirstTokenInAction(inputData, owningAction);
 		Data<Workflow, Token> outputData = systemFunction.asBehavior(owningAction)
-				.actOn(workflowWithFirstTokenInAction);
+			.actOn(workflowWithFirstTokenInAction);
 		return outputData;
 	}
 
 	private Data<Workflow, Token> workflowWithFirstTokenInAction(Data<Workflow, Token> inputData, Action owningAction) {
 		Workflow workflow = Workflow.from(inputData);
 		Data<Workflow, Token> workflowWithFirstTokenInAction = data(workflow,
-				firstTokenInAction(workflow, owningAction));
+			firstTokenInAction(workflow, owningAction));
 		return workflowWithFirstTokenInAction;
 	}
 
