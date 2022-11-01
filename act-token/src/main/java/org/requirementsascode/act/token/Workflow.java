@@ -24,7 +24,7 @@ public class Workflow {
 	private final Statemachine<Workflow, Token> statemachine;
 	private final ActionData actionOutput;
 	
-	public Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+	private Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
 		this.statemachine = statemachine;
 		this.tokens = tokens;
 		this.actionOutput = actionOutput;
