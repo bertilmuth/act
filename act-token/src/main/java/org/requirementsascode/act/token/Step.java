@@ -78,13 +78,19 @@ class SystemFunction<T extends ActionData, U extends ActionData> implements Acti
 	}
 
 	private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
-		Workflow workflow = Workflow.from(inputData);
-		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
-		Data<Workflow, ActionData> functionInput = data(workflow, token.actionData().orElse(null));
+		Data<Workflow, ActionData> functionInput = unboxActionData(inputData);
 		Data<Workflow, ActionData> functionOutput = functionBehavior.actOn(functionInput);
-		Token tokenAfter = tokenFor(token.node(), functionOutput);
-		Data<Workflow, Token> resultWorkflow = workflow.replaceToken(token, tokenAfter);
+		Token tokenAfter = tokenFor(Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!")).node(), functionOutput);
+		Data<Workflow, Token> resultWorkflow = Workflow.from(inputData).replaceToken(Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!")), tokenAfter);
 		return resultWorkflow;
+	}
+
+	private Data<Workflow, ActionData> unboxActionData(Data<Workflow, Token> inputData) {
+		return data(Workflow.from(inputData), actionDataFrom(inputData));
+	}
+
+	private ActionData actionDataFrom(Data<Workflow, Token> inputData) {
+		return Token.from(inputData).flatMap(Token::actionData).orElse(null);
 	}
 
 	private Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input) {
