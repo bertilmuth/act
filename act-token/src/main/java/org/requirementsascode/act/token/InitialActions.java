@@ -24,7 +24,7 @@ public class InitialActions{
 	
 	private List<InitialAction> createInitialActions(List<Action> actions) {
 		return actions.stream()
-			.map(a -> InitialAction.initialAction(a))
+			.map(InitialAction::new)
 			.collect(Collectors.toList());
 	}
 }
