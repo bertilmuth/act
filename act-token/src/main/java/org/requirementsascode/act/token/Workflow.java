@@ -21,7 +21,7 @@ public class Workflow {
 	private final WorkflowState state;
 	private final Statemachine<Workflow, Token> statemachine;
 	
-	private Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+	Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
 		this.statemachine = statemachine;
 		this.state = new WorkflowState(this, tokens, actionOutput);
 	}
@@ -51,13 +51,9 @@ public class Workflow {
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
-		return createWorkflow(statemachineWith(actions, tokenFlows, initialActions), new Tokens(emptyList()), null);
+		return new Workflow(statemachineWith(actions, tokenFlows, initialActions), new Tokens(emptyList()), null);
 	}
 
-	static Workflow createWorkflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData outputActionData) {
-		return new Workflow(statemachine, tokens, outputActionData);
-	}
-	
 	private Workflow nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");
 		Data<Workflow, Token> trigger = actionTrigger(actionData);
