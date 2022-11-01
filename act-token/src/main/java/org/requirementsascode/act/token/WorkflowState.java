@@ -1,8 +1,8 @@
 package org.requirementsascode.act.token;
 
 public class WorkflowState {
-	public Tokens tokens;
-	public ActionData actionOutput;
+	private final Tokens tokens;
+	private final ActionData actionOutput;
 	
 	public WorkflowState(Tokens tokens, ActionData actionOutput) {
 		this.tokens = tokens;

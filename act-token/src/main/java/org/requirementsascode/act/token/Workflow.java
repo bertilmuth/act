@@ -97,7 +97,7 @@ public class Workflow {
 	
 	@Override
 	public String toString() {
-		return "Workflow[" + workflowState.tokens + "]";
+		return "Workflow[" + workflowState.tokens() + "]";
 	}
 	
 	private Statemachine<Workflow, Token> statemachine() {
