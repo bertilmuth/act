@@ -59,8 +59,8 @@ class WorkflowTest {
 			.build();
 		
 		AfterStep afterAction1 = workflow.start(s(START_WORKFLOW)).nextStep();
-		Tokens tokensAfterAction1 = afterAction1.tokens();
-		assertEquals(token(action2, s(ACTION2)), tokensAfterAction1.firstTokenIn(ACTION2).get());
+		assertEquals(new StringData(ACTION2), afterAction1.actionOutput().get());
+		assertEquals(token(action2, s(ACTION2)), afterAction1.tokens().firstTokenIn(ACTION2).get());
 	}
 	
 	@Test
