@@ -49,10 +49,15 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	}
 	
 	private class StepBehavior implements Behavior<Workflow, Token, Token> {
+		private final Class<T> inputClass;
+		private final BiFunction<Workflow, T, U> functionOnActionData;
 		private final Behavior<Workflow, ActionData, ActionData> stepBehavior;
 
+
 		private StepBehavior(Class<T> inputClass, BiFunction<Workflow, T, U> functionOnActionData) {
-			this.stepBehavior = createStepBehavior(inputClass, functionOnActionData);
+			this.inputClass = inputClass;
+			this.functionOnActionData = functionOnActionData;
+			this.stepBehavior = createStepBehavior();
 		}
 
 		@Override
@@ -82,15 +87,14 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 			return Token.from(inputData).flatMap(Token::actionData).orElse(null);
 		}
 		
-		private Behavior<Workflow, ActionData, ActionData> createStepBehavior(Class<T> inputClass, BiFunction<Workflow, T, U> functionOnActionData) {
-			Behavior<Workflow, T, U> behavior = d -> apply(functionOnActionData, d);
-			return when(inputClass, behavior);
+		private Behavior<Workflow, ActionData, ActionData> createStepBehavior() {
+			return when(inputClass, this::applyFunctionOnActionData);
 		}
 
-		private Data<Workflow, U> apply(BiFunction<Workflow, T, U> function, Data<Workflow, T> input) {
+		private Data<Workflow, U> applyFunctionOnActionData(Data<Workflow, T> input) {
 			Workflow workflow = Workflow.from(input);
 			T inputActionData = input.value().orElse(null);
-			U outputActionData = function.apply(workflow, inputActionData);
+			U outputActionData = functionOnActionData.apply(workflow, inputActionData);
 			return data(workflow, outputActionData);
 		}
 	}
