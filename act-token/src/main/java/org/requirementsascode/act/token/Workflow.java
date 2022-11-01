@@ -47,10 +47,6 @@ public class Workflow {
 		return state().actionOutput();
 	}
 	
-	Tokens tokens(){
-		return state().tokens();
-	}
-	
 	static Workflow initialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
@@ -75,7 +71,7 @@ public class Workflow {
 	
 	Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
 		return Token.from(d).map(t -> {
-			Tokens tokensAfterMove = tokens().moveToken(t, toNode);
+			Tokens tokensAfterMove = state().tokens().moveToken(t, toNode);
 			return updatedData(tokensAfterMove, t);
 		}).orElse(d);
 	}
