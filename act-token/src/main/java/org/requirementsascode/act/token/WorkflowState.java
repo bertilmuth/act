@@ -1,5 +1,7 @@
 package org.requirementsascode.act.token;
 
+import static org.requirementsascode.act.core.Data.data;
+
 import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
@@ -33,7 +35,10 @@ public class WorkflowState {
 	}
 	
 	private Data<Workflow, Token> updateTokens(Tokens tokens, Token token) {
-		return workflow.updateTokens(tokens, token);
+		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
+		WorkflowState newWorkflowState = new WorkflowState(workflow, tokens, outputActionData);
+		Workflow updatedWorkflow = new Workflow(workflow.statemachine(), newWorkflowState);
+		return data(updatedWorkflow, token);
 	}
 
 	public Tokens tokens() {

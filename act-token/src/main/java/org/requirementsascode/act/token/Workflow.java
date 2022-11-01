@@ -26,6 +26,11 @@ public class Workflow {
 		this.state = new WorkflowState(this, tokens, actionOutput);
 	}
 	
+	Workflow(Statemachine<Workflow, Token> statemachine, WorkflowState state) {
+		this.statemachine = statemachine;
+		this.state = state;
+	}
+	
 	public final static WorkflowBuilder builder() {
 		return new WorkflowBuilder();
 	}
@@ -52,12 +57,6 @@ public class Workflow {
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
 		return new Workflow(statemachineWith(actions, tokenFlows, initialActions), new Tokens(emptyList()), null);
-	}
-	
-	Data<Workflow, Token> updateTokens(Tokens tokens, Token token) {
-		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
-		Workflow updatedWorkflow = new Workflow(statemachine(), tokens, outputActionData);
-		return data(updatedWorkflow, token);
 	}
 
 	private Workflow nextStep(ActionData actionData) {
