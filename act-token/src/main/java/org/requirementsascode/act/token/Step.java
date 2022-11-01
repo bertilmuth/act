@@ -12,13 +12,13 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
 public class Step<T extends ActionData, U extends ActionData> implements ActionBehavior {
-	private final SystemFunction systemFunction;
+	private final StepFunction stepFunction;
 	public static final StepTrigger stepTrigger = new StepTrigger();
 
 	private Step(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
 		requireNonNull(inputClass, "inputClass must be non-null!");
 		requireNonNull(function, "function must be non-null!");
-		this.systemFunction = new SystemFunction(inputClass, function);
+		this.stepFunction = new StepFunction(inputClass, function);
 	}
 
 	public static <T extends ActionData, U extends ActionData> Step<T, U> step(Class<T> inputClass,
@@ -32,7 +32,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	}
 
 	private Data<Workflow, Token> runStep(Workflow workflow, Action owningAction) {
-		Behavior<Workflow, Token, Token> stepBehavior = systemFunction.asBehavior(owningAction);
+		Behavior<Workflow, Token, Token> stepBehavior = stepFunction.asBehavior(owningAction);
 		return stepBehavior.actOn(firstTokenInAction(workflow, owningAction));
 	}
 
@@ -49,22 +49,22 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		};
 	}
 	
-	private class SystemFunction implements ActionBehavior {
-		private final Behavior<Workflow, ActionData, ActionData> functionOnActionData;
+	private class StepFunction implements ActionBehavior {
+		private final Behavior<Workflow, ActionData, ActionData> stepBehavior;
 
-		private SystemFunction(Class<T> inputClass, BiFunction<Workflow, T, U> functionOnActionData) {
+		private StepFunction(Class<T> inputClass, BiFunction<Workflow, T, U> functionOnActionData) {
 			Behavior<Workflow, T, U> behavior = d -> apply(functionOnActionData, d);
-			this.functionOnActionData = when(inputClass, behavior);
+			this.stepBehavior = when(inputClass, behavior);
 		}
 
 		@Override
 		public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
-			return this::executeFunction;
+			return this::actOn;
 		}
 
-		private Data<Workflow, Token> executeFunction(Data<Workflow, Token> inputData) {
+		private Data<Workflow, Token> actOn(Data<Workflow, Token> inputData) {
 			Data<Workflow, ActionData> inputActionData = unboxActionData(inputData);
-			Data<Workflow, ActionData> outputActionData = functionOnActionData.actOn(inputActionData);
+			Data<Workflow, ActionData> outputActionData = stepBehavior.actOn(inputActionData);
 			
 			Token inputToken = tokenFrom(inputData);
 			Token outputToken = updateActionData(inputToken, outputActionData);
