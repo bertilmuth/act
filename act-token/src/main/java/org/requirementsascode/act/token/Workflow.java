@@ -19,14 +19,12 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class Workflow {
-	private final Tokens tokens;
+	private final WorkflowState workflowState;
 	private final Statemachine<Workflow, Token> statemachine;
-	private final ActionData actionOutput;
 	
 	private Workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
 		this.statemachine = statemachine;
-		this.tokens = tokens;
-		this.actionOutput = actionOutput;
+		this.workflowState = new WorkflowState(tokens, actionOutput);
 	}
 	
 	public final static WorkflowBuilder builder() {
@@ -42,11 +40,11 @@ public class Workflow {
 	}
 	
 	Optional<ActionData> actionOutput(){
-		return Optional.ofNullable(actionOutput);
+		return Optional.ofNullable(workflowState.actionOutput());
 	}
 	
 	Tokens tokens(){
-		return tokens;
+		return workflowState.tokens();
 	}
 	
 	static Workflow initialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
@@ -99,7 +97,7 @@ public class Workflow {
 	
 	@Override
 	public String toString() {
-		return "Workflow[" + tokens + "]";
+		return "Workflow[" + workflowState.tokens + "]";
 	}
 	
 	private Statemachine<Workflow, Token> statemachine() {
