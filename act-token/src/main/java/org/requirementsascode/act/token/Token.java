@@ -3,6 +3,7 @@ package org.requirementsascode.act.token;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.token.Step.StepTrigger;
 
@@ -11,7 +12,7 @@ public class Token {
 	private final ActionData actionData;
 
 	private Token(Node node, ActionData actionData) {
-		this.node = node;
+		this.node = requireNonNull(node, "node must be non-null!");
 		this.actionData = actionData;
 	}
 	

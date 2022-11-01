@@ -1,7 +1,6 @@
 package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.token.DefaultNode.defaultNode;
 import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 
 import org.requirementsascode.act.statemachine.Flow;
@@ -21,7 +20,7 @@ public class InitialAction implements Flow<Workflow, Token> {
 
 	@Override
 	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
-		return tokenFlow(defaultNode(owningStatemachine), initialAction)
+		return tokenFlow(new DefaultNode(owningStatemachine), initialAction)
 			.asTransition(owningStatemachine);
 	}
 }
