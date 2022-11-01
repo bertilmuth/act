@@ -53,6 +53,12 @@ public class Workflow {
 
 		return new Workflow(statemachineWith(actions, tokenFlows, initialActions), new Tokens(emptyList()), null);
 	}
+	
+	Data<Workflow, Token> updateTokens(Tokens tokens, Token token) {
+		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
+		Workflow updatedWorkflow = new Workflow(statemachine(), tokens, outputActionData);
+		return data(updatedWorkflow, token);
+	}
 
 	private Workflow nextStep(ActionData actionData) {
 		requireNonNull(actionData, "actionData must be non-null!");

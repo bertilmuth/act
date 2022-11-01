@@ -1,7 +1,5 @@
 package org.requirementsascode.act.token;
 
-import static org.requirementsascode.act.core.Data.data;
-
 import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
@@ -19,25 +17,23 @@ public class WorkflowState {
 	
 	Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
-		return updatedData(tokensAfter, tokenAfter);
+		return updateTokens(tokensAfter, tokenAfter);
 	}
 	
 	Data<Workflow, Token> moveToken(Data<Workflow, Token> d, Node toNode) {
 		return Token.from(d).map(t -> {
 			Tokens tokensAfterMove = tokens().moveToken(t, toNode);
-			return updatedData(tokensAfterMove, t);
+			return updateTokens(tokensAfterMove, t);
 		}).orElse(d);
 	}
 	
 	Data<Workflow, Token> removeToken(Token tokenBefore) {
 		Tokens tokensAfter = tokens().removeToken(tokenBefore);
-		return updatedData(tokensAfter, null);
+		return updateTokens(tokensAfter, null);
 	}
 	
-	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
-		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
-		Workflow updatedWorkflow = new Workflow(workflow.statemachine(), tokens, outputActionData);
-		return data(updatedWorkflow, token);
+	private Data<Workflow, Token> updateTokens(Tokens tokens, Token token) {
+		return workflow.updateTokens(tokens, token);
 	}
 
 	public Tokens tokens() {
