@@ -20,16 +20,16 @@ public class Token {
 		return data.value();
 	}
 	
+	public static Token token(Node node, ActionData actionData) {
+		return new Token(node, actionData);
+	}
+	
 	public Node node() {
 		return node;
 	}
 	
 	public Optional<ActionData> actionData() {
 		return Optional.ofNullable(actionData);
-	}
-	
-	static Token token(Node node, ActionData actionData) {
-		return new Token(node, actionData);
 	}
 	
 	public static boolean isStepTriggering(Data<Workflow, Token> inputData) {
