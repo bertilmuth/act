@@ -1,15 +1,15 @@
 package org.requirementsascode.act.token;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
+import static org.requirementsascode.act.token.DefaultNode.defaultNode;
 import static org.requirementsascode.act.token.RemoveTokensWithoutActionData.removeTokensWithoutActionData;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
-import static org.requirementsascode.act.token.DefaultNode.defaultNode;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -50,16 +50,16 @@ public class Workflow {
 		return tokens;
 	}
 	
-	static Workflow workflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
+	static Workflow initialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
-		return workflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(Collections.emptyList()));
+		return createWorkflow(statemachineWith(actions, tokenFlows, initialActions), Tokens.tokens(emptyList()), null);
 	}
 
-	private static Workflow workflow(Statemachine<Workflow, Token> statemachine, Tokens tokens) {
-		return new Workflow(statemachine, tokens, null);
+	private static Workflow createWorkflow(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData outputActionData) {
+		return new Workflow(statemachine, tokens, outputActionData);
 	}
 	
 	Data<Workflow, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
@@ -80,7 +80,9 @@ public class Workflow {
 	}
 	
 	private Data<Workflow, Token> updatedData(Tokens tokens, Token token) {
-		return data(workflow(statemachine(), tokens), token);
+		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
+		Workflow workflow = createWorkflow(statemachine(), tokens, outputActionData);
+		return data(workflow, token);
 	}
 	
 	private AfterStep nextStep(ActionData actionData) {
