@@ -5,14 +5,15 @@ import static org.requirementsascode.act.core.Data.data;
 import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.statemachine.Statemachine;
 
 public class WorkflowState {
-	private final Workflow workflow;
+	private final Statemachine<Workflow, Token> statemachine;
 	private final Tokens tokens;
 	private final ActionData actionOutput;
 	
-	WorkflowState(Workflow workflow, Tokens tokens, ActionData actionOutput) {
-		this.workflow = workflow;
+	WorkflowState(Statemachine<Workflow, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+		this.statemachine = statemachine;
 		this.tokens = tokens;
 		this.actionOutput = actionOutput;
 	}
@@ -36,8 +37,8 @@ public class WorkflowState {
 	
 	private Data<Workflow, Token> updateTokens(Tokens tokens, Token token) {
 		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
-		WorkflowState newWorkflowState = new WorkflowState(workflow, tokens, outputActionData);
-		Workflow updatedWorkflow = new Workflow(workflow.statemachine(), newWorkflowState);
+		WorkflowState newWorkflowState = new WorkflowState(statemachine, tokens, outputActionData);
+		Workflow updatedWorkflow = new Workflow(statemachine, newWorkflowState);
 		return data(updatedWorkflow, token);
 	}
 
