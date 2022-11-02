@@ -3,7 +3,8 @@ package org.requirementsascode.act.token;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
@@ -85,38 +86,30 @@ public class Workflow {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
-		
-		Flow[] flowsArray = Stream.concat(
-			Stream.concat(initialActions.stream(), tokenFlows.stream()),
-			RemoveTokensWithoutActionData.stream())
+		Flow[] flowsArray = Stream.concat(initialActions.stream(), tokenFlows.stream())
 			.toArray(Flow[]::new);
 		
 		Statemachine<Workflow, Token> statemachine = 
 			Statemachine.builder()
 				.states(actionsArray)
-				.transitions()
+				.transitions(
+					removeTokensWithoutActionData()
+				)
 				.flows(flowsArray)
 				.build();
 		return statemachine;
 	}
-}
-
-class RemoveTokensWithoutActionData implements Flow<Workflow, Token> {
-	public static Stream<RemoveTokensWithoutActionData> stream() {
-		return Stream.of(new RemoveTokensWithoutActionData());
-	}
 	
-	@Override
-	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> statemachine) {
+	private static Transition<Workflow, Token> removeTokensWithoutActionData() {
 		return transition(anyState(), anyState(), 
-			whenInCase(Token.class, this::hasNoActionData, this::removeToken));
+			whenInCase(Token.class, Workflow::hasNoActionData, Workflow::removeToken));
 	}
 
-	private boolean hasNoActionData(Data<Workflow, Token> d) {
+	private static boolean hasNoActionData(Data<Workflow, Token> d) {
 		return d.value().map(t -> !t.actionData().isPresent()).orElse(false);
 	}
 
-	private Data<Workflow, Token> removeToken(Data<Workflow, Token> inputData) {
+	private static Data<Workflow, Token> removeToken(Data<Workflow, Token> inputData) {
 		WorkflowState workflowState = Workflow.from(inputData).state();
 		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
 		Data<Workflow, Token> resultWorkflowWithRemovedToken = workflowState.removeToken(token);
