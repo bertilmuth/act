@@ -17,12 +17,12 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class Workflow {
-	private final WorkflowState state;
+	private final WorkflowState initialState;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	
-	Workflow(Statemachine<WorkflowState, Token> statemachine, WorkflowState state) {
+	Workflow(Statemachine<WorkflowState, Token> statemachine, WorkflowState initialState) {
 		this.statemachine = statemachine;
-		this.state = state;
+		this.initialState = initialState;
 	}
 	
 	public final static WorkflowBuilder builder() {
@@ -33,12 +33,8 @@ public class Workflow {
 		return data.state();
 	}
 	
-	public WorkflowState state() {
-		return state;
-	}
-	
 	public WorkflowState nextStep(ActionData actionData) {
-		Data<WorkflowState, ActionData> inputData = data(state, actionData);
+		Data<WorkflowState, ActionData> inputData = data(initialState, actionData);
 		Data<WorkflowState, Token> inputDataWithToken = tokenized(inputData);
 		Data<WorkflowState, Token> output = statemachine().actOn(inputDataWithToken);
 		return nextStep(output.state(), Step.proceed);
@@ -68,11 +64,6 @@ public class Workflow {
 	
 	private static WorkflowState intialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
 		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
-	}
-	
-	@Override
-	public String toString() {
-		return "Workflow[" + state().tokens() + "]";
 	}
 	
 	Statemachine<WorkflowState, Token> statemachine() {
