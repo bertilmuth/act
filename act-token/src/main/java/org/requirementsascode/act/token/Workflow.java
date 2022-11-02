@@ -1,6 +1,5 @@
 package org.requirementsascode.act.token;
 
-import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
@@ -22,7 +21,7 @@ public class Workflow {
 	
 	Workflow(Statemachine<WorkflowState, Token> statemachine) {
 		this.statemachine = statemachine;
-		this.initialState = intialWorkflowState(statemachine);
+		this.initialState = WorkflowState.intialWorkflowState(statemachine);
 	}
 	
 	public final static WorkflowBuilder builder() {
@@ -60,10 +59,6 @@ public class Workflow {
 
 		Statemachine<WorkflowState, Token> statemachine = statemachineWith(actions, tokenFlows, initialActions);		
 		return new Workflow(statemachine);
-	}
-	
-	private static WorkflowState intialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
-		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
 	}
 	
 	Statemachine<WorkflowState, Token> statemachine() {

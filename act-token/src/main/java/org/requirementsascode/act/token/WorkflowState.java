@@ -1,5 +1,6 @@
 package org.requirementsascode.act.token;
 
+import static java.util.Collections.emptyList;
 import static org.requirementsascode.act.core.Data.data;
 
 import java.util.Optional;
@@ -16,6 +17,10 @@ public class WorkflowState {
 		this.statemachine = statemachine;
 		this.tokens = tokens;
 		this.actionOutput = actionOutput;
+	}
+	
+	static WorkflowState intialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
+		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
 	}
 	
 	Data<WorkflowState, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
