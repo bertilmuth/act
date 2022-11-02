@@ -14,8 +14,8 @@ public class Actions {
 		this.actions = requireNonNull(actions, "actions must be non-null!");
 	}
 
-	Stream<State<Workflow, Token>> asStates() {
-		Stream<State<Workflow, Token>> statesStream = this.stream().map(e -> e.asState());
+	Stream<State<WorkflowState, Token>> asStates() {
+		Stream<State<WorkflowState, Token>> statesStream = this.stream().map(e -> e.asState());
 		return statesStream;
 	}
 

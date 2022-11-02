@@ -16,7 +16,7 @@ public class Token {
 		this.actionData = actionData;
 	}
 	
-	public static Optional<Token> from(Data<Workflow, Token> data) {
+	public static Optional<Token> from(Data<WorkflowState, Token> data) {
 		return data.value();
 	}
 	
@@ -32,7 +32,7 @@ public class Token {
 		return Optional.ofNullable(actionData);
 	}
 	
-	public static boolean isForProceeding(Data<Workflow, Token> inputData) {
+	public static boolean isForProceeding(Data<WorkflowState, Token> inputData) {
 		return Token.from(inputData).map(Token::containsProceed).orElse(false);
 	}
 

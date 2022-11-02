@@ -7,7 +7,7 @@ import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class TokenFlow implements Flow<Workflow, Token>{
+public class TokenFlow implements Flow<WorkflowState, Token>{
 	private final Node fromNode;
 	private final Node toNode;
 
@@ -21,7 +21,7 @@ public class TokenFlow implements Flow<Workflow, Token>{
 	}
 
 	@Override
-	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> owningStatemachine) {
-		return transition(fromNode.asState(), toNode.asState(), d -> Workflow.from(d).state().moveToken(d, toNode));
+	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
+		return transition(fromNode.asState(), toNode.asState(), d -> d.state().moveToken(d, toNode));
 	}
 }

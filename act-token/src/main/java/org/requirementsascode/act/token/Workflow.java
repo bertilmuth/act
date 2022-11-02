@@ -6,7 +6,6 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
-import static org.requirementsascode.act.token.Step.proceed;
 import static org.requirementsascode.act.token.Token.token;
 
 import java.util.stream.Stream;
@@ -19,9 +18,9 @@ import org.requirementsascode.act.statemachine.Transition;
 
 public class Workflow {
 	private final WorkflowState state;
-	private final Statemachine<Workflow, Token> statemachine;
+	private final Statemachine<WorkflowState, Token> statemachine;
 	
-	Workflow(Statemachine<Workflow, Token> statemachine, WorkflowState state) {
+	Workflow(Statemachine<WorkflowState, Token> statemachine, WorkflowState state) {
 		this.statemachine = statemachine;
 		this.state = state;
 	}
@@ -38,12 +37,24 @@ public class Workflow {
 		return state;
 	}
 	
-	public Workflow start(ActionData actionData) {
-		return nextStep(actionData).nextStep();
+	public WorkflowState nextStep(ActionData actionData) {
+		Data<WorkflowState, ActionData> inputData = data(state, actionData);
+		Data<WorkflowState, Token> inputDataWithToken = tokenized(inputData);
+		Data<WorkflowState, Token> output = statemachine().actOn(inputDataWithToken);
+		return nextStep(output.state(), Step.proceed);
 	}
 	
-	public Workflow nextStep() {
-		return nextStep(proceed);
+	public WorkflowState nextStep(WorkflowState workflowState, ActionData actionData) {
+		Data<WorkflowState, ActionData> inputData = Data.data(workflowState, actionData);
+		WorkflowState updatedWorkflowState = statemachine().actOn(tokenized(inputData)).state();
+		return updatedWorkflowState;
+	}
+
+	private Data<WorkflowState, Token> tokenized(Data<WorkflowState,ActionData> inputData) {
+		DefaultNode defaultNode = new DefaultNode(statemachine());
+		Token token = token(defaultNode, inputData.value().orElse(null));
+		Data<WorkflowState, Token> data = data(inputData.state(), token);
+		return data;
 	}
 	
 	static Workflow createInitialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
@@ -51,23 +62,12 @@ public class Workflow {
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
-		Statemachine<Workflow, Token> statemachine = statemachineWith(actions, tokenFlows, initialActions);		
+		Statemachine<WorkflowState, Token> statemachine = statemachineWith(actions, tokenFlows, initialActions);		
 		return new Workflow(statemachine, intialWorkflowState(statemachine));
 	}
 	
-	private static WorkflowState intialWorkflowState(Statemachine<Workflow, Token> statemachine) {
+	private static WorkflowState intialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
 		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
-	}
-
-	private Workflow nextStep(ActionData actionData) {
-		Workflow updatedWorkflow = statemachine().actOn(wrappped(actionData)).state();
-		return updatedWorkflow;
-	}
-
-	private Data<Workflow, Token> wrappped(ActionData actionData) {
-		DefaultNode defaultNode = new DefaultNode(statemachine());
-		Data<Workflow, Token> trigger = data(this, token(defaultNode, actionData));
-		return trigger;
 	}
 	
 	@Override
@@ -75,17 +75,17 @@ public class Workflow {
 		return "Workflow[" + state().tokens() + "]";
 	}
 	
-	Statemachine<Workflow, Token> statemachine() {
+	Statemachine<WorkflowState, Token> statemachine() {
 		return statemachine;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<Workflow, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
+	private static Statemachine<WorkflowState, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
 		Flow[] flowsArray = Stream.concat(initialActions.stream(), tokenFlows.stream())
 			.toArray(Flow[]::new);
 		
-		Statemachine<Workflow, Token> statemachine = 
+		Statemachine<WorkflowState, Token> statemachine = 
 			Statemachine.builder()
 				.states(actionsArray)
 				.transitions(
@@ -96,19 +96,19 @@ public class Workflow {
 		return statemachine;
 	}
 	
-	private static Transition<Workflow, Token> removeTokensWithoutActionData() {
+	private static Transition<WorkflowState, Token> removeTokensWithoutActionData() {
 		return transition(anyState(), anyState(), 
 			whenInCase(Token.class, Workflow::hasNoActionData, Workflow::removeToken));
 	}
 
-	private static boolean hasNoActionData(Data<Workflow, Token> d) {
+	private static boolean hasNoActionData(Data<WorkflowState, Token> d) {
 		return d.value().map(t -> !t.actionData().isPresent()).orElse(false);
 	}
 
-	private static Data<Workflow, Token> removeToken(Data<Workflow, Token> inputData) {
-		WorkflowState workflowState = Workflow.from(inputData).state();
+	private static Data<WorkflowState, Token> removeToken(Data<WorkflowState, Token> inputData) {
+		WorkflowState workflowState = inputData.state();
 		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
-		Data<Workflow, Token> resultWorkflowWithRemovedToken = workflowState.removeToken(token);
+		Data<WorkflowState, Token> resultWorkflowWithRemovedToken = workflowState.removeToken(token);
 		return resultWorkflowWithRemovedToken;
 	}
 }

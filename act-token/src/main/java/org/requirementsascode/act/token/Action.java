@@ -25,8 +25,8 @@ public class Action implements Node{
 	}
 
 	@Override
-	public State<Workflow, Token> asState() {		
-		State<Workflow, Token> state = state(name(), wf -> wf.state().tokens().isAnyTokenIn(name()), 
+	public State<WorkflowState, Token> asState() {		
+		State<WorkflowState, Token> state = state(name(), wf -> wf.tokens().isAnyTokenIn(name()), 
 			when(Token.class, actionBehavior.asBehavior(this)));
 		return state;
 	}

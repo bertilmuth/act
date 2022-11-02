@@ -4,5 +4,5 @@ import org.requirementsascode.act.statemachine.State;
 
 public interface Node {
 	String name();
-	State<Workflow, Token> asState();
+	State<WorkflowState, Token> asState();
 }

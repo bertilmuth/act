@@ -6,9 +6,9 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 
 class DefaultNode implements Node {
-	private final State<Workflow, Token> defaultState;
+	private final State<WorkflowState, Token> defaultState;
 
-	DefaultNode(Statemachine<Workflow, Token> statemachine) {
+	DefaultNode(Statemachine<WorkflowState, Token> statemachine) {
 		requireNonNull(statemachine, "statemachine must be non-null!");
 		this.defaultState = statemachine.defaultState();
 	}
@@ -19,7 +19,7 @@ class DefaultNode implements Node {
 	}
 
 	@Override
-	public State<Workflow, Token> asState() {
+	public State<WorkflowState, Token> asState() {
 		return defaultState;
 	}
 }
