@@ -33,7 +33,7 @@ public class Workflow {
 		return data.state();
 	}
 	
-	public WorkflowState nextStep(ActionData actionData) {
+	public WorkflowState start(ActionData actionData) {
 		Data<WorkflowState, ActionData> inputData = data(initialState, actionData);
 		Data<WorkflowState, Token> inputDataWithToken = tokenized(inputData);
 		Data<WorkflowState, Token> output = statemachine().actOn(inputDataWithToken);
