@@ -37,11 +37,10 @@ public class Workflow {
 		Data<WorkflowState, ActionData> inputData = data(initialState, actionData);
 		Data<WorkflowState, Token> inputDataWithToken = tokenized(inputData);
 		Data<WorkflowState, Token> output = statemachine().actOn(inputDataWithToken);
-		return nextStep(output.state(), Step.proceed);
+		return nextStep(data(output.state(), Step.proceed));
 	}
 	
-	public WorkflowState nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> inputData = Data.data(workflowState, actionData);
+	public WorkflowState nextStep(Data<WorkflowState,ActionData> inputData) {
 		WorkflowState updatedWorkflowState = statemachine().actOn(tokenized(inputData)).state();
 		return updatedWorkflowState;
 	}
