@@ -46,7 +46,7 @@ public class WorkflowBuilder {
 			private InitialActionsBuilder(){}
 			
 			public final Workflow build() {
-				return Workflow.initialWorkflow(builderActions, builderTokenFlows, builderInitialActions);
+				return Workflow.createInitialWorkflow(builderActions, builderTokenFlows, builderInitialActions);
 			}
 		}
 	}

@@ -52,7 +52,7 @@ public class Workflow {
 		return nextStep(stepTrigger);
 	}
 	
-	static Workflow initialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
+	static Workflow createInitialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
