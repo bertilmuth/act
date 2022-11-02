@@ -21,13 +21,6 @@ public class Workflow {
 	private final WorkflowState state;
 	private final Statemachine<Workflow, Token> statemachine;
 	
-	private Workflow(Statemachine<Workflow, Token> statemachine) {
-		this(statemachine, intialWorkflowState(statemachine));
-	}
-	private static WorkflowState intialWorkflowState(Statemachine<Workflow, Token> statemachine) {
-		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
-	}
-	
 	Workflow(Statemachine<Workflow, Token> statemachine, WorkflowState state) {
 		this.statemachine = statemachine;
 		this.state = state;
@@ -58,7 +51,12 @@ public class Workflow {
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
 
-		return new Workflow(statemachineWith(actions, tokenFlows, initialActions));
+		Statemachine<Workflow, Token> statemachine = statemachineWith(actions, tokenFlows, initialActions);		
+		return new Workflow(statemachine, intialWorkflowState(statemachine));
+	}
+	
+	private static WorkflowState intialWorkflowState(Statemachine<Workflow, Token> statemachine) {
+		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
 	}
 
 	private Workflow nextStep(ActionData actionData) {
