@@ -6,6 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.token.WorkflowState.intialWorkflowState;
 
 import java.util.stream.Stream;
 
@@ -21,7 +22,7 @@ public class Workflow {
 	
 	Workflow(Statemachine<WorkflowState, Token> statemachine) {
 		this.statemachine = statemachine;
-		this.initialState = WorkflowState.intialWorkflowState(statemachine);
+		this.initialState = intialWorkflowState(statemachine);
 	}
 	
 	public final static WorkflowBuilder builder() {

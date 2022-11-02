@@ -13,7 +13,7 @@ public class WorkflowState {
 	private final Tokens tokens;
 	private final ActionData actionOutput;
 	
-	WorkflowState(Statemachine<WorkflowState, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+	private WorkflowState(Statemachine<WorkflowState, Token> statemachine, Tokens tokens, ActionData actionOutput) {
 		this.statemachine = statemachine;
 		this.tokens = tokens;
 		this.actionOutput = actionOutput;
