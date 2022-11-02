@@ -11,6 +11,7 @@ import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.requirementsascode.act.core.Data;
 
 class WorkflowTest {
 	private static final String START_WORKFLOW = "";
@@ -25,9 +26,9 @@ class WorkflowTest {
 			.initialActions()
 			.build();
 		
-		WorkflowState afterStart = workflow.start(s("")).state();
-		assertTrue(afterStart.actionOutput().isEmpty());
-		assertTrue(afterStart.tokens().stream().toList().isEmpty());
+		Data<WorkflowState, ActionData> afterStart = workflow.start(s(""));
+		assertTrue(afterStart.value().isEmpty());
+		assertTrue(afterStart.state().tokens().stream().toList().isEmpty());
 	}
 	
 	@Test
