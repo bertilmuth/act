@@ -60,13 +60,11 @@ public class Workflow {
 	}
 
 	private Workflow nextStep(ActionData actionData) {
-		requireNonNull(actionData, "actionData must be non-null!");
-		Data<Workflow, Token> trigger = actionTrigger(actionData);
-		Workflow updatedWorkflow = statemachine().actOn(trigger).state();
+		Workflow updatedWorkflow = statemachine().actOn(wrappped(actionData)).state();
 		return updatedWorkflow;
 	}
 
-	private Data<Workflow, Token> actionTrigger(ActionData actionData) {
+	private Data<Workflow, Token> wrappped(ActionData actionData) {
 		DefaultNode defaultNode = new DefaultNode(statemachine());
 		Data<Workflow, Token> trigger = data(this, token(defaultNode, actionData));
 		return trigger;
