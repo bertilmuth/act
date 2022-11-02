@@ -3,7 +3,7 @@ package org.requirementsascode.act.token;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 import static org.requirementsascode.act.token.Step.stepTrigger;
 import static org.requirementsascode.act.token.Token.token;
@@ -108,7 +108,7 @@ class RemoveTokensWithoutActionData implements Flow<Workflow, Token> {
 	
 	@Override
 	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> statemachine) {
-		return transition(statemachine.definedState(), statemachine.definedState(), 
+		return transition(statemachine.definedState(), anyState(), 
 			whenInCase(Token.class, this::hasNoActionData, this::removeToken));
 	}
 
