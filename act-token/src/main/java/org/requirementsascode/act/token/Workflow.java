@@ -108,7 +108,7 @@ class RemoveTokensWithoutActionData implements Flow<Workflow, Token> {
 	
 	@Override
 	public Transition<Workflow, Token> asTransition(Statemachine<Workflow, Token> statemachine) {
-		return transition(statemachine.definedState(), anyState(), 
+		return transition(anyState(), anyState(), 
 			whenInCase(Token.class, this::hasNoActionData, this::removeToken));
 	}
 
