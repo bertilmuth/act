@@ -13,7 +13,7 @@ import org.requirementsascode.act.core.Data;
 
 public class Step<T extends ActionData, U extends ActionData> implements ActionBehavior {
 	private final Behavior<Workflow, Token, Token> stepBehavior;
-	public static final StepTrigger stepTrigger = new StepTrigger();
+	public static final Proceed proceed = new Proceed();
 
 	private Step(Class<T> inputClass, BiFunction<Workflow, T, U> function) {
 		requireNonNull(inputClass, "inputClass must be non-null!");
@@ -28,10 +28,10 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	@Override
 	public Behavior<Workflow, Token, Token> asBehavior(Action owningAction) {
-		return inCase(Token::isStepTriggering, d -> runStep(Workflow.from(d), owningAction));
+		return inCase(Token::isForProceeding, d -> proceed(Workflow.from(d), owningAction));
 	}
 
-	private Data<Workflow, Token> runStep(Workflow workflow, Action owningAction) {
+	private Data<Workflow, Token> proceed(Workflow workflow, Action owningAction) {
 		return stepBehavior.actOn(firstTokenInAction(workflow, owningAction));
 	}
 
@@ -43,8 +43,8 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		return workflow.state().tokens().firstTokenIn(owningAction.name()).get();
 	}
 
-	static class StepTrigger implements ActionData {
-		private StepTrigger() {
+	static class Proceed implements ActionData {
+		private Proceed() {
 		};
 	}
 	
