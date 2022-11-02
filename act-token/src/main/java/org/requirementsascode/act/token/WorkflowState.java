@@ -41,8 +41,8 @@ public class WorkflowState {
 	}
 	
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
-		ActionData outputActionData = token != null? token.actionData().orElse(null) : null;
-		WorkflowState newWorkflowState = new WorkflowState(statemachine, tokens, outputActionData);
+		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
+		WorkflowState newWorkflowState = new WorkflowState(statemachine, tokens, actionOutput);
 		return data(newWorkflowState, token);
 	}
 

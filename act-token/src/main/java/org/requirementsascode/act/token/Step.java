@@ -84,7 +84,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		}
 
 		private ActionData actionDataFrom(Data<WorkflowState, Token> inputData) {
-			return Token.from(inputData).flatMap(Token::actionData).orElse(null);
+			return ActionData.from(inputData);
 		}
 		
 		private Behavior<WorkflowState, ActionData, ActionData> createStepBehavior() {
