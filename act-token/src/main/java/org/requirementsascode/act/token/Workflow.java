@@ -35,8 +35,7 @@ public class Workflow {
 	
 	public WorkflowState start(ActionData actionData) {
 		Data<WorkflowState, ActionData> inputData = data(initialState, actionData);
-		Data<WorkflowState, Token> inputDataWithToken = tokenized(inputData);
-		Data<WorkflowState, Token> output = statemachine().actOn(inputDataWithToken);
+		Data<WorkflowState, Token> output = statemachine().actOn(tokenized(inputData));
 		return nextStep(data(output.state(), Step.proceed));
 	}
 	
