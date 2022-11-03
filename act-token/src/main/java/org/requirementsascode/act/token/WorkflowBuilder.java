@@ -23,30 +23,31 @@ public class WorkflowBuilder {
 			requireNonNull(actions, "actions must be non-null!");
 			this.builderActions = new Actions(asList(actions));
 		}
-
+		
 		@SafeVarargs
-		public final TokenFlowsBuilder tokenFlows(TokenFlow... tokenFlowsArray) {
-			requireNonNull(tokenFlowsArray, "tokenFlowsArray must be non-null!");
-			builderTokenFlows = TokenFlows.tokenFlows(asList(tokenFlowsArray));
-			return new TokenFlowsBuilder();
+		public final InitialActionsBuilder initialActions(Action... actionsArray) {
+			requireNonNull(actionsArray, "initialActionsArray must be non-null!");
+			builderInitialActions = new InitialActions(asList(actionsArray));
+			return new InitialActionsBuilder();
 		}
 
-		public class TokenFlowsBuilder {
-			private TokenFlowsBuilder(){}
-			
-			@SafeVarargs
-			public final InitialActionsBuilder initialActions(Action... actionsArray) {
-				requireNonNull(actionsArray, "initialActionsArray must be non-null!");
-				builderInitialActions = new InitialActions(asList(actionsArray));
-				return new InitialActionsBuilder();
-			}
-		}
 		
 		public class InitialActionsBuilder {
 			private InitialActionsBuilder(){}
 			
-			public final Workflow build() {
-				return Workflow.createInitialWorkflow(builderActions, builderTokenFlows, builderInitialActions);
+			@SafeVarargs
+			public final TokenFlowsBuilder tokenFlows(TokenFlow... tokenFlowsArray) {
+				requireNonNull(tokenFlowsArray, "tokenFlowsArray must be non-null!");
+				builderTokenFlows = TokenFlows.tokenFlows(asList(tokenFlowsArray));
+				return new TokenFlowsBuilder();
+			}
+			
+			public class TokenFlowsBuilder {
+				private TokenFlowsBuilder(){}
+				
+				public final Workflow build() {
+					return Workflow.createInitialWorkflow(builderActions, builderTokenFlows, builderInitialActions);
+				}
 			}
 		}
 	}
