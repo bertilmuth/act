@@ -10,13 +10,14 @@ import static org.requirementsascode.act.token.WorkflowState.intialWorkflowState
 
 import java.util.stream.Stream;
 
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class Workflow {
+public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialState;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	
@@ -43,6 +44,7 @@ public class Workflow {
 		return actOn(data(workflowState, Step.proceed));
 	}
 	
+	@Override
 	public Data<WorkflowState, ActionData> actOn(Data<WorkflowState,ActionData> inputData) {
 		Data<WorkflowState, Token> output = statemachine().actOn(tokenized(inputData));
 		ActionData outputActionData = output.state().actionOutput().orElse(null);
