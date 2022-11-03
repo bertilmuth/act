@@ -1,10 +1,10 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
-import static org.requirementsascode.act.token.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.function.BiFunction;
 

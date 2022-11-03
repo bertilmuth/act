@@ -1,4 +1,4 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.workflow;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;

@@ -1,12 +1,12 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
-import static org.requirementsascode.act.token.WorkflowApi.*;
-import static org.requirementsascode.act.token.WorkflowState.intialWorkflowState;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
 
 import java.util.stream.Stream;
 

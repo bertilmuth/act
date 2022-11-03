@@ -1,4 +1,4 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.workflow;
 
 import static java.util.Collections.emptyList;
 import static org.requirementsascode.act.core.Data.data;

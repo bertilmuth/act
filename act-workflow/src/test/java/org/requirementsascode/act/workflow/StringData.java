@@ -1,6 +1,8 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.workflow;
 
 import java.util.Objects;
+
+import org.requirementsascode.act.workflow.ActionData;
 
 class StringData implements ActionData{
 		public final String string;

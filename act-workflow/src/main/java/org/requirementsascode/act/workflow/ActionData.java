@@ -1,4 +1,4 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.workflow;
 
 import org.requirementsascode.act.core.Data;
 

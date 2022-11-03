@@ -1,8 +1,8 @@
-package org.requirementsascode.act.token;
+package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.requirementsascode.act.token.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.List;
 

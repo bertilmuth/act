@@ -4,5 +4,5 @@ import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
-@SelectPackages({"org.requirementsascode.act.token"})
+@SelectPackages({"org.requirementsascode.act.workflow"})
 public class AllTests {}
