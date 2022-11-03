@@ -11,13 +11,9 @@ public class DataFlow implements Flow<WorkflowState, Token>{
 	private final Node fromNode;
 	private final Node toNode;
 
-	private DataFlow(Node fromNode, Node toNode) {
+	DataFlow(Node fromNode, Node toNode) {
 		this.fromNode = requireNonNull(fromNode, "fromNode must be non-null!");
 		this.toNode = requireNonNull(toNode, "toNode must be non-null!");
-	}
-	
-	public static DataFlow dataFlow(Node fromNode, Node toNode) {		
-		return new DataFlow(fromNode, toNode);
 	}
 
 	@Override

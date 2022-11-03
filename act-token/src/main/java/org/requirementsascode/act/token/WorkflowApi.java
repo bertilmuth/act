@@ -4,7 +4,7 @@ import java.util.function.BiFunction;
 
 public class WorkflowApi {
 	public static Action action(String name, ActionBehavior actionBehavior) {
-		return Action.action(name, actionBehavior);
+		return new Action(name, actionBehavior);
 	}
 	
 	public static <T extends ActionData, U extends ActionData> Step<T, U> step(Class<T> inputClass,
@@ -17,6 +17,6 @@ public class WorkflowApi {
 	}
 	
 	public static DataFlow dataFlow(Node fromNode, Node toNode) {		
-		return DataFlow.dataFlow(fromNode, toNode);
+		return new DataFlow(fromNode, toNode);
 	}
 }

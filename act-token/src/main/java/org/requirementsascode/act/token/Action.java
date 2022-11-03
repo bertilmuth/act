@@ -10,14 +10,10 @@ public class Action implements Node{
 	private final String name;
 	private final ActionBehavior actionBehavior;
 	
-	private Action(String name, ActionBehavior actionBehavior) {
+	Action(String name, ActionBehavior actionBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 	}	
-	
-	static Action action(String name, ActionBehavior actionBehavior) {
-		return new Action(name, actionBehavior);
-	}
 	
 	@Override
 	public String name() {

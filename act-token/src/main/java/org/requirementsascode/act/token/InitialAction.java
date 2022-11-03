@@ -1,7 +1,7 @@
 package org.requirementsascode.act.token;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.token.DataFlow.dataFlow;
+import static org.requirementsascode.act.token.WorkflowApi.dataFlow;
 
 import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.Statemachine;
