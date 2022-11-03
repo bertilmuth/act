@@ -15,15 +15,10 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	private final Behavior<WorkflowState, Token, Token> stepBehavior;
 	public static final Proceed proceed = new Proceed();
 
-	private Step(Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
+	Step(Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
 		requireNonNull(inputClass, "inputClass must be non-null!");
 		requireNonNull(function, "function must be non-null!");
 		this.stepBehavior = new StepBehavior(inputClass, function);
-	}
-
-	static <T extends ActionData, U extends ActionData> Step<T, U> step(Class<T> inputClass,
-			BiFunction<WorkflowState, T, U> function) {
-		return new Step<>(inputClass, function);
 	}
 
 	@Override

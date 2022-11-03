@@ -9,7 +9,7 @@ public class WorkflowApi {
 	
 	public static <T extends ActionData, U extends ActionData> Step<T, U> step(Class<T> inputClass,
 			BiFunction<WorkflowState, T, U> function) {
-		return Step.step(inputClass, function);
+		return new Step<>(inputClass, function);
 	}
 	
 	public static Token token(Node node, ActionData actionData) {
