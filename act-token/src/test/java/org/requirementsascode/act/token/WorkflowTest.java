@@ -42,7 +42,7 @@ class WorkflowTest {
 		
 		Data<WorkflowState, ActionData> afterAction1 = workflow.start(str(START_WORKFLOW));
 		
-		assertEquals(new StringData(ACTION1), afterAction1.value().get());
+		assertEquals(str(ACTION1), afterAction1.value().get());
 		assertEquals(1, afterAction1.state().tokens().stream().toList().size());
 		assertEquals(token(action1, str(ACTION1)), afterAction1.state().tokens().firstTokenIn(ACTION1).get());
 	}
@@ -63,7 +63,7 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
 		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
 		
-		assertEquals(new StringData(ACTION2), afterAction2.value().get());
+		assertEquals(str(ACTION2), afterAction2.value().get());
 		assertEquals(1, afterAction2.state().tokens().stream().toList().size());
 		assertEquals(token(action2, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
 	}
