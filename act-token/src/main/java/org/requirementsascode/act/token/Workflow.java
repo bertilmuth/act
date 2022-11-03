@@ -58,7 +58,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		return data;
 	}
 	
-	static Workflow createInitialWorkflow(Actions actions, TokenFlows tokenFlows, InitialActions initialActions){
+	static Workflow createInitialWorkflow(Actions actions, DataFlows tokenFlows, InitialActions initialActions){
 		requireNonNull(actions, "actions must be non-null!");
 		requireNonNull(tokenFlows, "tokenFlows must be non-null!");
 		requireNonNull(initialActions, "initialActions must be non-null!");
@@ -72,7 +72,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<WorkflowState, Token> statemachineWith(Actions actions, TokenFlows tokenFlows, InitialActions initialActions) {
+	private static Statemachine<WorkflowState, Token> statemachineWith(Actions actions, DataFlows tokenFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
 		Flow[] flowsArray = Stream.concat(initialActions.stream(), tokenFlows.stream())
 			.toArray(Flow[]::new);

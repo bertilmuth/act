@@ -16,7 +16,7 @@ public class WorkflowApi {
 		return Token.token(node, actionData);
 	}
 	
-	public static TokenFlow tokenFlow(Node fromNode, Node toNode) {		
-		return TokenFlow.tokenFlow(fromNode, toNode);
+	public static DataFlow dataFlow(Node fromNode, Node toNode) {		
+		return DataFlow.dataFlow(fromNode, toNode);
 	}
 }

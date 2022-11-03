@@ -19,7 +19,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions()
 			.initialActions()
-			.tokenFlows()
+			.dataFlows()
 			.build();
 		
 		Data<WorkflowState, ActionData> afterStart = workflow.start(str(""));
@@ -34,7 +34,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
 			.initialActions(action1)
-			.tokenFlows()
+			.dataFlows()
 			.build();
 		
 		Data<WorkflowState, ActionData> afterAction1 = workflow.start(str(START_WORKFLOW));
@@ -52,8 +52,8 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2)
 			.initialActions(action1)
-			.tokenFlows(
-				tokenFlow(action1, action2)
+			.dataFlows(
+				dataFlow(action1, action2)
 			)
 			.build();
 		
@@ -72,7 +72,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
 			.initialActions(action1)
-			.tokenFlows()
+			.dataFlows()
 			.build();
 		
 		Tokens tokensAfterStart = workflow.start(new UnknownData()).state().tokens();
@@ -87,7 +87,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
 			.initialActions(action1)
-			.tokenFlows()
+			.dataFlows()
 			.build();
 		
 		WorkflowState afterStartState = workflow.start(new UnknownData()).state();

@@ -7,17 +7,17 @@ import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class TokenFlow implements Flow<WorkflowState, Token>{
+public class DataFlow implements Flow<WorkflowState, Token>{
 	private final Node fromNode;
 	private final Node toNode;
 
-	private TokenFlow(Node fromNode, Node toNode) {
+	private DataFlow(Node fromNode, Node toNode) {
 		this.fromNode = requireNonNull(fromNode, "fromNode must be non-null!");
 		this.toNode = requireNonNull(toNode, "toNode must be non-null!");
 	}
 	
-	public static TokenFlow tokenFlow(Node fromNode, Node toNode) {		
-		return new TokenFlow(fromNode, toNode);
+	public static DataFlow dataFlow(Node fromNode, Node toNode) {		
+		return new DataFlow(fromNode, toNode);
 	}
 
 	@Override
