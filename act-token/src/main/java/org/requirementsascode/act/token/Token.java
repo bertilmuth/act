@@ -20,7 +20,7 @@ public class Token {
 		return data.value();
 	}
 	
-	public static Token token(Node node, ActionData actionData) {
+	static Token token(Node node, ActionData actionData) {
 		return new Token(node, actionData);
 	}
 	
