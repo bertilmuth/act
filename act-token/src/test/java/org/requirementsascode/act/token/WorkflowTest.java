@@ -2,7 +2,6 @@ package org.requirementsascode.act.token;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.token.Action.action;
 import static org.requirementsascode.act.token.Step.step;
 import static org.requirementsascode.act.token.Token.token;
@@ -41,9 +40,9 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		Data<WorkflowState, ActionData> afterStart = workflow.start(s(START_WORKFLOW));
-		assertEquals(new StringData(ACTION1), afterStart.value().get());
-		assertEquals(token(action1, s(ACTION1)), afterStart.state().tokens().firstTokenIn(ACTION1).get());
+		Data<WorkflowState, ActionData> afterAction1 = workflow.start(s(START_WORKFLOW));
+		assertEquals(new StringData(ACTION1), afterAction1.value().get());
+		assertEquals(token(action1, s(ACTION1)), afterAction1.state().tokens().firstTokenIn(ACTION1).get());
 	}
 	
 	@Test
@@ -59,10 +58,10 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		WorkflowState afterStart = workflow.start(s(START_WORKFLOW)).state();
-		Data<WorkflowState, ActionData> afterAction1 = workflow.actOn(data(afterStart, Step.proceed));
-		assertEquals(new StringData(ACTION2), afterAction1.value().get());
-		assertEquals(token(action2, s(ACTION2)), afterAction1.state().tokens().firstTokenIn(ACTION2).get());
+		WorkflowState afterAction1State = workflow.start(s(START_WORKFLOW)).state();
+		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		assertEquals(new StringData(ACTION2), afterAction2.value().get());
+		assertEquals(token(action2, s(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
 	}
 	
 	@Test
@@ -90,8 +89,8 @@ class WorkflowTest {
 			.initialActions(action1)
 			.build();
 		
-		WorkflowState afterStart = workflow.start(new UnknownData()).state();
-		Tokens tokensAfterNextStep = workflow.actOn(data(afterStart, Step.proceed)).state().tokens();
+		WorkflowState afterStartState = workflow.start(new UnknownData()).state();
+		Tokens tokensAfterNextStep = workflow.nextStep(afterStartState).state().tokens();
 		List<Token> tokenList = tokensAfterNextStep.stream().toList();
 		assertTrue(tokenList.isEmpty());
 	}
