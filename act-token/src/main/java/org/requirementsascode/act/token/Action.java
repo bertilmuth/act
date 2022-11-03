@@ -15,7 +15,7 @@ public class Action implements Node{
 		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 	}	
 	
-	public static Action action(String name, ActionBehavior actionBehavior) {
+	static Action action(String name, ActionBehavior actionBehavior) {
 		return new Action(name, actionBehavior);
 	}
 	

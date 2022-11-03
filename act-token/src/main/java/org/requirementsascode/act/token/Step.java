@@ -21,7 +21,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		this.stepBehavior = new StepBehavior(inputClass, function);
 	}
 
-	public static <T extends ActionData, U extends ActionData> Step<T, U> step(Class<T> inputClass,
+	static <T extends ActionData, U extends ActionData> Step<T, U> step(Class<T> inputClass,
 			BiFunction<WorkflowState, T, U> function) {
 		return new Step<>(inputClass, function);
 	}
