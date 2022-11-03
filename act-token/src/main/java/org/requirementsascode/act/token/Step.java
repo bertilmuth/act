@@ -49,12 +49,10 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	}
 	
 	private class StepBehavior implements Behavior<WorkflowState, Token, Token> {
-		private final Class<T> inputClass;
 		private final BiFunction<WorkflowState, T, U> functionOnActionData;
 		private final Behavior<WorkflowState, ActionData, ActionData> stepBehavior;
 
 		private StepBehavior(Class<T> inputClass, BiFunction<WorkflowState, T, U> functionOnActionData) {
-			this.inputClass = inputClass;
 			this.functionOnActionData = functionOnActionData;
 			this.stepBehavior = when(inputClass, this::applyFunctionOnActionData);
 		}
@@ -82,10 +80,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		private Token updateActionData(Token token, Data<WorkflowState, ActionData> outputActionData) {
 			return token(token.node(), outputActionData.value().orElse(null));
 		}
-		
-		private Behavior<WorkflowState, ActionData, ActionData> createStepBehavior() {
-			return when(inputClass, this::applyFunctionOnActionData);
-		}
+
 
 		private Data<WorkflowState, U> applyFunctionOnActionData(Data<WorkflowState, T> input) {
 			WorkflowState workflowState = input.state();
