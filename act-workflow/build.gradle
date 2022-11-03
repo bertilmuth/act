@@ -17,7 +17,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'act-token',
+        attributes 'Implementation-Title': 'act-workflow',
                    'Implementation-Version': archiveVersion
 	}
 }
@@ -58,8 +58,8 @@ if (project.hasProperty("signing.keyId")) {
 		publications {
 			mavenJava(MavenPublication) {
 				pom{
-					name = 'act-token'
-					description = 'Petri net like semantics for act.'
+					name = 'act-workflow'
+					description = 'Workflow semantics for act.'
 					url = 'http://requirementsascode.org/'
 					packaging = 'jar'
 
