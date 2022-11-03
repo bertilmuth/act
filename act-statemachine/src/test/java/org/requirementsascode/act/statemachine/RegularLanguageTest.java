@@ -10,8 +10,7 @@ import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTer
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S2;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S3;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.WordTooLong;
-import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.Transition.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.function.Predicate;
 
