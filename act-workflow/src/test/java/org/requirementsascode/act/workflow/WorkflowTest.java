@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.workflow.testdata.StringData;
 
 class WorkflowTest {
 	private static final String START_WORKFLOW = "";
