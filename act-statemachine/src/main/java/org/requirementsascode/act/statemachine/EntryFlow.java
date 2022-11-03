@@ -1,7 +1,7 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.Transition.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.Optional;
 

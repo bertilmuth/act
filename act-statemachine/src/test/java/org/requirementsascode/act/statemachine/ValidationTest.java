@@ -1,10 +1,7 @@
 package org.requirementsascode.act.statemachine;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.Transition.transition;
-import static org.requirementsascode.act.statemachine.function.ConsumeWith.consumeWith;
-import static org.requirementsascode.act.statemachine.function.When.when;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.statemachine.testdata.HierarchicalCart;
