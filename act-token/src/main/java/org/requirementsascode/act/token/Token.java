@@ -11,17 +11,13 @@ public class Token {
 	private final Node node;
 	private final ActionData actionData;
 
-	private Token(Node node, ActionData actionData) {
+	Token(Node node, ActionData actionData) {
 		this.node = requireNonNull(node, "node must be non-null!");
 		this.actionData = actionData;
 	}
 	
 	public static Optional<Token> from(Data<WorkflowState, Token> data) {
 		return data.value();
-	}
-	
-	static Token token(Node node, ActionData actionData) {
-		return new Token(node, actionData);
 	}
 	
 	public Node node() {

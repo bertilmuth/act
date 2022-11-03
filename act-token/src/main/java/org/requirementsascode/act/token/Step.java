@@ -3,8 +3,8 @@ package org.requirementsascode.act.token;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.StatemachineApi.when;
-import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.token.WorkflowApi.*;
 
 import java.util.function.BiFunction;
 

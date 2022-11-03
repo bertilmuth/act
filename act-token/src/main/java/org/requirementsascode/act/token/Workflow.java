@@ -5,7 +5,7 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
-import static org.requirementsascode.act.token.Token.token;
+import static org.requirementsascode.act.token.WorkflowApi.*;
 import static org.requirementsascode.act.token.WorkflowState.intialWorkflowState;
 
 import java.util.stream.Stream;

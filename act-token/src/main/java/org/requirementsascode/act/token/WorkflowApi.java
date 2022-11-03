@@ -13,7 +13,7 @@ public class WorkflowApi {
 	}
 	
 	public static Token token(Node node, ActionData actionData) {
-		return Token.token(node, actionData);
+		return new Token(node, actionData);
 	}
 	
 	public static DataFlow dataFlow(Node fromNode, Node toNode) {		
