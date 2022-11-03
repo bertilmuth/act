@@ -1,7 +1,5 @@
 package org.requirementsascode.act.token;
 
-import static org.requirementsascode.act.token.TokenFlow.tokenFlow;
-
 import java.util.function.BiFunction;
 
 public class WorkflowApi {
@@ -16,5 +14,9 @@ public class WorkflowApi {
 	
 	public static Token token(Node node, ActionData actionData) {
 		return Token.token(node, actionData);
+	}
+	
+	public static TokenFlow tokenFlow(Node fromNode, Node toNode) {		
+		return TokenFlow.tokenFlow(fromNode, toNode);
 	}
 }
