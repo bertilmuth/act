@@ -41,7 +41,8 @@ public class Workflow {
 	
 	public Data<WorkflowState, ActionData> actOn(Data<WorkflowState,ActionData> inputData) {
 		Data<WorkflowState, Token> output = statemachine().actOn(tokenized(inputData));
-		return data(output.state(), ActionData.from(output));
+		ActionData outputActionData = output.state().actionOutput().orElse(null);
+		return data(output.state(), outputActionData);
 	}
 
 	private Data<WorkflowState, Token> tokenized(Data<WorkflowState,ActionData> inputData) {
