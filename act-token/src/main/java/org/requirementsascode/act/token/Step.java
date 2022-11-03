@@ -72,7 +72,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		}
 
 		private Data<WorkflowState, ActionData> unboxActionData(Data<WorkflowState, Token> inputData) {
-			return data(inputData.state(), actionDataFrom(inputData));
+			return data(inputData.state(), ActionData.from(inputData));
 		}
 
 		private Token tokenFrom(Data<WorkflowState, Token> inputData) {
@@ -81,10 +81,6 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 		private Token updateActionData(Token token, Data<WorkflowState, ActionData> outputActionData) {
 			return token(token.node(), outputActionData.value().orElse(null));
-		}
-
-		private ActionData actionDataFrom(Data<WorkflowState, Token> inputData) {
-			return ActionData.from(inputData);
 		}
 		
 		private Behavior<WorkflowState, ActionData, ActionData> createStepBehavior() {
