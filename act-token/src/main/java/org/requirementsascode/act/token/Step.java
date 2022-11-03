@@ -56,7 +56,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		private StepBehavior(Class<T> inputClass, BiFunction<WorkflowState, T, U> functionOnActionData) {
 			this.inputClass = inputClass;
 			this.functionOnActionData = functionOnActionData;
-			this.stepBehavior = createStepBehavior();
+			this.stepBehavior = when(inputClass, this::applyFunctionOnActionData);
 		}
 
 		@Override
