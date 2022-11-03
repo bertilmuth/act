@@ -50,7 +50,7 @@ public class WorkflowState {
 		return tokens;
 	}
 
-	public Optional<ActionData> actionOutput() {
+	Optional<ActionData> actionOutput() {
 		return Optional.ofNullable(actionOutput);
 	}
 }
