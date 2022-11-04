@@ -8,10 +8,12 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase
 import static org.requirementsascode.act.workflow.WorkflowApi.*;
 import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.Flow;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -79,6 +81,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		
 		Statemachine<WorkflowState, Token> statemachine = 
 			Statemachine.builder()
+				.mergeStrategy(new TokenMergeStrategy())
 				.states(actionsArray)
 				.transitions(
 					removeTokensWithoutActionData()
@@ -103,4 +106,11 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		Data<WorkflowState, Token> resultWorkflowWithRemovedToken = workflowState.removeToken(token);
 		return resultWorkflowWithRemovedToken;
 	}
+}
+
+class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
+	@Override
+	public Data<WorkflowState, Token> merge(List<Data<WorkflowState, Token>> datas) {
+		return null;
+	}	
 }

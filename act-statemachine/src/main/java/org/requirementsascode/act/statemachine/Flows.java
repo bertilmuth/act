@@ -7,16 +7,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
+import org.requirementsascode.act.core.merge.MergeStrategy;
 
 public class Flows<S, V0> implements AsBehavior<S, V0>{
 	private final List<Flow<S, V0>> flows;
+	private final MergeStrategy<S, V0> mergeStrategy;
 
-	private Flows(List<Flow<S, V0>> flows) {
+	private Flows(List<Flow<S, V0>> flows, MergeStrategy<S, V0> mergeStrategy) {
 		this.flows = requireNonNull(flows, "flows must be non-null!");
+		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 	}
 
-	static <S, V0> Flows<S, V0> flows(List<Flow<S, V0>> flows) {
-		return new Flows<>(flows);
+	static <S, V0> Flows<S, V0> flows(List<Flow<S, V0>> flows, MergeStrategy<S, V0> mergeStrategy) {
+		return new Flows<>(flows, mergeStrategy);
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class Flows<S, V0> implements AsBehavior<S, V0>{
 		List<Transition<S, V0>> transitionsList = this.stream()
 				.map(e -> e.asTransition(owningStatemachine))
 				.collect(Collectors.toList());
-		return Transitions.transitions(transitionsList);
+		return Transitions.transitions(transitionsList, mergeStrategy);
 	}
 
 	public Stream<Flow<S, V0>> stream() {

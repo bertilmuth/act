@@ -2,10 +2,14 @@ package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.action;
+import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
+import static org.requirementsascode.act.workflow.WorkflowApi.step;
+import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -14,6 +18,8 @@ class WorkflowTest {
 	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
 	private static final String ACTION2 = "Action2";
+	private static final String ACTION2A = "Action2a";
+	private static final String ACTION2B = "Action2b";
 	
 	@Test
 	void runningEmptyWorkflowDoesNothing() {
@@ -64,6 +70,30 @@ class WorkflowTest {
 		assertEquals(str(ACTION2), afterAction2.value().get());
 		assertEquals(1, afterAction2.state().tokens().stream().toList().size());
 		assertEquals(token(action2, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
+	}
+	
+	@Test
+	@Disabled
+	void testFork() {
+		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
+		Action action2a = action(ACTION2A, step(StringData.class, this::action2Performed));
+		Action action2b = action(ACTION2B, step(StringData.class, this::action2Performed));
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1, action2a, action2b)
+			.initialActions(action1)
+			.dataFlows(
+				dataFlow(action1, action2a),
+				dataFlow(action1, action2b)
+			)
+			.build();
+		
+		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
+		/*Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		
+		assertEquals(str(ACTION2), afterAction2.value().get());
+		assertEquals(1, afterAction2.state().tokens().stream().toList().size());
+		assertEquals(token(action2a, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());*/
 	}
 	
 	@Test

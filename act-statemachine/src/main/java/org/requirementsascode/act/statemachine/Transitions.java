@@ -8,22 +8,24 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
-import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
+import org.requirementsascode.act.core.merge.MergeStrategy;
 
 public class Transitions<S, V0> implements AsBehavior<S, V0> {
 	private final List<Transition<S, V0>> transitions;
+	private final MergeStrategy<S, V0> mergeStrategy;
 
-	private Transitions(List<Transition<S, V0>> transitions) {
+	private Transitions(List<Transition<S, V0>> transitions, MergeStrategy<S, V0> mergeStrategy) {
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
+		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 	}
 
-	static <S, V0> Transitions<S, V0> transitions(List<Transition<S, V0>> transitions) {
-		return new Transitions<>(transitions);
+	static <S, V0> Transitions<S, V0> transitions(List<Transition<S, V0>> transitions, MergeStrategy<S, V0> mergeStrategy) {
+		return new Transitions<>(transitions, mergeStrategy);
 	}
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {
-		return unitedBehavior(new OnlyOneBehaviorMayAct<>(), transitionBehaviors(owningStatemachine));
+		return unitedBehavior(mergeStrategy, transitionBehaviors(owningStatemachine));
 	}
 
 	private List<Behavior<S, V0, V0>> transitionBehaviors(Statemachine<S, V0> owningStatemachine) {
