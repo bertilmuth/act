@@ -75,8 +75,8 @@ class WorkflowTest {
 	@Test
 	void testFork() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
-		Action action2a = action(ACTION2A, step(StringData.class, this::action2Performed));
-		Action action2b = action(ACTION2B, step(StringData.class, this::action2Performed));
+		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
+		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2a, action2b)
@@ -88,11 +88,14 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
-		/*Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		System.out.println(afterAction1State.tokens().stream().toList());
 		
-		assertEquals(str(ACTION2), afterAction2.value().get());
-		assertEquals(1, afterAction2.state().tokens().stream().toList().size());
-		assertEquals(token(action2a, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());*/
+		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		
+		//assertEquals(str(ACTION2), afterAction2.value().get());
+		//assertEquals(2, afterAction2.state().tokens().stream().toList().size());
+		//System.out.println(afterAction2.state().tokens().stream().toList());
+		//assertEquals(token(action2a, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
 	}
 	
 	@Test
@@ -136,6 +139,14 @@ class WorkflowTest {
 	
 	private StringData action2Performed(WorkflowState workflowState, StringData input) {
 		return new StringData(ACTION2);
+	}
+	
+	private StringData action2aPerformed(WorkflowState workflowState, StringData input) {
+		return new StringData(ACTION2A);
+	}
+	
+	private StringData action2bPerformed(WorkflowState workflowState, StringData input) {
+		return new StringData(ACTION2B);
 	}
 }
 
