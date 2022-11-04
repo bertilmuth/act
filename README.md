@@ -89,7 +89,7 @@ You can use Act to create hierarchical state machines as well.
 
 That means: states can have a behavior that is a state machine itself.
 
-Have a look at [this class]https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/testdata/HierarchicalCartStateMachine.java) for details on how to create one.
+Have a look at [this class](https://github.com/bertilmuth/act/blob/main/act-statemachine/src/test/java/org/requirementsascode/act/statemachine/testdata/HierarchicalCartStateMachine.java) for details on how to create one.
 
 # Processing regular languages
 Act can be used to decide whether a word is part of a regular language or not.
