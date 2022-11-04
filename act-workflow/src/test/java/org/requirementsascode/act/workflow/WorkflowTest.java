@@ -9,7 +9,6 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -87,15 +86,10 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
-		System.out.println(afterAction1State.tokens().stream().toList());
-		
-		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
-		
-		//assertEquals(str(ACTION2), afterAction2.value().get());
-		//assertEquals(2, afterAction2.state().tokens().stream().toList().size());
-		//System.out.println(afterAction2.state().tokens().stream().toList());
-		//assertEquals(token(action2a, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
+		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
+		assertEquals(token(action2a, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2A).get());
+		assertEquals(token(action2b, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2B).get());
+		assertEquals(2, afterAction1State.tokens().stream().toList().size());
 	}
 	
 	@Test
