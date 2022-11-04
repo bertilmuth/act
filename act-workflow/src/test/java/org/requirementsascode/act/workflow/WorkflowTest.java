@@ -9,6 +9,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -90,6 +91,30 @@ class WorkflowTest {
 		assertEquals(token(action2a, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2A).get());
 		assertEquals(token(action2b, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2B).get());
 		assertEquals(2, afterAction1State.tokens().stream().toList().size());
+	}
+	
+	@Test
+	@Disabled
+	void testStepAfterFork() {
+		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
+		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
+		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1, action2a, action2b)
+			.initialActions(action1)
+			.dataFlows(
+				dataFlow(action1, action2a),
+				dataFlow(action1, action2b)
+			)
+			.build();
+		
+		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
+		WorkflowState stepAfterFork = workflow.nextStep(afterAction1State).state();
+
+		assertEquals(token(action2a, str(ACTION2A)), stepAfterFork.tokens().firstTokenIn(ACTION2A).get());
+		assertEquals(token(action2b, str(ACTION2B)), stepAfterFork.tokens().firstTokenIn(ACTION2B).get());
+		assertEquals(2, stepAfterFork.tokens().stream().toList().size());
 	}
 	
 	@Test
