@@ -5,10 +5,11 @@ import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
@@ -106,11 +107,28 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		Data<WorkflowState, Token> resultWorkflowWithRemovedToken = workflowState.removeToken(token);
 		return resultWorkflowWithRemovedToken;
 	}
+	
+	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
+		@Override
+		public Data<WorkflowState, Token> merge(List<Data<WorkflowState, Token>> datas) {
+			Tokens mergedTokens = mergeTokens(datas);
+			Statemachine<WorkflowState, Token> statemachine = datas.stream()
+				.findFirst()
+				.map(Data::state)
+				.map(WorkflowState::statemachine)
+				.orElse(null);
+			
+			WorkflowState mergedWorkflowState = new WorkflowState(statemachine, mergedTokens, null);
+			return data(mergedWorkflowState, null);
+		}
+
+		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datas) {
+			List<Token> mergedTokenList = datas.stream()
+				.map(Data::state)
+				.flatMap(s -> s.tokens().stream())
+				.collect(Collectors.toList());
+			return new Tokens(mergedTokenList);
+		}	
+	}
 }
 
-class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
-	@Override
-	public Data<WorkflowState, Token> merge(List<Data<WorkflowState, Token>> datas) {
-		return null;
-	}	
-}

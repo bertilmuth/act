@@ -73,7 +73,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void testFork() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2a = action(ACTION2A, step(StringData.class, this::action2Performed));
