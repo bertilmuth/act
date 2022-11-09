@@ -9,7 +9,6 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -94,7 +93,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void testStepAfterFork() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
