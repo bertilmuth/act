@@ -24,7 +24,9 @@ public class Tokens {
 	}
 	
 	public boolean isAnyTokenIn(String nodeName) {
-		return inNode(nodeName).count() >= 1;
+		boolean b = inNode(nodeName).count() >= 1;
+		System.out.println("isAnyTokenIn " + nodeName + ": " + b);
+		return b;
 	}
 	
 	public Optional<Token> firstTokenIn(String nodeName) {
@@ -37,7 +39,7 @@ public class Tokens {
 		
 		Token movedToken = token.moveTo(toNode);
 		Tokens newTokens = replaceToken(token, movedToken);
-		
+
 		return newTokens;
 	}
 

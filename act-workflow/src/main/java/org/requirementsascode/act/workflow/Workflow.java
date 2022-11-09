@@ -112,17 +112,13 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			Statemachine<WorkflowState, Token> statemachine = statemachineOf(datasAfter);
+			Statemachine<WorkflowState, Token> statemachine = statemachineOf(dataBefore);
 			WorkflowState state = new WorkflowState(statemachine, mergeTokens(dataBefore, datasAfter), null);
 			return data(state, null);
 		}
 
-		private Statemachine<WorkflowState, Token> statemachineOf(List<Data<WorkflowState, Token>> datas) {
-			return datas.stream()
-				.findFirst()
-				.map(Data::state)
-				.map(WorkflowState::statemachine)
-				.orElse(null);
+		private Statemachine<WorkflowState, Token> statemachineOf(Data<WorkflowState, Token> dataBefore) {
+			return dataBefore.state().statemachine();
 		}
 
 		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {	
@@ -141,6 +137,11 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 			removedTokensList.stream().forEach(tokensAfterList::remove);
 			
 			Tokens updatedTokens = new Tokens(tokensAfterList);
+			
+			System.out.println("\ndatasAfter: " + datasAfter);
+			System.out.println("addedTokensList: " + addedTokensList);
+			System.out.println("removedTokensList: " + removedTokensList);
+
 			return updatedTokens;
 		}	
 	}

@@ -10,6 +10,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -118,6 +119,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void testImplicitJoin() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
@@ -139,6 +141,7 @@ class WorkflowTest {
 		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
 		WorkflowState afterJoinState = workflow.nextStep(afterForkState).state();
 		
+		assertEquals(token(action2a, str(ACTION2A)), afterJoinState.tokens().firstTokenIn(ACTION3).get());
 		assertEquals(2, afterJoinState.tokens().stream().toList().size());
 	}
 	
