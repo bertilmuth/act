@@ -24,7 +24,7 @@ class TokenDifferenceTest {
 	}
 
 	@Test
-	void differenceOfOneToken() {
+	void oneTokenAddedToEmptyList() {
 		Tokens tokensBefore = new Tokens(emptyList());
 		List<Token> tokensAfterList = asList(token(ACTION, null));
 		Tokens tokensAfter = new Tokens(tokensAfterList);
