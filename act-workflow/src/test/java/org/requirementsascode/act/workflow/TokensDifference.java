@@ -6,20 +6,23 @@ import java.util.List;
 class TokensDifference {
 
 	public static Tokens tokensAdded(Tokens tokensBefore, Tokens tokensAfter) {
-		List<Token> tokens = plus(tokensBefore, tokensAfter);
-		minus(tokensBefore, tokens);
-		return new Tokens(tokens);
+		List<Token> allTokens = allOf(tokensBefore, tokensAfter);
+		List<Token> tokensAdded = minus(allTokens, asList(tokensBefore));
+		return new Tokens(tokensAdded);
 	}
 
-	private static List<Token> plus(Tokens tokensBefore, Tokens tokensAfter) {
+	private static List<Token> allOf(Tokens tokensA, Tokens tokensB) {
 		List<Token> tokensList = new ArrayList<>();
-		tokensList.addAll(asList(tokensBefore));
-		tokensList.addAll(asList(tokensAfter));
+		tokensList.addAll(asList(tokensA));
+		tokensList.addAll(asList(tokensB));
 		return tokensList;
 	}
 	
-	private static boolean minus(Tokens tokensBefore, List<Token> tokens) {
-		return tokens.removeAll(asList(tokensBefore));
+	private static List<Token> minus(List<Token> tokens, List<Token> toBeRemoved) {
+		List<Token> tokensList = new ArrayList<>();
+		tokensList.addAll(tokens);
+		tokensList.removeAll(toBeRemoved);
+		return tokensList;
 	}
 
 	private static List<Token> asList(Tokens tokensBefore) {
