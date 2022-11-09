@@ -7,6 +7,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 import static org.requirementsascode.act.workflow.WorkflowApi.step;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -137,6 +138,8 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
 		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
 		WorkflowState afterJoinState = workflow.nextStep(afterForkState).state();
+		
+		assertEquals(2, afterJoinState.tokens().stream().toList().size());
 	}
 	
 	@Test
