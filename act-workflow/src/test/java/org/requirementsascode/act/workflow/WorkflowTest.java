@@ -72,7 +72,7 @@ class WorkflowTest {
 	}
 	
 	@Test
-	void testFork() {
+	void testImplicitFork() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
 		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
@@ -93,7 +93,7 @@ class WorkflowTest {
 	}
 	
 	@Test
-	void testStepAfterFork() {
+	void testStepAfterImplicitFork() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
 		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
