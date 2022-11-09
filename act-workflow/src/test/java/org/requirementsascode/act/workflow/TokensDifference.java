@@ -4,7 +4,7 @@ import java.util.List;
 
 class TokensDifference {
 
-	public static Tokens between(Tokens tokensBefore, Tokens tokensAfter) {
+	public static Tokens tokensAdded(Tokens tokensBefore, Tokens tokensAfter) {
 		List<Token> tokenList = tokensAfter.stream().toList();
 		return new Tokens(tokenList);
 	}

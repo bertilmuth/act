@@ -18,7 +18,7 @@ class TokenDifferenceTest {
 	@Test
 	void differenceBetweenEmptyLists() {
 		Tokens emptyTokens = new Tokens(emptyList());
-		Tokens difference = TokensDifference.between(emptyTokens, emptyTokens);
+		Tokens difference = TokensDifference.tokensAdded(emptyTokens, emptyTokens);
 		assertEquals(emptyList(), difference.stream().toList());
 	}
 
@@ -28,7 +28,7 @@ class TokenDifferenceTest {
 		List<Token> tokensAfterList = asList(token(ACTION, null));
 		Tokens tokensAfter = new Tokens(tokensAfterList);
 
-		Tokens difference = TokensDifference.between(tokensBefore, tokensAfter);
+		Tokens difference = TokensDifference.tokensAdded(tokensBefore, tokensAfter);
 		assertEquals(tokensAfterList, difference.stream().toList());
 	}
 	
