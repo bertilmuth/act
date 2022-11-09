@@ -46,7 +46,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		} else if (datasAfter.size() == 1) {
 			mergedData = singleElementOf(datasAfter);
 		} else {
-			mergedData = merge(datasAfter);
+			mergedData = merge(dataBefore, datasAfter);
 		}
 
 		return mergedData;
@@ -61,8 +61,8 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		return dataAfters.get(0);
 	}
 
-	private Data<S, V> merge(List<Data<S, V>> datas) {
-		return mergeStrategy.merge(datas);
+	private Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datasAfter) {
+		return mergeStrategy.merge(datasAfter);
 	}
 
 	public List<Behavior<S, ? extends V, ? extends V>> behaviors() {
