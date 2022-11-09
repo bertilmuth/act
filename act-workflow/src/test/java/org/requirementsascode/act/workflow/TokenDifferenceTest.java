@@ -32,7 +32,7 @@ class TokenDifferenceTest {
 	}
 	
 	@Test
-	void oneTokenAddedToOneElementList() {
+	void oneDifferentTokenAddedToOneElementList() {
 		Tokens tokensBefore = new Tokens(asList(TOKEN1));
 		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN2));
 
