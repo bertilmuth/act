@@ -62,7 +62,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 	}
 
 	private Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datasAfter) {
-		return mergeStrategy.merge(null, datasAfter);
+		return mergeStrategy.merge(dataBefore, datasAfter);
 	}
 
 	public List<Behavior<S, ? extends V, ? extends V>> behaviors() {
