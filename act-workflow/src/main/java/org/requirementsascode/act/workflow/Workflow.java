@@ -110,7 +110,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
-		public Data<WorkflowState, Token> merge(List<Data<WorkflowState, Token>> datas) {
+		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datas) {
 			WorkflowState state = new WorkflowState(statemachineOf(datas), mergeTokens(datas), null);
 			return data(state, null);
 		}

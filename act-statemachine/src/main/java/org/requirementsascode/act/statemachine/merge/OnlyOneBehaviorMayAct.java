@@ -7,7 +7,7 @@ import org.requirementsascode.act.core.merge.MergeStrategy;
 
 public class OnlyOneBehaviorMayAct<S, V> implements MergeStrategy<S, V> {
 	@Override
-	public Data<S, V> merge(List<Data<S, V>> datas) {
+	public Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datas) {
 		// more than one behavior that can act --> this is not acceptable, throw
 		// exception
 		throw new MoreThanOneBehaviorActed(
