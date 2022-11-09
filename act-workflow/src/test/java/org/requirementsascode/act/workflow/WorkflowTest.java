@@ -19,6 +19,7 @@ class WorkflowTest {
 	private static final String ACTION2 = "Action2";
 	private static final String ACTION2A = "Action2a";
 	private static final String ACTION2B = "Action2b";
+	private static final String ACTION3 = "Action3";
 	
 	@Test
 	void runningEmptyWorkflowDoesNothing() {
@@ -108,11 +109,34 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
-		WorkflowState stepAfterFork = workflow.nextStep(afterAction1State).state();
+		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
 
-		assertEquals(token(action2a, str(ACTION2A)), stepAfterFork.tokens().firstTokenIn(ACTION2A).get());
-		assertEquals(token(action2b, str(ACTION2B)), stepAfterFork.tokens().firstTokenIn(ACTION2B).get());
-		assertEquals(2, stepAfterFork.tokens().stream().toList().size());
+		assertEquals(token(action2a, str(ACTION2A)), afterForkState.tokens().firstTokenIn(ACTION2A).get());
+		assertEquals(token(action2b, str(ACTION2B)), afterForkState.tokens().firstTokenIn(ACTION2B).get());
+		assertEquals(2, afterForkState.tokens().stream().toList().size());
+	}
+	
+	@Test
+	void testImplicitJoin() {
+		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
+		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
+		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
+		Action action3 = action(ACTION3, step(StringData.class, this::action3Performed));
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1, action2a, action2b, action3)
+			.initialActions(action1)
+			.dataFlows(
+				dataFlow(action1, action2a),
+				dataFlow(action1, action2b),
+				dataFlow(action2a, action3),
+				dataFlow(action2b, action3)
+			)
+			.build();
+		
+		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
+		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
+		WorkflowState afterJoinState = workflow.nextStep(afterForkState).state();
 	}
 	
 	@Test
@@ -164,6 +188,10 @@ class WorkflowTest {
 	
 	private StringData action2bPerformed(WorkflowState workflowState, StringData input) {
 		return new StringData(ACTION2B);
+	}
+	
+	private StringData action3Performed(WorkflowState workflowState, StringData input) {
+		return new StringData(ACTION3);
 	}
 }
 
