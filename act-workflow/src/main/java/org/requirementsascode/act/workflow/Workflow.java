@@ -8,6 +8,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -126,6 +127,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 
 		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {	
 			Tokens tokensBefore = dataBefore.state().tokens();
+			
 			List<Token> addedTokensList = datasAfter.stream()
 				.map(Data::state).map(s -> s.tokens())
 				.flatMap(tkns -> TokensDifference.addedTokens(tokensBefore, tkns).stream())
@@ -134,8 +136,12 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 				.map(Data::state).map(s -> s.tokens())
 				.flatMap(tkns -> TokensDifference.removedTokens(tokensBefore, tkns).stream())
 				.collect(Collectors.toList());
-	
-			return new Tokens(addedTokensList);
+			List<Token> tokensAfterList = new ArrayList<>(tokensBefore.stream().toList());
+			tokensAfterList.addAll(addedTokensList);
+			removedTokensList.stream().forEach(tokensAfterList::remove);
+			
+			Tokens updatedTokens = new Tokens(tokensAfterList);
+			return updatedTokens;
 		}	
 	}
 }
