@@ -110,8 +110,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
-		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datas) {
-			WorkflowState state = new WorkflowState(statemachineOf(datas), mergeTokens(datas), null);
+		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
+			WorkflowState state = new WorkflowState(statemachineOf(datasAfter), mergeTokens(dataBefore, datasAfter), null);
 			return data(state, null);
 		}
 
@@ -123,8 +123,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 				.orElse(null);
 		}
 
-		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datas) {
-			List<Token> mergedTokenList = datas.stream()
+		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
+			List<Token> mergedTokenList = datasAfter.stream()
 				.map(Data::state)
 				.flatMap(s -> s.tokens().stream())
 				.collect(Collectors.toList());
