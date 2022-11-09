@@ -3,6 +3,7 @@ package org.requirementsascode.act.workflow;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.requirementsascode.act.workflow.TokensDifference.tokensAdded;
 import static org.requirementsascode.act.workflow.WorkflowApi.step;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
@@ -28,7 +29,7 @@ class TokenDifferenceTest {
 		List<Token> tokensAfterList = asList(token(ACTION, null));
 		Tokens tokensAfter = new Tokens(tokensAfterList);
 
-		Tokens difference = TokensDifference.tokensAdded(tokensBefore, tokensAfter);
+		Tokens difference = tokensAdded(tokensBefore, tokensAfter);
 		assertEquals(tokensAfterList, difference.stream().toList());
 	}
 	
