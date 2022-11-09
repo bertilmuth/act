@@ -10,7 +10,7 @@ class TokensDifference {
 	}
 	
 	public static Tokens tokensRemoved(Tokens tokensBefore, Tokens tokensAfter) {
-		List<Token> tokensRemoved = tokensBefore.stream().toList();
+		List<Token> tokensRemoved = minus(asList(tokensBefore), asList(tokensAfter));
 		return new Tokens(tokensRemoved);
 	}
 	

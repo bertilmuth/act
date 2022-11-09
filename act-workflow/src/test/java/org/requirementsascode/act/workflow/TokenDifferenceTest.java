@@ -58,6 +58,15 @@ class TokenDifferenceTest {
 		assertEquals(asList(TOKEN1), tokensRemoved.stream().toList());
 	}
 	
+	@Test
+	void tokenRemovedFromTwoElementList() {
+		Tokens tokensBefore = new Tokens(asList(TOKEN1, TOKEN2));
+		Tokens tokensAfter = new Tokens(asList(TOKEN1));
+
+		Tokens tokensRemoved = tokensRemoved(tokensBefore, tokensAfter);
+		assertEquals(asList(TOKEN2), tokensRemoved.stream().toList());
+	}
+	
 	private static StringData runStep(WorkflowState state, StringData inputData) {
 		return inputData;
 	}
