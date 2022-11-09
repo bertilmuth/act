@@ -124,12 +124,18 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 				.orElse(null);
 		}
 
-		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			List<Token> mergedTokenList = datasAfter.stream()
-				.map(Data::state)
-				.flatMap(s -> s.tokens().stream())
+		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {	
+			Tokens tokensBefore = dataBefore.state().tokens();
+			List<Token> addedTokensList = datasAfter.stream()
+				.map(Data::state).map(s -> s.tokens())
+				.flatMap(tkns -> TokensDifference.addedTokens(tokensBefore, tkns).stream())
 				.collect(Collectors.toList());
-			return new Tokens(mergedTokenList);
+			List<Token> removedTokensList = datasAfter.stream()
+				.map(Data::state).map(s -> s.tokens())
+				.flatMap(tkns -> TokensDifference.removedTokens(tokensBefore, tkns).stream())
+				.collect(Collectors.toList());
+	
+			return new Tokens(addedTokensList);
 		}	
 	}
 }

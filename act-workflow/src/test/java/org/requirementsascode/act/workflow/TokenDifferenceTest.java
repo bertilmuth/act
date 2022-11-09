@@ -18,7 +18,7 @@ class TokenDifferenceTest {
 	@Test
 	void differenceBetweenEmptyLists() {
 		Tokens emptyTokens = new Tokens(emptyList());
-		Tokens difference = TokensDifference.tokensAdded(emptyTokens, emptyTokens);
+		Tokens difference = TokensDifference.addedTokens(emptyTokens, emptyTokens);
 		assertEquals(emptyList(), difference.stream().toList());
 	}
 
@@ -27,7 +27,7 @@ class TokenDifferenceTest {
 		Tokens tokensBefore = new Tokens(emptyList());
 		Tokens tokensAfter = new Tokens(asList(TOKEN1));
 
-		Tokens tokensAdded = tokensAdded(tokensBefore, tokensAfter);
+		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
 		assertEquals(asList(TOKEN1), tokensAdded.stream().toList());
 	}
 	
@@ -36,7 +36,7 @@ class TokenDifferenceTest {
 		Tokens tokensBefore = new Tokens(asList(TOKEN1));
 		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN2));
 
-		Tokens tokensAdded = tokensAdded(tokensBefore, tokensAfter);
+		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
 		assertEquals(asList(TOKEN2), tokensAdded.stream().toList());
 	}
 	
@@ -45,7 +45,7 @@ class TokenDifferenceTest {
 		Tokens tokensBefore = new Tokens(asList(TOKEN1));
 		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN1));
 
-		Tokens tokensAdded = tokensAdded(tokensBefore, tokensAfter);
+		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
 		assertEquals(asList(TOKEN1), tokensAdded.stream().toList());
 	}
 	
@@ -54,7 +54,7 @@ class TokenDifferenceTest {
 		Tokens tokensBefore = new Tokens(asList(TOKEN1));
 		Tokens tokensAfter = new Tokens(emptyList());
 
-		Tokens tokensRemoved = tokensRemoved(tokensBefore, tokensAfter);
+		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
 		assertEquals(asList(TOKEN1), tokensRemoved.stream().toList());
 	}
 	
@@ -63,7 +63,7 @@ class TokenDifferenceTest {
 		Tokens tokensBefore = new Tokens(asList(TOKEN1, TOKEN2));
 		Tokens tokensAfter = new Tokens(asList(TOKEN1));
 
-		Tokens tokensRemoved = tokensRemoved(tokensBefore, tokensAfter);
+		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
 		assertEquals(asList(TOKEN2), tokensRemoved.stream().toList());
 	}
 	

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 class TokensDifference {
-	public static Tokens tokensAdded(Tokens tokensBefore, Tokens tokensAfter) {
+	public static Tokens addedTokens(Tokens tokensBefore, Tokens tokensAfter) {
 		List<Token> tokensAdded = minus(asList(tokensAfter), asList(tokensBefore));
 		return new Tokens(tokensAdded);
 	}
 	
-	public static Tokens tokensRemoved(Tokens tokensBefore, Tokens tokensAfter) {
+	public static Tokens removedTokens(Tokens tokensBefore, Tokens tokensAfter) {
 		List<Token> tokensRemoved = minus(asList(tokensBefore), asList(tokensAfter));
 		return new Tokens(tokensRemoved);
 	}
