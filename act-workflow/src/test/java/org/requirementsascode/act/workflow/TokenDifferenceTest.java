@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 class TokenDifferenceTest {
 
 	@Test
-	void test() {
+	void differenceBetweenEmptyLists() {
 		Tokens emptyTokens = new Tokens(emptyList());
 		Tokens difference = TokensDifference.between(emptyTokens, emptyTokens);
 		assertEquals(emptyList(), difference.stream().toList());
