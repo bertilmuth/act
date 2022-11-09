@@ -7,14 +7,13 @@ import static org.requirementsascode.act.workflow.TokensDifference.tokensAdded;
 import static org.requirementsascode.act.workflow.WorkflowApi.step;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class TokenDifferenceTest {
-	private static final ActionBehavior STEP = step(StringData.class, TokenDifferenceTest::runStep);
-	private static final Action ACTION = new Action("Action1", STEP);
+	private static final Action ACTION = new Action("Action1", step(StringData.class, TokenDifferenceTest::runStep));
+	private static final Token TOKEN1 = token(ACTION, new StringData("Action1"));
+	private static final Token TOKEN2 = token(ACTION, new StringData("Action2"));
 
 	@Test
 	void differenceBetweenEmptyLists() {
@@ -26,11 +25,19 @@ class TokenDifferenceTest {
 	@Test
 	void oneTokenAddedToEmptyList() {
 		Tokens tokensBefore = new Tokens(emptyList());
-		List<Token> tokensAfterList = asList(token(ACTION, null));
-		Tokens tokensAfter = new Tokens(tokensAfterList);
+		Tokens tokensAfter = new Tokens(asList(TOKEN1));
 
-		Tokens difference = tokensAdded(tokensBefore, tokensAfter);
-		assertEquals(tokensAfterList, difference.stream().toList());
+		Tokens tokensAdded = tokensAdded(tokensBefore, tokensAfter);
+		assertEquals(asList(TOKEN1), tokensAdded.stream().toList());
+	}
+	
+	@Test
+	void oneTokenAddedToOneElementList() {
+		Tokens tokensBefore = new Tokens(asList(TOKEN1));
+		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN2));
+
+		Tokens tokensAdded = tokensAdded(tokensBefore, tokensAfter);
+		assertEquals(asList(TOKEN2), tokensAdded.stream().toList());
 	}
 	
 	private static StringData runStep(WorkflowState state, StringData inputData) {
