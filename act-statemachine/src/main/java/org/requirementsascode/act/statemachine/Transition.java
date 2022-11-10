@@ -40,8 +40,8 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 		return inCase(before -> fromState.matchesStateIn(before),
 			behavior
 				.andThen(inCase(Transition::hasFired, 
-					inCase(this::inToState, Behavior.identity(), this::errorIfNotInToState)))
-				.andThen(d -> toStateActOn(d, owningStatemachine)));
+					inCase(this::inToState, d -> toStateActOn(d, owningStatemachine), 
+						this::errorIfNotInToState))));
 	}
 
 	private boolean inToState(Data<S, V0> d) {
