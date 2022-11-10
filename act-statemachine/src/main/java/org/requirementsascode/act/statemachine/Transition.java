@@ -1,9 +1,7 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.Transition.hasFired;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -39,20 +37,18 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {		
+		Behavior<S, V0, V0> toStateBehavior = toState().asBehavior(owningStatemachine);
+		
 		return inCase(before -> fromState.matchesStateIn(before),
 			behavior
 				.andThen(inCase(Transition::hasFired, 
-					inCase(this::isInToState, d -> toStateActOn(d, owningStatemachine), 
+					inCase(this::isInToState, 
+						toStateBehavior.andThen(owningStatemachine.recallStatemachine()), 
 						this::errorIfNotInToState))));
 	}
 
 	private boolean isInToState(Data<S, V0> d) {
 		return toState().matchesStateIn(d);
-	}
-	
-	private Data<S, V0> toStateActOn(Data<S, V0> data, Statemachine<S, V0> owningStatemachine){
-		Data<S, V0> toStateResult = toState().asBehavior(owningStatemachine).actOn(data);
-		return owningStatemachine.recallStatemachine().actOn(toStateResult);
 	}
 	
 	private Data<S, V0> errorIfNotInToState(Data<S, V0> d) {
