@@ -5,7 +5,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.transition
 
 import org.requirementsascode.act.core.Behavior;
 
-public class ExitFlow<S, V0> implements Flow<S, V0>{
+public class ExitFlow<S, V0> implements Transitionable<S, V0>{
 	private final State<S, V0> fromState;
 	private final Behavior<S, V0, V0> exitBehavior;
 

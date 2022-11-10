@@ -60,7 +60,7 @@ class IngoingOutgoingTransitionsTest {
 		assertEquals(asList(transition12), listOf(outgoingTransitions));
 	}
 	
-	private List<Transition<?, ?>> listOf(Transitions<?, ?> outgoingTransitions) {
+	private List<?> listOf(Transitions<?, ?> outgoingTransitions) {
 		return outgoingTransitions.stream().collect(Collectors.toList());
 	}
 }

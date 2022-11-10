@@ -7,7 +7,7 @@ import static org.requirementsascode.act.core.InCase.inCase;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
-public class Transition<S, V0> implements AsBehavior<S, V0> {
+public class Transition<S, V0> implements AsBehavior<S,V0>, Transitionable<S, V0> {
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0, V0> behavior;
@@ -34,6 +34,11 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	@Override
 	public String toString() {
 		return "Transition [fromState=" + fromState + ", toState=" + toState + "]";
+	}
+	
+	@Override
+	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
+		return this;
 	}
 
 	@Override

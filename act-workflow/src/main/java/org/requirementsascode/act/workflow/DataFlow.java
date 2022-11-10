@@ -3,11 +3,11 @@ package org.requirementsascode.act.workflow;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
-import org.requirementsascode.act.statemachine.Flow;
+import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class DataFlow implements Flow<WorkflowState, Token>{
+public class DataFlow implements Transitionable<WorkflowState, Token>{
 	private final Node fromNode;
 	private final Node toNode;
 

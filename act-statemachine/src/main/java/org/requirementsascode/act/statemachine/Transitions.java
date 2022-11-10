@@ -10,13 +10,13 @@ import java.util.stream.Stream;
 import org.requirementsascode.act.core.Behavior;
 
 public class Transitions<S, V0> implements AsBehavior<S, V0> {
-	private final List<Transition<S, V0>> transitions;
+	private final List<Transitionable<S, V0>> transitions;
 
-	private Transitions(List<Transition<S, V0>> transitions) {
+	private Transitions(List<Transitionable<S, V0>> transitions) {
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
 	}
 
-	static <S, V0> Transitions<S, V0> transitions(List<Transition<S, V0>> transitions) {
+	static <S, V0> Transitions<S, V0> transitions(List<Transitionable<S, V0>> transitions) {
 		return new Transitions<>(transitions);
 	}
 
@@ -27,12 +27,13 @@ public class Transitions<S, V0> implements AsBehavior<S, V0> {
 
 	private List<Behavior<S, V0, V0>> transitionBehaviors(Statemachine<S, V0> owningStatemachine) {
 		List<Behavior<S, V0, V0>> behaviors = this.stream()
-			.map(e -> e.asBehavior(owningStatemachine))
+			.map(t -> t.asTransition(owningStatemachine))
+			.map(t -> t.asBehavior(owningStatemachine))
 			.collect(Collectors.toList());
 		return behaviors;
 	}
 
-	public Stream<Transition<S, V0>> stream() {
+	public Stream<Transitionable<S, V0>> stream() {
 		return transitions.stream();
 	}
 }

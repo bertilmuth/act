@@ -23,13 +23,13 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 	private final States<S, V0> states;
 	private final Transitions<S, V0> transitions;
-	private final Flows<S, V0> flows;
+	private final Transitions<S, V0> flows;
 	private final Behavior<S, V0, V0> statemachineBehavior;
 	private final State<S, V0> defaultState;
 	private final State<S, V0> definedState;
 	private final MergeStrategy<S, V0> mergeStrategy;
 
-	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, Flows<S, V0> flows, MergeStrategy<S, V0> mergeStrategy) {
+	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, Transitions<S, V0> flows, MergeStrategy<S, V0> mergeStrategy) {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
 		this.flows = requireNonNull(flows, "flows must be non-null!");
@@ -56,7 +56,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return transitions;
 	}
 
-	public Flows<S, V0> flows() {
+	public Transitions<S, V0> flows() {
 		return flows;
 	}
 
@@ -75,8 +75,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	public Transitions<S, V0> outgoingTransitions(State<S, V0> outsideState) {
 		requireNonNull(outsideState, "outsideState must be non-null!");
 		
-		List<Transition<S, V0>> transitionList = transitions.stream()
-			.filter(t -> t.fromState().equals(outsideState))
+		List<Transitionable<S, V0>> transitionList = transitions.stream()
+			.filter(t -> t.asTransition(this).fromState().equals(outsideState))
 			.collect(Collectors.toList());
 		
 		Transitions<S, V0> transitions = Transitions.transitions(transitionList);

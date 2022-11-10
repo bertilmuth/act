@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
+import org.requirementsascode.act.statemachine.Transitionable;
 
 public class StatemachineValidator {
 	public static <S, V0> void validate(Statemachine<S, V0> statemachine) {
@@ -25,6 +26,7 @@ public class StatemachineValidator {
 		State<S, V0> defaultState = statemachine.defaultState();
 		
 		List<State<S, ?>> statesNotInList = transitionsAndFlowsOf(statemachine)
+			.map(t -> t.asTransition(statemachine))
 			.map(transitionStateAccess)
 			.filter(s -> !definedState.equals(s) && 
 				!defaultState.equals(s) && !anyState().equals(s) && 
@@ -36,10 +38,10 @@ public class StatemachineValidator {
 		}
 	}
 
-	private static <V0, S> Stream<Transition<S, V0>> transitionsAndFlowsOf(Statemachine<S, V0> stateMachine) {
-		Stream<Transition<S, V0>> transitions = 
+	private static <V0, S> Stream<Transitionable<S, V0>> transitionsAndFlowsOf(Statemachine<S, V0> stateMachine) {
+		Stream<Transitionable<S, V0>> transitions = 
 			Stream.concat(
-				stateMachine.flows().asTransitions(stateMachine).stream(),
+				stateMachine.flows().stream(),
 				stateMachine.transitions().stream()
 			);
 		

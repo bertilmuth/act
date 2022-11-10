@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.merge.MergeStrategy;
-import org.requirementsascode.act.statemachine.Flow;
+import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
@@ -78,8 +78,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<WorkflowState, Token> statemachineWith(Actions actions, DataFlows dataFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
-		Flow[] flowsArray = Stream.concat(initialActions.stream(), dataFlows.stream())
-			.toArray(Flow[]::new);
+		Transitionable[] flowsArray = Stream.concat(initialActions.stream(), dataFlows.stream())
+			.toArray(Transitionable[]::new);
 		
 		Statemachine<WorkflowState, Token> statemachine = 
 			Statemachine.builder()
