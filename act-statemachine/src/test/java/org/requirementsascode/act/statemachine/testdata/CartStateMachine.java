@@ -62,9 +62,8 @@ public class CartStateMachine {
 								
 				transition(nonEmpty, empty, 
 					whenInCase(RemoveItem.class, d -> cartSize(d) == 1 && itemIsInCart(d), 
-						consumeWith(Cart::removeItem)))
-			)
-			.flows(
+						consumeWith(Cart::removeItem))),
+				
 				entryFlow(when(CreateCart.class, init(Cart::createCart)))
 			)
 			.build();
