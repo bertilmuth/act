@@ -42,15 +42,18 @@ class IngoingOutgoingTransitionsTest {
 	void checksSingleOutgoingTransition() {	
 		State<String, String> state1 = state("State1", s -> true);
 		State<String, String> state2 = state("State2", s -> true);
-		Transition<String, String> transition = transition(state1, state2, d -> d);
+		Transition<String, String> transition12 = transition(state1, state2, d -> d);
+		Transition<String, String> transition21 = transition(state2, state1, d -> d);
 		
 		Statemachine<String, String> statemachine = Statemachine.builder()
 			.states(state1, state2)
-			.transitions(transition)
+			.transitions(
+				transition21, transition12
+			)
 			.build();
 		
 		Transitions<String , String> outgoingTransitions =
 			statemachine.outgoingTransitions(state1);
-		assertEquals(asList(transition), outgoingTransitions.stream().toList());
+		assertEquals(asList(transition12), outgoingTransitions.stream().toList());
 	}
 }

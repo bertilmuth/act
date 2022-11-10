@@ -5,10 +5,30 @@ import java.util.Collections;
 import java.util.List;
 
 public class Cart {
-	public interface Value { }
-	public record CreateCart() implements Value { }
-	public record AddItem(String item) implements Value { }
-	public record RemoveItem(String item) implements Value {}	
+	public static interface Value { }
+	public static class CreateCart implements Value { }
+	public static class AddItem implements Value { 
+		private final String item;
+
+		AddItem(String item){
+			this.item = item;
+		}
+		
+		public String item() {
+			return item;
+		}
+	}
+	public static class RemoveItem implements Value {
+		private final String item;
+
+		RemoveItem(String item){
+			this.item = item;
+		}
+		
+		public String item() {
+			return item;
+		}
+	}	
 	
 	private final List<String> items;
 	

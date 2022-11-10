@@ -11,6 +11,7 @@ import static org.requirementsascode.act.statemachine.validate.StatemachineValid
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -74,7 +75,12 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 	
 	public Transitions<S, V0> outgoingTransitions(State<S, V0> outsideState) {
-		List<Transition<S, V0>> transitionList = transitions.stream().toList();
+		requireNonNull(outsideState, "outsideState must be non-null!");
+		
+		List<Transition<S, V0>> transitionList = transitions.stream()
+			.filter(t -> t.fromState().equals(outsideState))
+			.collect(Collectors.toList());
+		
 		Transitions<S, V0> transitions = Transitions.transitions(transitionList);
 		return transitions;
 	}

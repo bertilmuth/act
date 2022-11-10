@@ -7,7 +7,6 @@ import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 import static org.requirementsascode.act.workflow.WorkflowApi.step;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Disabled;

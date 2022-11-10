@@ -20,7 +20,7 @@ public class StatemachineValidator {
 	private static <S, V0> void validateStates(Statemachine<S, V0> statemachine,
 		Function<Transition<S, ?>, State<S, ?>> transitionStateAccess, String message) {
 		
-		List<State<S, V0>> expectedStates = statemachine.states().stream().toList();
+		List<State<S, V0>> expectedStates = statemachine.states().stream().collect(Collectors.toList());
 		State<S, V0> definedState = statemachine.definedState();
 		State<S, V0> defaultState = statemachine.defaultState();
 		
