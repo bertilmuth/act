@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Stream.concat;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
@@ -16,10 +17,9 @@ import java.util.stream.Stream;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.merge.MergeStrategy;
-import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
-import org.requirementsascode.act.statemachine.Transition;
+import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialState;
@@ -78,7 +78,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<WorkflowState, Token> statemachineWith(Actions actions, DataFlows dataFlows, InitialActions initialActions) {
 		State[] actionsArray = actions.asStates().toArray(State[]::new);
-		Transitionable[] flowsArray = Stream.concat(initialActions.stream(), dataFlows.stream())
+		Transitionable[] transitionablesArray = concat(concat(initialActions.stream(), dataFlows.stream()),
+			Stream.of(removeTokensWithoutActionData()))
 			.toArray(Transitionable[]::new);
 		
 		Statemachine<WorkflowState, Token> statemachine = 
@@ -86,14 +87,13 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 				.mergeStrategy(new TokenMergeStrategy())
 				.states(actionsArray)
 				.transitions(
-					removeTokensWithoutActionData()
+					transitionablesArray
 				)
-				.flows(flowsArray)
 				.build();
 		return statemachine;
 	}
 	
-	private static Transition<WorkflowState, Token> removeTokensWithoutActionData() {
+	private static Transitionable<WorkflowState, Token> removeTokensWithoutActionData() {
 		return transition(anyState(), anyState(), 
 			whenInCase(Token.class, Workflow::hasNoActionData, Workflow::removeToken));
 	}
