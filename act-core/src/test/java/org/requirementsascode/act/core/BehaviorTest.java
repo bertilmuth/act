@@ -122,7 +122,7 @@ class BehaviorTest {
 			);
 
 		Data<State, ConditionalTrigger_B1> after = unitedBehavior.actOn(TRUE_BEFORE_B1);
-		assertNull(after.value());
+		assertFalse(after.value().isPresent());
 	}
 
 	@Test

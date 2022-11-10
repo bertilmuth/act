@@ -22,7 +22,7 @@ public class On{
 	}
 	
 	private static String triggerTypeOf(Data<?, ?> i) {
-		return i.value().getClass().getSimpleName();
+		return i.value().get().getClass().getSimpleName();
 	}
 	
 	@SuppressWarnings("unchecked")
