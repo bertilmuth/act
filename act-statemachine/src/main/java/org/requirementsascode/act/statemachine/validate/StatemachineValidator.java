@@ -25,7 +25,7 @@ public class StatemachineValidator {
 		State<S, V0> definedState = statemachine.definedState();
 		State<S, V0> defaultState = statemachine.defaultState();
 		
-		List<State<S, ?>> statesNotInList = transitionsAndFlowsOf(statemachine)
+		List<State<S, ?>> statesNotInList = transitionsOf(statemachine)
 			.map(t -> t.asTransition(statemachine))
 			.map(transitionStateAccess)
 			.filter(s -> !definedState.equals(s) && 
@@ -38,13 +38,7 @@ public class StatemachineValidator {
 		}
 	}
 
-	private static <V0, S> Stream<Transitionable<S, V0>> transitionsAndFlowsOf(Statemachine<S, V0> stateMachine) {
-		Stream<Transitionable<S, V0>> transitions = 
-			Stream.concat(
-				stateMachine.flows().stream(),
-				stateMachine.transitions().stream()
-			);
-		
-		return transitions;
+	private static <V0, S> Stream<Transitionable<S, V0>> transitionsOf(Statemachine<S, V0> stateMachine) {
+		return stateMachine.transitions().stream();
 	}
 }

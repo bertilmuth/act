@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.UnitedBehavior;
 import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
 
@@ -23,16 +22,14 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 	private final States<S, V0> states;
 	private final Transitions<S, V0> transitions;
-	private final Transitions<S, V0> flows;
 	private final Behavior<S, V0, V0> statemachineBehavior;
 	private final State<S, V0> defaultState;
 	private final State<S, V0> definedState;
 	private final MergeStrategy<S, V0> mergeStrategy;
 
-	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, Transitions<S, V0> flows, MergeStrategy<S, V0> mergeStrategy) {
+	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, MergeStrategy<S, V0> mergeStrategy) {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
-		this.flows = requireNonNull(flows, "flows must be non-null!");
 		this.mergeStrategy = mergeStrategy;
 		this.definedState = createDefinedState(states);
 		this.defaultState = createDefaultState(definedState);
@@ -54,10 +51,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 	public Transitions<S, V0> transitions() {
 		return transitions;
-	}
-
-	public Transitions<S, V0> flows() {
-		return flows;
 	}
 
 	public State<S, V0> defaultState() {
@@ -98,7 +91,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		validate(this);
 
 		Behavior<S, V0, V0> behavior = 
-			statesBehaviorOrIdentity().andThen(transitBehavior());
+			statesBehaviorOrIdentity().andThen(transitionBehavior());
 
 		return behavior;
 	}
@@ -108,9 +101,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return unitedBehavior(new FirstOneWhoActsWins<>(), asList(statesBehavior, identity()));
 	}
 
-	private UnitedBehavior<S, V0> transitBehavior() {
-		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
-		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
-		return unitedBehavior(new FirstOneWhoActsWins<>(), transitionsBehavior, flowsBehavior);
+	private Behavior<S, V0, V0> transitionBehavior() {
+		return transitions().asBehavior(this);
 	}
 }
