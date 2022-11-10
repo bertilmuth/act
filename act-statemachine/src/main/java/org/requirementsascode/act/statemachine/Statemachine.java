@@ -9,6 +9,7 @@ import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.Transition.hasFired;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
+import java.util.Collections;
 import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
@@ -63,6 +64,10 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 	public State<S, V0> definedState() {
 		return definedState;
+	}
+	
+	public Transitions<Object, Object> outgoingTransitions(State<Object, Object> outsideState) {
+		return Transitions.transitions(Collections.emptyList(), new FirstOneWhoActsWins<>());
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
