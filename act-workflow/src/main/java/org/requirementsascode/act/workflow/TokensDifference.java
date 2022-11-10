@@ -2,6 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class TokensDifference {
 	public static Tokens addedTokens(Tokens tokensBefore, Tokens tokensAfter) {
@@ -22,7 +23,7 @@ class TokensDifference {
 	}
 
 	private static List<Token> asList(Tokens tokensBefore) {
-		return tokensBefore.stream().toList();
+		return tokensBefore.stream().collect(Collectors.toList());
 	}
 
 }

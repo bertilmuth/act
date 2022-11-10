@@ -7,6 +7,9 @@ import static org.requirementsascode.act.workflow.TokensDifference.*;
 import static org.requirementsascode.act.workflow.WorkflowApi.step;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
@@ -19,7 +22,7 @@ class TokenDifferenceTest {
 	void differenceBetweenEmptyLists() {
 		Tokens emptyTokens = new Tokens(emptyList());
 		Tokens difference = TokensDifference.addedTokens(emptyTokens, emptyTokens);
-		assertEquals(emptyList(), difference.stream().toList());
+		assertEquals(emptyList(), tokensList(difference));
 	}
 
 	@Test
@@ -28,7 +31,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(asList(TOKEN1));
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN1), tokensAdded.stream().toList());
+		assertEquals(asList(TOKEN1), tokensList(tokensAdded));
 	}
 	
 	@Test
@@ -37,7 +40,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN2));
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN2), tokensAdded.stream().toList());
+		assertEquals(asList(TOKEN2), tokensList(tokensAdded));
 	}
 	
 	@Test
@@ -46,7 +49,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN1));
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN1), tokensAdded.stream().toList());
+		assertEquals(asList(TOKEN1), tokensList(tokensAdded));
 	}
 	
 	@Test
@@ -55,7 +58,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(emptyList());
 
 		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN1), tokensRemoved.stream().toList());
+		assertEquals(asList(TOKEN1), tokensList(tokensRemoved));
 	}
 	
 	@Test
@@ -64,10 +67,14 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(asList(TOKEN1));
 
 		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN2), tokensRemoved.stream().toList());
+		assertEquals(asList(TOKEN2), tokensList(tokensRemoved));
 	}
 	
 	private static StringData runStep(WorkflowState state, StringData inputData) {
 		return inputData;
+	}
+	
+	private List<Token> tokensList(Tokens difference) {
+		return difference.stream().collect(Collectors.toList());
 	}
 }
