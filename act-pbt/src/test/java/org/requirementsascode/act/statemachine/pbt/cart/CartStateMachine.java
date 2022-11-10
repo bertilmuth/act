@@ -52,9 +52,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 				
 				transition(anyState(), anyState(), 
 					whenInCase(RemoveItem.class, this::itemIsNotInCart, 
-						consumeWith(Cart::removeItem).andHandleChangeWith(itemNotRemoved)))
-			)
-			.flows(
+						consumeWith(Cart::removeItem).andHandleChangeWith(itemNotRemoved))),
+				
 				entryFlow(when(CreateCart.class, init(Cart::create)))
 			)
 			.build();
