@@ -8,6 +8,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.step;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -199,7 +200,7 @@ class WorkflowTest {
 	}
 	
 	private List<Token> tokensList(WorkflowState afterStartState) {
-		return afterStartState.tokens().stream().toList();
+		return afterStartState.tokens().stream().collect(Collectors.toList());
 	}
 }
 
