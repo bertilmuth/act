@@ -51,9 +51,7 @@ public class HierarchicalCartStateMachine {
 			.transitions(
 				transition(emptyCartState, nonEmptyCartState, when(AddItem.class, consumeWith(HierarchicalCart::addItem))),
 				transition(emptyCartState, emptyCartState, when(RemoveItem.class, consumeWith((s,t) -> {throw new RuntimeException("RemoveItem not expected");}))),
-				transition(nonEmptyCartState, emptyCartState, whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, consumeWith(HierarchicalCart::removeItem)))
-			)
-			.flows(
+				transition(nonEmptyCartState, emptyCartState, whenInCase(RemoveItem.class, i -> i.state().items().size() == 1, consumeWith(HierarchicalCart::removeItem))),
 				entryFlow(when(CreateHierarchicalCart.class, init(HierarchicalCart::createCart)))
 			)
 			.build();
@@ -69,9 +67,7 @@ public class HierarchicalCartStateMachine {
 			.states(nonFullCartSubState, fullCartSubState)
 			.transitions(
 				transition(nonFullCartSubState, fullCartSubState, when(AddItem.class, consumeWith(HierarchicalCart::addItem))),
-				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCart::removeItem)))
-			)
-			.flows(
+				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCart::removeItem))),
 				entryFlow(nonFullCartSubState, consumeWith(HierarchicalCart::enterSubstate)),
 				exitFlow(nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCart::exitSubstate)))
 			)
