@@ -3,7 +3,6 @@ package org.requirementsascode.act.statemachine;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
-import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
@@ -99,8 +98,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		validate(this);
 
 		Behavior<S, V0, V0> behavior = 
-			statesBehaviorOrIdentity().andThen(transitBehavior())
-			/*.andThen(recallStatemachine())*/;
+			statesBehaviorOrIdentity().andThen(transitBehavior());
 
 		return behavior;
 	}
@@ -114,13 +112,5 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
 		Behavior<S, V0, V0> flowsBehavior = flows().asBehavior(this);
 		return unitedBehavior(new FirstOneWhoActsWins<>(), transitionsBehavior, flowsBehavior);
-	}
-	
-	Behavior<S, V0, V0> recallStatemachine(Statemachine<S, V0> owningStatemachine) {
-		return inCase(d -> isInDefaultState(d, owningStatemachine), identity(), owningStatemachine);
-	}
-
-	boolean isInDefaultState(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
-		return owningStatemachine.defaultState().matchesStateIn(d);
 	}
 }
