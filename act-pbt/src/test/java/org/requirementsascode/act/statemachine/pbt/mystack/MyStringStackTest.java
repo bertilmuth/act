@@ -16,6 +16,7 @@ import net.jqwik.api.Arbitrary;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
+import net.jqwik.api.arbitraries.TypeArbitrary;
 import net.jqwik.api.lifecycle.BeforeProperty;
 import net.jqwik.api.state.Action;
 import net.jqwik.api.state.ActionChain;
@@ -50,7 +51,7 @@ class MyStringStackTest {
 	}
 	
 	private Action<MyStringStack> arbitraryActionOf(Class<? extends Value> actionClass) {
-		var triggers = Arbitraries.forType(actionClass);
+		TypeArbitrary<? extends Value> triggers = Arbitraries.forType(actionClass);
 		return stateMachineEvent(triggers, statemachine);
 	}
 	

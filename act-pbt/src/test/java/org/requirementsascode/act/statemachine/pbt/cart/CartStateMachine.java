@@ -33,8 +33,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 		State<Cart, Value> empty = state("Empty", cart -> cart != null && cart.items().size() == 0);
 		State<Cart, Value> nonEmpty = state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
 		
-		var itemRemoved = itemRemoved();
-		var itemNotRemoved = itemNotRemoved();
+		PropertyValidator<Cart, RemoveItem, RemoveItem> itemRemoved = itemRemoved();
+		PropertyValidator<Cart, RemoveItem, RemoveItem> itemNotRemoved = itemNotRemoved();
 		
 		Statemachine<Cart, Value> statemachine = Statemachine.builder()
 			.states(empty,nonEmpty)

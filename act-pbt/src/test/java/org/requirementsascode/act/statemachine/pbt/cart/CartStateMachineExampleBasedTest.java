@@ -27,7 +27,7 @@ class CartStateMachineExampleBasedTest {
 	@Test
 	void createsEmptyCart() {
 		Data<Cart, Value> createFromScratch = data(null, new CreateCart());
-		var after = statemachine.actOn(createFromScratch);
+		Data<Cart, Value> after = statemachine.actOn(createFromScratch);
 		assertThat(cartSize(after)).isEqualTo(0);
 	}
 

@@ -17,10 +17,30 @@ import org.requirementsascode.act.core.Data;
  */
 public class MyStringStack {
 	public interface Value{};
-	public static record Push(String text) implements Value {};
-	public static record Pop() implements Value {};
-	public static record PoppedElement(String text) implements Value {};
-	public static record Clear() implements Value {};
+	public static class Push implements Value {
+		private final String text;
+
+		Push(String text){
+			this.text = text;
+		}
+		
+		public String text() {
+			return text;
+		}
+	};
+	public static class Pop implements Value {};
+	public static class PoppedElement implements Value {
+		private final String text;
+
+		PoppedElement(String text){
+			this.text = text;
+		}
+		
+		public String text() {
+			return text;
+		}
+	};
+	public static class Clear implements Value {};
 		
 	private final List<String> elements = new ArrayList<>();
 	
