@@ -1,7 +1,9 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.statemachine.Transition.hasFired;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -49,7 +51,8 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	}
 	
 	private Data<S, V0> toStateActOn(Data<S, V0> data, Statemachine<S, V0> owningStatemachine){
-		return toState().asBehavior(owningStatemachine).actOn(data);
+		Data<S, V0> toStateResult = toState().asBehavior(owningStatemachine).actOn(data);
+		return owningStatemachine.recallStatemachine().actOn(toStateResult);
 	}
 	
 	private Data<S, V0> errorIfNotInToState(Data<S, V0> d) {

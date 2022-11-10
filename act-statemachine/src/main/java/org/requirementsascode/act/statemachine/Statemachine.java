@@ -101,7 +101,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 		Behavior<S, V0, V0> behavior = 
 			statesBehaviorOrIdentity().andThen(transitBehavior())
-			.andThen(recallStatemachine());
+			/*.andThen(recallStatemachine())*/;
 
 		return behavior;
 	}
@@ -117,11 +117,11 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return unitedBehavior(new FirstOneWhoActsWins<>(), transitionsBehavior, flowsBehavior);
 	}
 	
-	private Behavior<S, V0, V0> recallStatemachine() {
+	Behavior<S, V0, V0> recallStatemachine() {
 		return inCase(this::hasFiredAndNotInDefaultState, this, identity());
 	}
 
-	private boolean hasFiredAndNotInDefaultState(Data<S, V0> d) {
+	boolean hasFiredAndNotInDefaultState(Data<S, V0> d) {
 		boolean b = hasFired(d) && !defaultState().matchesStateIn(d);
 		return b;
 	}
