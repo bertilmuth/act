@@ -11,7 +11,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.NoOp;
 
-public class State<S, V> implements AsBehavior<S, V> {
+public class State<S, V> implements Behavioral<S, V> {
 	private final String name;
 	private final Predicate<S> invariant;
 	private Behavior<S, V, V> stateInternalBehavior;

@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.merge.MergeStrategy;
 
-public class States<S, V0> implements AsBehavior<S, V0>{
+public class States<S, V0> implements Behavioral<S, V0>{
 	private final List<State<S, V0>> states;
 	private final MergeStrategy<S, V0> mergeStrategy;
 

@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 
-public class Transitions<S, V0> implements AsBehavior<S, V0> {
+public class Transitions<S, V0> implements Behavioral<S, V0> {
 	private final List<Transitionable<S, V0>> transitions;
 
 	private Transitions(List<Transitionable<S, V0>> transitions) {
