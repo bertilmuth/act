@@ -9,7 +9,7 @@ import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.Transition.hasFired;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
@@ -73,8 +73,10 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return mergeStrategy;
 	}
 	
-	public Transitions<Object, Object> outgoingTransitions(State<Object, Object> outsideState) {
-		return Transitions.transitions(Collections.emptyList());
+	public Transitions<S, V0> outgoingTransitions(State<S, V0> outsideState) {
+		List<Transition<S, V0>> transitionList = transitions.stream().toList();
+		Transitions<S, V0> transitions = Transitions.transitions(transitionList);
+		return transitions;
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
