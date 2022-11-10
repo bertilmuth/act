@@ -5,4 +5,4 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectPackages({"org.requirementsascode.act.statemachine"})
-public class AllTests {}
+public class AllStatemachineTests {}
