@@ -2,10 +2,10 @@ package org.requirementsascode.act.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
+import static org.requirementsascode.act.core.testdata.On.on;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.testdata.LastOneWhoActsWins;
@@ -15,7 +15,6 @@ import org.requirementsascode.act.core.testdata.trigger.Trigger;
 import org.requirementsascode.act.core.testdata.trigger.Trigger_B1;
 import org.requirementsascode.act.core.testdata.trigger.Trigger_B2;
 import org.requirementsascode.act.core.testdata.trigger.UnknownTrigger;
-import static org.requirementsascode.act.core.testdata.On.on;
 
 class BehaviorTest {
 	/**
