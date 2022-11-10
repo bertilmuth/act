@@ -25,7 +25,6 @@ public class Tokens {
 	
 	public boolean isAnyTokenIn(String nodeName) {
 		boolean b = inNode(nodeName).count() >= 1;
-		System.out.println("isAnyTokenIn " + nodeName + ": " + b);
 		return b;
 	}
 	

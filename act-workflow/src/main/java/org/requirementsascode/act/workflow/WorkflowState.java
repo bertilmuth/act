@@ -31,8 +31,6 @@ public class WorkflowState {
 	Data<WorkflowState, Token> moveToken(Data<WorkflowState, Token> d, Node toNode) {
 		return Token.from(d).map(t -> {
 			Tokens tokensAfterMove = tokens().moveToken(t, toNode);
-			System.out.println("Moving " + t + " to "  + toNode);
-
 			return updateTokens(tokensAfterMove, t);
 		}).orElse(d);
 	}
