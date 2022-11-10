@@ -75,7 +75,7 @@ public class StatemachineBuilder {
 			private FlowsBuilder(){}
 			
 			public final Statemachine<S,V> build() {
-				return new Statemachine<>(builderStates, builderTransitions, builderFlows);
+				return new Statemachine<>(builderStates, builderTransitions, builderFlows, mergeStrategy);
 			}
 		}
 	}
