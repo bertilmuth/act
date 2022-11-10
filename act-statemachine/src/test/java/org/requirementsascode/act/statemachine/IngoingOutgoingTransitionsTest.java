@@ -1,14 +1,14 @@
 package org.requirementsascode.act.statemachine;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import org.junit.jupiter.api.Test;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 class IngoingOutgoingTransitionsTest {
 
 	@Test
-	void noOutgoingTranisitionsForStateNotPartOfStatemachine() {	
+	void noOutgoingTransitionsForStateNotPartOfStatemachine() {	
 		State<Object, Object> outsideState = state("OutsideState", s -> true);
 		
 		Statemachine<Object, Object> statemachine = Statemachine.builder()
@@ -21,4 +21,17 @@ class IngoingOutgoingTransitionsTest {
 		assertTrue(outgoingTransitions.stream().toList().isEmpty());
 	}
 
+	@Test
+	void noOutgoingTransitionsForStateWithoutTransitions() {	
+		State<Object, Object> stateWithoutTransitions = state("StateWithoutTransitions", s -> true);
+		
+		Statemachine<Object, Object> statemachine = Statemachine.builder()
+			.states(stateWithoutTransitions)
+			.transitions()
+			.build();
+		
+		Transitions<Object , Object> outgoingTransitions =
+			statemachine.outgoingTransitions(stateWithoutTransitions);
+		assertTrue(outgoingTransitions.stream().toList().isEmpty());
+	}
 }
