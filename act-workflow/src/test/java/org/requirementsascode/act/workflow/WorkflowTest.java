@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
@@ -32,7 +33,7 @@ class WorkflowTest {
 			.build();
 		
 		Data<WorkflowState, ActionData> afterStart = workflow.start(str(""));
-		assertTrue(afterStart.value().isEmpty());
+		assertFalse(afterStart.value().isPresent());
 		WorkflowState afterStartState = afterStart.state();
 		assertTrue(tokensList(afterStartState).isEmpty());
 	}
