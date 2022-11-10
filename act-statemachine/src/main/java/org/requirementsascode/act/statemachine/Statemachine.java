@@ -122,7 +122,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 
 	boolean isInDefaultState(Data<S, V0> d) {
-		boolean b = defaultState().matchesStateIn(d);
-		return b;
+		return defaultState().matchesStateIn(d);
 	}
 }
