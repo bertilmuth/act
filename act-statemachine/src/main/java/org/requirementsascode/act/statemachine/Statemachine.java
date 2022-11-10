@@ -117,7 +117,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 	
 	Behavior<S, V0, V0> recallStatemachine(Statemachine<S, V0> owningStatemachine) {
-		return inCase(this::isInDefaultState, identity(), owningStatemachine);
+		return inCase(d -> isInDefaultState(d), identity(), owningStatemachine);
 	}
 
 	boolean isInDefaultState(Data<S, V0> d) {
