@@ -59,21 +59,6 @@ public class StatemachineBuilder {
 		public class TransitionsBuilder {
 			private TransitionsBuilder(){}
 			
-			@SafeVarargs
-			public final FlowsBuilder flows(Transitionable<S, V>... flowsArray) {
-				requireNonNull(flowsArray, "flowsArray must be non-null!");
-				builderFlows = Transitions.transitions(asList(flowsArray));
-				return new FlowsBuilder();
-			}
-			
-			public final Statemachine<S,V> build() {
-				return new FlowsBuilder().build();
-			}
-		}
-		
-		public class FlowsBuilder {
-			private FlowsBuilder(){}
-			
 			public final Statemachine<S,V> build() {
 				return new Statemachine<>(builderStates, builderTransitions, builderFlows, mergeStrategy);
 			}
