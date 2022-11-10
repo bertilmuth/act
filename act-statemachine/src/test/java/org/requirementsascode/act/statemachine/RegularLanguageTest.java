@@ -84,11 +84,9 @@ class RegularLanguageTest {
 				transition(s1, s2, accept('a', S2)),
 				transition(s1, s2, accept('b', S2)),
 				transition(s2, s3, accept('b', S3)),
-				transition(s3, wordTooLong, inCase(i -> !i.value().get().isEmpty(), i -> data(WordTooLong)))
-			)
-			.flows(
-					entryFlow(s1, accept('a', S1)),
-					entryFlow(s1, accept('b', S1))
+				transition(s3, wordTooLong, inCase(i -> !i.value().get().isEmpty(), i -> data(WordTooLong))),
+				entryFlow(s1, accept('a', S1)),
+				entryFlow(s1, accept('b', S1))
 			)
 			.build();
 		
