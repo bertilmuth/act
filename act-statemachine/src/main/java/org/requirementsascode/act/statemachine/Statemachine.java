@@ -74,7 +74,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 	
 	public Transitions<Object, Object> outgoingTransitions(State<Object, Object> outsideState) {
-		return Transitions.transitions(Collections.emptyList(), new FirstOneWhoActsWins<>());
+		return Transitions.transitions(Collections.emptyList());
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {

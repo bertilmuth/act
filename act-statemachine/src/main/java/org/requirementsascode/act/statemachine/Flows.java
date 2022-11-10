@@ -31,7 +31,7 @@ public class Flows<S, V0> implements AsBehavior<S, V0>{
 		List<Transition<S, V0>> transitionsList = this.stream()
 				.map(e -> e.asTransition(owningStatemachine))
 				.collect(Collectors.toList());
-		return Transitions.transitions(transitionsList, mergeStrategy);
+		return Transitions.transitions(transitionsList);
 	}
 
 	public Stream<Flow<S, V0>> stream() {
