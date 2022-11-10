@@ -46,7 +46,7 @@ public class StatemachineBuilder {
 			this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 			this.builderStates = States.states(asList(states), mergeStrategy);
 			this.builderTransitions = Transitions.transitions(Collections.emptyList());
-			this.builderFlows = Flows.flows(Collections.emptyList(), mergeStrategy);
+			this.builderFlows = Flows.flows(Collections.emptyList());
 		}
 
 		@SafeVarargs
@@ -62,7 +62,7 @@ public class StatemachineBuilder {
 			@SafeVarargs
 			public final FlowsBuilder flows(Flow<S, V>... flowsArray) {
 				requireNonNull(flowsArray, "flowsArray must be non-null!");
-				builderFlows = Flows.flows(asList(flowsArray), mergeStrategy);
+				builderFlows = Flows.flows(asList(flowsArray));
 				return new FlowsBuilder();
 			}
 			
