@@ -3,7 +3,7 @@ package org.requirementsascode.act.statemachine.pbt.cart;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.pbt.cart.Cart.cart;
 
 import java.util.List;

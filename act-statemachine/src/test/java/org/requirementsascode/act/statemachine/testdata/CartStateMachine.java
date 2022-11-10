@@ -1,14 +1,6 @@
 package org.requirementsascode.act.statemachine.testdata;
 
-import static org.requirementsascode.act.core.Data.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
-import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
-import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
-import static org.requirementsascode.act.statemachine.StatemachineApi.init;
-import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
-import static org.requirementsascode.act.statemachine.StatemachineApi.when;
-import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.List;
 

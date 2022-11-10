@@ -1,6 +1,6 @@
 package org.requirementsascode.act.statemachine.pbt;
 
-import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;

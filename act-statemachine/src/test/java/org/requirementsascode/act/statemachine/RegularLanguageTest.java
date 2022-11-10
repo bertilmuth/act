@@ -2,7 +2,6 @@ package org.requirementsascode.act.statemachine;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S0;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S1;

@@ -13,6 +13,14 @@ import org.requirementsascode.act.statemachine.function.When;
 import org.requirementsascode.act.statemachine.function.WhenInCase;
 
 public class StatemachineApi {	
+	public static <S, V> Data<S, V> data(S state) {
+		return Data.data(state);
+	}
+	
+	public static <S, V> Data<S, V> data(S state, V value) {
+		return Data.data(state, value);
+	}
+	
 	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
 		return State.state(stateName, stateInvariant);
 	}

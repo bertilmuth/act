@@ -1,5 +1,4 @@
 package org.requirementsascode.act.statemachine.testdata;
-import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.List;

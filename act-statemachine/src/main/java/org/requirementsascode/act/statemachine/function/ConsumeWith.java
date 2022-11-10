@@ -1,7 +1,7 @@
 package org.requirementsascode.act.statemachine.function;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Data.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
 import java.util.function.BiFunction;
 
