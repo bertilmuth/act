@@ -132,7 +132,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 				.map(Data::state).map(s -> s.tokens())
 				.flatMap(tkns -> TokensDifference.removedTokens(tokensBefore, tkns).stream())
 				.collect(Collectors.toList());
-			List<Token> tokensAfterList = new ArrayList<>(tokensBefore.stream().toList());
+			List<Token> tokensBeforeList = tokensBefore.stream().collect(Collectors.toList());
+			List<Token> tokensAfterList = new ArrayList<>(tokensBeforeList);
 			tokensAfterList.addAll(addedTokensList);
 			removedTokensList.stream().forEach(tokensAfterList::remove);
 			
