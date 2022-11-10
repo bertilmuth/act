@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
-import org.requirementsascode.act.core.Change;
 import org.requirementsascode.act.core.Data;
 
 public class Transition<S, V0> implements AsBehavior<S, V0> {
@@ -39,21 +38,24 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {		
 		return inCase(before -> fromState.matchesStateIn(before),
-				behavior.andHandleChangeWith(this::errorIfNotInToState)
-					.andThen(d -> toStateActOn(d, owningStatemachine)));
+			behavior
+				.andThen(inCase(Transition::hasFired, 
+					inCase(this::inToState, Behavior.identity(), this::errorIfNotInToState)))
+				.andThen(d -> toStateActOn(d, owningStatemachine)));
 	}
 
-	private Data<S, V0> errorIfNotInToState(Change<S, V0, V0> c) {
-		if (hasFired(c.after()) && !toState().matchesStateIn(c.after())) {
-			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
-					+ ", but invariant was false!\nbefore: " + c.before() + "\nafter: " + c.after());
-		}
-		return c.after();
+	private boolean inToState(Data<S, V0> d) {
+		return toState().matchesStateIn(d);
 	}
 	
 	private Data<S, V0> toStateActOn(Data<S, V0> data, Statemachine<S, V0> owningStatemachine){
 		return toState().asBehavior(owningStatemachine).actOn(data);
 	}
+	
+	private Data<S, V0> errorIfNotInToState(Data<S, V0> d) {
+		throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
+				+ ", but invariant was false in toState! Data: " + d);
+}
 
 	public static boolean hasFired(Data<?, ?> data) {
 		return data.value().isPresent();
