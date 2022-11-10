@@ -1,6 +1,7 @@
 package org.requirementsascode.act.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
@@ -110,7 +111,7 @@ class BehaviorTest {
 
 	@Test
 	void doesntActOnFalseTrigger() {
-		assertNull(conditionalB1().actOn(FALSE_BEFORE_B1).value());
+		assertFalse(conditionalB1().actOn(FALSE_BEFORE_B1).value().isPresent());
 	}
 	
 	@Test
