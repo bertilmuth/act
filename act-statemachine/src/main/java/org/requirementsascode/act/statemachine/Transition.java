@@ -43,7 +43,7 @@ public class Transition<S, V0> implements AsBehavior<S, V0> {
 			behavior
 				.andThen(inCase(Transition::hasFired, 
 					inCase(this::isInToState, 
-						toStateBehavior.andThen(owningStatemachine.recallStatemachine()), 
+						toStateBehavior.andThen(owningStatemachine.recallStatemachine(owningStatemachine)), 
 						this::errorIfNotInToState))));
 	}
 

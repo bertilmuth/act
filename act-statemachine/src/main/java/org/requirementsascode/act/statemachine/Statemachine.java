@@ -6,7 +6,6 @@ import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.State.state;
-import static org.requirementsascode.act.statemachine.Transition.hasFired;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
 import java.util.List;
@@ -117,8 +116,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return unitedBehavior(new FirstOneWhoActsWins<>(), transitionsBehavior, flowsBehavior);
 	}
 	
-	Behavior<S, V0, V0> recallStatemachine() {
-		return inCase(this::isInDefaultState, identity(), this);
+	Behavior<S, V0, V0> recallStatemachine(Statemachine<S, V0> owningStatemachine) {
+		return inCase(this::isInDefaultState, identity(), owningStatemachine);
 	}
 
 	boolean isInDefaultState(Data<S, V0> d) {
