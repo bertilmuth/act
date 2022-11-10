@@ -32,7 +32,8 @@ class WorkflowTest {
 		
 		Data<WorkflowState, ActionData> afterStart = workflow.start(str(""));
 		assertTrue(afterStart.value().isEmpty());
-		assertTrue(afterStart.state().tokens().stream().toList().isEmpty());
+		WorkflowState afterStartState = afterStart.state();
+		assertTrue(tokensList(afterStartState).isEmpty());
 	}
 	
 	@Test
@@ -48,7 +49,7 @@ class WorkflowTest {
 		Data<WorkflowState, ActionData> afterAction1 = workflow.start(str(START_WORKFLOW));
 		
 		assertEquals(str(ACTION1), afterAction1.value().get());
-		assertEquals(1, afterAction1.state().tokens().stream().toList().size());
+		assertEquals(1, tokensList(afterAction1.state()).size());
 		assertEquals(token(action1, str(ACTION1)), afterAction1.state().tokens().firstTokenIn(ACTION1).get());
 	}
 	
@@ -69,7 +70,7 @@ class WorkflowTest {
 		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
 		
 		assertEquals(str(ACTION2), afterAction2.value().get());
-		assertEquals(1, afterAction2.state().tokens().stream().toList().size());
+		assertEquals(1, tokensList(afterAction2.state()).size());
 		assertEquals(token(action2, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
 	}
 	
@@ -91,7 +92,7 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
 		assertEquals(token(action2a, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2A).get());
 		assertEquals(token(action2b, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2B).get());
-		assertEquals(2, afterAction1State.tokens().stream().toList().size());
+		assertEquals(2, tokensList(afterAction1State).size());
 	}
 	
 	@Test
@@ -114,7 +115,7 @@ class WorkflowTest {
 
 		assertEquals(token(action2a, str(ACTION2A)), afterForkState.tokens().firstTokenIn(ACTION2A).get());
 		assertEquals(token(action2b, str(ACTION2B)), afterForkState.tokens().firstTokenIn(ACTION2B).get());
-		assertEquals(2, afterForkState.tokens().stream().toList().size());
+		assertEquals(2, tokensList(afterForkState).size());
 	}
 	
 	@Test
@@ -141,7 +142,7 @@ class WorkflowTest {
 		WorkflowState afterJoinState = workflow.nextStep(afterForkState).state();
 
 		assertEquals(token(action2a, str(ACTION2A)), afterJoinState.tokens().firstTokenIn(ACTION3).get());
-		assertEquals(2, afterJoinState.tokens().stream().toList().size());
+		assertEquals(2, tokensList(afterJoinState).size());
 	}
 	
 	@Test
@@ -154,9 +155,8 @@ class WorkflowTest {
 			.dataFlows()
 			.build();
 		
-		Tokens tokensAfterStart = workflow.start(new UnknownData()).state().tokens();
-		List<Token> tokenList = tokensAfterStart.stream().toList();
-		assertTrue(tokenList.isEmpty());
+		WorkflowState tokensAfterStartState = workflow.start(new UnknownData()).state();
+		assertTrue(tokensList(tokensAfterStartState).isEmpty());
 	}
 	
 	@Test
@@ -170,9 +170,8 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterStartState = workflow.start(new UnknownData()).state();
-		Tokens tokensAfterNextStep = workflow.nextStep(afterStartState).state().tokens();
-		List<Token> tokenList = tokensAfterNextStep.stream().toList();
-		assertTrue(tokenList.isEmpty());
+		WorkflowState afterNextStepState = workflow.nextStep(afterStartState).state();
+		assertTrue(tokensList(afterNextStepState).isEmpty());
 	}
 
 	private StringData str(String str) {
@@ -197,6 +196,10 @@ class WorkflowTest {
 	
 	private StringData action3Performed(WorkflowState workflowState, StringData input) {
 		return new StringData(ACTION3);
+	}
+	
+	private List<Token> tokensList(WorkflowState afterStartState) {
+		return afterStartState.tokens().stream().toList();
 	}
 }
 
