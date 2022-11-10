@@ -3,6 +3,7 @@ package org.requirementsascode.act.statemachine.pbt.cart;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cart {
 	public static interface Value { }
@@ -37,7 +38,7 @@ public class Cart {
 	}
 	
 	public List<String> items() {
-		return items.stream().distinct().toList();
+		return items.stream().distinct().collect(Collectors.toList());
 	}
 	
 	public long quantityOf(String item) {

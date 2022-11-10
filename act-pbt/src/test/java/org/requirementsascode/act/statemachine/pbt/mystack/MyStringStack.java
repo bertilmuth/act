@@ -20,7 +20,7 @@ public class MyStringStack {
 	public static class Push implements Value {
 		private final String text;
 
-		Push(String text){
+		public Push(String text){
 			this.text = text;
 		}
 		
@@ -32,7 +32,7 @@ public class MyStringStack {
 	public static class PoppedElement implements Value {
 		private final String text;
 
-		PoppedElement(String text){
+		public PoppedElement(String text){
 			this.text = text;
 		}
 		

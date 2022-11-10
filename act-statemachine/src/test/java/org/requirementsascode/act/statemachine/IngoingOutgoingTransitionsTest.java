@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.util.Arrays.asList;
 
 import org.junit.jupiter.api.Test;
@@ -21,7 +24,7 @@ class IngoingOutgoingTransitionsTest {
 		
 		Transitions<Object , Object> outgoingTransitions =
 			statemachine.outgoingTransitions(state);
-		assertTrue(outgoingTransitions.stream().toList().isEmpty());
+		assertTrue(listOf(outgoingTransitions).isEmpty());
 	}
 
 	@Test
@@ -35,7 +38,7 @@ class IngoingOutgoingTransitionsTest {
 		
 		Transitions<Object , Object> outgoingTransitions =
 			statemachine.outgoingTransitions(state);
-		assertTrue(outgoingTransitions.stream().toList().isEmpty());
+		assertTrue(listOf(outgoingTransitions).isEmpty());
 	}
 	
 	@Test
@@ -54,6 +57,10 @@ class IngoingOutgoingTransitionsTest {
 		
 		Transitions<String , String> outgoingTransitions =
 			statemachine.outgoingTransitions(state1);
-		assertEquals(asList(transition12), outgoingTransitions.stream().toList());
+		assertEquals(asList(transition12), listOf(outgoingTransitions));
+	}
+	
+	private List<Transition<?, ?>> listOf(Transitions<?, ?> outgoingTransitions) {
+		return outgoingTransitions.stream().collect(Collectors.toList());
 	}
 }
