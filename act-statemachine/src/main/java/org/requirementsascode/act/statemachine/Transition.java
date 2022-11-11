@@ -1,7 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
@@ -45,7 +44,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {				
 		return inCase(before -> fromState.matchesStateIn(before),
 			behavior
-				.andThen(inCase(Transition::hasFired, 
+				.andThen(inCase(this::hasFired, 
 					inCase(this::isInToState, 
 						d -> toStateBehavior(d, owningStatemachine), 
 						this::errorIfNotInToState))));
@@ -63,12 +62,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		}
 	}
 
-	public static boolean hasFired(Data<?, ?> data) {
+	private boolean hasFired(Data<?, ?> data) {
 		return data.value().isPresent();
-	}
-	
-	private Behavior<S, V0, V0> recallStatemachine(Statemachine<S, V0> owningStatemachine) {
-		return inCase(d -> isInDefaultState(d, owningStatemachine), identity(), owningStatemachine);
 	}
 
 	private boolean isInDefaultState(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {

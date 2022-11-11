@@ -1,7 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import java.util.Objects;
@@ -44,11 +43,14 @@ public class State<S, V> implements Behavioral<S, V> {
 
 	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStatemachine) {
-		Behavior<S, V, V> transitionsBehavior = owningStatemachine.transitions().asBehavior(owningStatemachine);
-		Behavior<S, V, V> transitions = inCase(Transition::hasFired, transitionsBehavior);
-		
 		return inCase(this::matchesStateIn,
-				stateInternalBehavior.andThen(inCase(this::matchesStateIn, transitions, this::throwsIllegalStateException)));
+			stateInternalBehavior.andThen(inCase(this::matchesStateIn, 
+				transitionsBehavior(owningStatemachine), this::throwsIllegalStateException)));
+	}
+
+	private Behavior<S, V, V> transitionsBehavior(Statemachine<S, V> owningStatemachine) {
+		Behavior<S, V, V> transitionsBehavior = owningStatemachine.transitions().asBehavior(owningStatemachine);
+		return inCase(d -> d.value().isPresent(), transitionsBehavior);
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
