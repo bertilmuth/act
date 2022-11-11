@@ -6,7 +6,9 @@ import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.State.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -60,6 +62,17 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	
 	public MergeStrategy<S, V0> mergeStrategy() {
 		return mergeStrategy;
+	}
+	
+	public Transitions<S, V0> outgoingTransitions(State<S, V0> outsideState) {
+		requireNonNull(outsideState, "outsideState must be non-null!");
+		
+		List<Transitionable<S, V0>> transitionList = transitions.stream()
+			.filter(t -> t.asTransition(this).fromState().equals(outsideState))
+			.collect(Collectors.toList());
+		
+		Transitions<S, V0> transitions = Transitions.transitions(transitionList);
+		return transitions;
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
