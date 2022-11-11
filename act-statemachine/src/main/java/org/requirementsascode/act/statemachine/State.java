@@ -44,8 +44,11 @@ public class State<S, V> implements Behavioral<S, V> {
 
 	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStatemachine) {
+		Behavior<S, V, V> transitionsBehavior = owningStatemachine.transitions().asBehavior(owningStatemachine);
+		Behavior<S, V, V> transitions = inCase(Transition::hasFired, transitionsBehavior);
+		
 		return inCase(this::matchesStateIn,
-				stateInternalBehavior.andThen(inCase(this::matchesStateIn, identity(), this::throwsIllegalStateException)));
+				stateInternalBehavior.andThen(inCase(this::matchesStateIn, transitions, this::throwsIllegalStateException)));
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {

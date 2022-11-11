@@ -90,18 +90,10 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private Behavior<S, V0, V0> createStatemachineBehavior() {
 		validate(this);
 
-		Behavior<S, V0, V0> behavior = 
-			statesBehaviorOrIdentity().andThen(transitionBehavior());
+		Behavior<S, V0, V0> behavior = unitedBehavior(new FirstOneWhoActsWins<>(), 
+				states().asBehavior(this),
+				transitions().asBehavior(this));
 
 		return behavior;
-	}
-	
-	public Behavior<S, V0, V0> statesBehaviorOrIdentity() {
-		Behavior<S, V0, V0> statesBehavior = states().asBehavior(this);
-		return unitedBehavior(new FirstOneWhoActsWins<>(), asList(statesBehavior, identity()));
-	}
-
-	private Behavior<S, V0, V0> transitionBehavior() {
-		return transitions().asBehavior(this);
 	}
 }

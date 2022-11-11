@@ -42,19 +42,21 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 
 	@Override
-	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {		
-		Behavior<S, V0, V0> toStateBehavior = toState().asBehavior(owningStatemachine);
-		
+	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {				
 		return inCase(before -> fromState.matchesStateIn(before),
 			behavior
 				.andThen(inCase(Transition::hasFired, 
 					inCase(this::isInToState, 
-						toStateBehavior.andThen(recallStatemachine(owningStatemachine)), 
+						d -> toStateBehavior(d, owningStatemachine), 
 						this::errorIfNotInToState))));
 	}
 
 	private boolean isInToState(Data<S, V0> d) {
 		return toState().matchesStateIn(d);
+	}
+	
+	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
+		return toState().asBehavior(owningStatemachine).actOn(d);
 	}
 
 	public static boolean hasFired(Data<?, ?> data) {
