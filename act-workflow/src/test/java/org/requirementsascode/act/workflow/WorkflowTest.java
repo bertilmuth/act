@@ -146,6 +146,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void doesntRunActionForUnknownData() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		
@@ -160,6 +161,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void doesntRunActionForUnknownData_nextStep() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		
