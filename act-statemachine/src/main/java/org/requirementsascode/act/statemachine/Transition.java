@@ -2,6 +2,7 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.core.Behavior.identity;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -43,31 +44,27 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {				
 		return inCase(before -> fromState.matchesStateIn(before),
-			behavior
-				.andThen(inCase(this::hasFired, 
-					inCase(this::isInToState, 
-						d -> toStateBehavior(d, owningStatemachine), 
-						this::errorIfNotInToState))));
+			behavior.andThen(inCase(this::hasFired, 
+				inCase(this::isInToState, 
+					inCase(d -> isInDefaultState(d, owningStatemachine), 
+						identity(), d -> toStateBehavior(d, owningStatemachine)), 
+					this::errorIfNotInToState))));
 	}
 
 	private boolean isInToState(Data<S, V0> d) {
 		return toState().matchesStateIn(d);
 	}
 	
+	private boolean isInDefaultState(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
+		return owningStatemachine.defaultState().matchesStateIn(d);
+	}
+	
 	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
-		if(!isInDefaultState(d, owningStatemachine)) {
-			return toState().asBehavior(owningStatemachine).actOn(d);
-		} else {
-			return d;
-		}
+		return toState().asBehavior(owningStatemachine).actOn(d);
 	}
 
 	private boolean hasFired(Data<?, ?> data) {
 		return data.value().isPresent();
-	}
-
-	private boolean isInDefaultState(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
-		return owningStatemachine.defaultState().matchesStateIn(d);
 	}
 	
 	private Data<S, V0> errorIfNotInToState(Data<S, V0> d) {
