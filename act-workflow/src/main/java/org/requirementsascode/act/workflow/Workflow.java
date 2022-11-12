@@ -87,11 +87,13 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			Statemachine<WorkflowState, Token> statemachine = statemachineOf(dataBefore);
 			Tokens mergedTokens = mergeTokens(dataBefore, datasAfter);
-			ActionData firstActionData = mergedTokens.stream().findFirst().flatMap(Token::actionData).orElse(null);
-			WorkflowState state = new WorkflowState(statemachine, mergedTokens, firstActionData);
+			WorkflowState state = new WorkflowState(statemachineOf(dataBefore), mergedTokens, actionDataOfFirstOf(mergedTokens));
 			return data(state, null);
+		}
+
+		private ActionData actionDataOfFirstOf(Tokens token) {
+			return token.stream().findFirst().flatMap(Token::actionData).orElse(null);
 		}
 
 		private Statemachine<WorkflowState, Token> statemachineOf(Data<WorkflowState, Token> dataBefore) {
