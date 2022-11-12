@@ -39,7 +39,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
 		Data<WorkflowState, ActionData> inputData = data(initialState, actionData);
-		Data<WorkflowState, Token> output = statemachine().actOn(tokenized(inputData));
+		Data<WorkflowState, ActionData> output = actOn(inputData);
 		return nextStep(output.state());
 	}
 
