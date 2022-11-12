@@ -116,24 +116,36 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		}
 
 		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {	
-			Tokens tokensBefore = dataBefore.state().tokens();
+			List<Token> tokensAfter = new ArrayList<>(tokensBefore(dataBefore));
+			tokensAfter.addAll(addedTokens(dataBefore, datasAfter));
+			removedTokens(dataBefore, datasAfter).stream().forEach(tokensAfter::remove);
 			
-			List<Token> addedTokensList = datasAfter.stream()
-				.map(Data::state).map(s -> s.tokens())
-				.flatMap(tkns -> TokensDifference.addedTokens(tokensBefore, tkns).stream())
-				.collect(Collectors.toList());
+			Tokens updatedTokens = new Tokens(tokensAfter);
+			return updatedTokens;
+		}
+
+		private List<Token> tokensBefore(Data<WorkflowState, Token> dataBefore) {
+			return dataBefore.state().tokens().stream().collect(Collectors.toList());
+		}
+
+		private List<Token> removedTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
+			Tokens tokensBefore = dataBefore.state().tokens();
+
 			List<Token> removedTokensList = datasAfter.stream()
 				.map(Data::state).map(s -> s.tokens())
 				.flatMap(tkns -> TokensDifference.removedTokens(tokensBefore, tkns).stream())
 				.collect(Collectors.toList());
-			List<Token> tokensBeforeList = tokensBefore.stream().collect(Collectors.toList());
-			List<Token> tokensAfterList = new ArrayList<>(tokensBeforeList);
-			tokensAfterList.addAll(addedTokensList);
-			removedTokensList.stream().forEach(tokensAfterList::remove);
-			
-			Tokens updatedTokens = new Tokens(tokensAfterList);
+			return removedTokensList;
+		}
 
-			return updatedTokens;
+		private List<Token> addedTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
+			Tokens tokensBefore = dataBefore.state().tokens();
+
+			List<Token> addedTokensList = datasAfter.stream()
+				.map(Data::state).map(s -> s.tokens())
+				.flatMap(tkns -> TokensDifference.addedTokens(tokensBefore, tkns).stream())
+				.collect(Collectors.toList());
+			return addedTokensList;
 		}	
 	}
 }
