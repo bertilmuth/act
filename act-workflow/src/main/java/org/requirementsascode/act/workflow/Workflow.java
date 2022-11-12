@@ -107,7 +107,9 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Statemachine<WorkflowState, Token> statemachine = statemachineOf(dataBefore);
-			WorkflowState state = new WorkflowState(statemachine, mergeTokens(dataBefore, datasAfter), null);
+			Tokens mergedTokens = mergeTokens(dataBefore, datasAfter);
+			ActionData firstActionData = mergedTokens.stream().findFirst().flatMap(Token::actionData).orElse(null);
+			WorkflowState state = new WorkflowState(statemachine, mergedTokens, firstActionData);
 			return data(state, null);
 		}
 
@@ -120,7 +122,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 			tokensAfterList.addAll(addedTokensList(dataBefore, datasAfter));
 			removedTokensList(dataBefore, datasAfter).stream().forEach(tokensAfterList::remove);
 			for (Token token : tokensAfterList) {
-				if(!token.actionData().isPresent()) tokensAfterList.remove(token);
+				//if(!token.actionData().isPresent()) tokensAfterList.remove(token);
 			}
 			
 			Tokens updatedTokens = new Tokens(tokensAfterList);

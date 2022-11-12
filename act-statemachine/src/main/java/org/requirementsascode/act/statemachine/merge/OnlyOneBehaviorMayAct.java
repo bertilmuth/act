@@ -10,7 +10,9 @@ public class OnlyOneBehaviorMayAct<S, V> implements MergeStrategy<S, V> {
 	public Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datas) {
 		// more than one behavior that can act --> this is not acceptable, throw
 		// exception
-		throw new MoreThanOneBehaviorActed(
-				"Only 1 behavior may act, but more than one can. Datas: " + datas);
+		if (datas.size() > 1) {
+			throw new MoreThanOneBehaviorActed("Only 1 behavior may act, but more than one can. Datas: " + datas);
+		}
+		return datas.get(0);
 	}
 }

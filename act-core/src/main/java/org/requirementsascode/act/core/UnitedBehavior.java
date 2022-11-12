@@ -43,8 +43,6 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 		if (datasAfter.isEmpty()) {
 			mergedData = noOp(dataBefore);
-		} else if (datasAfter.size() == 1) {
-			mergedData = singleElementOf(datasAfter);
 		} else {
 			mergedData = merge(dataBefore, datasAfter);
 		}
