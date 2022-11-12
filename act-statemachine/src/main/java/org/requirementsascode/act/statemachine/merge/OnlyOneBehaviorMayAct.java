@@ -8,6 +8,9 @@ import org.requirementsascode.act.core.merge.MergeStrategy;
 public class OnlyOneBehaviorMayAct<S, V> implements MergeStrategy<S, V> {
 	@Override
 	public Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datas) {
+		// The following assertion must always hold because of UnitedBehavior that only merges non-empty lists.
+		assert(!datas.isEmpty());
+		
 		// more than one behavior that can act --> this is not acceptable, throw
 		// exception
 		if (datas.size() > 1) {
