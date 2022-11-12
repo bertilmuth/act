@@ -116,19 +116,19 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		}
 
 		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {	
-			List<Token> tokensAfter = new ArrayList<>(tokensBefore(dataBefore));
-			tokensAfter.addAll(addedTokens(dataBefore, datasAfter));
-			removedTokens(dataBefore, datasAfter).stream().forEach(tokensAfter::remove);
+			List<Token> tokensAfterList = new ArrayList<>(tokensBeforeList(dataBefore));
+			tokensAfterList.addAll(addedTokensList(dataBefore, datasAfter));
+			removedTokensList(dataBefore, datasAfter).stream().forEach(tokensAfterList::remove);
 			
-			Tokens updatedTokens = new Tokens(tokensAfter);
+			Tokens updatedTokens = new Tokens(tokensAfterList);
 			return updatedTokens;
 		}
 
-		private List<Token> tokensBefore(Data<WorkflowState, Token> dataBefore) {
+		private List<Token> tokensBeforeList(Data<WorkflowState, Token> dataBefore) {
 			return dataBefore.state().tokens().stream().collect(Collectors.toList());
 		}
 
-		private List<Token> removedTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
+		private List<Token> removedTokensList(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Tokens tokensBefore = dataBefore.state().tokens();
 
 			List<Token> removedTokensList = datasAfter.stream()
@@ -138,7 +138,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 			return removedTokensList;
 		}
 
-		private List<Token> addedTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
+		private List<Token> addedTokensList(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Tokens tokensBefore = dataBefore.state().tokens();
 
 			List<Token> addedTokensList = datasAfter.stream()
