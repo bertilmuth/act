@@ -119,6 +119,9 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 			List<Token> tokensAfterList = new ArrayList<>(tokensBeforeList(dataBefore));
 			tokensAfterList.addAll(addedTokensList(dataBefore, datasAfter));
 			removedTokensList(dataBefore, datasAfter).stream().forEach(tokensAfterList::remove);
+			for (Token token : tokensAfterList) {
+				if(!token.actionData().isPresent()) tokensAfterList.remove(token);
+			}
 			
 			Tokens updatedTokens = new Tokens(tokensAfterList);
 			return updatedTokens;
