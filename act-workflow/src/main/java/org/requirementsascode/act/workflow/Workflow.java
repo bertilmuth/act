@@ -2,10 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Stream.concat;
-import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
-import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
 
@@ -87,22 +84,6 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		return statemachine;
 	}
 	
-	private static Transitionable<WorkflowState, Token> removeTokensWithoutActionData() {
-		return transition(anyState(), anyState(), 
-			whenInCase(Token.class, Workflow::hasNoActionData, Workflow::removeToken));
-	}
-
-	private static boolean hasNoActionData(Data<WorkflowState, Token> d) {
-		return d.value().map(t -> !t.actionData().isPresent()).orElse(false);
-	}
-
-	private static Data<WorkflowState, Token> removeToken(Data<WorkflowState, Token> inputData) {
-		WorkflowState workflowState = inputData.state();
-		Token token = Token.from(inputData).orElseThrow(() -> new IllegalStateException("Token missing!"));
-		Data<WorkflowState, Token> resultWorkflowWithRemovedToken = workflowState.removeToken(token);
-		return resultWorkflowWithRemovedToken;
-	}
-	
 	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
@@ -121,11 +102,9 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 			List<Token> tokensAfterList = new ArrayList<>(tokensBeforeList(dataBefore));
 			tokensAfterList.addAll(addedTokensList(dataBefore, datasAfter));
 			removedTokensList(dataBefore, datasAfter).stream().forEach(tokensAfterList::remove);
-			for (Token token : tokensAfterList) {
-				//if(!token.actionData().isPresent()) tokensAfterList.remove(token);
-			}
+			List<Token> updatedTokenList = tokensAfterList.stream().filter(t -> t.actionData().isPresent()).collect(Collectors.toList());
 			
-			Tokens updatedTokens = new Tokens(tokensAfterList);
+			Tokens updatedTokens = new Tokens(updatedTokenList);
 			return updatedTokens;
 		}
 
