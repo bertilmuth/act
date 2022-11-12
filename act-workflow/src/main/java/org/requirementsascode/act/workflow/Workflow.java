@@ -49,13 +49,13 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	@Override
 	public Data<WorkflowState, ActionData> actOn(Data<WorkflowState,ActionData> inputData) {
-		Data<WorkflowState, Token> output = statemachine().actOn(tokenized(inputData));
+		Data<WorkflowState, Token> output = statemachine.actOn(tokenized(inputData));
 		ActionData outputActionData = output.state().actionOutput().orElse(null);
 		return data(output.state(), outputActionData);
 	}
 
 	private Data<WorkflowState, Token> tokenized(Data<WorkflowState,ActionData> inputData) {
-		DefaultNode defaultNode = new DefaultNode(statemachine());
+		DefaultNode defaultNode = new DefaultNode(statemachine);
 		Token token = token(defaultNode, inputData.value().orElse(null));
 		Data<WorkflowState, Token> data = data(inputData.state(), token);
 		return data;
@@ -68,10 +68,6 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 
 		Statemachine<WorkflowState, Token> statemachine = statemachineWith(actions, dataFlows, initialActions);		
 		return new Workflow(statemachine);
-	}
-	
-	Statemachine<WorkflowState, Token> statemachine() {
-		return statemachine;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
