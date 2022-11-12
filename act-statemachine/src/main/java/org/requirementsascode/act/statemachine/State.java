@@ -50,7 +50,6 @@ public class State<S, V> implements Behavioral<S, V> {
 
 	private Behavior<S, V, V> transitionsBehavior(Statemachine<S, V> owningStatemachine) {
 		Behavior<S, V, V> transitionsBehavior = owningStatemachine.outgoingTransitions(this).asBehavior(owningStatemachine);
-		//Behavior<S, V, V> transitionsBehavior = owningStatemachine.transitions().asBehavior(owningStatemachine);
 		return inCase(d -> d.value().isPresent(), transitionsBehavior);
 	}
 
