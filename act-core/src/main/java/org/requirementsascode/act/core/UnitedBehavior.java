@@ -55,10 +55,6 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		return stateWithoutValue;
 	}
 
-	private Data<S, V> singleElementOf(List<Data<S, V>> dataAfters) {
-		return dataAfters.get(0);
-	}
-
 	private Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datasAfter) {
 		return mergeStrategy.merge(dataBefore, datasAfter);
 	}
