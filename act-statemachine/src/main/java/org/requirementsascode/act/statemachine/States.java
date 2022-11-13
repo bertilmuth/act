@@ -30,7 +30,7 @@ public class States<S, V0> implements Behavioral<S, V0>{
 
 	private List<Behavior<S, V0, V0>> stateBehaviors(Statemachine<S, V0> owningStatemachine) {
 		List<Behavior<S, V0, V0>> behaviors = this.stream()
-			.map(e -> e.asBehavior(owningStatemachine))
+			.map(s -> s.asBehavior(owningStatemachine))
 			.collect(Collectors.toList());
 		return behaviors;
 	}
