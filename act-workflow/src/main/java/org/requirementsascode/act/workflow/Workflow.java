@@ -56,8 +56,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 
 	private Data<WorkflowState, Token> tokenized(Data<WorkflowState,ActionData> inputData) {
-		DefaultNode defaultNode = new DefaultNode(statemachine);
-		Token token = token(defaultNode, inputData.value().orElse(null));
+		AnyNode anyNode = new AnyNode();
+		Token token = token(anyNode, inputData.value().orElse(null));
 		Data<WorkflowState, Token> data = data(inputData.state(), token);
 		return data;
 	}
