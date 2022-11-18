@@ -11,7 +11,6 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
@@ -79,7 +78,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2i = action(ACTION2I, step(IntegerData.class, this::action2iPerformed));
