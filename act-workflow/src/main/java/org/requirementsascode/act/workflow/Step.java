@@ -29,9 +29,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	private Data<WorkflowState, Token> proceed(WorkflowState workflowState, Action owningAction) {
 		Data<WorkflowState, Token> outputData = workflowState.tokens().inNode(owningAction.name())
 			.map(t -> stepBehavior.actOn(data(workflowState, t)))
-			.filter(d -> d.value().isPresent())
-			.findFirst()
-			.orElse(data(workflowState, null));
+			.reduce(data(workflowState,null), (a,b) -> b);
 			
 		return outputData;
 	}
