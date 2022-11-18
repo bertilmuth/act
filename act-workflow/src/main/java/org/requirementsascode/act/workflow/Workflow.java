@@ -39,9 +39,13 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		Data<WorkflowState, ActionData> output = actOn(inputData);
 		return nextStep(output.state());
 	}
-
+	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
-		return actOn(data(workflowState, Step.proceed));
+		return nextStep(workflowState, Step.proceed);
+	}
+	
+	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
+		return actOn(data(workflowState, actionData));
 	}
 	
 	@Override

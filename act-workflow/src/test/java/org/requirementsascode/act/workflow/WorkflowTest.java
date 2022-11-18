@@ -11,8 +11,10 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class WorkflowTest {
@@ -21,6 +23,7 @@ class WorkflowTest {
 	private static final String ACTION2 = "Action2";
 	private static final String ACTION2A = "Action2a";
 	private static final String ACTION2B = "Action2b";
+	private static final String ACTION2I = "Action2i";
 	private static final String ACTION3 = "Action3";
 	
 	@Test
@@ -55,7 +58,7 @@ class WorkflowTest {
 	}
 	
 	@Test
-	void runsTwoActions() {
+	void runsTwoActions_firstOneUserTriggered() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2 = action(ACTION2, step(StringData.class, this::action2Performed));
 		
@@ -73,6 +76,28 @@ class WorkflowTest {
 		assertEquals(str(ACTION2), afterAction2.value().get());
 		assertEquals(1, tokensList(afterAction2.state()).size());
 		assertEquals(token(action2, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
+	}
+	
+	@Test
+	@Disabled
+	void runsTwoActions_bothUserTriggered() {
+		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
+		Action action2i = action(ACTION2I, step(IntegerData.class, this::action2iPerformed));
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1, action2i)
+			.initialActions(action1)
+			.dataFlows(
+				dataFlow(action1, action2i)
+			)
+			.build();
+		
+		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
+		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State, new IntegerData(1));
+		
+		assertEquals(new IntegerData(2), afterAction2.value().get());
+		assertEquals(1, tokensList(afterAction2.state()).size());
+		assertEquals(token(action2i, new IntegerData(2)), afterAction2.state().tokens().firstTokenIn(ACTION2I).get());
 	}
 	
 	@Test
@@ -191,6 +216,10 @@ class WorkflowTest {
 	
 	private StringData action2bPerformed(WorkflowState workflowState, StringData input) {
 		return new StringData(ACTION2B);
+	}
+	
+	private IntegerData action2iPerformed(WorkflowState workflowState, IntegerData input) {
+		return new IntegerData(input.integer + 1);
 	}
 	
 	private StringData action3Performed(WorkflowState workflowState, StringData input) {
