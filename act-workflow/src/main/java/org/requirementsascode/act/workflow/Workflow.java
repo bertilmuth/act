@@ -35,17 +35,17 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		Data<WorkflowState, ActionData> inputData = data(initialState, actionData);
-		Data<WorkflowState, ActionData> output = actOn(inputData);
-		return nextStep(output.state());
+		return nextStep(initialState, actionData);
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
-		return nextStep(workflowState, Step.proceed);
+		return actOn(data(workflowState, Step.proceed));
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		return actOn(data(workflowState, actionData));
+		Data<WorkflowState, ActionData> providedToken = actOn(data(workflowState, actionData));
+		Data<WorkflowState, ActionData> result = nextStep(providedToken.state());
+		return result;
 	}
 	
 	@Override
