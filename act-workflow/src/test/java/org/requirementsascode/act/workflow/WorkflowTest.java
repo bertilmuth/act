@@ -86,7 +86,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2i)
-			.initialActions(action1)
+			.initialActions(action1, action2i)
 			.dataFlows(
 				dataFlow(action1, action2i)
 			)
