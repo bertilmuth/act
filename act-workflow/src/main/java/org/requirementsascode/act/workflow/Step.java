@@ -29,7 +29,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	private Data<WorkflowState, Token> proceed(WorkflowState workflowState, Action owningAction) {
 		List<Token> tokens = workflowState.tokens().inNode(owningAction.name()).collect(Collectors.toList());
-		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, null));
+		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, workflowState.actionOutput().orElse(null)));
 				
 		for (Token token : tokens) {
 			result = stepBehavior.actOn(data(result.state(), token));
