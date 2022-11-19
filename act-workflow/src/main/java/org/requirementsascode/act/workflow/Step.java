@@ -2,9 +2,8 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.when;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.function.BiFunction;
 
@@ -29,11 +28,19 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	private Data<WorkflowState, Token> proceed(WorkflowState workflowState, Action owningAction) {
 		Data<WorkflowState, Token> outputData = workflowState.tokens().inNode(owningAction.name())
 			.map(t -> stepBehavior.actOn(data(workflowState, t)))
-			.filter(d -> d.value().isPresent())
+			.filter(t -> t.value().isPresent())
 			.findFirst()
 			.orElse(data(workflowState, null));
 			
 		return outputData;
+	}
+
+	private Data<WorkflowState, Token> firstTokenInAction(WorkflowState workflowState, Action owningAction) {
+		return data(workflowState, firstTokenIn(workflowState, owningAction));
+	}
+
+	private Token firstTokenIn(WorkflowState workflowState, Action owningAction) {
+		return workflowState.tokens().firstTokenIn(owningAction.name()).get();
 	}
 
 	static class Proceed implements ActionData {
