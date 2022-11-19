@@ -5,7 +5,9 @@ import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
+import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -26,15 +28,17 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	}
 
 	private Data<WorkflowState, Token> proceed(WorkflowState workflowState, Action owningAction) {
-		return stepBehavior.actOn(firstTokenInAction(workflowState, owningAction));
-	}
-
-	private Data<WorkflowState, Token> firstTokenInAction(WorkflowState workflowState, Action owningAction) {
-		return data(workflowState, firstTokenIn(workflowState, owningAction));
-	}
-
-	private Token firstTokenIn(WorkflowState workflowState, Action owningAction) {
-		return workflowState.tokens().firstTokenIn(owningAction.name()).get();
+		List<Token> tokens = workflowState.tokens().inNode(owningAction.name()).collect(Collectors.toList());
+		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, null));
+				
+		for (Token token : tokens) {
+			result = stepBehavior.actOn(data(workflowState, token));
+			if(result.value().isPresent() && result.value().map(t -> t.actionData().isPresent()).orElse(false)) {
+				break;
+			}
+		}
+		
+		return result;
 	}
 
 	static class Proceed implements ActionData {
