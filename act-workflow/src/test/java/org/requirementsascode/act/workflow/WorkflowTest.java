@@ -11,7 +11,6 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
@@ -79,7 +78,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2i = action(ACTION2I, step(IntegerData.class, this::action2iPerformed));
@@ -95,6 +93,7 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
 		Data<WorkflowState, ActionData> afterAction2i = workflow.nextStep(afterAction1State, new IntegerData(1));
 		
+		System.out.println(afterAction2i.state().tokens());
 		assertEquals(new IntegerData(2), afterAction2i.value().get());
 		assertEquals(1, tokensList(afterAction2i.state()).size());
 		assertEquals(token(action2i, new IntegerData(2)), afterAction2i.state().tokens().firstTokenIn(ACTION2I).get());

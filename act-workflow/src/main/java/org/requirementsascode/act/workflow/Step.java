@@ -32,7 +32,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, null));
 				
 		for (Token token : tokens) {
-			result = stepBehavior.actOn(data(workflowState, token));
+			result = stepBehavior.actOn(data(result.state(), token));
 			if(result.value().isPresent() && result.value().map(t -> t.actionData().isPresent()).orElse(false)) {
 				break;
 			}
