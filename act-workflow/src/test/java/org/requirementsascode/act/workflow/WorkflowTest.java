@@ -72,9 +72,10 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
 		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
 		
-		assertEquals(str(ACTION2), afterAction2.value().get());
+		StringData action1_2 = str(ACTION1 + "." + ACTION2);
+		assertEquals(action1_2, afterAction2.value().get());
 		assertEquals(1, tokensList(afterAction2.state()).size());
-		assertEquals(token(action2, str(ACTION2)), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
+		assertEquals(token(action2, action1_2), afterAction2.state().tokens().firstTokenIn(ACTION2).get());
 	}
 	
 	@Test
@@ -115,6 +116,7 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
+		
 		assertEquals(token(action2a, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2A).get());
 		assertEquals(token(action2b, str(ACTION1)), afterAction1State.tokens().firstTokenIn(ACTION2B).get());
 		assertEquals(2, tokensList(afterAction1State).size());
@@ -138,8 +140,8 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
 		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
 
-		assertEquals(token(action2a, str(ACTION2A)), afterForkState.tokens().firstTokenIn(ACTION2A).get());
-		assertEquals(token(action2b, str(ACTION2B)), afterForkState.tokens().firstTokenIn(ACTION2B).get());
+		assertEquals(token(action2a, str(ACTION1 + "." + ACTION2A)), afterForkState.tokens().firstTokenIn(ACTION2A).get());
+		assertEquals(token(action2b, str(ACTION1 + "." + ACTION2B)), afterForkState.tokens().firstTokenIn(ACTION2B).get());
 		assertEquals(2, tokensList(afterForkState).size());
 	}
 	
@@ -164,7 +166,7 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
 		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
 
-		assertEquals(token(action3, str(ACTION2A)), afterForkState.tokens().firstTokenIn(ACTION3).get());
+		assertEquals(token(action3, str(ACTION1 + "." + ACTION2A)), afterForkState.tokens().firstTokenIn(ACTION3).get());
 		assertEquals(2, tokensList(afterForkState).size());
 	}
 	
@@ -206,15 +208,15 @@ class WorkflowTest {
 	}
 	
 	private StringData action2Performed(WorkflowState workflowState, StringData input) {
-		return new StringData(ACTION2);
+		return previousValuePlus(ACTION2, workflowState);
 	}
 	
 	private StringData action2aPerformed(WorkflowState workflowState, StringData input) {
-		return new StringData(ACTION2A);
+		return previousValuePlus(ACTION2A, workflowState);
 	}
 	
 	private StringData action2bPerformed(WorkflowState workflowState, StringData input) {
-		return new StringData(ACTION2B);
+		return previousValuePlus(ACTION2B, workflowState);
 	}
 	
 	private IntegerData action2iPerformed(WorkflowState workflowState, IntegerData input) {
@@ -223,6 +225,12 @@ class WorkflowTest {
 	
 	private StringData action3Performed(WorkflowState workflowState, StringData input) {
 		return new StringData(ACTION3);
+	}
+	
+	private StringData previousValuePlus(String actionNameToBeAdded, WorkflowState workflowState) {
+		String previousValue = workflowState.actionOutput().map(Object::toString).orElse("");
+		StringData concatenatedStringValue = new StringData(previousValue + "." + actionNameToBeAdded);
+		return concatenatedStringValue;
 	}
 	
 	private List<Token> tokensList(WorkflowState afterStartState) {

@@ -30,6 +30,6 @@ public class StringData implements ActionData {
 
 	@Override
 	public String toString() {
-		return "StringValue [" + string + "]";
+		return string;
 	}
 };
