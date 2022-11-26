@@ -29,11 +29,7 @@ public class Token {
 	}
 	
 	public static boolean isForProceeding(Data<WorkflowState, Token> inputData) {
-		return Token.from(inputData).map(Token::containsProceed).orElse(false);
-	}
-
-	private static boolean containsProceed(Token token) {
-		return token.actionData().map(ad -> ad instanceof ConsumeToken).orElse(false);
+		return Token.from(inputData).map(ConsumeToken::isConsumeToken).orElse(false);
 	}
 	
 	Token moveTo(Node node) {
