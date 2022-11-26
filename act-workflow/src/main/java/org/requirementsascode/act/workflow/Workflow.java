@@ -39,7 +39,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
-		return actOn(data(workflowState, Step.consumeToken));
+		return actOn(data(workflowState, new ConsumeToken()));
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
