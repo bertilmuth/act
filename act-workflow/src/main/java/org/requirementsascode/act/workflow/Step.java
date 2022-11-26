@@ -6,9 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
-import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -25,30 +23,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	@Override
 	public Behavior<WorkflowState, Token, Token> asBehavior(Action owningAction) {
-		return inCase(ConsumeToken::isContained, d -> consumeToken(d, owningAction));
-	}
-
-	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState,Token> inputData, Action owningAction) {
-		WorkflowState workflowState = inputData.state();
-		List<Token> tokensInAction = workflowState.tokensIn(owningAction).collect(Collectors.toList());
-		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, actionOutputIn(workflowState)));
-				
-		for (Token token : tokensInAction) {
-			result = stepBehavior.actOn(data(result.state(), token));
-			if(hasStepActed(result)) {
-				break;
-			}
-		}
-		
-		return result;
-	}
-	
-	private boolean hasStepActed(Data<WorkflowState, Token> result) {
-		return result.value().map(t -> t.actionData().isPresent()).orElse(false);
-	}
-
-	private ActionData actionOutputIn(WorkflowState workflowState) {
-		return workflowState.actionOutput().orElse(null);
+		return inCase(ConsumeToken::isContained, d -> owningAction.consumeToken(d, stepBehavior));
 	}
 	
 	private class StepBehavior implements Behavior<WorkflowState, Token, Token> {
