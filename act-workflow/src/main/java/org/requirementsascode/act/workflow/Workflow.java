@@ -16,6 +16,7 @@ import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
+import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialState;

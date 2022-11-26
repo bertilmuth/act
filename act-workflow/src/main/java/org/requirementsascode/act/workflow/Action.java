@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
+import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 
 public class Action implements Node{
 	private final String name;
