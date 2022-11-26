@@ -25,14 +25,14 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	@Override
 	public Behavior<WorkflowState, Token, Token> asBehavior(Action owningAction) {
-		return inCase(Token::isForProceeding, d -> proceed(d.state(), owningAction));
+		return inCase(ConsumeToken::matches, d -> consumeToken(d.state(), owningAction));
 	}
 
-	private Data<WorkflowState, Token> proceed(WorkflowState workflowState, Action owningAction) {
-		List<Token> tokens = workflowState.tokens().inNode(owningAction.name()).collect(Collectors.toList());
-		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, workflowState.actionOutput().orElse(null)));
+	private Data<WorkflowState, Token> consumeToken(WorkflowState workflowState, Action owningAction) {
+		List<Token> tokensInAction = workflowState.tokens().inNode(owningAction.name()).collect(Collectors.toList());
+		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, actionOutputIn(workflowState)));
 				
-		for (Token token : tokens) {
+		for (Token token : tokensInAction) {
 			result = stepBehavior.actOn(data(result.state(), token));
 			if(hasStepActed(result)) {
 				break;
@@ -41,9 +41,13 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 		
 		return result;
 	}
-
+	
 	private boolean hasStepActed(Data<WorkflowState, Token> result) {
 		return result.value().map(t -> t.actionData().isPresent()).orElse(false);
+	}
+
+	private ActionData actionOutputIn(WorkflowState workflowState) {
+		return workflowState.actionOutput().orElse(null);
 	}
 	
 	private class StepBehavior implements Behavior<WorkflowState, Token, Token> {

@@ -28,10 +28,6 @@ public class Token {
 		return Optional.ofNullable(actionData);
 	}
 	
-	public static boolean isForProceeding(Data<WorkflowState, Token> inputData) {
-		return Token.from(inputData).map(ConsumeToken::isConsumeToken).orElse(false);
-	}
-	
 	Token moveTo(Node node) {
 		return new Token(node, actionData);
 	}
