@@ -29,11 +29,7 @@ public class Tokens {
 	}
 	
 	public Optional<Token> firstTokenIn(Node node) {
-		return firstTokenIn(node.name());
-	}
-	
-	public Optional<Token> firstTokenIn(String nodeName) {
-		return inNode(nodeName).findFirst();
+		return inNode(node.name()).findFirst();
 	}
 
 	Tokens moveToken(Token token, Node toNode) {
