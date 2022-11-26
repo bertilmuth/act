@@ -23,11 +23,6 @@ public class Tokens {
 			.filter(token -> token.node().equals(node));
 	}
 	
-	public boolean isAnyTokenIn(Node node) {
-		boolean b = inNode(node).count() >= 1;
-		return b;
-	}
-	
 	public Optional<Token> firstTokenIn(Node node) {
 		return inNode(node).findFirst();
 	}
