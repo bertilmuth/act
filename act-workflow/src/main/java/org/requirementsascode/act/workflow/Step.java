@@ -29,7 +29,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 	}
 
 	private Data<WorkflowState, Token> consumeToken(WorkflowState workflowState, Action owningAction) {
-		List<Token> tokensInAction = owningAction.tokens(workflowState).collect(Collectors.toList());
+		List<Token> tokensInAction = workflowState.tokensIn(owningAction).collect(Collectors.toList());
 		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, actionOutputIn(workflowState)));
 				
 		for (Token token : tokensInAction) {

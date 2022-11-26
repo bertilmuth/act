@@ -28,7 +28,7 @@ public class WorkflowState {
 		return tokens;
 	}
 	
-	private Stream<Token> tokensIn(Node node) {
+	public Stream<Token> tokensIn(Node node) {
 		return tokens().stream().filter(token -> token.node().equals(node));
 	}
 	
