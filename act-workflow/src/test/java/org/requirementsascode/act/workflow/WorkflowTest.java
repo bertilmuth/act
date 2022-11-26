@@ -50,10 +50,11 @@ class WorkflowTest {
 			.build();
 		
 		Data<WorkflowState, ActionData> afterAction1 = workflow.start(str(START_WORKFLOW));
-		
+		WorkflowState state = afterAction1.state();
+
 		assertEquals(str(ACTION1), afterAction1.value().get());
-		assertEquals(1, tokensList(afterAction1.state()).size());
-		assertEquals(token(action1, str(ACTION1)), action1.firstToken(afterAction1.state()).get());
+		assertEquals(1, tokensList(state).size());
+		assertEquals(token(action1, str(ACTION1)), state.firstTokenIn(action1).get());
 	}
 	
 	@Test
@@ -71,11 +72,12 @@ class WorkflowTest {
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
 		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		WorkflowState state = afterAction2.state();
 		
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
 		assertEquals(action1_2, afterAction2.value().get());
-		assertEquals(1, tokensList(afterAction2.state()).size());
-		assertEquals(token(action2, action1_2), action2.firstToken(afterAction2.state()).get());
+		assertEquals(1, tokensList(state).size());
+		assertEquals(token(action2, action1_2), action2.firstToken(state).get());
 	}
 	
 	@Test
@@ -93,11 +95,11 @@ class WorkflowTest {
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
 		Data<WorkflowState, ActionData> afterAction2i = workflow.nextStep(afterAction1State, new IntegerData(1));
+		WorkflowState state = afterAction2i.state();
 		
-		System.out.println(afterAction2i.state().tokens());
 		assertEquals(new IntegerData(2), afterAction2i.value().get());
-		assertEquals(1, tokensList(afterAction2i.state()).size());
-		assertEquals(token(action2i, new IntegerData(2)), action2i.firstToken(afterAction2i.state()).get());
+		assertEquals(1, tokensList(state).size());
+		assertEquals(token(action2i, new IntegerData(2)), action2i.firstToken(state).get());
 	}
 	
 	@Test
@@ -115,10 +117,10 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
+		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 		
-		assertEquals(token(action2b, str(ACTION1)), action2b.firstToken(afterAction1State).get());
-		assertEquals(2, tokensList(afterAction1State).size());
+		assertEquals(token(action2b, str(ACTION1)), action2b.firstToken(state).get());
+		assertEquals(2, tokensList(state).size());
 	}
 	
 	@Test
@@ -137,11 +139,11 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
-		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
+		WorkflowState state = workflow.nextStep(afterAction1State).state();
 
-		assertEquals(token(action2a, str(ACTION1 + "." + ACTION2A)), action2a.firstToken(afterForkState).get());
-		assertEquals(token(action2b, str(ACTION1 + "." + ACTION2B)), action2b.firstToken(afterForkState).get());
-		assertEquals(2, tokensList(afterForkState).size());
+		assertEquals(token(action2a, str(ACTION1 + "." + ACTION2A)), action2a.firstToken(state).get());
+		assertEquals(token(action2b, str(ACTION1 + "." + ACTION2B)), action2b.firstToken(state).get());
+		assertEquals(2, tokensList(state).size());
 	}
 	
 	@Test
@@ -163,10 +165,10 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
-		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
+		WorkflowState state = workflow.nextStep(afterAction1State).state();
 
-		assertEquals(token(action3, str(ACTION1 + "." + ACTION2A)), action3.firstToken(afterForkState).get());
-		assertEquals(2, tokensList(afterForkState).size());
+		assertEquals(token(action3, str(ACTION1 + "." + ACTION2A)), action3.firstToken(state).get());
+		assertEquals(2, tokensList(state).size());
 	}
 	
 	@Test
@@ -179,8 +181,8 @@ class WorkflowTest {
 			.dataFlows()
 			.build();
 		
-		WorkflowState tokensAfterStartState = workflow.start(new UnknownData()).state();
-		assertTrue(tokensList(tokensAfterStartState).isEmpty());
+		WorkflowState state = workflow.start(new UnknownData()).state();
+		assertTrue(tokensList(state).isEmpty());
 	}
 	
 	@Test
@@ -194,31 +196,31 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterStartState = workflow.start(new UnknownData()).state();
-		WorkflowState afterNextStepState = workflow.nextStep(afterStartState).state();
-		assertTrue(tokensList(afterNextStepState).isEmpty());
+		WorkflowState state = workflow.nextStep(afterStartState).state();
+		assertTrue(tokensList(state).isEmpty());
 	}
 
 	private StringData str(String str) {
 		return new StringData(str);
 	}
 	
-	private StringData action1Performed(WorkflowState workflowState, StringData input) {
+	private StringData action1Performed(WorkflowState state, StringData input) {
 		return new StringData(ACTION1);
 	}
 	
-	private StringData action2Performed(WorkflowState workflowState, StringData input) {
-		return previousValuePlus(ACTION2, workflowState);
+	private StringData action2Performed(WorkflowState state, StringData input) {
+		return previousValuePlus(ACTION2, state);
 	}
 	
-	private StringData action2aPerformed(WorkflowState workflowState, StringData input) {
-		return previousValuePlus(ACTION2A, workflowState);
+	private StringData action2aPerformed(WorkflowState state, StringData input) {
+		return previousValuePlus(ACTION2A, state);
 	}
 	
-	private StringData action2bPerformed(WorkflowState workflowState, StringData input) {
-		return previousValuePlus(ACTION2B, workflowState);
+	private StringData action2bPerformed(WorkflowState state, StringData input) {
+		return previousValuePlus(ACTION2B, state);
 	}
 	
-	private IntegerData action2iPerformed(WorkflowState workflowState, IntegerData input) {
+	private IntegerData action2iPerformed(WorkflowState state, IntegerData input) {
 		return new IntegerData(input.integer + 1);
 	}
 	
@@ -232,8 +234,8 @@ class WorkflowTest {
 		return concatenatedStringValue;
 	}
 	
-	private List<Token> tokensList(WorkflowState afterStartState) {
-		return afterStartState.tokens().stream().collect(Collectors.toList());
+	private List<Token> tokensList(WorkflowState state) {
+		return state.tokens().stream().collect(Collectors.toList());
 	}
 }
 

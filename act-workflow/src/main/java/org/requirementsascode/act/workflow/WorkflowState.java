@@ -23,6 +23,14 @@ public class WorkflowState {
 		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
 	}
 	
+	public Tokens tokens() {
+		return tokens;
+	}
+	
+	public Optional<Token> firstTokenIn(Node node) {
+		return tokens().stream().findFirst();
+	}
+	
 	Data<WorkflowState, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);
@@ -44,10 +52,6 @@ public class WorkflowState {
 		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
 		WorkflowState newWorkflowState = new WorkflowState(statemachine, tokens, actionOutput);
 		return data(newWorkflowState, token);
-	}
-
-	public Tokens tokens() {
-		return tokens;
 	}
 
 	Optional<ActionData> actionOutput() {
