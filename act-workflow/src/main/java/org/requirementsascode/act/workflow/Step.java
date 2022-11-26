@@ -2,8 +2,9 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.when;
+import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -43,11 +44,6 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	private boolean hasStepActed(Data<WorkflowState, Token> result) {
 		return result.value().map(t -> t.actionData().isPresent()).orElse(false);
-	}
-
-	static class Proceed implements ActionData {
-		private Proceed() {
-		};
 	}
 	
 	private class StepBehavior implements Behavior<WorkflowState, Token, Token> {

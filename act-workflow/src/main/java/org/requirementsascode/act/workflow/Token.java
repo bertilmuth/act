@@ -1,11 +1,11 @@
 package org.requirementsascode.act.workflow;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.Objects.requireNonNull;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.workflow.Step.Proceed;
 
 public class Token {
 	private final Node node;
