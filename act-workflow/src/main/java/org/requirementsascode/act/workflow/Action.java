@@ -15,9 +15,9 @@ import org.requirementsascode.act.statemachine.State;
 
 public class Action implements Node{
 	private final String name;
-	private final ActionBehavior actionBehavior;
+	private final Behavior<WorkflowState,Token,Token> actionBehavior;
 	
-	Action(String name, ActionBehavior actionBehavior) {
+	Action(String name, Behavior<WorkflowState,Token,Token> actionBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 	}	
@@ -30,7 +30,7 @@ public class Action implements Node{
 	@Override
 	public State<WorkflowState, Token> asState() {		
 		State<WorkflowState, Token> state = state(name(), s -> s.hasTokens(this), 
-			inCase(ConsumeToken::isContained, actionBehavior.asBehavior(this)));
+			inCase(ConsumeToken::isContained, d -> consumeToken(d, actionBehavior)));
 		return state;
 	}
 	
