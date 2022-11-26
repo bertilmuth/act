@@ -36,7 +36,7 @@ public class WorkflowState {
 		return tokensIn(node).findFirst();
 	}
 	
-	public boolean hasTokens(Node node){
+	public boolean areTokensIn(Node node){
 		return firstTokenIn(node).isPresent();
 	}
 	

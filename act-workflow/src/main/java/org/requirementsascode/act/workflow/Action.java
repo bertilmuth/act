@@ -29,7 +29,7 @@ public class Action implements Node{
 
 	@Override
 	public State<WorkflowState, Token> asState() {		
-		State<WorkflowState, Token> state = state(name(), s -> s.hasTokens(this), 
+		State<WorkflowState, Token> state = state(name(), s -> s.areTokensIn(this), 
 			inCase(ConsumeToken::isContained, this::consumeToken));
 		return state;
 	}
