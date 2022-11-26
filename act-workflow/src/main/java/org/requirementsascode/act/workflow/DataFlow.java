@@ -25,7 +25,7 @@ public class DataFlow implements Transitionable<WorkflowState, Token>{
 	
 	private Data<WorkflowState,Token> moveToken(Data<WorkflowState,Token> inputDataWithToken){
 		ActionData inputActionData = ActionData.from(inputDataWithToken);
-		Token inputToken = Token.from(inputDataWithToken)
+		Token storeToken = Token.from(inputDataWithToken)
 			.map(t -> t.replaceActionData(new StoreToken(t)))
 			.orElse(null);
 
