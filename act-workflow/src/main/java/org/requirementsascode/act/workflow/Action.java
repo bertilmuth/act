@@ -1,9 +1,9 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
@@ -29,7 +29,8 @@ public class Action implements Node{
 
 	@Override
 	public State<WorkflowState, Token> asState() {		
-		State<WorkflowState, Token> state = state(name(), s -> s.hasTokens(this), when(Token.class, actionBehavior.asBehavior(this)));
+		State<WorkflowState, Token> state = state(name(), s -> s.hasTokens(this), 
+			inCase(ConsumeToken::isContained, actionBehavior.asBehavior(this)));
 		return state;
 	}
 	
