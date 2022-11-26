@@ -24,11 +24,12 @@ public class DataFlow implements Transitionable<WorkflowState, Token>{
 	}
 	
 	private Data<WorkflowState,Token> moveToken(Data<WorkflowState,Token> inputDataWithToken){
-		ActionData inputActionData = ActionData.from(inputDataWithToken);
+		WorkflowState state = inputDataWithToken.state();
+
 		Token storeToken = Token.from(inputDataWithToken)
 			.map(t -> t.replaceActionData(new StoreToken(t)))
 			.orElse(null);
 
-		return inputDataWithToken.state().moveToken(inputDataWithToken, toNode);
+		return state.moveToken(inputDataWithToken, toNode);
 	}
 }
