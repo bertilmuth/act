@@ -14,46 +14,51 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 
-public class Action implements Node{
+public class Action implements Node {
 	private final String name;
-	private final Behavior<WorkflowState,Token,Token> actionBehavior;
-	
-	Action(String name, Behavior<WorkflowState,Token,Token> actionBehavior) {
+	private final Behavior<WorkflowState, Token, Token> actionBehavior;
+
+	Action(String name, Behavior<WorkflowState, Token, Token> actionBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
-	}	
-	
+	}
+
 	@Override
 	public String name() {
 		return name;
 	}
 
 	@Override
-	public State<WorkflowState, Token> asState() {		
+	public State<WorkflowState, Token> asState() {
 		State<WorkflowState, Token> state = state(name(), s -> s.areTokensIn(this), 
-			inCase(ConsumeToken::isContained, this::consumeToken));
+			actionBehavior());
 		return state;
 	}
-	
-	Data<WorkflowState, Token> consumeToken(Data<WorkflowState,Token> inputData) {
+
+	private Behavior<WorkflowState, Token, Token> actionBehavior() {
+		Behavior<WorkflowState, Token, Token> behavior = inCase(ConsumeToken::isContained, this::consumeToken);
+		return behavior;
+	}
+
+	Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		List<Token> tokensInAction = state.tokensIn(this).collect(Collectors.toList());
 		Data<WorkflowState, Token> result = data(state, token(this, actionOutputIn(state)));
-				
+
 		for (Token token : tokensInAction) {
 			result = actionBehavior.actOn(data(result.state(), token));
-			if(hasStepActed(result)) {
+			if (hasStepActed(result)) {
 				break;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	private ActionData actionOutputIn(WorkflowState workflowState) {
 		return workflowState.actionOutput().orElse(null);
 	}
-	
+
 	private boolean hasStepActed(Data<WorkflowState, Token> result) {
 		return result.value().map(t -> t.actionData().isPresent()).orElse(false);
 	}
