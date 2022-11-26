@@ -36,6 +36,10 @@ public class WorkflowState {
 		return tokensIn(node).findFirst();
 	}
 	
+	public boolean hasTokens(Node node){
+		return firstTokenIn(node).isPresent();
+	}
+	
 	Data<WorkflowState, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);

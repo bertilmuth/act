@@ -22,7 +22,7 @@ public class Action implements Node{
 
 	@Override
 	public State<WorkflowState, Token> asState() {		
-		State<WorkflowState, Token> state = state(name(), this::hasTokens, 
+		State<WorkflowState, Token> state = state(name(), s -> s.hasTokens(this), 
 			when(Token.class, actionBehavior.asBehavior(this)));
 		return state;
 	}
