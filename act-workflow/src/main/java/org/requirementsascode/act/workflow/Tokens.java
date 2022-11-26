@@ -28,6 +28,10 @@ public class Tokens {
 		return b;
 	}
 	
+	public Optional<Token> firstTokenIn(Node node) {
+		return firstTokenIn(node.name());
+	}
+	
 	public Optional<Token> firstTokenIn(String nodeName) {
 		return inNode(nodeName).findFirst();
 	}
