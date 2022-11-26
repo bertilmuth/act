@@ -4,6 +4,7 @@ import static java.util.Collections.emptyList;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -27,8 +28,12 @@ public class WorkflowState {
 		return tokens;
 	}
 	
+	private Stream<Token> tokensIn(Node node) {
+		return tokens().stream().filter(token -> token.node().equals(node));
+	}
+	
 	public Optional<Token> firstTokenIn(Node node) {
-		return tokens().stream().findFirst();
+		return tokensIn(node).findFirst();
 	}
 	
 	Data<WorkflowState, Token> replaceToken(Token tokenBefore, Token tokenAfter) {

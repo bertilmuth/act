@@ -77,7 +77,7 @@ class WorkflowTest {
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
 		assertEquals(action1_2, afterAction2.value().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(token(action2, action1_2), action2.firstToken(state).get());
+		assertEquals(token(action2, action1_2), state.firstTokenIn(action2).get());
 	}
 	
 	@Test
@@ -99,7 +99,7 @@ class WorkflowTest {
 		
 		assertEquals(new IntegerData(2), afterAction2i.value().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(token(action2i, new IntegerData(2)), action2i.firstToken(state).get());
+		assertEquals(token(action2i, new IntegerData(2)), state.firstTokenIn(action2i).get());
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 		
-		assertEquals(token(action2b, str(ACTION1)), action2b.firstToken(state).get());
+		assertEquals(token(action2b, str(ACTION1)), state.firstTokenIn(action2b).get());
 		assertEquals(2, tokensList(state).size());
 	}
 	
