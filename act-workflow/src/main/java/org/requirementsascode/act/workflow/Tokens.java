@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Tokens {
@@ -21,10 +20,6 @@ public class Tokens {
 	public Stream<Token> inNode(Node node) {
 		return this.stream()
 			.filter(token -> token.node().equals(node));
-	}
-	
-	public Optional<Token> firstTokenIn(Node node) {
-		return inNode(node).findFirst();
 	}
 
 	Tokens moveToken(Token token, Node toNode) {
