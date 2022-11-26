@@ -1,9 +1,10 @@
 package org.requirementsascode.act.workflow;
 
-import java.util.function.BiFunction;
-import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
+import static org.requirementsascode.act.statemachine.StatemachineApi.when;
+
+import java.util.function.BiFunction;
+
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
@@ -22,7 +23,7 @@ class StepBehavior<T extends ActionData, U extends ActionData> implements Behavi
 		Data<WorkflowState, ActionData> outputActionData = typedFunction.actOn(inputActionData);
 
 		Token inputToken = tokenFrom(inputData);
-		Token outputToken = updateActionData(inputToken, outputActionData);
+		Token outputToken = inputToken.replaceActionDataWith(outputActionData);
 
 		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(inputToken, outputToken);
 		return updatedWorkflow;
@@ -34,10 +35,6 @@ class StepBehavior<T extends ActionData, U extends ActionData> implements Behavi
 
 	private Token tokenFrom(Data<WorkflowState, Token> inputData) {
 		return Token.from(inputData).orElseThrow(() -> new IllegalArgumentException("No token present!"));
-	}
-
-	private Token updateActionData(Token token, Data<WorkflowState, ActionData> outputActionData) {
-		return token(token.node(), outputActionData.value().orElse(null));
 	}
 
 	private Data<WorkflowState, U> applyFunctionOnActionData(Data<WorkflowState, T> input) {

@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -26,6 +27,10 @@ public class Token {
 	
 	public Optional<ActionData> actionData() {
 		return Optional.ofNullable(actionData);
+	}
+	
+	Token replaceActionDataWith(Data<WorkflowState, ActionData> outputData) {
+		return token(node(), outputData.value().orElse(null));
 	}
 	
 	Token moveTo(Node node) {

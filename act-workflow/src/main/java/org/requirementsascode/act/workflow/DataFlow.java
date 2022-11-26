@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import org.requirementsascode.act.core.Data;
@@ -23,6 +24,9 @@ public class DataFlow implements Transitionable<WorkflowState, Token>{
 	}
 	
 	private Data<WorkflowState,Token> moveToken(Data<WorkflowState,Token> inputDataWithToken){
+		/*WorkflowState state = inputDataWithToken.state();
+		Token token = Token.from(inputDataWithToken).orElse(null);
+		return data(state, token);*/
 		return inputDataWithToken.state().moveToken(inputDataWithToken, toNode);
 	}
 }
