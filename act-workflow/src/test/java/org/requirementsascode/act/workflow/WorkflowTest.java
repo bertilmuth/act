@@ -139,8 +139,8 @@ class WorkflowTest {
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
 		WorkflowState afterForkState = workflow.nextStep(afterAction1State).state();
 
-		assertEquals(token(action2a, str(ACTION1 + "." + ACTION2A)), afterForkState.tokens().firstTokenIn(action2a).get());
-		assertEquals(token(action2b, str(ACTION1 + "." + ACTION2B)), afterForkState.tokens().firstTokenIn(action2b).get());
+		assertEquals(token(action2a, str(ACTION1 + "." + ACTION2A)), action2a.firstToken(afterForkState).get());
+		assertEquals(token(action2b, str(ACTION1 + "." + ACTION2B)), action2b.firstToken(afterForkState).get());
 		assertEquals(2, tokensList(afterForkState).size());
 	}
 	
