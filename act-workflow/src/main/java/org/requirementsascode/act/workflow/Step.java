@@ -15,7 +15,7 @@ import org.requirementsascode.act.core.Data;
 
 public class Step<T extends ActionData, U extends ActionData> implements ActionBehavior {
 	private final Behavior<WorkflowState, Token, Token> stepBehavior;
-	public static final Proceed proceed = new Proceed();
+	public static final ConsumeToken proceed = new ConsumeToken();
 
 	Step(Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
 		requireNonNull(inputClass, "inputClass must be non-null!");

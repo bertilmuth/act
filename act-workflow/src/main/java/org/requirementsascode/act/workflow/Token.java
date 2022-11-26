@@ -33,7 +33,7 @@ public class Token {
 	}
 
 	private static boolean containsProceed(Token token) {
-		return token.actionData().map(ad -> ad instanceof Proceed).orElse(false);
+		return token.actionData().map(ad -> ad instanceof ConsumeToken).orElse(false);
 	}
 	
 	Token moveTo(Node node) {
