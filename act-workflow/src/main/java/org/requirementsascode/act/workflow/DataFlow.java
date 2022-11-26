@@ -3,11 +3,13 @@ package org.requirementsascode.act.workflow;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
+import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class DataFlow implements Transitionable<WorkflowState, Token>{
 	private final Node fromNode;
@@ -24,9 +26,10 @@ public class DataFlow implements Transitionable<WorkflowState, Token>{
 	}
 	
 	private Data<WorkflowState,Token> moveToken(Data<WorkflowState,Token> inputDataWithToken){
-		/*WorkflowState state = inputDataWithToken.state();
-		Token token = Token.from(inputDataWithToken).orElse(null);
-		return data(state, token);*/
+		ActionData inputActionData = ActionData.from(inputDataWithToken);
+		Token inputToken = Token.from(inputDataWithToken).orElse(null);
+		Token storeToken = inputToken.replaceActionData(new StoreToken(inputToken));
+
 		return inputDataWithToken.state().moveToken(inputDataWithToken, toNode);
 	}
 }

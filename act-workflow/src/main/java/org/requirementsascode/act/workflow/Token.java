@@ -29,8 +29,8 @@ public class Token {
 		return Optional.ofNullable(actionData);
 	}
 	
-	Token replaceActionDataWith(Data<WorkflowState, ActionData> outputData) {
-		return token(node(), outputData.value().orElse(null));
+	Token replaceActionData(ActionData outputActionData) {
+		return token(node(), outputActionData);
 	}
 	
 	Token moveTo(Node node) {

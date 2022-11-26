@@ -19,11 +19,11 @@ class StepBehavior<T extends ActionData, U extends ActionData> implements Behavi
 
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, ActionData> inputActionData = unboxActionData(inputData);
-		Data<WorkflowState, ActionData> outputActionData = typedFunction.actOn(inputActionData);
+		Data<WorkflowState, ActionData> functionInputData = unboxActionData(inputData);
+		ActionData outputActionData = typedFunction.actOn(functionInputData).value().orElse(null);
 
 		Token inputToken = tokenFrom(inputData);
-		Token outputToken = inputToken.replaceActionDataWith(outputActionData);
+		Token outputToken = inputToken.replaceActionData(outputActionData);
 
 		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(inputToken, outputToken);
 		return updatedWorkflow;
