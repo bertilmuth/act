@@ -19,7 +19,7 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	@Override
 	public Behavior<WorkflowState, Token, Token> asBehavior(Action owningAction) {
-		return inCase(ConsumeToken::isContained, d -> owningAction.consumeToken(d, stepBehavior));
+		return inCase(ConsumeToken::isContained, d -> owningAction.consumeToken(d));
 	}
 }
 
