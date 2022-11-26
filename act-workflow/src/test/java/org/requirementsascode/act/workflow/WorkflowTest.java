@@ -117,7 +117,7 @@ class WorkflowTest {
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
 		
-		assertEquals(token(action2b, str(ACTION1)), afterAction1State.tokens().firstTokenIn(action2b).get());
+		assertEquals(token(action2b, str(ACTION1)), action2b.firstToken(afterAction1State).get());
 		assertEquals(2, tokensList(afterAction1State).size());
 	}
 	
