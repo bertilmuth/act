@@ -25,10 +25,11 @@ public class Step<T extends ActionData, U extends ActionData> implements ActionB
 
 	@Override
 	public Behavior<WorkflowState, Token, Token> asBehavior(Action owningAction) {
-		return inCase(ConsumeToken::isContained, d -> consumeToken(d.state(), owningAction));
+		return inCase(ConsumeToken::isContained, d -> consumeToken(d, owningAction));
 	}
 
-	private Data<WorkflowState, Token> consumeToken(WorkflowState workflowState, Action owningAction) {
+	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState,Token> inputData, Action owningAction) {
+		WorkflowState workflowState = inputData.state();
 		List<Token> tokensInAction = workflowState.tokensIn(owningAction).collect(Collectors.toList());
 		Data<WorkflowState, Token> result = data(workflowState, token(owningAction, actionOutputIn(workflowState)));
 				
