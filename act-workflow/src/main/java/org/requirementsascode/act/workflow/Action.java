@@ -30,14 +30,14 @@ public class Action implements Node{
 	@Override
 	public State<WorkflowState, Token> asState() {		
 		State<WorkflowState, Token> state = state(name(), s -> s.hasTokens(this), 
-			inCase(ConsumeToken::isContained, d -> consumeToken(d)));
+			inCase(ConsumeToken::isContained, this::consumeToken));
 		return state;
 	}
 	
 	Data<WorkflowState, Token> consumeToken(Data<WorkflowState,Token> inputData) {
-		WorkflowState workflowState = inputData.state();
-		List<Token> tokensInAction = workflowState.tokensIn(this).collect(Collectors.toList());
-		Data<WorkflowState, Token> result = data(workflowState, token(this, actionOutputIn(workflowState)));
+		WorkflowState state = inputData.state();
+		List<Token> tokensInAction = state.tokensIn(this).collect(Collectors.toList());
+		Data<WorkflowState, Token> result = data(state, token(this, actionOutputIn(state)));
 				
 		for (Token token : tokensInAction) {
 			result = actionBehavior.actOn(data(result.state(), token));
