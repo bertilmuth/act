@@ -14,10 +14,11 @@ public interface Node {
 	}
 	
 	default Optional<Token> firstToken(WorkflowState workflowState) {
-		return ownedTokens(workflowState).findFirst();
+		return tokens(workflowState).findFirst();
 	}
 	
-	default Stream<Token> ownedTokens(WorkflowState workflowState){
-		return workflowState.tokens().inNode(this);
+	default Stream<Token> tokens(WorkflowState workflowState){
+		return workflowState.tokens().stream()
+			.filter(token -> token.node().equals(this));
 	}
 }

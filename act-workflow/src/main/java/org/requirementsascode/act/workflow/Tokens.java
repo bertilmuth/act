@@ -17,11 +17,6 @@ public class Tokens {
 		return tokens.stream();
 	}
 
-	public Stream<Token> inNode(Node node) {
-		return this.stream()
-			.filter(token -> token.node().equals(node));
-	}
-
 	Tokens moveToken(Token token, Node toNode) {
 		requireNonNull(token, "token must be non-null!");
 		requireNonNull(toNode, "toNode must be non-null!");
