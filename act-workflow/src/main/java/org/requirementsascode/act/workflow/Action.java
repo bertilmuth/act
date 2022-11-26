@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
+import java.util.stream.Stream;
+
 import org.requirementsascode.act.statemachine.State;
 
 public class Action implements Node{
@@ -25,6 +27,10 @@ public class Action implements Node{
 		State<WorkflowState, Token> state = state(name(), wf -> wf.tokens().isAnyTokenIn(name()), 
 			when(Token.class, actionBehavior.asBehavior(this)));
 		return state;
+	}
+	
+	public Stream<Token> ownedTokens(WorkflowState workflowState){
+		return workflowState.tokens().inNode(this.name);
 	}
 
 	@Override
