@@ -18,18 +18,18 @@ public class Tokens {
 		return tokens.stream();
 	}
 
-	public Stream<Token> inNode(String nodeName) {
+	public Stream<Token> inNode(Node node) {
 		return this.stream()
-			.filter(token -> token.node().name().equals(nodeName));
+			.filter(token -> token.node().equals(node));
 	}
 	
-	public boolean isAnyTokenIn(String nodeName) {
-		boolean b = inNode(nodeName).count() >= 1;
+	public boolean isAnyTokenIn(Node node) {
+		boolean b = inNode(node).count() >= 1;
 		return b;
 	}
 	
 	public Optional<Token> firstTokenIn(Node node) {
-		return inNode(node.name()).findFirst();
+		return inNode(node).findFirst();
 	}
 
 	Tokens moveToken(Token token, Node toNode) {

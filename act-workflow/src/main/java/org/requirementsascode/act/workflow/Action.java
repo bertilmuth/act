@@ -24,13 +24,17 @@ public class Action implements Node{
 
 	@Override
 	public State<WorkflowState, Token> asState() {		
-		State<WorkflowState, Token> state = state(name(), wf -> wf.tokens().isAnyTokenIn(name()), 
+		State<WorkflowState, Token> state = state(name(), this::hasTokens, 
 			when(Token.class, actionBehavior.asBehavior(this)));
 		return state;
 	}
 	
+	public boolean hasTokens(WorkflowState workflowState){
+		return ownedTokens(workflowState).findAny().isPresent();
+	}
+	
 	public Stream<Token> ownedTokens(WorkflowState workflowState){
-		return workflowState.tokens().inNode(this.name);
+		return workflowState.tokens().inNode(this);
 	}
 
 	@Override
