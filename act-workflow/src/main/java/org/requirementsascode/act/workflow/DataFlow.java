@@ -7,7 +7,6 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
-import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class DataFlow implements Transitionable<WorkflowState, Token>{
 	private final Node fromNode;
@@ -25,11 +24,11 @@ public class DataFlow implements Transitionable<WorkflowState, Token>{
 	
 	private Data<WorkflowState,Token> moveToken(Data<WorkflowState,Token> inputDataWithToken){
 		WorkflowState state = inputDataWithToken.state();
+		return moveToken(state, inputDataWithToken);
+	}
 
-		Token storeToken = Token.from(inputDataWithToken)
-			.map(t -> t.replaceActionData(new StoreToken(t)))
-			.orElse(null);
-
+	private Data<WorkflowState, Token> moveToken(WorkflowState state,
+			Data<WorkflowState, Token> inputDataWithToken) {
 		return state.moveToken(inputDataWithToken, toNode);
 	}
 }
