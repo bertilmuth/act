@@ -24,11 +24,6 @@ public class DataFlow implements Transitionable<WorkflowState, Token>{
 	
 	private Data<WorkflowState,Token> moveToken(Data<WorkflowState,Token> inputDataWithToken){
 		WorkflowState state = inputDataWithToken.state();
-		return consumeToken(state, inputDataWithToken);
-	}
-
-	private Data<WorkflowState, Token> consumeToken(WorkflowState state,
-			Data<WorkflowState, Token> inputDataWithToken) {
-		return state.moveToken(inputDataWithToken, toNode);
+		return toNode.consumeToken(state, inputDataWithToken);
 	}
 }

@@ -34,6 +34,12 @@ public class Action implements Node {
 			actionBehavior());
 		return state;
 	}
+	
+	@Override
+	public Data<WorkflowState, Token> consumeToken(WorkflowState state,
+			Data<WorkflowState, Token> inputDataWithToken) {
+		return state.moveToken(inputDataWithToken, this);
+	}
 
 	private Behavior<WorkflowState, Token, Token> actionBehavior() {
 		Behavior<WorkflowState, Token, Token> behavior = inCase(ConsumeToken::isContained, this::consumeToken);
