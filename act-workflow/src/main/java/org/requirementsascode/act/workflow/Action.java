@@ -2,6 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
+import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 
 public class Action implements Node {
@@ -35,12 +37,18 @@ public class Action implements Node {
 	}
 
 	@Override
-	public Data<WorkflowState, Token> storeToken(WorkflowState state, Data<WorkflowState, Token> inputDataWithToken) {
+	public Data<WorkflowState, Token> storeToken(Data<WorkflowState, Token> inputDataWithToken) {
+		WorkflowState state = inputDataWithToken.state();
 		return state.moveToken(inputDataWithToken, this);
 	}
 
 	private Behavior<WorkflowState, Token, Token> actionBehavior() {
-		Behavior<WorkflowState, Token, Token> behavior = inCase(ConsumeToken::isContained, this::consumeToken);
+		Behavior<WorkflowState, Token, Token> behavior = 
+			unitedBehavior(
+				new OnlyOneBehaviorMayAct<>(),
+				inCase(ConsumeToken::isContained, this::consumeToken)//,
+				//inCase(StoreToken::isContained, this::storeToken)
+			);
 		return behavior;
 	}
 
