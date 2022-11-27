@@ -15,6 +15,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
+import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class Action implements Node {
 	private final String name;
@@ -46,8 +47,8 @@ public class Action implements Node {
 		Behavior<WorkflowState, Token, Token> behavior = 
 			unitedBehavior(
 				new OnlyOneBehaviorMayAct<>(),
-				inCase(ConsumeToken::isContained, this::consumeToken)//,
-				//inCase(StoreToken::isContained, this::storeToken)
+				inCase(ConsumeToken::isContained, this::consumeToken),
+				inCase(StoreToken::isContained, this::storeToken)
 			);
 		return behavior;
 	}
