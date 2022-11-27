@@ -6,14 +6,14 @@ import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
 public class StoreToken implements ActionData {
-	private final Token token;
+	private final ActionData actionData;
 
-	public StoreToken(Token token){
-		this.token = token;
+	public StoreToken(ActionData actionData){
+		this.actionData = actionData;
 	};
 	
-	public Token token() {
-		return token;
+	public ActionData actionData() {
+		return actionData;
 	}
 	
 	public static boolean isContained(Data<WorkflowState, Token> inputData) {
