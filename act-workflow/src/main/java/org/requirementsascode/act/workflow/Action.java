@@ -30,14 +30,12 @@ public class Action implements Node {
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		State<WorkflowState, Token> state = state(name(), s -> s.areTokensIn(this), 
-			actionBehavior());
+		State<WorkflowState, Token> state = state(name(), s -> s.areTokensIn(this), actionBehavior());
 		return state;
 	}
-	
+
 	@Override
-	public Data<WorkflowState, Token> storeToken(WorkflowState state,
-			Data<WorkflowState, Token> inputDataWithToken) {
+	public Data<WorkflowState, Token> storeToken(WorkflowState state, Data<WorkflowState, Token> inputDataWithToken) {
 		return state.moveToken(inputDataWithToken, this);
 	}
 
