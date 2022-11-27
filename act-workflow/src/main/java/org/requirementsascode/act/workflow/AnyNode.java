@@ -18,10 +18,9 @@ class AnyNode implements Node {
 	public State<WorkflowState, Token> asState() {
 		return anyState();
 	}
-	
+
 	@Override
-	public Data<WorkflowState, Token> storeToken(WorkflowState state,
-			Data<WorkflowState, Token> inputDataWithToken) {
-		return state.moveToken(inputDataWithToken, this);
+	public Data<WorkflowState, Token> storeToken(WorkflowState state, Data<WorkflowState, Token> inputDataWithToken) {
+		return inputDataWithToken;
 	}
 }
