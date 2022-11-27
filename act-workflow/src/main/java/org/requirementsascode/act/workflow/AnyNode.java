@@ -20,7 +20,7 @@ class AnyNode implements Node {
 	}
 	
 	@Override
-	public Data<WorkflowState, Token> consumeToken(WorkflowState state,
+	public Data<WorkflowState, Token> storeToken(WorkflowState state,
 			Data<WorkflowState, Token> inputDataWithToken) {
 		return state.moveToken(inputDataWithToken, this);
 	}
