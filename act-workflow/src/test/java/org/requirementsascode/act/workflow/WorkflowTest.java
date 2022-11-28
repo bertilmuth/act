@@ -82,7 +82,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
 		Action action2i = action(ACTION2I, step(IntegerData.class, this::action2iPerformed));

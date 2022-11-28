@@ -17,6 +17,7 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
+import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialState;
@@ -44,13 +45,15 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> storedToken = storeToken(workflowState, actionData);
-		Data<WorkflowState, ActionData> stepBehaviorResult = nextStep(storedToken.state());
-		return stepBehaviorResult;
+		Data<WorkflowState, ActionData> storedTokenOutput = storeToken(workflowState, actionData);
+		Data<WorkflowState, ActionData> stepBehaviorOutput = nextStep(storedTokenOutput.state());
+		return stepBehaviorOutput;
 	}
 
 	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, ActionData actionData) {
-		return actOn(data(workflowState, actionData));
+		Data<WorkflowState, ActionData> inputData = data(workflowState, actionData);
+		StoreToken storeToken = new StoreToken(createTokenFrom(inputData));
+		return actOn(data(workflowState, storeToken));
 	}
 	
 	@Override

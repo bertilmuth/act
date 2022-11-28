@@ -36,21 +36,23 @@ public class Action implements Node {
 		State<WorkflowState, Token> state = state(name(), s -> s.areTokensIn(this), actionBehavior());
 		return state;
 	}
-
-	@Override
-	public Data<WorkflowState, Token> storeToken(Data<WorkflowState, Token> inputDataWithToken) {
-		WorkflowState state = inputDataWithToken.state();
-		return state.moveToken(inputDataWithToken, this);
-	}
-
+	
 	private Behavior<WorkflowState, Token, Token> actionBehavior() {
 		Behavior<WorkflowState, Token, Token> behavior = 
 			unitedBehavior(
 				new OnlyOneBehaviorMayAct<>(),
 				inCase(ConsumeToken::isContained, this::consumeToken),
-				inCase(StoreToken::isContained, this::storeToken)
+				inCase(StoreToken::isContained, d -> {
+					Token tokenToStore = Token.from(d).flatMap(Token::actionData).map(t -> (StoreToken)t).map(StoreToken::token).orElse(null);
+					return storeToken(d.state(), tokenToStore);
+				})
 			);
 		return behavior;
+	}
+
+	@Override
+	public Data<WorkflowState, Token> storeToken(WorkflowState workflowState, Token tokenToStore) {
+		return workflowState.moveToken(data(workflowState, tokenToStore), this);
 	}
 
 	Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {

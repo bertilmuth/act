@@ -8,5 +8,5 @@ public interface Node {
 
 	State<WorkflowState, Token> asState();
 
-	Data<WorkflowState, Token> storeToken(Data<WorkflowState, Token> inputDataWithToken);
+	Data<WorkflowState, Token> storeToken(WorkflowState workflowState, Token token);
 }

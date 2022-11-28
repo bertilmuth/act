@@ -1,6 +1,6 @@
 package org.requirementsascode.act.workflow;
 
-import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
@@ -20,7 +20,7 @@ class AnyNode implements Node {
 	}
 
 	@Override
-	public Data<WorkflowState, Token> storeToken(Data<WorkflowState, Token> inputDataWithToken) {
-		return inputDataWithToken;
+	public Data<WorkflowState, Token> storeToken(WorkflowState workflowState, Token token){
+		return data(workflowState,token);
 	}
 }
