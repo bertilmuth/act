@@ -44,9 +44,13 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> providedToken = actOn(data(workflowState, actionData));
-		Data<WorkflowState, ActionData> result = nextStep(providedToken.state());
-		return result;
+		Data<WorkflowState, ActionData> storedToken = storeToken(workflowState, actionData);
+		Data<WorkflowState, ActionData> stepBehaviorResult = nextStep(storedToken.state());
+		return stepBehaviorResult;
+	}
+
+	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, ActionData actionData) {
+		return actOn(data(workflowState, actionData));
 	}
 	
 	@Override
@@ -57,10 +61,11 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 
 	private Data<WorkflowState, Token> tokenized(Data<WorkflowState,ActionData> inputData) {
-		AnyNode anyNode = new AnyNode();
-		Token token = token(anyNode, inputData.value().orElse(null));
-		Data<WorkflowState, Token> data = data(inputData.state(), token);
-		return data;
+		return data(inputData.state(), createTokenFrom(inputData));
+	}
+
+	private Token createTokenFrom(Data<WorkflowState, ActionData> inputData) {
+		return token(new AnyNode(), inputData.value().orElse(null));
 	}
 	
 	static Workflow createInitialWorkflow(Actions actions, DataFlows dataFlows, InitialActions initialActions){
