@@ -17,7 +17,7 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
-import org.requirementsascode.act.workflow.trigger.StoreToken;
+import org.requirementsascode.act.workflow.trigger.MoveToken;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialState;
@@ -37,7 +37,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		return storeThenConsumeToken(initialState, actionData);
+		return moveThenConsumeToken(initialState, actionData);
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
@@ -46,17 +46,17 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
 		Token token = createTokenFrom(data(workflowState, actionData));
-		ActionData storeTokenCommand = new StoreToken(token);
-		return storeThenConsumeToken(workflowState, storeTokenCommand);
+		ActionData moveTokenCommand = new MoveToken(token);
+		return moveThenConsumeToken(workflowState, moveTokenCommand);
 	}
 
-	private Data<WorkflowState, ActionData> storeThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> storedTokenOutput = storeToken(workflowState, actionData);
-		Data<WorkflowState, ActionData> stepBehaviorOutput = nextStep(storedTokenOutput.state());
+	private Data<WorkflowState, ActionData> moveThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
+		Data<WorkflowState, ActionData> moveTokenOutput = moveToken(workflowState, actionData);
+		Data<WorkflowState, ActionData> stepBehaviorOutput = nextStep(moveTokenOutput.state());
 		return stepBehaviorOutput;
 	}
 
-	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, ActionData actionData) {
+	private Data<WorkflowState, ActionData> moveToken(WorkflowState workflowState, ActionData actionData) {
 		return actOn(data(workflowState, actionData));
 	}
 	

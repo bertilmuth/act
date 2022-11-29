@@ -15,7 +15,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
-import org.requirementsascode.act.workflow.trigger.StoreToken;
+import org.requirementsascode.act.workflow.trigger.MoveToken;
 
 public class Action implements Node {
 	private final String name;
@@ -42,17 +42,17 @@ public class Action implements Node {
 			unitedBehavior(
 				new OnlyOneBehaviorMayAct<>(),
 				inCase(ConsumeToken::isContained, this::consumeToken),
-				inCase(StoreToken::isContained, d -> {
-					Token tokenToStore = Token.from(d).flatMap(Token::actionData).map(t -> (StoreToken)t).map(StoreToken::token).orElse(null);
-					return storeToken(d.state(), tokenToStore);
+				inCase(MoveToken::isContained, d -> {
+					Token tokenToMove = Token.from(d).flatMap(Token::actionData).map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
+					return movenTokenHere(d.state(), tokenToMove);
 				})
 			);
 		return behavior;
 	}
 
 	@Override
-	public Data<WorkflowState, Token> storeToken(WorkflowState workflowState, Token tokenToStore) {
-		return workflowState.moveToken(data(workflowState, tokenToStore), this);
+	public Data<WorkflowState, Token> movenTokenHere(WorkflowState workflowState, Token tokenToMove) {
+		return workflowState.moveToken(data(workflowState, tokenToMove), this);
 	}
 
 	Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {

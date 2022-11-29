@@ -5,10 +5,10 @@ import org.requirementsascode.act.workflow.ActionData;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
-public class StoreToken implements ActionData {
+public class MoveToken implements ActionData {
 	private final Token token;
 
-	public StoreToken(Token token){
+	public MoveToken(Token token){
 		this.token = token;
 	};
 	
@@ -17,10 +17,10 @@ public class StoreToken implements ActionData {
 	}
 	
 	public static boolean isContained(Data<WorkflowState, Token> inputData) {
-		return Token.from(inputData).map(StoreToken::isContained).orElse(false);
+		return Token.from(inputData).map(MoveToken::isContained).orElse(false);
 	}
 
 	private static boolean isContained(Token token) {
-		return token.actionData().map(ad -> ad instanceof StoreToken).orElse(false);
+		return token.actionData().map(ad -> ad instanceof MoveToken).orElse(false);
 	}
 }
