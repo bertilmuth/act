@@ -37,8 +37,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		Token token = createTokenFrom(data(initialState, actionData));
-		return nextStep(initialState, actionData);
+		return storeThenConsumeToken(initialState, actionData);
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
