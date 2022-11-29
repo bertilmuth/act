@@ -46,6 +46,10 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
 		Token token = createTokenFrom(data(workflowState, actionData));
+		return storeThenConsumeToken(workflowState, token);
+	}
+
+	private Data<WorkflowState, ActionData> storeThenConsumeToken(WorkflowState workflowState, Token token) {
 		Data<WorkflowState, ActionData> storedTokenOutput = storeToken(workflowState, token);
 		Data<WorkflowState, ActionData> stepBehaviorOutput = nextStep(storedTokenOutput.state());
 		return stepBehaviorOutput;
