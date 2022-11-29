@@ -43,7 +43,7 @@ public class Action implements Node {
 				new OnlyOneBehaviorMayAct<>(),
 				inCase(ConsumeToken::isContained, this::consumeToken),
 				inCase(MoveToken::isContained, d -> {
-					Token tokenToMove = Token.from(d).flatMap(Token::actionData).map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
+					Token tokenToMove = Token.from(d).actionData().map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
 					return movenTokenHere(d.state(), tokenToMove);
 				})
 			);

@@ -10,7 +10,7 @@ public class ConsumeToken implements ActionData {
 	};
 
 	public static boolean isContained(Data<WorkflowState, Token> inputData) {
-		return Token.from(inputData).map(ConsumeToken::isContained).orElse(false);
+		return ConsumeToken.isContained(Token.from(inputData));
 	}
 
 	private static boolean isContained(Token token) {

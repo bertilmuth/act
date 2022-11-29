@@ -46,10 +46,9 @@ public class WorkflowState {
 	}
 	
 	Data<WorkflowState, Token> moveToken(Data<WorkflowState, Token> inputDataWithToken, Node toNode) {
-		return Token.from(inputDataWithToken).map(t -> {
-			Tokens tokensAfterMove = tokens().moveToken(t, toNode);
-			return updateTokens(tokensAfterMove, t);
-		}).orElse(inputDataWithToken);
+		Token t = Token.from(inputDataWithToken);
+		Tokens tokensAfterMove = tokens().moveToken(t, toNode);
+		return updateTokens(tokensAfterMove, t);
 	}
 	
 	Data<WorkflowState, Token> removeToken(Token tokenBefore) {

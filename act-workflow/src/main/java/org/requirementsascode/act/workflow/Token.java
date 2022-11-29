@@ -17,8 +17,8 @@ public class Token {
 		this.actionData = actionData;
 	}
 	
-	public static Optional<Token> from(Data<WorkflowState, Token> data) {
-		return data.value();
+	public static Token from(Data<WorkflowState, Token> data) {
+		return data.value().orElse(null);
 	}
 	
 	public Node node() {

@@ -17,10 +17,10 @@ public class MoveToken implements ActionData {
 	}
 	
 	public static boolean isContained(Data<WorkflowState, Token> inputData) {
-		return Token.from(inputData).map(MoveToken::isContained).orElse(false);
+		return MoveToken.isContainedInToken(Token.from(inputData));
 	}
 
-	private static boolean isContained(Token token) {
+	private static boolean isContainedInToken(Token token) {
 		return token.actionData().map(ad -> ad instanceof MoveToken).orElse(false);
 	}
 }

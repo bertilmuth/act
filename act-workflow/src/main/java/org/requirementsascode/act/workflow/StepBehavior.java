@@ -34,7 +34,7 @@ class StepBehavior<T extends ActionData, U extends ActionData> implements Behavi
 	}
 
 	private Token tokenFrom(Data<WorkflowState, Token> inputData) {
-		return Token.from(inputData).orElseThrow(() -> new IllegalArgumentException("No token present!"));
+		return Token.from(inputData);
 	}
 
 	private Data<WorkflowState, U> applyFunctionOnActionData(Data<WorkflowState, T> input) {
