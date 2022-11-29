@@ -37,6 +37,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
+		Token token = createTokenFrom(data(initialState, actionData));
 		return nextStep(initialState, actionData);
 	}
 	
@@ -46,17 +47,18 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
 		Token token = createTokenFrom(data(workflowState, actionData));
-		return storeThenConsumeToken(workflowState, token);
+		ActionData storeTokenCommand = new StoreToken(token);
+		return storeThenConsumeToken(workflowState, storeTokenCommand);
 	}
 
-	private Data<WorkflowState, ActionData> storeThenConsumeToken(WorkflowState workflowState, Token token) {
-		Data<WorkflowState, ActionData> storedTokenOutput = storeToken(workflowState, token);
+	private Data<WorkflowState, ActionData> storeThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
+		Data<WorkflowState, ActionData> storedTokenOutput = storeToken(workflowState, actionData);
 		Data<WorkflowState, ActionData> stepBehaviorOutput = nextStep(storedTokenOutput.state());
 		return stepBehaviorOutput;
 	}
 
-	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, Token token) {
-		return actOn(data(workflowState, new StoreToken(token)));
+	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, ActionData actionData) {
+		return actOn(data(workflowState, actionData));
 	}
 	
 	private Data<WorkflowState, ActionData> consumeToken(WorkflowState workflowState) {
