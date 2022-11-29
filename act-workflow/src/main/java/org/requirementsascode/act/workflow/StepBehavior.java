@@ -22,7 +22,7 @@ class StepBehavior<T extends ActionData, U extends ActionData> implements Behavi
 		Data<WorkflowState, ActionData> functionInputData = unboxActionData(inputData);
 		ActionData outputActionData = typedFunction.actOn(functionInputData).value().orElse(null);
 
-		Token inputToken = tokenFrom(inputData);
+		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
 
 		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(inputToken, outputToken);
@@ -31,10 +31,6 @@ class StepBehavior<T extends ActionData, U extends ActionData> implements Behavi
 
 	private Data<WorkflowState, ActionData> unboxActionData(Data<WorkflowState, Token> inputData) {
 		return data(inputData.state(), ActionData.from(inputData));
-	}
-
-	private Token tokenFrom(Data<WorkflowState, Token> inputData) {
-		return Token.from(inputData);
 	}
 
 	private Data<WorkflowState, U> applyFunctionOnActionData(Data<WorkflowState, T> input) {
