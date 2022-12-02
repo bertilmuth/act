@@ -20,7 +20,7 @@ class AnyNode implements Node {
 	}
 
 	@Override
-	public Data<WorkflowState, Token> movenTokenHere(WorkflowState workflowState, Token token){
+	public Data<WorkflowState, Token> moveTokenToMe(WorkflowState workflowState, Token token){
 		return data(workflowState,token);
 	}
 }

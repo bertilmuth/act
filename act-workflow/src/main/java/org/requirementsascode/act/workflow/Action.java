@@ -44,18 +44,13 @@ public class Action implements Node {
 				inCase(ConsumeToken::isContained, this::consumeToken),
 				inCase(MoveToken::isContained, d -> {
 					Token tokenToMove = Token.from(d).actionData().map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
-					return movenTokenHere(d.state(), tokenToMove);
+					return moveTokenToMe(d.state(), tokenToMove);
 				})
 			);
 		return behavior;
 	}
 
-	@Override
-	public Data<WorkflowState, Token> movenTokenHere(WorkflowState workflowState, Token tokenToMove) {
-		return workflowState.moveToken(data(workflowState, tokenToMove), this);
-	}
-
-	Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
+	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		List<Token> tokensInAction = state.tokensIn(this).collect(Collectors.toList());
 		Data<WorkflowState, Token> result = data(state, token(this, actionOutputIn(state)));

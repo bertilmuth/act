@@ -23,6 +23,6 @@ public class DataFlow implements Transitionable<WorkflowState, Token>{
 	}
 	
 	private Data<WorkflowState,Token> moveToken(Data<WorkflowState,Token> inputDataWithToken){
-		return toNode.movenTokenHere(inputDataWithToken.state(), Token.from(inputDataWithToken));
+		return toNode.moveTokenToMe(inputDataWithToken.state(), Token.from(inputDataWithToken));
 	}
 }
