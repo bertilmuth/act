@@ -40,7 +40,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		return nextStep(startWorkflow().state(), actionData);
+		Data<WorkflowState, ActionData> startedWorkflow = startWorkflow();
+		return nextStep(startedWorkflow.state(), actionData);
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
@@ -53,8 +54,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	private Data<WorkflowState, ActionData> startWorkflow() {
-		Data<WorkflowState, ActionData> started = actOn(data(initialWorkflowState, new StartWorkflow()));
-		return started;
+		return actOn(data(initialWorkflowState, new StartWorkflow()));
 	}
 	
 	private Data<WorkflowState, ActionData> storeAsToken(WorkflowState workflowState, ActionData actionData) {
