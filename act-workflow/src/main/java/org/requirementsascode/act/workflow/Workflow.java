@@ -41,7 +41,6 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
 		Data<WorkflowState, ActionData> started = reactTo(initialWorkflowState, new StartWorkflow());
-		System.out.println("After start:" + started);
 		return nextStep(started.state(), actionData);
 	}
 	
@@ -62,9 +61,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 
 	private Data<WorkflowState, ActionData> reactTo(WorkflowState workflowState, ActionData actionData) {
 		Data<WorkflowState, ActionData> inputData = data(workflowState, actionData);
-		System.out.println("React START: " + inputData );
 		Data<WorkflowState, ActionData> result = actOn(inputData);
-		System.out.println("React STOP. result = " + result);
 		return result;
 	}
 	
