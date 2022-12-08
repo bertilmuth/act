@@ -48,17 +48,16 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
 		Token token = createTokenFrom(data(workflowState, actionData));
-		ActionData moveTokenCommand = new MoveToken(token);
-		return reactAndThenConsumeToken(workflowState, moveTokenCommand);
+		return reactAndThenConsumeToken(workflowState, new MoveToken(token));
 	}
 
 	private Data<WorkflowState, ActionData> reactAndThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> moveTokenOutput = moveToken(workflowState, actionData);
-		Data<WorkflowState, ActionData> stepBehaviorOutput = consumeToken(moveTokenOutput.state());
-		return stepBehaviorOutput;
+		Data<WorkflowState, ActionData> output = reactTo(workflowState, actionData);
+		Data<WorkflowState, ActionData> consumeOutput = consumeToken(output.state());
+		return consumeOutput;
 	}
 
-	private Data<WorkflowState, ActionData> moveToken(WorkflowState workflowState, ActionData actionData) {
+	private Data<WorkflowState, ActionData> reactTo(WorkflowState workflowState, ActionData actionData) {
 		return actOn(data(workflowState, actionData));
 	}
 	
