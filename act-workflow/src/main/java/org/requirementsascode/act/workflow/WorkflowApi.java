@@ -23,11 +23,11 @@ public class WorkflowApi {
 		return new Token(node, actionData);
 	}
 	
-	public static DataFlow dataFlow(Node fromNode, Node toNode) {		
+	public static DataFlow<ActionData> dataFlow(Node fromNode, Node toNode) {		
 		return dataFlow(fromNode, toNode, ActionData.class, d -> true);
 	}
 	
-	public static <T extends ActionData> DataFlow dataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {		
-		return new DataFlow(fromNode, toNode, inputClass, guardCondition);
+	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {		
+		return new DataFlow<>(fromNode, toNode, inputClass, guardCondition);
 	}
 }
