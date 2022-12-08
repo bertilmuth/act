@@ -19,15 +19,16 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 import org.requirementsascode.act.workflow.trigger.MoveToken;
+import org.requirementsascode.act.workflow.trigger.StartWorkflow;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
-	private final WorkflowState initialState;
+	private final WorkflowState initialWorkflowState;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	private static final AnyNode anyNode = new AnyNode();
 	
 	Workflow(Statemachine<WorkflowState, Token> statemachine) {
 		this.statemachine = statemachine;
-		this.initialState = intialWorkflowState(statemachine);
+		this.initialWorkflowState = intialWorkflowState(statemachine);
 	}
 	
 	public final static WorkflowBuilder builder() {
@@ -39,7 +40,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		return reactAndThenConsumeToken(initialState, actionData);
+		Data<WorkflowState, ActionData> started = reactAndThenConsumeToken(initialWorkflowState, new StartWorkflow());
+		return reactAndThenConsumeToken(started.state(), actionData);
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
