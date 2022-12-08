@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 
@@ -23,6 +24,10 @@ public class WorkflowApi {
 	}
 	
 	public static DataFlow dataFlow(Node fromNode, Node toNode) {		
+		return new DataFlow(fromNode, toNode);
+	}
+	
+	public static <T extends ActionData> DataFlow dataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {		
 		return new DataFlow(fromNode, toNode);
 	}
 }
