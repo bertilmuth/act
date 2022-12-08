@@ -17,16 +17,6 @@ public class Tokens {
 		return tokens.stream();
 	}
 
-	Tokens moveToken(Token token, Node toNode) {
-		requireNonNull(token, "token must be non-null!");
-		requireNonNull(toNode, "toNode must be non-null!");
-		
-		Token movedToken = token.moveTo(toNode);
-		Tokens newTokens = replaceToken(token, movedToken);
-
-		return newTokens;
-	}
-
 	Tokens replaceToken(Token tokenToBeReplaced, Token tokenToReplace) {
 		List<Token> newTokensList = removeTokenFromList(tokenToBeReplaced);
 		newTokensList.add(tokenToReplace);
