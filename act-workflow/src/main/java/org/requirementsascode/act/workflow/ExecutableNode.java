@@ -49,11 +49,11 @@ public class ExecutableNode implements Node {
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
-		List<Token> tokensInAction = state.tokensIn(this).collect(Collectors.toList());
+		List<Token> tokensInNode = state.tokensIn(this).collect(Collectors.toList());
 		
 		Data<WorkflowState, Token> result = data(state, null);
-		for (Token token : tokensInAction) {
-			result = executableBehavior.actOn(data(result.state(), token));
+		for (Token tokenInNode : tokensInNode) {
+			result = executableBehavior.actOn(data(result.state(), tokenInNode));
 			if (hasExecuted(result)) {
 				break;
 			}
