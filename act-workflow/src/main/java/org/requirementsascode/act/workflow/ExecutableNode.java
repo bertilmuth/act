@@ -16,11 +16,11 @@ import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 import org.requirementsascode.act.workflow.trigger.MoveToken;
 
-public class Action implements Node {
+public class ExecutableNode implements Node {
 	private final String name;
 	private final Behavior<WorkflowState, Token, Token> actionBehavior;
 
-	Action(String name, Behavior<WorkflowState, Token, Token> actionBehavior) {
+	ExecutableNode(String name, Behavior<WorkflowState, Token, Token> actionBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 	}

@@ -4,8 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.requirementsascode.act.workflow.TokensDifference.*;
-import static org.requirementsascode.act.workflow.WorkflowApi.step;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class TokenDifferenceTest {
-	private static final Action ACTION = new Action("Action1", step(StringData.class, TokenDifferenceTest::runStep));
+	private static final ExecutableNode ACTION = action("Action1", StringData.class, TokenDifferenceTest::runStep);
 	private static final Token TOKEN1 = token(ACTION, new StringData("Action1"));
 	private static final Token TOKEN2 = token(ACTION, new StringData("Action2"));
 

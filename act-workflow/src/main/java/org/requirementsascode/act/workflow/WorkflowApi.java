@@ -6,15 +6,15 @@ import java.util.function.Predicate;
 import org.requirementsascode.act.core.Behavior;
 
 public class WorkflowApi {
-	public static <T extends ActionData, U extends ActionData> Action action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
-		return action(name, step(inputClass, function));
+	public static <T extends ActionData, U extends ActionData> ExecutableNode action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
+		return executableNode(name, actionBehavior(inputClass, function));
 	}
 	
-	public static Action action(String name, Behavior<WorkflowState,Token,Token> actionBehavior) {
-		return new Action(name, actionBehavior);
+	public static ExecutableNode executableNode(String name, Behavior<WorkflowState,Token,Token> behavior) {
+		return new ExecutableNode(name, behavior);
 	}
 	
-	public static <T extends ActionData, U extends ActionData> StepBehavior<T, U> step(Class<T> inputClass,
+	public static <T extends ActionData, U extends ActionData> StepBehavior<T, U> actionBehavior(Class<T> inputClass,
 			BiFunction<WorkflowState, T, U> function) {
 		return new StepBehavior<>(inputClass, function);
 	}
