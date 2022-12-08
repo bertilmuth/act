@@ -102,7 +102,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
 		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		Action action2 = action(ACTION2, StringData.class, this::action2Performed);
@@ -120,7 +119,8 @@ class WorkflowTest {
 		WorkflowState state = afterAction2.state();
 		
 		assertEquals(str(ACTION1), afterAction2.value().get());
-		assertEquals(0, tokensList(state).size());
+		assertEquals(1, tokensList(state).size());
+		assertEquals(token(action1, str(ACTION1)), state.firstTokenIn(action1).get());
 	}
 	
 	@Test
