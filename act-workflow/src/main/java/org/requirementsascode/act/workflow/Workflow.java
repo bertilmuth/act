@@ -39,7 +39,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		return moveThenConsumeToken(initialState, actionData);
+		return reactAndThenConsumeToken(initialState, actionData);
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
@@ -49,10 +49,10 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
 		Token token = createTokenFrom(data(workflowState, actionData));
 		ActionData moveTokenCommand = new MoveToken(token);
-		return moveThenConsumeToken(workflowState, moveTokenCommand);
+		return reactAndThenConsumeToken(workflowState, moveTokenCommand);
 	}
 
-	private Data<WorkflowState, ActionData> moveThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
+	private Data<WorkflowState, ActionData> reactAndThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
 		Data<WorkflowState, ActionData> moveTokenOutput = moveToken(workflowState, actionData);
 		Data<WorkflowState, ActionData> stepBehaviorOutput = consumeToken(moveTokenOutput.state());
 		return stepBehaviorOutput;
