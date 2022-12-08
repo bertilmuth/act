@@ -52,7 +52,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 
 	private Data<WorkflowState, ActionData> moveThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
 		Data<WorkflowState, ActionData> moveTokenOutput = moveToken(workflowState, actionData);
-		Data<WorkflowState, ActionData> stepBehaviorOutput = nextStep(moveTokenOutput.state());
+		Data<WorkflowState, ActionData> stepBehaviorOutput = consumeToken(moveTokenOutput.state());
 		return stepBehaviorOutput;
 	}
 
