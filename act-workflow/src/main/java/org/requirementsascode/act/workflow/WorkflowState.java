@@ -51,11 +51,6 @@ public class WorkflowState {
 		return updateTokens(tokensAfterMove, t);
 	}
 	
-	Data<WorkflowState, Token> removeToken(Token tokenBefore) {
-		Tokens tokensAfter = tokens().removeToken(tokenBefore);
-		return updateTokens(tokensAfter, null);
-	}
-	
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
 		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
 		WorkflowState newWorkflowState = new WorkflowState(statemachine, tokens, actionOutput);

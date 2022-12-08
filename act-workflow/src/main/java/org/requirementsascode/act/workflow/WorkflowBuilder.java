@@ -36,7 +36,7 @@ public class WorkflowBuilder {
 			private InitialActionsBuilder(){}
 			
 			@SafeVarargs
-			public final DataFlowsBuilder dataFlows(DataFlow... dataFlowsArray) {
+			public final DataFlowsBuilder dataFlows(DataFlow<?>... dataFlowsArray) {
 				requireNonNull(dataFlowsArray, "dataFlowsArray must be non-null!");
 				builderDataFlows = new DataFlows(asList(dataFlowsArray));
 				return new DataFlowsBuilder();
