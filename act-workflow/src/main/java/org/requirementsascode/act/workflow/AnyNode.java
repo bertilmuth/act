@@ -1,9 +1,12 @@
 package org.requirementsascode.act.workflow;
 
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
-import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
+import org.requirementsascode.act.workflow.trigger.AddToken;
 
 class AnyNode implements Node {
 	AnyNode() {
@@ -16,11 +19,16 @@ class AnyNode implements Node {
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		return anyState();
+		State<WorkflowState, Token> state = state("Any Node", s -> true, anyNodeBehavior());
+		return state;
 	}
-
-	@Override
-	public Data<WorkflowState, Token> moveTokenToMe(WorkflowState workflowState, Token token){
-		return data(workflowState,token);
+	
+	private Behavior<WorkflowState, Token, Token> anyNodeBehavior() {
+		Behavior<WorkflowState, Token, Token> behavior = 
+			inCase(AddToken::isContained, d -> {
+				Token tokenToAdd = Token.from(d).actionData().map(t -> (AddToken)t).map(AddToken::token).orElse(null);
+				return d.state().addToken(tokenToAdd);
+			});
+		return behavior;
 	}
 }

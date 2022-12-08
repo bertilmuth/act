@@ -13,7 +13,6 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
-import org.requirementsascode.act.workflow.trigger.AddToken;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 import org.requirementsascode.act.workflow.trigger.MoveToken;
 
@@ -45,12 +44,7 @@ public class Action implements Node {
 				inCase(MoveToken::isContained, d -> {
 					Token tokenToMove = Token.from(d).actionData().map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
 					return moveTokenToMe(d.state(), tokenToMove);
-				},
-				inCase(AddToken::isContained, d -> {
-					Token tokenToAdd = Token.from(d).actionData().map(t -> (AddToken)t).map(AddToken::token).orElse(null);
-					return d.state().addToken(tokenToAdd);
 				})
-				)
 			);
 		return behavior;
 	}
