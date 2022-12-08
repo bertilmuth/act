@@ -7,16 +7,16 @@ import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class InitialAction implements Transitionable<WorkflowState, Token> {
-	private final Action initialAction;
+public class InitialNode implements Transitionable<WorkflowState, Token> {
+	private final Action initialNode;
 
-	InitialAction(Action initialAction) {
-		this.initialAction = requireNonNull(initialAction, "initialAction must be non-null!");
+	InitialNode(Action initialNode) {
+		this.initialNode = requireNonNull(initialNode, "initialNode must be non-null!");
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return dataFlow(new AnyNode(), initialAction)
+		return dataFlow(new AnyNode(), initialNode)
 			.asTransition(owningStatemachine);
 	}
 }
