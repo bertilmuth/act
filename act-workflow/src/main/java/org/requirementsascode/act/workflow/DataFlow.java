@@ -35,10 +35,12 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 	@SuppressWarnings("unchecked")
 	private Data<WorkflowState, Token> call(Data<WorkflowState, Token> inputData) {
 		Token inputToken = Token.from(inputData);
+		WorkflowState state = inputData.state();
+
 		return inputToken.actionData()
-			.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
-			.filter(ad -> guardCondition.test((T) ad))
-			.map(ad -> moveToken(inputData.state(), inputToken))
-			.orElse(inputData);
+			//.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
+			//.filter(ad -> guardCondition.test((T) ad))
+			.map(ad -> moveToken(state, inputToken))
+			.orElse(data(state, null));
 	}
 }
