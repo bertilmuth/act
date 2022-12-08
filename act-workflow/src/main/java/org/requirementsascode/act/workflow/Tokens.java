@@ -17,10 +17,10 @@ public class Tokens {
 		return tokens.stream();
 	}
 
-	Tokens replaceToken(Token tokenToBeReplaced, Token tokenToReplace) {
-		List<Token> listWithTokenRemoved = removeTokenFromList(tokens, tokenToBeReplaced);
-		List<Token> listWithTokenAdded = addTokenToList(listWithTokenRemoved, tokenToReplace);
-		return new Tokens(listWithTokenAdded);
+	Tokens replaceToken(Token tokenBefore, Token tokenAfter) {
+		List<Token> listWithTokenBeforeRemoved = removeTokenFromList(tokens, tokenBefore);
+		List<Token> listWithTokenAfterAdded = addTokenToList(listWithTokenBeforeRemoved, tokenAfter);
+		return new Tokens(listWithTokenAfterAdded);
 	}
 
 	Tokens addToken(Token tokenToAdd) {
