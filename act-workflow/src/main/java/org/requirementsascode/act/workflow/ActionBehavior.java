@@ -8,11 +8,11 @@ import java.util.function.BiFunction;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
-class StepBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
+class ActionBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
 	private final BiFunction<WorkflowState, T, U> functionOnActionData;
 	private final Behavior<WorkflowState, ActionData, ActionData> typedFunction;
 
-	StepBehavior(Class<T> inputClass, BiFunction<WorkflowState, T, U> functionOnActionData) {
+	ActionBehavior(Class<T> inputClass, BiFunction<WorkflowState, T, U> functionOnActionData) {
 		this.functionOnActionData = functionOnActionData;
 		this.typedFunction = when(inputClass, this::applyFunctionOnActionData);
 	}

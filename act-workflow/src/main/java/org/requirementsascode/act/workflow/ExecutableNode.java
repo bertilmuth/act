@@ -18,11 +18,11 @@ import org.requirementsascode.act.workflow.trigger.MoveToken;
 
 public class ExecutableNode implements Node {
 	private final String name;
-	private final Behavior<WorkflowState, Token, Token> actionBehavior;
+	private final Behavior<WorkflowState, Token, Token> executableBehavior;
 
-	ExecutableNode(String name, Behavior<WorkflowState, Token, Token> actionBehavior) {
+	ExecutableNode(String name, Behavior<WorkflowState, Token, Token> executableBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
-		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
+		this.executableBehavior = requireNonNull(executableBehavior, "executableBehavior must be non-null!");
 	}
 
 	@Override
@@ -32,21 +32,19 @@ public class ExecutableNode implements Node {
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		State<WorkflowState, Token> state = state(name(), s -> s.areTokensIn(this), actionBehavior());
+		State<WorkflowState, Token> state = state(name(), s -> s.areTokensIn(this), nodeBehavior());
 		return state;
 	}
 	
-	private Behavior<WorkflowState, Token, Token> actionBehavior() {
-		Behavior<WorkflowState, Token, Token> behavior = 
-			unitedBehavior(
-				new OnlyOneBehaviorMayAct<>(),
-				inCase(ConsumeToken::isContained, this::consumeToken),
-				inCase(MoveToken::isContained, d -> {
-					Token tokenToMove = Token.from(d).actionData().map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
-					return moveTokenToMe(d.state(), tokenToMove);
-				})
-			);
-		return behavior;
+	private Behavior<WorkflowState, Token, Token> nodeBehavior() {
+		return unitedBehavior(
+			new OnlyOneBehaviorMayAct<>(),
+			inCase(ConsumeToken::isContained, this::consumeToken),
+			inCase(MoveToken::isContained, d -> {
+				Token tokenToMove = Token.from(d).actionData().map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
+				return moveTokenToMe(d.state(), tokenToMove);
+			})
+		);
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
@@ -55,8 +53,8 @@ public class ExecutableNode implements Node {
 		
 		Data<WorkflowState, Token> result = data(state, null);
 		for (Token token : tokensInAction) {
-			result = actionBehavior.actOn(data(result.state(), token));
-			if (hasStepActed(result)) {
+			result = executableBehavior.actOn(data(result.state(), token));
+			if (hasExecuted(result)) {
 				break;
 			}
 		}
@@ -64,7 +62,7 @@ public class ExecutableNode implements Node {
 		return result;
 	}
 
-	private boolean hasStepActed(Data<WorkflowState, Token> result) {
+	private boolean hasExecuted(Data<WorkflowState, Token> result) {
 		return result.value().map(t -> t.actionData().isPresent()).orElse(false);
 	}
 
