@@ -51,11 +51,6 @@ public class WorkflowState {
 		return data(newState, null);
 	}
 	
-	Data<WorkflowState, Token> addToken(Token tokenToAdd) {
-		Tokens tokensAfter = tokens().addToken(tokenToAdd);
-		return updateTokens(tokensAfter, tokenToAdd);
-	}
-	
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
 		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
 		WorkflowState newWorkflowState = new WorkflowState(statemachine, tokens, actionOutput);
