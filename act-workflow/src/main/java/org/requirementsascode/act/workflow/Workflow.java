@@ -9,6 +9,7 @@ import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowSt
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -22,6 +23,7 @@ import org.requirementsascode.act.workflow.trigger.MoveToken;
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialState;
 	private final Statemachine<WorkflowState, Token> statemachine;
+	private static final AnyNode anyNode = new AnyNode();
 	
 	Workflow(Statemachine<WorkflowState, Token> statemachine) {
 		this.statemachine = statemachine;
@@ -76,7 +78,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 
 	private Token createTokenFrom(Data<WorkflowState, ActionData> inputData) {
-		return token(new AnyNode(), inputData.value().orElse(null));
+		return token(anyNode, inputData.value().orElse(null));
 	}
 	
 	static Workflow createInitialWorkflow(Nodes nodes, DataFlows dataFlows, InitialNodes initialNodes){
@@ -90,7 +92,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows, InitialNodes initialNodes) {
-		State[] nodesArray = nodes.asStates().toArray(State[]::new);
+		State[] nodesArray = concat(nodes.asStates(), Stream.of(anyNode.asState())).toArray(State[]::new);
 		Transitionable[] transitionablesArray = concat(initialNodes.stream(), dataFlows.stream())
 			.toArray(Transitionable[]::new);
 		
