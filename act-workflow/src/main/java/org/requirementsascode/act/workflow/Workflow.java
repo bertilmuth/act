@@ -67,18 +67,18 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	@Override
 	public Data<WorkflowState, ActionData> actOn(Data<WorkflowState,ActionData> inputData) {
-		Data<WorkflowState, Token> output = statemachine.actOn(tokenized(inputData));
-		ActionData outputActionData = output.state().actionOutput().orElse(null);
-		return data(output.state(), outputActionData);
+		Data<WorkflowState, Token> output = statemachine.actOn(tokenize(inputData));
+		return data(output.state(), actionOutputIn(output));
+	}
+	
+	private Data<WorkflowState, Token> tokenize(Data<WorkflowState,ActionData> inputData) {
+		return data(inputData.state(), token(anyNode, inputData.value().orElse(null)));
+	}
+	
+	private ActionData actionOutputIn(Data<WorkflowState, Token> output) {
+		return output.state().actionOutput().orElse(null);
 	}
 
-	private Data<WorkflowState, Token> tokenized(Data<WorkflowState,ActionData> inputData) {
-		return data(inputData.state(), createTokenFrom(inputData));
-	}
-
-	private Token createTokenFrom(Data<WorkflowState, ActionData> inputData) {
-		return token(anyNode, inputData.value().orElse(null));
-	}
 	
 	static Workflow createInitialWorkflow(Nodes nodes, DataFlows dataFlows, InitialFlows initialNodes){
 		requireNonNull(nodes, "nodes must be non-null!");
