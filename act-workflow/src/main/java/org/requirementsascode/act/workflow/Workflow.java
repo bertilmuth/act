@@ -91,17 +91,19 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows, InitialNodes initialNodes) {
-		State[] nodeStates = concat(nodes.asStates(), Stream.of(anyNode.asState())).toArray(State[]::new);
-		Transitionable[] transitionablesArray = concat(initialNodes.stream(), dataFlows.stream())
-			.toArray(Transitionable[]::new);
+	private static Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows,
+			InitialNodes initialNodes) {
 		
+		State[] nodeStates = concat(nodes.asStates(), Stream.of(anyNode.asState())).toArray(State[]::new);
+		Transitionable[] transitionables = concat(initialNodes.stream(), dataFlows.stream())
+				.toArray(Transitionable[]::new);
+
 		Statemachine<WorkflowState, Token> statemachine = 
 			Statemachine.builder()
 				.mergeStrategy(new TokenMergeStrategy())
 				.states(nodeStates)
 				.transitions(
-					transitionablesArray
+					transitionables
 				)
 				.build();
 		return statemachine;
