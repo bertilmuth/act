@@ -28,6 +28,6 @@ public class WorkflowApi {
 	}
 	
 	public static <T extends ActionData> DataFlow dataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {		
-		return new DataFlow(fromNode, toNode);
+		return new DataFlow(fromNode, toNode, inputClass, guardCondition);
 	}
 }

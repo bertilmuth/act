@@ -101,6 +101,27 @@ class WorkflowTest {
 	}
 	
 	@Test
+	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Action action2 = action(ACTION2, StringData.class, this::action2Performed);
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1, action2)
+			.initialActions(action1)
+			.dataFlows(
+				dataFlow(action1, action2, StringData.class, sd -> !sd.toString().equals(ACTION1))
+			)
+			.build();
+		
+		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
+		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		WorkflowState state = afterAction2.state();
+		
+		assertEquals(str(ACTION1), afterAction2.value().get());
+		assertEquals(0, tokensList(state).size());
+	}
+	
+	@Test
 	void runsTwoActions_bothUserTriggered() {
 		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		Action action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
