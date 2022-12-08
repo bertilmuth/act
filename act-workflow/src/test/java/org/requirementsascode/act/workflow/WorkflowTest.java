@@ -27,7 +27,7 @@ class WorkflowTest {
 	@Test
 	void runningEmptyWorkflowDoesNothing() {
 		Workflow workflow = Workflow.builder()
-			.actions()
+			.nodes()
 			.initialActions()
 			.dataFlows()
 			.build();
@@ -43,7 +43,7 @@ class WorkflowTest {
 		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1)
+			.nodes(action1)
 			.initialActions(action1)
 			.dataFlows()
 			.build();
@@ -62,7 +62,7 @@ class WorkflowTest {
 		Action action2 = action(ACTION2, StringData.class, this::action2Performed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1, action2)
+			.nodes(action1, action2)
 			.initialActions(action1)
 			.dataFlows(
 				dataFlow(action1, action2)
@@ -85,7 +85,7 @@ class WorkflowTest {
 		Action action2 = action(ACTION2, StringData.class, this::action2Performed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1, action2)
+			.nodes(action1, action2)
 			.initialActions(action1)
 			.dataFlows(
 				dataFlow(action1, action2, StringData.class, sd -> sd.toString().equals(ACTION1))
@@ -108,7 +108,7 @@ class WorkflowTest {
 		Action action2 = action(ACTION2, StringData.class, this::action2Performed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1, action2)
+			.nodes(action1, action2)
 			.initialActions(action1)
 			.dataFlows(
 				dataFlow(action1, action2, StringData.class, sd -> !sd.toString().equals(ACTION1))
@@ -130,7 +130,7 @@ class WorkflowTest {
 		Action action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1, action2i)
+			.nodes(action1, action2i)
 			.initialActions(action1)
 			.dataFlows(
 				dataFlow(action1, action2i)
@@ -153,7 +153,7 @@ class WorkflowTest {
 		Action action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1, action2a, action2b)
+			.nodes(action1, action2a, action2b)
 			.initialActions(action1)
 			.dataFlows(
 				dataFlow(action1, action2a),
@@ -174,7 +174,7 @@ class WorkflowTest {
 		Action action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1, action2a, action2b)
+			.nodes(action1, action2a, action2b)
 			.initialActions(action1)
 			.dataFlows(
 				dataFlow(action1, action2a),
@@ -198,7 +198,7 @@ class WorkflowTest {
 		Action action3 = action(ACTION3, StringData.class, this::action3Performed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1, action2a, action2b, action3)
+			.nodes(action1, action2a, action2b, action3)
 			.initialActions(action1)
 			.dataFlows(
 				dataFlow(action1, action2a),
@@ -220,7 +220,7 @@ class WorkflowTest {
 		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1)
+			.nodes(action1)
 			.initialActions(action1)
 			.dataFlows()
 			.build();
@@ -234,7 +234,7 @@ class WorkflowTest {
 		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
-			.actions(action1)
+			.nodes(action1)
 			.initialActions(action1)
 			.dataFlows()
 			.build();
