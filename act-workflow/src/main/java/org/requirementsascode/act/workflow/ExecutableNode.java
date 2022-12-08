@@ -14,7 +14,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
-import org.requirementsascode.act.workflow.trigger.MoveToken;
+import org.requirementsascode.act.workflow.trigger.StoreAsToken;
 
 public class ExecutableNode implements Node {
 	private final String name;
@@ -39,11 +39,11 @@ public class ExecutableNode implements Node {
 	private Behavior<WorkflowState, Token, Token> nodeBehavior() {
 		return unitedBehavior(
 			new OnlyOneBehaviorMayAct<>(),
-			inCase(ConsumeToken::isContained, this::consumeToken),
-			inCase(MoveToken::isContained, d -> {
-				Token tokenToMove = Token.from(d).actionData().map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
-				return moveTokenToMe(d.state(), tokenToMove);
-			})
+			inCase(StoreAsToken::isContained, d -> {
+				Token tokenToStore = Token.from(d).actionData().map(t -> (StoreAsToken)t).map(StoreAsToken::token).orElse(null);
+				return moveTokenToMe(d.state(), tokenToStore);
+			}),
+			inCase(ConsumeToken::isContained, this::consumeToken)
 		);
 	}
 

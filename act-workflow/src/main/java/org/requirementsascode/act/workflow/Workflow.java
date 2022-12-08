@@ -18,7 +18,7 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
-import org.requirementsascode.act.workflow.trigger.MoveToken;
+import org.requirementsascode.act.workflow.trigger.StoreAsToken;
 import org.requirementsascode.act.workflow.trigger.StartWorkflow;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
@@ -50,7 +50,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
 		Token token = createTokenFrom(data(workflowState, actionData));
-		return reactAndThenConsumeToken(workflowState, new MoveToken(token));
+		return reactAndThenConsumeToken(workflowState, new StoreAsToken(token));
 	}
 
 	private Data<WorkflowState, ActionData> reactAndThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
