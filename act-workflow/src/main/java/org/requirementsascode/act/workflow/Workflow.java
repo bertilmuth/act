@@ -40,28 +40,25 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		Data<WorkflowState, ActionData> started = reactTo(initialWorkflowState, new StartWorkflow());
-		return nextStep(started.state(), actionData);
+		return nextStep(startWorkflow().state(), actionData);
+	}
+	
+	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
+		Data<WorkflowState, ActionData> storedToken = storeAsToken(workflowState, actionData);
+		return consumeToken(storedToken.state());
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
 		return consumeToken(workflowState);
 	}
 	
-	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		return reactAndThenConsumeToken(workflowState, new StoreAsToken(actionData));
+	private Data<WorkflowState, ActionData> startWorkflow() {
+		Data<WorkflowState, ActionData> started = actOn(data(initialWorkflowState, new StartWorkflow()));
+		return started;
 	}
-
-	private Data<WorkflowState, ActionData> reactAndThenConsumeToken(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> output = reactTo(workflowState, actionData);
-		Data<WorkflowState, ActionData> consumeOutput = consumeToken(output.state());
-		return consumeOutput;
-	}
-
-	private Data<WorkflowState, ActionData> reactTo(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> inputData = data(workflowState, actionData);
-		Data<WorkflowState, ActionData> result = actOn(inputData);
-		return result;
+	
+	private Data<WorkflowState, ActionData> storeAsToken(WorkflowState workflowState, ActionData actionData) {
+		return actOn(data(workflowState, new StoreAsToken(actionData)));
 	}
 	
 	private Data<WorkflowState, ActionData> consumeToken(WorkflowState workflowState) {
