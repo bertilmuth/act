@@ -40,8 +40,9 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		Data<WorkflowState, ActionData> started = reactAndThenConsumeToken(initialWorkflowState, new StartWorkflow());
-		return reactAndThenConsumeToken(started.state(), actionData);
+		Data<WorkflowState, ActionData> started = reactTo(initialWorkflowState, new StartWorkflow());
+		System.out.println("After start:" + started);
+		return nextStep(started.state(), actionData);
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
@@ -60,7 +61,11 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 
 	private Data<WorkflowState, ActionData> reactTo(WorkflowState workflowState, ActionData actionData) {
-		return actOn(data(workflowState, actionData));
+		Data<WorkflowState, ActionData> inputData = data(workflowState, actionData);
+		System.out.println("React START: " + inputData );
+		Data<WorkflowState, ActionData> result = actOn(inputData);
+		System.out.println("React STOP. result = " + result);
+		return result;
 	}
 	
 	private Data<WorkflowState, ActionData> consumeToken(WorkflowState workflowState) {

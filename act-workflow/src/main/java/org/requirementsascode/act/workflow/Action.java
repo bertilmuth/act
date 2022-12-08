@@ -43,7 +43,9 @@ public class Action implements Node {
 				inCase(ConsumeToken::isContained, this::consumeToken),
 				inCase(MoveToken::isContained, d -> {
 					Token tokenToMove = Token.from(d).actionData().map(t -> (MoveToken)t).map(MoveToken::token).orElse(null);
-					return moveTokenToMe(d.state(), tokenToMove);
+					System.out.println("ACTION: Moving " + tokenToMove + " to " + this);
+					Data<WorkflowState, Token> output = moveTokenToMe(d.state(), tokenToMove);
+					return data(output.state(), null);
 				})
 			);
 		return behavior;
@@ -52,6 +54,7 @@ public class Action implements Node {
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		List<Token> tokensInAction = state.tokensIn(this).collect(Collectors.toList());
+		System.out.println("Consuming: " + tokensInAction);
 		
 		Data<WorkflowState, Token> result = data(state, null);
 		for (Token token : tokensInAction) {

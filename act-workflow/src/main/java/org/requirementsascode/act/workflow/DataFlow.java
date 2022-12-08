@@ -29,6 +29,7 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 	}
 	
 	private Data<WorkflowState,Token> moveToken(WorkflowState state, Token inputToken){
+		System.out.println("FLOW: Moving " + inputToken + " to " + toNode);
 		return toNode.moveTokenToMe(state, inputToken);
 	}
 	
