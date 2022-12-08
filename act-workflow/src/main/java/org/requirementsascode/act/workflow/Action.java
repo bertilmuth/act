@@ -5,7 +5,6 @@ import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,8 +52,8 @@ public class Action implements Node {
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		List<Token> tokensInAction = state.tokensIn(this).collect(Collectors.toList());
-		Data<WorkflowState, Token> result = data(state, token(this, actionOutputIn(state)));
-
+		
+		Data<WorkflowState, Token> result = data(state, null);
 		for (Token token : tokensInAction) {
 			result = actionBehavior.actOn(data(result.state(), token));
 			if (hasStepActed(result)) {
@@ -63,10 +62,6 @@ public class Action implements Node {
 		}
 
 		return result;
-	}
-
-	private ActionData actionOutputIn(WorkflowState workflowState) {
-		return workflowState.actionOutput().orElse(null);
 	}
 
 	private boolean hasStepActed(Data<WorkflowState, Token> result) {
