@@ -3,10 +3,7 @@ package org.requirementsascode.act.workflow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.requirementsascode.act.workflow.WorkflowApi.action;
-import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
-import static org.requirementsascode.act.workflow.WorkflowApi.step;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +38,7 @@ class WorkflowTest {
 	
 	@Test
 	void runsSingleAction() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
@@ -59,8 +56,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_firstOneUserTriggered() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
-		Action action2 = action(ACTION2, step(StringData.class, this::action2Performed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Action action2 = action(ACTION2, StringData.class, this::action2Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2)
@@ -82,8 +79,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_bothUserTriggered() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
-		Action action2i = action(ACTION2I, step(IntegerData.class, this::action2iPerformed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Action action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2i)
@@ -104,9 +101,9 @@ class WorkflowTest {
 	
 	@Test
 	void testImplicitFork() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
-		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
-		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Action action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
+		Action action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2a, action2b)
@@ -125,9 +122,9 @@ class WorkflowTest {
 	
 	@Test
 	void testStepAfterImplicitFork() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
-		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
-		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Action action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
+		Action action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2a, action2b)
@@ -148,10 +145,10 @@ class WorkflowTest {
 	
 	@Test
 	void testImplicitMerge() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
-		Action action2a = action(ACTION2A, step(StringData.class, this::action2aPerformed));
-		Action action2b = action(ACTION2B, step(StringData.class, this::action2bPerformed));
-		Action action3 = action(ACTION3, step(StringData.class, this::action3Performed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Action action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
+		Action action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
+		Action action3 = action(ACTION3, StringData.class, this::action3Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2a, action2b, action3)
@@ -173,7 +170,7 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
@@ -187,7 +184,7 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData_nextStep() {
-		Action action1 = action(ACTION1, step(StringData.class, this::action1Performed));
+		Action action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
