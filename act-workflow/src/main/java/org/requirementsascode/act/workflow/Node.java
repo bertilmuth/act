@@ -10,4 +10,5 @@ public interface Node {
 
 	default Data<WorkflowState, Token> moveTokenToMe(WorkflowState workflowState, Token tokenToMove) {
 		return workflowState.moveToken(tokenToMove, this);
-	}}
+	}
+}
