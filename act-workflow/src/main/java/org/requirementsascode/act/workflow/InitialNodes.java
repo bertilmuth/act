@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public class InitialNodes{
 	private final List<InitialNode> initialNodes;
 
-	InitialNodes(List<Action> nodes) {
+	InitialNodes(List<Node> nodes) {
 		requireNonNull(nodes, "nodes must be non-null!");
 		this.initialNodes = createInitialNodes(nodes);
 	}
@@ -18,7 +18,7 @@ public class InitialNodes{
 		return initialNodes.stream();
 	}
 	
-	private List<InitialNode> createInitialNodes(List<Action> nodes) {
+	private List<InitialNode> createInitialNodes(List<Node> nodes) {
 		return nodes.stream()
 			.map(InitialNode::new)
 			.collect(Collectors.toList());

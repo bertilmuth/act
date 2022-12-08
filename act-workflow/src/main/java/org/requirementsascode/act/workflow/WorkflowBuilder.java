@@ -25,7 +25,7 @@ public class WorkflowBuilder {
 		}
 		
 		@SafeVarargs
-		public final InitialNodesBuilder initialNodes(Action... nodesArray) {
+		public final InitialNodesBuilder initialNodes(Node... nodesArray) {
 			requireNonNull(nodesArray, "nodesArray must be non-null!");
 			builderInitialNodes = new InitialNodes(asList(nodesArray));
 			return new InitialNodesBuilder();

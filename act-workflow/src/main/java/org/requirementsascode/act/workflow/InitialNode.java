@@ -8,9 +8,9 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class InitialNode implements Transitionable<WorkflowState, Token> {
-	private final Action initialNode;
+	private final Node initialNode;
 
-	InitialNode(Action initialNode) {
+	InitialNode(Node initialNode) {
 		this.initialNode = requireNonNull(initialNode, "initialNode must be non-null!");
 	}
 
