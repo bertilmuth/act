@@ -18,15 +18,25 @@ public class Tokens {
 	}
 
 	Tokens replaceToken(Token tokenToBeReplaced, Token tokenToReplace) {
-		List<Token> newTokensList = removeTokenFromList(tokenToBeReplaced);
-		newTokensList.add(tokenToReplace);
-		Tokens newTokens = new Tokens(newTokensList);
-		return newTokens;
+		List<Token> listWithTokenRemoved = removeTokenFromList(tokens, tokenToBeReplaced);
+		List<Token> listWithTokenAdded = addTokenToList(listWithTokenRemoved, tokenToReplace);
+		return new Tokens(listWithTokenAdded);
 	}
 
-	private List<Token> removeTokenFromList(Token tokenToBeReplaced) {
+	Tokens addToken(Token tokenToAdd) {
+		List<Token> listWithTokenAdded = addTokenToList(tokens, tokenToAdd);
+		return new Tokens(listWithTokenAdded);
+	}
+	
+	private List<Token> removeTokenFromList(List<Token> tokens, Token tokenToBeRemoved) {
 		List<Token> newTokensList = new ArrayList<>(tokens);
-		newTokensList.remove(tokenToBeReplaced);
+		newTokensList.remove(tokenToBeRemoved);
+		return newTokensList;
+	}
+	
+	private List<Token> addTokenToList(List<Token> tokens, Token tokenToAdd) {
+		List<Token> newTokensList = new ArrayList<>(tokens);
+		newTokensList.add(tokenToAdd);
 		return newTokensList;
 	}
 
