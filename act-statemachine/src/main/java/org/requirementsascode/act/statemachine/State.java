@@ -2,6 +2,7 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -13,12 +14,12 @@ import org.requirementsascode.act.core.NoOp;
 public class State<S, V> implements Behavioral<S, V> {
 	private final String name;
 	private final Predicate<S> invariant;
-	private Behavior<S, V, V> stateInternalBehavior;
+	private Behavior<S, V, V> stateBehavior;
 
-	private State(String name, Predicate<S> invariant, Behavior<S, V, V> stateInternalBehavior) {
+	private State(String name, Predicate<S> invariant, Behavior<S, V, V> stateBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.invariant = requireNonNull(invariant, "invariant must be non-null!");
-		this.stateInternalBehavior = requireNonNull(stateInternalBehavior, "stateInternalBehavior must be non-null!");
+		this.stateBehavior = requireNonNull(stateBehavior, "stateBehavior must be non-null!");
 	}
 
 	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
@@ -43,22 +44,20 @@ public class State<S, V> implements Behavioral<S, V> {
 
 	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStatemachine) {
-		return inCase(this::matchesStateIn,
-			stateInternalBehavior.andThen(inCase(this::matchesStateIn, 
-				transitionsBehavior(owningStatemachine), this::throwsIllegalStateException)));
+		return myBehavior(owningStatemachine).andThen(myOutgoingTransitions(owningStatemachine));
+	}
+	
+	private Behavior<S, V, V> myBehavior(Statemachine<S, V> owningStatemachine) {
+		return transition(this, this, stateBehavior).asBehavior(owningStatemachine);
 	}
 
-	private Behavior<S, V, V> transitionsBehavior(Statemachine<S, V> owningStatemachine) {
+	private Behavior<S, V, V> myOutgoingTransitions(Statemachine<S, V> owningStatemachine) {
 		Behavior<S, V, V> transitionsBehavior = owningStatemachine.outgoingTransitions(this).asBehavior(owningStatemachine);
-		return inCase(d -> d.value().isPresent(), transitionsBehavior, Behavior.identity());
+		return inCase(d -> d.value().isPresent(), transitionsBehavior);
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
 		return invariant().test(data.state());
-	}
-
-	private Data<S, V> throwsIllegalStateException(Data<S, V> data) {
-		throw new IllegalStateException("After behavior of state " + name() + ", invariant is false. Data: " + data);
 	}
 
 	@Override
