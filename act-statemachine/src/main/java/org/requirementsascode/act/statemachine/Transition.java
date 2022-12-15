@@ -47,7 +47,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 			transitionBehavior.andThen(inCase(this::hasFired, 
 				inCase(this::isInToState, 
 					inCase(d -> isInFinalState(d, sm), 
-						identity(), d -> toStateBehavior(d, sm)), 
+						identity(), 
+						d -> toStateBehavior(d, sm)), 
 				this::errorIfNotInToState))));
 	}
 
