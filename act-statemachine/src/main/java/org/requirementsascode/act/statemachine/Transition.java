@@ -42,12 +42,12 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 
 	@Override
-	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> owningStatemachine) {				
+	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {				
 		return inCase(before -> fromState.matchesStateIn(before),
 			transitionBehavior.andThen(inCase(this::hasFired, 
 				inCase(this::isInToState, 
-					inCase(d -> isInFinalState(d, owningStatemachine), 
-						identity(), d -> toStateBehavior(d, owningStatemachine)), 
+					inCase(d -> isInFinalState(d, sm), 
+						identity(), d -> toStateBehavior(d, sm)), 
 				this::errorIfNotInToState))));
 	}
 
@@ -55,8 +55,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		return toState().matchesStateIn(d);
 	}
 	
-	private boolean isInFinalState(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
-		return owningStatemachine.finalState().matchesStateIn(d);
+	private boolean isInFinalState(Data<S, V0> d, Statemachine<S, V0> sm) {
+		return sm.finalState().matchesStateIn(d);
 	}
 	
 	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
