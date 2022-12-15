@@ -46,17 +46,17 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		return inCase(before -> fromState.matchesStateIn(before),
 			behavior.andThen(inCase(this::hasFired, 
 				inCase(this::isInToState, 
-					inCase(d -> isInDefaultState(d, owningStatemachine), 
+					inCase(d -> isInFinalState(d, owningStatemachine), 
 						identity(), d -> toStateBehavior(d, owningStatemachine)), 
-					this::errorIfNotInToState))));
+				this::errorIfNotInToState))));
 	}
 
 	private boolean isInToState(Data<S, V0> d) {
 		return toState().matchesStateIn(d);
 	}
 	
-	private boolean isInDefaultState(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
-		return owningStatemachine.defaultState().matchesStateIn(d);
+	private boolean isInFinalState(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
+		return owningStatemachine.finalState().matchesStateIn(d);
 	}
 	
 	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
