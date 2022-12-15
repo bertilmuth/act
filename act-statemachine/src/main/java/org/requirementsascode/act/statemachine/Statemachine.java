@@ -97,8 +97,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return state(FINAL_STATE, notIn(definedState), identity());
 	}
 	
-	private Predicate<S> notIn(State<S, V0> definedState) {
-		return definedState.invariant().negate();
+	private Predicate<S> notIn(State<S, V0> state) {
+		return state.invariant().negate();
 	}
 
 	private Behavior<S, V0, V0> createStatemachineBehavior() {

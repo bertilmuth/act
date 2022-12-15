@@ -1,8 +1,8 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.Behavior.identity;
+import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -60,7 +60,11 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
-		return toState().asBehavior(owningStatemachine).actOn(d);
+		return inCase(this::notInFromState, toState().asBehavior(owningStatemachine)).actOn(d);
+	}
+	
+	private boolean notInFromState(Data<S,V0> data) {
+		return !fromState.invariant().test(data.state());
 	}
 
 	private boolean hasFired(Data<?, ?> data) {
