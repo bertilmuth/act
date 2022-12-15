@@ -9,7 +9,7 @@ If you are using Maven, include the following in your `pom.xml`:
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
     <artifactId>act-statemachine</artifactId>
-    <version>0.7</version>
+    <version>0.7.1</version>
   </dependency>
 ```
 Here's a minimal [POM file](https://github.com/bertilmuth/act-examples/blob/main/light/pom.xml) that you can use in your own projects.
@@ -20,7 +20,7 @@ Another way to get started is to clone the [act-examples](https://github.com/ber
 If you are using Gradle, include the following in your `build.gradle` dependencies:
 
 ```
-implementation 'org.requirementsascode.act:act-statemachine:0.7'
+implementation 'org.requirementsascode.act:act-statemachine:0.7.1'
 ```
 
 # Example usage
@@ -72,14 +72,14 @@ If you are using Maven, include the following in your `pom.xml`:
   <dependency>
     <groupId>org.requirementsascode.act</groupId>
     <artifactId>act-pbt</artifactId>
-    <version>0.7</version>
+    <version>0.7.1</version>
   </dependency>
 ```
 
 If you are using Gradle, include the following in your `build.gradle` dependencies:
 
 ```
-implementation 'org.requirementsascode.act:act-pbt:0.7'
+implementation 'org.requirementsascode.act:act-pbt:0.7.1'
 ```
 
 Have a look at the [examples](https://github.com/bertilmuth/act/tree/main/act-pbt/src/test/java/org/requirementsascode/act/statemachine/pbt) for details.
