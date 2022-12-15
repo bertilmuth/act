@@ -18,12 +18,14 @@ import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
 public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String DEFINED_STATE = "Defined State";
 	private static final String DEFAULT_STATE = "Default State";
+	private static final String FINAL_STATE = "Final State";
 
 	private final States<S, V0> states;
 	private final Transitions<S, V0> transitions;
 	private final Behavior<S, V0, V0> statemachineBehavior;
 	private final State<S, V0> defaultState;
 	private final State<S, V0> definedState;
+	private final State<S, V0> finalState;
 	private final MergeStrategy<S, V0> mergeStrategy;
 
 	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, MergeStrategy<S, V0> mergeStrategy) {
@@ -32,6 +34,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		this.mergeStrategy = mergeStrategy;
 		this.definedState = createDefinedState(states);
 		this.defaultState = createDefaultState(definedState);
+		this.finalState = createFinalState(definedState);
 		this.statemachineBehavior = createStatemachineBehavior();
 	}
 
@@ -52,12 +55,16 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return transitions;
 	}
 
+	public State<S, V0> definedState() {
+		return definedState;
+	}
+	
 	public State<S, V0> defaultState() {
 		return defaultState;
 	}
-
-	public State<S, V0> definedState() {
-		return definedState;
+	
+	public State<S, V0> finalState() {
+		return finalState;
 	}
 	
 	public MergeStrategy<S, V0> mergeStrategy() {
@@ -83,7 +90,15 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 
 	private State<S, V0> createDefaultState(State<S, V0> definedState) {
-		return state(DEFAULT_STATE, definedState.invariant().negate(), identity());
+		return state(DEFAULT_STATE, notIn(definedState), identity());
+	}
+	
+	private State<S, V0> createFinalState(State<S, V0> definedState) {
+		return state(FINAL_STATE, notIn(definedState), identity());
+	}
+	
+	private Predicate<S> notIn(State<S, V0> definedState) {
+		return definedState.invariant().negate();
 	}
 
 	private Behavior<S, V0, V0> createStatemachineBehavior() {

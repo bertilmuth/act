@@ -20,7 +20,7 @@ public class ExitFlow<S, V0> implements Transitionable<S, V0>{
 
 	@Override
 	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
-		State<S, V0> defaultState = owningStatemachine.defaultState();
-		return transition(fromState, defaultState, exitBehavior);
+		State<S, V0> finalState = owningStatemachine.finalState();
+		return transition(fromState, finalState, exitBehavior);
 	}
 }
