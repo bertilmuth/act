@@ -1,15 +1,16 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Stream.concat;
 import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
-import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -75,11 +76,16 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	public Transitions<S, V0> outgoingTransitions(State<S, V0> fromState) {
 		requireNonNull(fromState, "fromState must be non-null!");
 		
-		List<Transitionable<S, V0>> transitionList = transitions().stream()
+		Stream<Transitionable<S, V0>> streamOfTransitionables = transitions().stream();
+		Stream<Transition<S, V0>> streamOfFinalStateTransition = Stream.of(finalStateTransition());
+		Stream<Transitionable<S, V0>> streamOfAllTransitionables = concat(streamOfTransitionables,
+			streamOfFinalStateTransition);
+		
+		List<Transitionable<S, V0>> allTransitionablesList = streamOfAllTransitionables
 			.filter(t -> t.asTransition(this).fromState().equals(fromState))
 			.collect(Collectors.toList());
 		
-		return new Transitions<>(transitionList);
+		return new Transitions<>(allTransitionablesList);
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
@@ -97,8 +103,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return state(FINAL_STATE, notIn(definedState), identity());
 	}
 	
-	private Transition<S, V0> finalStateTransition(State<S, V0> finalState) {
-		return transition(finalState, finalState, identity());
+	private Transition<S, V0> finalStateTransition() {
+		return transition(finalState(), finalState, identity());
 	}
 	
 	private Predicate<S> notIn(State<S, V0> state) {
