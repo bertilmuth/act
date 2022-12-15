@@ -60,8 +60,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		return sm.finalState().matchesStateIn(d);
 	}
 	
-	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> owningStatemachine) {
-		return inCase(this::notInFromState, toState().asBehavior(owningStatemachine), identity()).actOn(d);
+	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> sm) {
+		return inCase(this::notInFromState, toState().asBehavior(sm), identity()).actOn(d);
 	}
 	
 	private boolean notInFromState(Data<S,V0> data) {
