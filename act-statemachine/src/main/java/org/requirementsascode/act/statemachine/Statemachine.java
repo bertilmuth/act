@@ -3,7 +3,8 @@ package org.requirementsascode.act.statemachine;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
 import java.util.List;
@@ -74,7 +75,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	public Transitions<S, V0> outgoingTransitions(State<S, V0> fromState) {
 		requireNonNull(fromState, "fromState must be non-null!");
 		
-		List<Transitionable<S, V0>> transitionList = transitions.stream()
+		List<Transitionable<S, V0>> transitionList = transitions().stream()
 			.filter(t -> t.asTransition(this).fromState().equals(fromState))
 			.collect(Collectors.toList());
 		
@@ -94,6 +95,10 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	
 	private State<S, V0> createFinalState(State<S, V0> definedState) {
 		return state(FINAL_STATE, notIn(definedState), identity());
+	}
+	
+	private Transition<S, V0> finalStateTransition(State<S, V0> finalState) {
+		return transition(finalState, finalState, identity());
 	}
 	
 	private Predicate<S> notIn(State<S, V0> state) {
