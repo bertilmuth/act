@@ -12,12 +12,8 @@ import org.requirementsascode.act.core.Behavior;
 public class Transitions<S, V0> implements Behavioral<S, V0> {
 	private final List<Transitionable<S, V0>> transitions;
 
-	private Transitions(List<Transitionable<S, V0>> transitions) {
+	Transitions(List<Transitionable<S, V0>> transitions) {
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
-	}
-
-	static <S, V0> Transitions<S, V0> transitions(List<Transitionable<S, V0>> transitions) {
-		return new Transitions<>(transitions);
 	}
 
 	@Override

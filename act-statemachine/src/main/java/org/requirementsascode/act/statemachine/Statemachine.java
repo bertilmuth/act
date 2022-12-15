@@ -3,7 +3,7 @@ package org.requirementsascode.act.statemachine;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
-import static org.requirementsascode.act.statemachine.State.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
 import java.util.List;
@@ -78,8 +78,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 			.filter(t -> t.asTransition(this).fromState().equals(fromState))
 			.collect(Collectors.toList());
 		
-		Transitions<S, V0> transitions = Transitions.transitions(transitionList);
-		return transitions;
+		return new Transitions<>(transitionList);
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
