@@ -44,15 +44,15 @@ public class State<S, V> implements Behavioral<S, V> {
 
 	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> sm) {
-		return myBehavior(sm).andThen(myOutgoingTransitions(sm));
+		return stateBehavior(sm).andThen(outgoingTransitions(sm));
 	}
 	
-	private Behavior<S, V, V> myBehavior(Statemachine<S, V> owningStatemachine) {
-		return transition(this, this, stateBehavior).asBehavior(owningStatemachine);
+	private Behavior<S, V, V> stateBehavior(Statemachine<S, V> sm) {
+		return transition(this, this, stateBehavior).asBehavior(sm);
 	}
 
-	private Behavior<S, V, V> myOutgoingTransitions(Statemachine<S, V> owningStatemachine) {
-		Behavior<S, V, V> transitionsBehavior = owningStatemachine.outgoingTransitions(this).asBehavior(owningStatemachine);
+	private Behavior<S, V, V> outgoingTransitions(Statemachine<S, V> sm) {
+		Behavior<S, V, V> transitionsBehavior = sm.outgoingTransitions(this).asBehavior(sm);
 		return inCase(d -> d.value().isPresent(), transitionsBehavior);
 	}
 
