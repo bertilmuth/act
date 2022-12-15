@@ -43,8 +43,8 @@ public class State<S, V> implements Behavioral<S, V> {
 	}
 
 	@Override
-	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStatemachine) {
-		return myBehavior(owningStatemachine).andThen(myOutgoingTransitions(owningStatemachine));
+	public Behavior<S, V, V> asBehavior(Statemachine<S, V> sm) {
+		return myBehavior(sm).andThen(myOutgoingTransitions(sm));
 	}
 	
 	private Behavior<S, V, V> myBehavior(Statemachine<S, V> owningStatemachine) {
