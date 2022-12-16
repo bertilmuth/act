@@ -30,6 +30,10 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	public State<S, V0> toState() {
 		return toState;
 	}
+	
+	public Behavior<S, V0, V0> transitionBehavior() {
+		return transitionBehavior;
+	}
 
 	@Override
 	public String toString() {
@@ -43,8 +47,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {				
-		return inCase(before -> fromState.matchesStateIn(before),
-			transitionBehavior.andThen(inCase(this::hasFired, 
+		return inCase(before -> fromState().matchesStateIn(before),
+			transitionBehavior().andThen(inCase(this::hasFired, 
 				inCase(this::isInToState, 
 					d -> toStateBehavior(d, sm), 
 					this::errorIfNotInToState))));
@@ -55,11 +59,11 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> sm) {
-		return inCase(this::notInFromState, toState().asBehavior(sm), identity()).actOn(d);
+		return inCase(this::toStateEqualsFromState, identity(), toState().asBehavior(sm)).actOn(d);
 	}
 	
-	private boolean notInFromState(Data<S,V0> data) {
-		return !fromState.invariant().test(data.state());
+	private boolean toStateEqualsFromState(Data<S,V0> data) {
+		return toState().equals(fromState());
 	}
 
 	private boolean hasFired(Data<?, ?> data) {
@@ -67,7 +71,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	private Data<S, V0> errorIfNotInToState(Data<S, V0> d) {
-		throw new IllegalStateException("Tried transition from " + fromState + " to " + toState
+		throw new IllegalStateException("Tried transition from " + fromState() + " to " + toState()
 				+ ", but invariant was false in toState! Data: " + d);
 	}
 }
