@@ -79,16 +79,20 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	public Transitions<S, V0> outgoingTransitions(State<S, V0> fromState) {
 		requireNonNull(fromState, "fromState must be non-null!");
 		
-		Stream<Transitionable<S, V0>> streamOfTransitionables = transitions().stream();
+		Stream<Transitionable<S, V0>> streamOfTransitions = transitions().stream();
 		Stream<Transition<S, V0>> streamOfFinalStateTransition = Stream.of(finalStateTransition());
-		Stream<Transitionable<S, V0>> streamOfAllTransitionables = concat(streamOfTransitionables,
+		Stream<Transitionable<S, V0>> streamOfAllTransitions = concat(streamOfTransitions,
 			streamOfFinalStateTransition);
 		
-		List<Transitionable<S, V0>> allTransitionablesList = streamOfAllTransitionables
+		List<Transitionable<S, V0>> allTransitions = streamOfAllTransitions
 			.filter(t -> t.asTransition(this).fromState().equals(fromState))
 			.collect(Collectors.toList());
 		
-		return new Transitions<>(allTransitionablesList);
+		return new Transitions<>(allTransitions);
+	}
+	
+	private Transition<S, V0> finalStateTransition() {
+		return transition(finalState(), finalState, identity());
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
@@ -104,10 +108,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	
 	private State<S, V0> createFinalState(State<S, V0> definedState) {
 		return state(FINAL_STATE, notIn(definedState), identity());
-	}
-	
-	private Transition<S, V0> finalStateTransition() {
-		return transition(finalState(), finalState, identity());
 	}
 	
 	private Predicate<S> notIn(State<S, V0> state) {
