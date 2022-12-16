@@ -14,20 +14,20 @@ import org.requirementsascode.act.core.NoOp;
 public class State<S, V> implements Behavioral<S, V> {
 	private final String name;
 	private final Predicate<S> invariant;
-	private Behavior<S, V, V> stateBehavior;
+	private Behavior<S, V, V> stateInternalBehavior;
 
-	private State(String name, Predicate<S> invariant, Behavior<S, V, V> stateBehavior) {
+	private State(String name, Predicate<S> invariant, Behavior<S, V, V> stateInternalBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.invariant = requireNonNull(invariant, "invariant must be non-null!");
-		this.stateBehavior = requireNonNull(stateBehavior, "stateBehavior must be non-null!");
+		this.stateInternalBehavior = requireNonNull(stateInternalBehavior, "stateInternalBehavior must be non-null!");
 	}
 
 	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
 		return new State<>(stateName, stateInvariant, new NoOp<>());
 	}
 
-	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {
-		return new State<>(stateName, stateInvariant, stateBehavior);
+	static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateInternalBehavior) {
+		return new State<>(stateName, stateInvariant, stateInternalBehavior);
 	}
 
 	static <S, V> State<S, V> anyState() {
@@ -48,7 +48,7 @@ public class State<S, V> implements Behavioral<S, V> {
 	}
 	
 	private Behavior<S, V, V> stateBehavior(Statemachine<S, V> sm) {
-		return transition(this, this, stateBehavior).asBehavior(sm);
+		return transition(this, this, stateInternalBehavior).asBehavior(sm);
 	}
 
 	private Behavior<S, V, V> outgoingTransitions(Statemachine<S, V> sm) {
