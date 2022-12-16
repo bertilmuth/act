@@ -35,8 +35,8 @@ public class EntryFlow<S, V0> implements Transitionable<S, V0> {
 
 	@Override
 	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
-		State<S, V0> defaultState = owningStatemachine.defaultState();
+		State<S, V0> initialState = owningStatemachine.initialState();
 		State<S, V0> toStateOrAnyDefinedState = toState().orElse(owningStatemachine.definedState());
-		return transition(defaultState, toStateOrAnyDefinedState, entryBehavior());
+		return transition(initialState, toStateOrAnyDefinedState, entryBehavior());
 	}
 }
