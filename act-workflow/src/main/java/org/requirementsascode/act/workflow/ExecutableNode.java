@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +13,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
-import org.requirementsascode.act.workflow.trigger.StoreAsToken;
+import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class ExecutableNode implements Node {
 	private final String name;
@@ -39,14 +38,14 @@ public class ExecutableNode implements Node {
 	private Behavior<WorkflowState, Token, Token> nodeBehavior() {
 		return unitedBehavior(
 			new OnlyOneBehaviorMayAct<>(),
-			inCase(StoreAsToken::isContained, this::storeToken),
+			inCase(StoreToken::isContained, this::storeToken),
 			inCase(ConsumeToken::isContained, this::consumeToken)
 		);
 	}
 	
 	private Data<WorkflowState, Token> storeToken(Data<WorkflowState, Token> inputData) {
-		ActionData actionData = Token.from(inputData).actionData().map(t -> (StoreAsToken)t).map(StoreAsToken::actionData).orElse(null);
-		return moveTokenToMe(inputData.state(), token(this, actionData));
+		Token token = Token.from(inputData).actionData().map(t -> (StoreToken)t).map(StoreToken::token).orElse(null);
+		return moveTokenToMe(inputData.state(), token);
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {

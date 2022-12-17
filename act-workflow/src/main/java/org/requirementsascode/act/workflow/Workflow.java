@@ -19,7 +19,7 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 import org.requirementsascode.act.workflow.trigger.StartWorkflow;
-import org.requirementsascode.act.workflow.trigger.StoreAsToken;
+import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialWorkflowState;
@@ -58,7 +58,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	private Data<WorkflowState, ActionData> storeAsToken(WorkflowState workflowState, ActionData actionData) {
-		return actOn(data(workflowState, new StoreAsToken(actionData)));
+		Token token = tokenInAnyNode(actionData);
+		return actOn(data(workflowState, new StoreToken(token)));
 	}
 	
 	private Data<WorkflowState, ActionData> consumeToken(WorkflowState workflowState) {
@@ -72,7 +73,12 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	private Data<WorkflowState, Token> tokenize(Data<WorkflowState,ActionData> inputData) {
-		return data(inputData.state(), token(anyNode, inputData.value().orElse(null)));
+		ActionData actionData = inputData.value().orElse(null);
+		return data(inputData.state(), tokenInAnyNode(actionData));
+	}
+
+	private Token tokenInAnyNode(ActionData actionData) {
+		return token(anyNode, actionData);
 	}
 	
 	private ActionData actionOutputIn(Data<WorkflowState, Token> output) {

@@ -5,22 +5,22 @@ import org.requirementsascode.act.workflow.ActionData;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
-public class StoreAsToken implements ActionData {
-	private final ActionData actionData;
+public class StoreToken implements ActionData {
+	private final Token token;
 
-	public StoreAsToken(ActionData actionData){
-		this.actionData = actionData;
+	public StoreToken(Token token){
+		this.token = token;
 	};
 	
-	public ActionData actionData() {
-		return actionData;
+	public Token token() {
+		return token;
 	}
 	
 	public static boolean isContained(Data<WorkflowState, Token> inputData) {
-		return StoreAsToken.isContainedInToken(Token.from(inputData));
+		return StoreToken.isContainedInToken(Token.from(inputData));
 	}
 
 	private static boolean isContainedInToken(Token token) {
-		return token.actionData().map(ad -> ad instanceof StoreAsToken).orElse(false);
+		return token.actionData().map(ad -> ad instanceof StoreToken).orElse(false);
 	}
 }
