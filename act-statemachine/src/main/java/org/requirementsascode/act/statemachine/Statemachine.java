@@ -32,13 +32,11 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, MergeStrategy<S, V0> mergeStrategy) {
 		this.states = requireNonNull(states, "states must be non-null!");
-		requireNonNull(transitions, "transitions must be non-null!");
 		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
-
 		this.definedState = createDefinedState(states);
 		this.initialState = createInitialState(definedState);
 		this.finalState = createFinalState(definedState);
-		this.transitions = addFinalStateTransition(transitions, finalState);
+		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
 
 		this.statemachineBehavior = createStatemachineBehavior();
 	}
@@ -112,10 +110,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	
 	private Predicate<S> notIn(State<S, V0> state) {
 		return state.invariant().negate();
-	}
-	
-	private Transitions<S, V0> addFinalStateTransition(Transitions<S, V0> transitions, State<S, V0> finalState) {
-		return transitions;
 	}
 
 	private Behavior<S, V0, V0> createStatemachineBehavior() {
