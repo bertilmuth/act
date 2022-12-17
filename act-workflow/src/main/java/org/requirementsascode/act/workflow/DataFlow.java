@@ -25,22 +25,22 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(fromNode.asState(), toNode.asState(), this::call);
-	}
-	
-	private Data<WorkflowState,Token> moveToken(WorkflowState state, Token inputToken){
-		return toNode.moveTokenToMe(state, inputToken);
+		return transition(fromNode.asState(), toNode.asState(), this::moveToken);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Data<WorkflowState, Token> call(Data<WorkflowState, Token> inputData) {
+	private Data<WorkflowState, Token> moveToken(Data<WorkflowState, Token> inputData) {
 		Token inputToken = Token.from(inputData);
 		WorkflowState state = inputData.state();
 
 		return inputToken.actionData()
 			.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
 			.filter(ad -> guardCondition.test((T) ad))
-			.map(ad -> moveToken(state, inputToken))
+			.map(ad -> moveTokenToToNode(state, inputToken))
 			.orElse(data(state, null));
+	}
+	
+	private Data<WorkflowState,Token> moveTokenToToNode(WorkflowState state, Token inputToken){
+		return toNode.moveTokenToMe(state, inputToken);
 	}
 }
