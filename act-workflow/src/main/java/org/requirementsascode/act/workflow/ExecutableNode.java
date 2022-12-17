@@ -39,12 +39,14 @@ public class ExecutableNode implements Node {
 	private Behavior<WorkflowState, Token, Token> nodeBehavior() {
 		return unitedBehavior(
 			new OnlyOneBehaviorMayAct<>(),
-			inCase(StoreAsToken::isContained, d -> {
-				ActionData actionData = Token.from(d).actionData().map(t -> (StoreAsToken)t).map(StoreAsToken::actionData).orElse(null);
-				return moveTokenToMe(d.state(), token(this, actionData));
-			}),
+			inCase(StoreAsToken::isContained, this::storeToken),
 			inCase(ConsumeToken::isContained, this::consumeToken)
 		);
+	}
+	
+	private Data<WorkflowState, Token> storeToken(Data<WorkflowState, Token> inputData) {
+		ActionData actionData = Token.from(inputData).actionData().map(t -> (StoreAsToken)t).map(StoreAsToken::actionData).orElse(null);
+		return moveTokenToMe(inputData.state(), token(this, actionData));
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
