@@ -45,7 +45,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> storedToken = storeAsToken(workflowState, actionData);
+		Data<WorkflowState, ActionData> storedToken = storeToken(workflowState, actionData);
 		return consumeToken(storedToken.state());
 	}
 	
@@ -57,7 +57,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		return actOn(data(initialWorkflowState, new StartWorkflow()));
 	}
 	
-	private Data<WorkflowState, ActionData> storeAsToken(WorkflowState workflowState, ActionData actionData) {
+	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, ActionData actionData) {
 		Token token = tokenInAnyNode(actionData);
 		return actOn(data(workflowState, new StoreToken(token)));
 	}
