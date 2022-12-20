@@ -46,7 +46,7 @@ public class WorkflowBuilder {
 				private DataFlowsBuilder(){}
 				
 				public final Workflow build() {
-					return Workflow.createInitialWorkflow(builderNodes, builderDataFlows, builderStartFlows);
+					return Workflow.create(builderNodes, builderDataFlows, builderStartFlows);
 				}
 			}
 		}

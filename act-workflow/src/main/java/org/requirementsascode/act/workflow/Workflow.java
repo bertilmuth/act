@@ -85,7 +85,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 
 	
-	static Workflow createInitialWorkflow(Nodes nodes, DataFlows dataFlows, StartFlows initialNodes){
+	static Workflow create(Nodes nodes, DataFlows dataFlows, StartFlows initialNodes){
 		requireNonNull(nodes, "nodes must be non-null!");
 		requireNonNull(dataFlows, "dataFlows must be non-null!");
 		requireNonNull(initialNodes, "initialNodes must be non-null!");
