@@ -28,7 +28,7 @@ class WorkflowTest {
 	void runningEmptyWorkflowDoesNothing() {
 		Workflow workflow = Workflow.builder()
 			.nodes()
-			.initialNodes()
+			.startNodes()
 			.dataFlows()
 			.build();
 		
@@ -44,7 +44,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows()
 			.build();
 		
@@ -63,7 +63,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2)
 			)
@@ -86,7 +86,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2, StringData.class, sd -> sd.toString().equals(ACTION1))
 			)
@@ -109,7 +109,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2, StringData.class, sd -> !sd.toString().equals(ACTION1))
 			)
@@ -131,7 +131,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2i)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2i)
 			)
@@ -154,7 +154,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2a),
 				dataFlow(action1, action2b)
@@ -175,7 +175,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2a),
 				dataFlow(action1, action2b)
@@ -199,7 +199,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b, action3)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2a),
 				dataFlow(action1, action2b),
@@ -221,7 +221,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows()
 			.build();
 		
@@ -235,7 +235,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
-			.initialNodes(action1)
+			.startNodes(action1)
 			.dataFlows()
 			.build();
 		

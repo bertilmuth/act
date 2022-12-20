@@ -6,21 +6,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InitialFlows{
-	private final List<InitialFlow> initialFlows;
+public class StartFlows{
+	private final List<StartFlow> initialFlows;
 
-	InitialFlows(List<Node> initialNodes) {
+	StartFlows(List<Node> initialNodes) {
 		requireNonNull(initialNodes, "initialNodes must be non-null!");
 		this.initialFlows = createInitialFlowsFrom(initialNodes);
 	}
 
-	public Stream<InitialFlow> stream() {
+	public Stream<StartFlow> stream() {
 		return initialFlows.stream();
 	}
 	
-	private List<InitialFlow> createInitialFlowsFrom(List<Node> initialNodes) {
+	private List<StartFlow> createInitialFlowsFrom(List<Node> initialNodes) {
 		return initialNodes.stream()
-			.map(InitialFlow::new)
+			.map(StartFlow::new)
 			.collect(Collectors.toList());
 	}
 }

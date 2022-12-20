@@ -9,34 +9,34 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class InitialFlow implements Transitionable<WorkflowState, Token> {
-	private final Node initialNode;
+public class StartFlow implements Transitionable<WorkflowState, Token> {
+	private final Node startNode;
 
-	InitialFlow(Node initialNode) {
-		this.initialNode = requireNonNull(initialNode, "initialNode must be non-null!");
+	StartFlow(Node startNode) {
+		this.startNode = requireNonNull(startNode, "startNode must be non-null!");
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return dataFlow(new StartNode<>(owningStatemachine), initialNode, StartWorkflow.class).asTransition(owningStatemachine);
+		return dataFlow(new InitialNode<>(owningStatemachine), startNode, StartWorkflow.class).asTransition(owningStatemachine);
 	}
 }
 
-class StartNode<T> implements Node{
-	private Statemachine<WorkflowState, Token> sm;
+class InitialNode<T> implements Node{
+	private Statemachine<WorkflowState, Token> owningStatemachine;
 
-	public StartNode(Statemachine<WorkflowState,Token> sm) {
-		this.sm = sm;
+	public InitialNode(Statemachine<WorkflowState,Token> owningStatemachine) {
+		this.owningStatemachine = owningStatemachine;
 	}
 
 	@Override
 	public String name() {
-		return "Start Node";
+		return "Initial Node";
 	}
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		return sm.initialState();
+		return owningStatemachine.initialState();
 	}
 	
 }
