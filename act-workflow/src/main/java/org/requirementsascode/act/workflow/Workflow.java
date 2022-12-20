@@ -85,21 +85,21 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 
 	
-	static Workflow create(Nodes nodes, DataFlows dataFlows, StartFlows initialNodes){
+	static Workflow create(Nodes nodes, DataFlows dataFlows, StartFlows startFlows){
 		requireNonNull(nodes, "nodes must be non-null!");
 		requireNonNull(dataFlows, "dataFlows must be non-null!");
-		requireNonNull(initialNodes, "initialNodes must be non-null!");
+		requireNonNull(startFlows, "startFlows must be non-null!");
 
-		Statemachine<WorkflowState, Token> statemachine = statemachineWith(nodes, dataFlows, initialNodes);		
+		Statemachine<WorkflowState, Token> statemachine = statemachineWith(nodes, dataFlows, startFlows);		
 		return new Workflow(statemachine);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows,
-			StartFlows initialNodes) {
+			StartFlows startFlows) {
 		
 		State[] nodeStates = nodes.asStates().toArray(State[]::new);
-		Transitionable[] transitionables = concat(initialNodes.stream(), dataFlows.stream())
+		Transitionable[] transitionables = concat(startFlows.stream(), dataFlows.stream())
 				.toArray(Transitionable[]::new);
 
 		Statemachine<WorkflowState, Token> statemachine = 
