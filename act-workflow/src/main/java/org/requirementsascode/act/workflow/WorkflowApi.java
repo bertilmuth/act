@@ -19,7 +19,11 @@ public class WorkflowApi {
 	}
 	
 	public static DataFlow<ActionData> dataFlow(Node fromNode, Node toNode) {		
-		return dataFlow(fromNode, toNode, ActionData.class, d -> true);
+		return dataFlow(fromNode, toNode, ActionData.class);
+	}
+	
+	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass) {		
+		return dataFlow(fromNode, toNode, inputClass, d -> true);
 	}
 	
 	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {		
