@@ -17,7 +17,6 @@ public class InitialFlow implements Transitionable<WorkflowState, Token> {
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return dataFlow(new AnyNode(), initialNode, StartWorkflow.class, d -> true)
-			.asTransition(owningStatemachine);
+		return dataFlow(new AnyNode(), initialNode, StartWorkflow.class).asTransition(owningStatemachine);
 	}
 }
