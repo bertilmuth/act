@@ -9,7 +9,6 @@ import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowSt
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -99,7 +98,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	private static Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows,
 			InitialFlows initialNodes) {
 		
-		State[] nodeStates = concat(nodes.asStates(), Stream.of(anyNode.asState())).toArray(State[]::new);
+		State[] nodeStates = nodes.asStates().toArray(State[]::new);
 		Transitionable[] transitionables = concat(initialNodes.stream(), dataFlows.stream())
 				.toArray(Transitionable[]::new);
 

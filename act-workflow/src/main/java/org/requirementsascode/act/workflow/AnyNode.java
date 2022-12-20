@@ -2,7 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
-import org.requirementsascode.act.core.NoOp;
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
 
 class AnyNode implements Node {
@@ -16,7 +16,7 @@ class AnyNode implements Node {
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		State<WorkflowState, Token> state = state(name(), s -> true, new NoOp<>());
+		State<WorkflowState, Token> state = state(name(), s -> true, Behavior.identity());
 		return state;
 	}
 }
