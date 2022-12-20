@@ -30,6 +30,10 @@ public class ExecutableNode<T> implements Node {
 	public String name() {
 		return name;
 	}
+	
+	public Class<T> inputClass(){
+		return inputClass;
+	}
 
 	@Override
 	public State<WorkflowState, Token> asState() {
