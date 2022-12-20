@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class TokenDifferenceTest {
-	private static final ExecutableNode ACTION = action("Action1", StringData.class, TokenDifferenceTest::runStep);
+	private static final ExecutableNode<?> ACTION = action("Action1", StringData.class, TokenDifferenceTest::runStep);
 	private static final Token TOKEN1 = token(ACTION, new StringData("Action1"));
 	private static final Token TOKEN2 = token(ACTION, new StringData("Action2"));
 

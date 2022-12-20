@@ -40,7 +40,7 @@ class WorkflowTest {
 	
 	@Test
 	void runsSingleAction() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -58,8 +58,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_firstOneUserTriggered() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2 = action(ACTION2, StringData.class, this::action2Performed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action2 = action(ACTION2, StringData.class, this::action2Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -81,8 +81,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_firstOneUserTriggered_withTruePredicate() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2 = action(ACTION2, StringData.class, this::action2Performed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action2 = action(ACTION2, StringData.class, this::action2Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -104,8 +104,8 @@ class WorkflowTest {
 	
 	@Test
 	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2 = action(ACTION2, StringData.class, this::action2Performed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action2 = action(ACTION2, StringData.class, this::action2Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -126,8 +126,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_bothUserTriggered() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2i)
@@ -148,9 +148,9 @@ class WorkflowTest {
 	
 	@Test
 	void testImplicitFork() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
-		ExecutableNode action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
+		ExecutableNode<?> action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
@@ -169,9 +169,9 @@ class WorkflowTest {
 	
 	@Test
 	void testStepAfterImplicitFork() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
-		ExecutableNode action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
+		ExecutableNode<?> action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
@@ -192,10 +192,10 @@ class WorkflowTest {
 	
 	@Test
 	void testImplicitMerge() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
-		ExecutableNode action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
-		ExecutableNode action3 = action(ACTION3, StringData.class, this::action3Performed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
+		ExecutableNode<?> action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
+		ExecutableNode<?> action3 = action(ACTION3, StringData.class, this::action3Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b, action3)
@@ -217,7 +217,7 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -231,7 +231,7 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData_nextStep() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
+		ExecutableNode<?> action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
