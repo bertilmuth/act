@@ -7,19 +7,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StartFlows{
-	private final List<StartFlow> initialFlows;
+	private final List<StartFlow> startFlows;
 
-	StartFlows(List<Node> initialNodes) {
-		requireNonNull(initialNodes, "initialNodes must be non-null!");
-		this.initialFlows = createInitialFlowsFrom(initialNodes);
+	StartFlows(List<Node> startNodes) {
+		requireNonNull(startNodes, "startNodes must be non-null!");
+		this.startFlows = createStartFlowsFrom(startNodes);
 	}
 
 	public Stream<StartFlow> stream() {
-		return initialFlows.stream();
+		return startFlows.stream();
 	}
 	
-	private List<StartFlow> createInitialFlowsFrom(List<Node> initialNodes) {
-		return initialNodes.stream()
+	private List<StartFlow> createStartFlowsFrom(List<Node> startNodes) {
+		return startNodes.stream()
 			.map(StartFlow::new)
 			.collect(Collectors.toList());
 	}
