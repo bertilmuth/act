@@ -7,7 +7,6 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
-import org.requirementsascode.act.workflow.trigger.StartWorkflow;
 
 public class StartFlow implements Transitionable<WorkflowState, Token> {
 	private final Node startNode;
@@ -18,7 +17,7 @@ public class StartFlow implements Transitionable<WorkflowState, Token> {
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return dataFlow(new InitialNode(owningStatemachine), startNode, StartWorkflow.class).asTransition(owningStatemachine);
+		return dataFlow(new InitialNode(owningStatemachine), startNode, startNode.inputClass()).asTransition(owningStatemachine);
 	}
 }
 

@@ -17,7 +17,6 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
-import org.requirementsascode.act.workflow.trigger.StartWorkflow;
 import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
@@ -39,8 +38,8 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		Data<WorkflowState, ActionData> startedWorkflow = startWorkflow();
-		return nextStep(startedWorkflow.state(), actionData);
+		Data<WorkflowState, ActionData> startedWorkflow = actOn(data(initialWorkflowState, actionData));
+		return consumeToken(startedWorkflow.state());
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
@@ -50,10 +49,6 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
 		return consumeToken(workflowState);
-	}
-	
-	private Data<WorkflowState, ActionData> startWorkflow() {
-		return actOn(data(initialWorkflowState, new StartWorkflow()));
 	}
 	
 	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, ActionData actionData) {
