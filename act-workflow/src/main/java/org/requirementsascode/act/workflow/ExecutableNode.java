@@ -15,7 +15,7 @@ import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 import org.requirementsascode.act.workflow.trigger.StoreToken;
 
-public class ExecutableNode<T> implements Node {
+public class ExecutableNode<T extends ActionData> implements Node {
 	private final String name;
 	private final Class<T> inputClass;
 	private final Behavior<WorkflowState, Token, Token> executableBehavior;
@@ -31,6 +31,7 @@ public class ExecutableNode<T> implements Node {
 		return name;
 	}
 	
+	@Override
 	public Class<T> inputClass(){
 		return inputClass;
 	}

@@ -19,4 +19,9 @@ class AnyNode implements Node {
 		State<WorkflowState, Token> state = state(name(), s -> true, Behavior.identity());
 		return state;
 	}
+
+	@Override
+	public Class<? extends ActionData> inputClass() {
+		return ActionData.class;
+	}
 }
