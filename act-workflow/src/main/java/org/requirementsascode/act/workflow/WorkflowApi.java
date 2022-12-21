@@ -6,12 +6,12 @@ import java.util.function.Predicate;
 import org.requirementsascode.act.core.Behavior;
 
 public class WorkflowApi {
-	public static <T extends ActionData, U extends ActionData> ExecutableNode<T> action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
+	public static <T extends ActionData, U extends ActionData> ExecutableNode action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
 		return executableNode(name, inputClass, new ActionBehavior<>(inputClass, function));
 	}
 	
-	public static <T extends ActionData> ExecutableNode<T> executableNode(String name, Class<T> inputClass, Behavior<WorkflowState,Token,Token> behavior) {
-		return new ExecutableNode<>(name, inputClass, behavior);
+	public static <T extends ActionData> ExecutableNode executableNode(String name, Class<T> inputClass, Behavior<WorkflowState,Token,Token> behavior) {
+		return new ExecutableNode(name, inputClass, behavior);
 	}
 	
 	public static Token token(Node node, ActionData actionData) {

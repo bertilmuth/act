@@ -15,12 +15,12 @@ import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 import org.requirementsascode.act.workflow.trigger.ConsumeToken;
 import org.requirementsascode.act.workflow.trigger.StoreToken;
 
-public class ExecutableNode<T extends ActionData> implements Node {
+public class ExecutableNode implements Node {
 	private final String name;
-	private final Class<T> inputClass;
+	private final Class<? extends ActionData> inputClass;
 	private final Behavior<WorkflowState, Token, Token> executableBehavior;
 
-	ExecutableNode(String name, Class<T> inputClass, Behavior<WorkflowState, Token, Token> executableBehavior) {
+	ExecutableNode(String name, Class<? extends ActionData> inputClass, Behavior<WorkflowState, Token, Token> executableBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.inputClass = requireNonNull(inputClass, "inputClass must be non-null!");
 		this.executableBehavior = requireNonNull(executableBehavior, "executableBehavior must be non-null!");
@@ -32,7 +32,7 @@ public class ExecutableNode<T extends ActionData> implements Node {
 	}
 	
 	@Override
-	public Class<T> inputClass(){
+	public Class<? extends ActionData> inputClass(){
 		return inputClass;
 	}
 
