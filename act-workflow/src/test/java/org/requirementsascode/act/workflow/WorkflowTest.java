@@ -65,7 +65,7 @@ class WorkflowTest {
 			.nodes(action1, action2)
 			.startNodes(action1)
 			.dataFlows(
-				dataFlow(action1, action2, StringData.class)
+				dataFlow(action1, action2)
 			)
 			.build();
 		
