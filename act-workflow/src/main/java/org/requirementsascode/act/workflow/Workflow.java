@@ -43,7 +43,7 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> storedToken = storeToken(workflowState, actionData);
+		Data<WorkflowState, ActionData> storedToken = actOn(data(workflowState, actionData));
 		return nextStep(storedToken.state());
 	}
 	
