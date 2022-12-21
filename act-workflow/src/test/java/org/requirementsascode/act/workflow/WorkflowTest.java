@@ -156,8 +156,8 @@ class WorkflowTest {
 			.nodes(action1, action2a, action2b)
 			.startNodes(action1)
 			.dataFlows(
-				dataFlow(action1, action2a, StringData.class),
-				dataFlow(action1, action2b, StringData.class)
+				dataFlow(action1, action2a),
+				dataFlow(action1, action2b)
 			)
 			.build();
 		
@@ -177,8 +177,8 @@ class WorkflowTest {
 			.nodes(action1, action2a, action2b)
 			.startNodes(action1)
 			.dataFlows(
-				dataFlow(action1, action2a, StringData.class),
-				dataFlow(action1, action2b, StringData.class)
+				dataFlow(action1, action2a),
+				dataFlow(action1, action2b)
 			)
 			.build();
 		
@@ -201,10 +201,10 @@ class WorkflowTest {
 			.nodes(action1, action2a, action2b, action3)
 			.startNodes(action1)
 			.dataFlows(
-				dataFlow(action1, action2a, StringData.class),
-				dataFlow(action1, action2b, StringData.class),
-				dataFlow(action2a, action3, StringData.class),
-				dataFlow(action2b, action3, StringData.class)
+				dataFlow(action1, action2a),
+				dataFlow(action1, action2b),
+				dataFlow(action2a, action3),
+				dataFlow(action2b, action3)
 			)
 			.build();
 		
