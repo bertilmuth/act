@@ -1,7 +1,8 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.function.Predicate;
 
@@ -13,13 +14,11 @@ import org.requirementsascode.act.statemachine.Transitionable;
 public class DataFlow<T extends ActionData> implements Transitionable<WorkflowState, Token>{
 	private final Node fromNode;
 	private final Node toNode;
-	private final Class<T> inputClass;
 	private final Predicate<T> guardCondition;
 
 	DataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {
 		this.fromNode = requireNonNull(fromNode, "fromNode must be non-null!");
 		this.toNode = requireNonNull(toNode, "toNode must be non-null!");
-		this.inputClass = requireNonNull(inputClass, "inputClass must be non-null!");
 		this.guardCondition = requireNonNull(guardCondition, "guardCondition must be non-null!");
 	}
 
@@ -34,7 +33,6 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 		WorkflowState state = inputData.state();
 
 		return inputToken.actionData()
-			.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
 			.filter(ad -> guardCondition.test((T) ad))
 			.map(ad -> moveTokenToToNode(state, inputToken))
 			.orElse(clearToken(state));
