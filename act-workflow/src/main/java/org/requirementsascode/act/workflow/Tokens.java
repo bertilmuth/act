@@ -1,43 +1,55 @@
 package org.requirementsascode.act.workflow;
 
-import static java.util.Objects.requireNonNull;
+import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Tokens {
-	private final List<Token> tokens;
+	private final Map<Node, List<Token>> tokens;
 
-	Tokens(List<Token> tokens) {
-		this.tokens = requireNonNull(tokens);
+	Tokens(List<Token> tokensList) {
+		this(mapOf(tokensList));
+	}
+	
+	private Tokens(Map<Node, List<Token>> tokensMap) {
+		this.tokens = tokensMap;
+	}
+
+	private static Map<Node, List<Token>> mapOf(List<Token> tokens) {
+		return tokens.stream()
+			.collect(Collectors.groupingBy(Token::node));
 	}
 
 	public Stream<Token> stream() {
-		return tokens.stream();
+		return tokens.values().stream().flatMap(List::stream);
 	}
 
 	Tokens replaceToken(Token tokenBefore, Token tokenAfter) {
-		List<Token> mapWithTokenRemoved = removeTokenFromMap(tokens, tokenBefore);
-		List<Token> mapWithTokenAdded = addTokenToMap(mapWithTokenRemoved, tokenAfter);
-		return new Tokens(mapWithTokenAdded);
-	}
-
-	Tokens addToken(Token tokenToAdd) {
-		List<Token> mapWithTokenAdded = addTokenToMap(tokens, tokenToAdd);
+		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(tokens, tokenBefore);
+		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(mapWithTokenRemoved, tokenAfter);
 		return new Tokens(mapWithTokenAdded);
 	}
 	
-	private List<Token> removeTokenFromMap(List<Token> tokens, Token tokenToBeRemoved) {
-		List<Token> newTokensList = new ArrayList<>(tokens);
-		newTokensList.remove(tokenToBeRemoved);
-		return newTokensList;
+	private Map<Node, List<Token>> addTokenToMap(Map<Node, List<Token>> tokens, Token tokenToAdd) {
+		LinkedHashMap<Node, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
+		newTokensMap.merge(tokenToAdd.node(), singletonList(tokenToAdd), (oldValue, value) -> {
+			List<Token> newList = new ArrayList<>(oldValue);
+			newList.addAll(value);
+			return newList;
+		});
+		return newTokensMap;
 	}
 	
-	private List<Token> addTokenToMap(List<Token> tokens, Token tokenToAdd) {
-		List<Token> newTokensList = new ArrayList<>(tokens);
-		newTokensList.add(tokenToAdd);
-		return newTokensList;
+	private Map<Node, List<Token>> removeTokenFromMap(Map<Node, List<Token>> tokens, Token tokenToBeRemoved) {
+		Map<Node, List<Token>> newTokensMap = new HashMap<>(tokens);
+		newTokensMap.remove(tokenToBeRemoved.node());
+		return newTokensMap;
 	}
 
 	@Override
