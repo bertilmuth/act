@@ -9,23 +9,16 @@ import org.requirementsascode.act.statemachine.State;
 
 public class ExecutableNode implements Node {
 	private final String name;
-	private final Class<? extends ActionData> inputClass;
 	private final Behavior<WorkflowState, Token, Token> executableBehavior;
 
-	ExecutableNode(String name, Class<? extends ActionData> inputClass, Behavior<WorkflowState, Token, Token> executableBehavior) {
+	ExecutableNode(String name, Behavior<WorkflowState, Token, Token> executableBehavior) {
 		this.name = requireNonNull(name, "name must be non-null!");
-		this.inputClass = requireNonNull(inputClass, "inputClass must be non-null!");
 		this.executableBehavior = requireNonNull(executableBehavior, "executableBehavior must be non-null!");
 	}
 
 	@Override
 	public String name() {
 		return name;
-	}
-	
-	@Override
-	public Class<? extends ActionData> inputClass(){
-		return inputClass;
 	}
 
 	@Override

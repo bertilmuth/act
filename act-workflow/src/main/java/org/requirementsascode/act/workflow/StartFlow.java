@@ -37,10 +37,4 @@ class InitialNode implements Node{
 	public State<WorkflowState, Token> asState() {
 		return owningStatemachine.initialState();
 	}
-
-	@Override
-	public Class<? extends ActionData> inputClass() {
-		return ActionData.class;
-	}
-	
 }
