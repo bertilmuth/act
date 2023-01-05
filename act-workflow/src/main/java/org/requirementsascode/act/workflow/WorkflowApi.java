@@ -18,15 +18,11 @@ public class WorkflowApi {
 		return new Token(node, actionData);
 	}
 	
-	public static DataFlow<? extends ActionData> dataFlow(Node fromNode, Node toNode) {		
-		return dataFlow(fromNode, toNode, toNode.inputClass());
+	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode) {		
+		return dataFlow(fromNode, toNode, d -> true);
 	}
 	
-	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass) {		
-		return dataFlow(fromNode, toNode, inputClass, d -> true);
-	}
-	
-	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {		
-		return new DataFlow<>(fromNode, toNode, inputClass, guardCondition);
+	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Predicate<T> guardCondition) {		
+		return new DataFlow<>(fromNode, toNode, guardCondition);
 	}
 }

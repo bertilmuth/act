@@ -16,7 +16,7 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 	private final Node toNode;
 	private final Predicate<T> guardCondition;
 
-	DataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {
+	DataFlow(Node fromNode, Node toNode, Predicate<T> guardCondition) {
 		this.fromNode = requireNonNull(fromNode, "fromNode must be non-null!");
 		this.toNode = requireNonNull(toNode, "toNode must be non-null!");
 		this.guardCondition = requireNonNull(guardCondition, "guardCondition must be non-null!");
