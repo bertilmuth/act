@@ -17,7 +17,7 @@ import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 
-public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
+public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final WorkflowState initialWorkflowState;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	private static final AnyNode anyNode = new AnyNode();
@@ -35,18 +35,18 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 		return data.state();
 	}
 	
-	public Data<WorkflowState, ActionData> start(ActionData actionData) {
+	public Data<WorkflowState, Token> start(ActionData actionData) {
 		return nextStep(initialWorkflowState, actionData);
 	}
 	
-	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		return actOn(data(workflowState, actionData));
+	public Data<WorkflowState, Token> nextStep(WorkflowState workflowState, ActionData actionData) {
+		Data<WorkflowState, ActionData> inputData = data(workflowState, actionData);
+		return actOn(tokenize(inputData));
 	}
 	
 	@Override
-	public Data<WorkflowState, ActionData> actOn(Data<WorkflowState,ActionData> inputData) {
-		Data<WorkflowState, Token> output = statemachine.actOn(tokenize(inputData));
-		return data(output.state(), actionOutputIn(output));
+	public Data<WorkflowState, Token> actOn(Data<WorkflowState,Token> inputData) {
+		return statemachine.actOn(inputData);
 	}
 	
 	private Data<WorkflowState, Token> tokenize(Data<WorkflowState,ActionData> inputData) {
@@ -57,11 +57,6 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	private Token tokenInAnyNode(ActionData actionData) {
 		return token(anyNode, actionData);
 	}
-	
-	private ActionData actionOutputIn(Data<WorkflowState, Token> output) {
-		return output.state().actionOutput().orElse(null);
-	}
-
 	
 	static Workflow create(Nodes nodes, DataFlows dataFlows, StartFlows startFlows){
 		requireNonNull(nodes, "nodes must be non-null!");

@@ -33,7 +33,7 @@ class WorkflowTest {
 			.dataFlows()
 			.build();
 		
-		Data<WorkflowState, ActionData> afterStart = workflow.start(str(""));
+		Data<WorkflowState, Token> afterStart = workflow.start(str(""));
 		assertFalse(afterStart.value().isPresent());
 		WorkflowState afterStartState = afterStart.state();
 		assertTrue(tokensList(afterStartState).isEmpty());
@@ -49,10 +49,10 @@ class WorkflowTest {
 			.dataFlows()
 			.build();
 		
-		Data<WorkflowState, ActionData> afterAction1 = workflow.start(str(START_WORKFLOW));
+		Data<WorkflowState, Token> afterAction1 = workflow.start(str(START_WORKFLOW));
 		WorkflowState state = afterAction1.state();
 
-		assertEquals(str(ACTION1), afterAction1.value().get());
+		assertEquals(str(ACTION1), state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
 		assertEquals(token(action1, str(ACTION1)), state.firstTokenIn(action1).get());
 	}
@@ -70,11 +70,11 @@ class WorkflowTest {
 			)
 			.build();
 		
-		Data<WorkflowState, ActionData> afterAction2 = workflow.start(str(START_WORKFLOW));
+		Data<WorkflowState, Token> afterAction2 = workflow.start(str(START_WORKFLOW));
 		WorkflowState state = afterAction2.state();
 		
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
-		assertEquals(action1_2, afterAction2.value().get());
+		assertEquals(action1_2, state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
 		assertEquals(token(action2, action1_2), state.firstTokenIn(action2).get());
 	}
@@ -92,10 +92,10 @@ class WorkflowTest {
 			)
 			.build();
 		
-		Data<WorkflowState, ActionData> afterAction2 = workflow.start(str(START_WORKFLOW));
+		Data<WorkflowState, Token> afterAction2 = workflow.start(str(START_WORKFLOW));
 		WorkflowState state = afterAction2.state();
 		
-		assertEquals(str(ACTION1), afterAction2.value().get());
+		assertEquals(str(ACTION1), state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
 		assertEquals(token(action1, str(ACTION1)), state.firstTokenIn(action1).get());
 	}
@@ -115,7 +115,7 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
-		Data<WorkflowState, ActionData> afterAction2i = workflow.nextStep(afterAction1State, new IntegerData(1));
+		Data<WorkflowState, Token> afterAction2i = workflow.nextStep(afterAction1State, new IntegerData(1));
 		WorkflowState state = afterAction2i.state();
 		
 		//assertEquals(new IntegerData(2), afterAction2i.value().get());
