@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import org.requirementsascode.act.core.Behavior;
 
 public class WorkflowApi {
-	public static <T extends ActionData, U extends ActionData> ExecutableNode action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
+	public static <T extends ActionData, U extends ActionData> Node action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> function) {
 		return executableNode(name, inputClass, new ActionBehavior<>(inputClass, function));
 	}
 	
