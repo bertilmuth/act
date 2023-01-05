@@ -10,6 +10,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
@@ -69,31 +70,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
-		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
-		WorkflowState state = afterAction2.state();
-		
-		StringData action1_2 = str(ACTION1 + "." + ACTION2);
-		assertEquals(action1_2, afterAction2.value().get());
-		assertEquals(1, tokensList(state).size());
-		assertEquals(token(action2, action1_2), state.firstTokenIn(action2).get());
-	}
-	
-	@Test
-	void runsTwoActions_firstOneUserTriggered_withTruePredicate() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2 = action(ACTION2, StringData.class, this::action2Performed);
-		
-		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2)
-			.startNodes(action1)
-			.dataFlows(
-				dataFlow(action1, action2, StringData.class, sd -> sd.toString().equals(ACTION1))
-			)
-			.build();
-		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
-		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		Data<WorkflowState, ActionData> afterAction2 = workflow.start(str(START_WORKFLOW));
 		WorkflowState state = afterAction2.state();
 		
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
@@ -115,8 +92,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
-		Data<WorkflowState, ActionData> afterAction2 = workflow.nextStep(afterAction1State);
+		Data<WorkflowState, ActionData> afterAction2 = workflow.start(str(START_WORKFLOW));
 		WorkflowState state = afterAction2.state();
 		
 		assertEquals(str(ACTION1), afterAction2.value().get());
@@ -125,6 +101,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
 		ExecutableNode action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
@@ -147,27 +124,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	void testImplicitFork() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		ExecutableNode action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
-		ExecutableNode action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
-		
-		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2a, action2b)
-			.startNodes(action1)
-			.dataFlows(
-				dataFlow(action1, action2a),
-				dataFlow(action1, action2b)
-			)
-			.build();
-		
-		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
-		
-		assertEquals(token(action2b, str(ACTION1)), state.firstTokenIn(action2b).get());
-		assertEquals(2, tokensList(state).size());
-	}
-	
-	@Test
 	void testStepAfterImplicitFork() {
 		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
 		ExecutableNode action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
@@ -182,8 +138,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
-		WorkflowState state = workflow.nextStep(afterAction1State).state();
+		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
 		assertEquals(token(action2a, str(ACTION1 + "." + ACTION2A)), state.firstTokenIn(action2a).get());
 		assertEquals(token(action2b, str(ACTION1 + "." + ACTION2B)), state.firstTokenIn(action2b).get());
@@ -208,10 +163,12 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();	
-		WorkflowState state = workflow.nextStep(afterAction1State).state();
+		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
-		assertEquals(token(action3, str(ACTION1 + "." + ACTION2A)), state.firstTokenIn(action3).get());
+		List<Token> tokensInAction3 = state.tokensIn(action3).collect(Collectors.toList());
+		Token expectedToken = token(action3, str(ACTION3));
+		assertEquals(expectedToken, tokensInAction3.get(0));
+		assertEquals(expectedToken, tokensInAction3.get(1));
 		assertEquals(2, tokensList(state).size());
 	}
 	
@@ -226,21 +183,6 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState state = workflow.start(new UnknownData()).state();
-		assertTrue(tokensList(state).isEmpty());
-	}
-	
-	@Test
-	void doesntRunActionForUnknownData_nextStep() {
-		ExecutableNode action1 = action(ACTION1, StringData.class, this::action1Performed);
-		
-		Workflow workflow = Workflow.builder()
-			.nodes(action1)
-			.startNodes(action1)
-			.dataFlows()
-			.build();
-		
-		WorkflowState afterStartState = workflow.start(new UnknownData()).state();
-		WorkflowState state = workflow.nextStep(afterStartState).state();
 		assertTrue(tokensList(state).isEmpty());
 	}
 

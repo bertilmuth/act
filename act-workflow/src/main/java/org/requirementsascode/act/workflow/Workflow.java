@@ -16,8 +16,6 @@ import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
-import org.requirementsascode.act.workflow.trigger.ConsumeToken;
-import org.requirementsascode.act.workflow.trigger.StoreToken;
 
 public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>{
 	private final WorkflowState initialWorkflowState;
@@ -38,26 +36,11 @@ public class Workflow implements Behavior<WorkflowState, ActionData, ActionData>
 	}
 	
 	public Data<WorkflowState, ActionData> start(ActionData actionData) {
-		Data<WorkflowState, ActionData> startedWorkflow = actOn(data(initialWorkflowState, actionData));
-		return nextStep(startedWorkflow.state());
+		return actOn(data(initialWorkflowState, actionData));
 	}
 	
 	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> storedToken = actOn(data(workflowState, actionData));
-		return nextStep(storedToken.state());
-	}
-	
-	public Data<WorkflowState, ActionData> nextStep(WorkflowState workflowState) {
-		return consumeToken(workflowState);
-	}
-	
-	private Data<WorkflowState, ActionData> storeToken(WorkflowState workflowState, ActionData actionData) {
-		Token token = tokenInAnyNode(actionData);
-		return actOn(data(workflowState, new StoreToken(token)));
-	}
-	
-	private Data<WorkflowState, ActionData> consumeToken(WorkflowState workflowState) {
-		return actOn(data(workflowState, new ConsumeToken()));
+		return actOn(data(workflowState, actionData));
 	}
 	
 	@Override
