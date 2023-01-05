@@ -18,23 +18,23 @@ public class Tokens {
 	}
 
 	Tokens replaceToken(Token tokenBefore, Token tokenAfter) {
-		List<Token> listWithTokenBeforeRemoved = removeTokenFromList(tokens, tokenBefore);
-		List<Token> listWithTokenAfterAdded = addTokenToList(listWithTokenBeforeRemoved, tokenAfter);
-		return new Tokens(listWithTokenAfterAdded);
+		List<Token> mapWithTokenRemoved = removeTokenFromMap(tokens, tokenBefore);
+		List<Token> mapWithTokenAdded = addTokenToMap(mapWithTokenRemoved, tokenAfter);
+		return new Tokens(mapWithTokenAdded);
 	}
 
 	Tokens addToken(Token tokenToAdd) {
-		List<Token> listWithTokenAdded = addTokenToList(tokens, tokenToAdd);
-		return new Tokens(listWithTokenAdded);
+		List<Token> mapWithTokenAdded = addTokenToMap(tokens, tokenToAdd);
+		return new Tokens(mapWithTokenAdded);
 	}
 	
-	private List<Token> removeTokenFromList(List<Token> tokens, Token tokenToBeRemoved) {
+	private List<Token> removeTokenFromMap(List<Token> tokens, Token tokenToBeRemoved) {
 		List<Token> newTokensList = new ArrayList<>(tokens);
 		newTokensList.remove(tokenToBeRemoved);
 		return newTokensList;
 	}
 	
-	private List<Token> addTokenToList(List<Token> tokens, Token tokenToAdd) {
+	private List<Token> addTokenToMap(List<Token> tokens, Token tokenToAdd) {
 		List<Token> newTokensList = new ArrayList<>(tokens);
 		newTokensList.add(tokenToAdd);
 		return newTokensList;
