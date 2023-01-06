@@ -9,6 +9,7 @@ import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowSt
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -117,8 +118,10 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			        Map.Entry::getKey,
 			        Map.Entry::getValue,
 			        (v1, v2) -> { 
-			        	v1.addAll(v2); 
-			        	return v1; 
+			        	List<Token> mergedList = Stream.concat(v1.stream(), v2.stream())
+			        		.filter(t -> t.actionData().isPresent())
+			        		.collect(Collectors.toList());
+			        	return mergedList; 
 			        })
 			    );
 			
