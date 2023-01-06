@@ -1,5 +1,6 @@
 package org.requirementsascode.act.workflow;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Tokens {
 	}
 	
 	public Stream<Token> tokensIn(Node node) {
-		return streamAsList().filter(token -> token.node().equals(node));
+		return tokens.getOrDefault(node, emptyList()).stream();
 	}
 
 	Tokens replaceToken(Token tokenBefore, Token tokenAfter) {
