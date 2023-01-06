@@ -3,10 +3,11 @@ package org.requirementsascode.act.workflow;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.requirementsascode.act.workflow.TokensDifference.*;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.TokensDifference.addedTokens;
+import static org.requirementsascode.act.workflow.TokensDifference.removedTokens;
+import static org.requirementsascode.act.workflow.WorkflowApi.action;
+import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
