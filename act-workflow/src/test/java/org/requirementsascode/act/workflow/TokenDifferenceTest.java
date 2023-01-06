@@ -2,6 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.requirementsascode.act.workflow.TokensDifference.*;
 import static org.requirementsascode.act.workflow.WorkflowApi.*;
@@ -18,8 +19,8 @@ class TokenDifferenceTest {
 	private static final Token TOKEN2 = token(ACTION, new StringData("Action2"));
 
 	@Test
-	void differenceBetweenEmptyLists() {
-		Tokens emptyTokens = new Tokens(emptyList());
+	void differenceBetweenEmptyTokens() {
+		Tokens emptyTokens = new Tokens(emptyMap());
 		Tokens difference = TokensDifference.addedTokens(emptyTokens, emptyTokens);
 		assertEquals(emptyList(), tokensList(difference));
 	}
