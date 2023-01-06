@@ -26,59 +26,71 @@ class TokenDifferenceTest {
 	}
 
 	@Test
-	void oneTokenAddedToEmptyList() {
-		Tokens tokensBefore = new Tokens(emptyList());
-		Tokens tokensAfter = new Tokens(asList(TOKEN1));
+	void oneTokenAdded() {
+		Tokens tokensBefore = new Tokens(emptyMap());
+		Tokens tokensAfter = new Tokens(token1inAction());
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN1), tokensList(tokensAdded));
+		assertEquals(token1inAction(), tokensList(tokensAdded));
 	}
 	
 	@Test
 	void oneDifferentTokenAddedToOneElementList() {
-		Tokens tokensBefore = new Tokens(asList(TOKEN1));
-		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN2));
+		Tokens tokensBefore = new Tokens(token1inAction());
+		Tokens tokensAfter = new Tokens(token12inAction());
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN2), tokensList(tokensAdded));
+		assertEquals(token2inAction(), tokensList(tokensAdded));
 	}
 	
 	@Test
 	void sameTokenAddedToOneElementList() {
-		Tokens tokensBefore = new Tokens(asList(TOKEN1));
+		Tokens tokensBefore = new Tokens(token1inAction());
 		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN1));
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN1), tokensList(tokensAdded));
+		assertEquals(token1inAction(), tokensList(tokensAdded));
 	}
 	
 	@Test
 	void oneTokenRemovedFromOneElementList() {
-		Tokens tokensBefore = new Tokens(asList(TOKEN1));
+		Tokens tokensBefore = new Tokens(token1inAction());
 		Tokens tokensAfter = new Tokens(emptyList());
 
 		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN1), tokensList(tokensRemoved));
+		assertEquals(token1inAction(), tokensList(tokensRemoved));
 	}
 	
 	@Test
 	void tokenRemovedFromTwoElementList() {
-		Tokens tokensBefore = new Tokens(asList(TOKEN1, TOKEN2));
-		Tokens tokensAfter = new Tokens(asList(TOKEN1));
+		Tokens tokensBefore = new Tokens(token12inAction());
+		Tokens tokensAfter = new Tokens(token1inAction());
 
 		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
-		assertEquals(asList(TOKEN2), tokensList(tokensRemoved));
+		assertEquals(token2inAction(), tokensList(tokensRemoved));
 	}
 	
 	private static StringData runStep(WorkflowState state, StringData inputData) {
 		return inputData;
 	}
 	
-	private List<Token> tokensList(Tokens difference) {
-		return difference.stream().collect(Collectors.toList());
+	private List<Token> tokensList(Tokens tokens) {
+		return tokens.stream().collect(Collectors.toList());
 	}
 	
 	private List<Token> asList(Token...tokens){
 		return Arrays.asList(tokens);
+	}
+	
+	private List<Token> token1inAction() {
+		return asList(TOKEN1);
+	}
+	
+	private List<Token> token2inAction() {
+		return asList(TOKEN2);
+	}
+	
+	private List<Token> token12inAction() {
+		return asList(TOKEN1, TOKEN2);
 	}
 }
