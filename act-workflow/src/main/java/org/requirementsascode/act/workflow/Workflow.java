@@ -88,20 +88,19 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			Tokens mergedTokens = mergeTokens(dataBefore, datasAfter);
-			WorkflowState state = new WorkflowState(statemachineOf(dataBefore), mergedTokens, actionDataOfFirstOf(mergedTokens));
+			Statemachine<WorkflowState, Token> statemachine = statemachineOf(dataBefore);
+			Tokens mergedTokens = mergeTokens(datasAfter);
+			ActionData actionData = actionDataOfFirstOf(mergedTokens);
+			
+			WorkflowState state = new WorkflowState(statemachine, mergedTokens, actionData);
 			return data(state, null);
-		}
-
-		private ActionData actionDataOfFirstOf(Tokens token) {
-			return token.streamAsList().findFirst().flatMap(Token::actionData).orElse(null);
 		}
 
 		private Statemachine<WorkflowState, Token> statemachineOf(Data<WorkflowState, Token> dataBefore) {
 			return dataBefore.state().statemachine();
 		}
 
-		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {	
+		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datasAfter) {	
 			List<Token> updatedTokenList = tokensIn(datasAfter).stream()
 				.filter(t -> t.actionData().isPresent()).collect(Collectors.toList());
 			
@@ -116,6 +115,10 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 				.collect(Collectors.toList());
 			return addedTokensList;
 		}	
+		
+		private ActionData actionDataOfFirstOf(Tokens token) {
+			return token.streamAsList().findFirst().flatMap(Token::actionData).orElse(null);
+		}
 	}
 }
 
