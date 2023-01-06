@@ -1,12 +1,12 @@
 package org.requirementsascode.act.workflow;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.requirementsascode.act.workflow.TokensDifference.*;
 import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,5 +76,9 @@ class TokenDifferenceTest {
 	
 	private List<Token> tokensList(Tokens difference) {
 		return difference.stream().collect(Collectors.toList());
+	}
+	
+	private List<Token> asList(Token...tokens){
+		return Arrays.asList(tokens);
 	}
 }
