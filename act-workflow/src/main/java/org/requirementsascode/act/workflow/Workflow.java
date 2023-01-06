@@ -111,23 +111,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			return updatedTokens;
 		}
 
-		private List<Token> tokensBeforeList(Data<WorkflowState, Token> dataBefore) {
-			return dataBefore.state().tokens().streamAsList().collect(Collectors.toList());
-		}
-
-		private List<Token> removedTokensList(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			Tokens tokensBefore = dataBefore.state().tokens();
-
-			List<Token> removedTokensList = datasAfter.stream()
-				.map(Data::state).map(s -> s.tokens())
-				.flatMap(tkns -> TokensDifference.removedTokens(tokensBefore, tkns).streamAsList())
-				.collect(Collectors.toList());
-			return removedTokensList;
-		}
-
 		private List<Token> addedTokensList(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			Tokens tokensBefore = dataBefore.state().tokens();
-
 			List<Token> addedTokensList = datasAfter.stream()
 				.map(Data::state).map(s -> s.tokens())
 				.flatMap(tkns -> tkns.streamAsList())
