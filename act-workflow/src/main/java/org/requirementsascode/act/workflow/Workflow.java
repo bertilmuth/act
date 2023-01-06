@@ -7,6 +7,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Behavior;
@@ -109,11 +110,16 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		}
 
 		private List<Token> tokensIn(List<Data<WorkflowState, Token>> datasAfter) {
-			List<Token> addedTokensList = datasAfter.stream()
+			Map<Node, List<Token>> map = datasAfter.stream()
 				.map(Data::state).map(s -> s.tokens())
-				.flatMap(tkns -> tkns.streamAsList())
-				.collect(Collectors.toList());
-			return addedTokensList;
+				.flatMap(tkns -> tkns.asMap().entrySet().stream())
+			    .collect(Collectors.toMap(
+				        Map.Entry::getKey,
+				        Map.Entry::getValue,
+				        (v1, v2) -> { v1.addAll(v2); return v1; }));
+			
+			List<Token> tokensList = map.values().stream().flatMap(tkns -> tkns.stream()).collect(Collectors.toList());
+			return tokensList;
 		}	
 		
 		private ActionData actionDataOfFirstOf(Tokens token) {
