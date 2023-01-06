@@ -29,7 +29,7 @@ public class WorkflowState {
 	}
 	
 	public Stream<Token> tokensIn(Node node) {
-		return tokens().streamAsList().filter(token -> token.node().equals(node));
+		return tokens().tokensIn(node);
 	}
 	
 	public Optional<Token> firstTokenIn(Node node) {

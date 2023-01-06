@@ -24,6 +24,10 @@ public class Tokens {
 	public Stream<Token> streamAsList() {
 		return tokens.values().stream().flatMap(List::stream);
 	}
+	
+	public Stream<Token> tokensIn(Node node) {
+		return streamAsList().filter(token -> token.node().equals(node));
+	}
 
 	Tokens replaceToken(Token tokenBefore, Token tokenAfter) {
 		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(tokens, tokenBefore);
