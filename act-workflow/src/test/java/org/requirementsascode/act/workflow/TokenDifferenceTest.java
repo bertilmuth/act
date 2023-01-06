@@ -35,9 +35,9 @@ class TokenDifferenceTest {
 	}
 	
 	@Test
-	void oneDifferentTokenAddedToOneElementList() {
+	void oneDifferentTokenAdded() {
 		Tokens tokensBefore = new Tokens(token1inAction());
-		Tokens tokensAfter = new Tokens(token12inAction());
+		Tokens tokensAfter = new Tokens(token1_2inAction());
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
 		assertEquals(token2inAction(), tokensList(tokensAdded));
@@ -46,7 +46,7 @@ class TokenDifferenceTest {
 	@Test
 	void sameTokenAddedToOneElementList() {
 		Tokens tokensBefore = new Tokens(token1inAction());
-		Tokens tokensAfter = new Tokens(asList(TOKEN1, TOKEN1));
+		Tokens tokensAfter = new Tokens(token1_1inAction());
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
 		assertEquals(token1inAction(), tokensList(tokensAdded));
@@ -63,7 +63,7 @@ class TokenDifferenceTest {
 	
 	@Test
 	void tokenRemovedFromTwoElementList() {
-		Tokens tokensBefore = new Tokens(token12inAction());
+		Tokens tokensBefore = new Tokens(token1_2inAction());
 		Tokens tokensAfter = new Tokens(token1inAction());
 
 		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
@@ -90,7 +90,11 @@ class TokenDifferenceTest {
 		return asList(TOKEN2);
 	}
 	
-	private List<Token> token12inAction() {
+	private List<Token> token1_1inAction() {
+		return asList(TOKEN1, TOKEN1);
+	}
+	
+	private List<Token> token1_2inAction() {
 		return asList(TOKEN1, TOKEN2);
 	}
 }
