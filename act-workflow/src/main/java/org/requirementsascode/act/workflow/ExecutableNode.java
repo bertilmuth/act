@@ -20,15 +20,6 @@ public class ExecutableNode implements Node {
 		requireNonNull(actionFunction, "actionFunction must be non-null!");
 		this.actionBehavior = when(inputClass, behaviorOf(actionFunction));
 	}
-
-
-	private <T extends ActionData, U extends ActionData> Behavior<WorkflowState, T, U> behaviorOf(BiFunction<WorkflowState, T, U> functionOnActionData) {
-		return d -> {
-			WorkflowState state = d.state();
-			U functionResult = functionOnActionData.apply(state, d.value().orElse(null));
-			return data(state, functionResult);
-		};
-	}
 	
 
 	@Override
@@ -43,7 +34,7 @@ public class ExecutableNode implements Node {
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
 		Data<WorkflowState, ActionData> functionInputData = unboxActionData(inputData);
-		ActionData outputActionData = executeBehavior(functionInputData).value().orElse(null);
+		ActionData outputActionData = actionBehavior.actOn(functionInputData).value().orElse(null);
 
 		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
@@ -57,11 +48,15 @@ public class ExecutableNode implements Node {
 		return "ExecutableNode[" + name + "]";
 	}
 	
-	private Data<WorkflowState, ActionData> unboxActionData(Data<WorkflowState, Token> inputData) {
-		return data(inputData.state(), ActionData.from(inputData));
+	private <T extends ActionData, U extends ActionData> Behavior<WorkflowState, T, U> behaviorOf(BiFunction<WorkflowState, T, U> actionFunction) {
+		return d -> {
+			WorkflowState state = d.state();
+			U functionResult = actionFunction.apply(state, d.value().orElse(null));
+			return data(state, functionResult);
+		};
 	}
 	
-	private Data<WorkflowState, ActionData> executeBehavior(Data<WorkflowState, ActionData> functionInputData) {
-		return actionBehavior.actOn(functionInputData);
+	private Data<WorkflowState, ActionData> unboxActionData(Data<WorkflowState, Token> inputData) {
+		return data(inputData.state(), ActionData.from(inputData));
 	}
 }
