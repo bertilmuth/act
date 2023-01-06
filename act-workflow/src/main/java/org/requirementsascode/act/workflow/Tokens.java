@@ -21,10 +21,6 @@ public class Tokens {
 	public Map<Node, List<Token>> asMap() {
 		return Collections.unmodifiableMap(tokens);
 	}
-
-	public Stream<Token> streamAsList() {
-		return tokens.values().stream().flatMap(List::stream);
-	}
 	
 	public Stream<Token> tokensIn(Node node) {
 		return tokens.getOrDefault(node, emptyList()).stream();

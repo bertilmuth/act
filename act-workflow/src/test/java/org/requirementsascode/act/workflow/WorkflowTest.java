@@ -2,7 +2,6 @@ package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 
@@ -219,12 +218,8 @@ class WorkflowTest {
 		return concatenatedStringValue;
 	}
 	
-	private int nrOfTokensIn(WorkflowState state) {
-		return tokensList(state).size();
-	}
-	
-	private List<Token> tokensList(WorkflowState state) {
-		return state.tokens().streamAsList().collect(Collectors.toList());
+	private long nrOfTokensIn(WorkflowState state) {
+		return state.tokens().asMap().values().stream().flatMap(List::stream).count();
 	}
 	
 	private ActionData actionDataIn(Node action1, WorkflowState state) {
