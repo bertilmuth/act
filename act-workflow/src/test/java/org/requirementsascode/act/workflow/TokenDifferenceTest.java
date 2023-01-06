@@ -12,8 +12,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -27,7 +25,7 @@ class TokenDifferenceTest {
 	void differenceBetweenEmptyTokens() {
 		Tokens emptyTokens = new Tokens(emptyMap());
 		Tokens difference = TokensDifference.addedTokens(emptyTokens, emptyTokens);
-		assertEquals(emptyList(), tokensList(difference));
+		assertEquals(emptyMap(), difference.asMap());
 	}
 
 	@Test
@@ -77,10 +75,6 @@ class TokenDifferenceTest {
 	
 	private static StringData runStep(WorkflowState state, StringData inputData) {
 		return inputData;
-	}
-	
-	private List<Token> tokensList(Tokens tokens) {
-		return tokens.streamAsList().collect(Collectors.toList());
 	}
 	
 	private Map<Node, List<Token>> token1inAction() {
