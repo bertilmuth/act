@@ -17,7 +17,7 @@ public class Tokens {
 		this(mapOf(tokensList));
 	}
 	
-	private Tokens(Map<Node, List<Token>> tokensMap) {
+	Tokens(Map<Node, List<Token>> tokensMap) {
 		this.tokens = tokensMap;
 	}
 

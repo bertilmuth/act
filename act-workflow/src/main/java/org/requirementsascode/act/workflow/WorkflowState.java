@@ -1,6 +1,6 @@
 package org.requirementsascode.act.workflow;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class WorkflowState {
 	}
 	
 	static WorkflowState intialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
-		return new WorkflowState(statemachine, new Tokens(emptyList()), null);
+		return new WorkflowState(statemachine, new Tokens(emptyMap()), null);
 	}
 	
 	public Tokens tokens() {
