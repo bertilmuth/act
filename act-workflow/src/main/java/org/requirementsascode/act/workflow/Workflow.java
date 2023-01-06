@@ -104,7 +104,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 
 		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datasAfter) {	
 			List<Token> updatedTokenList = tokensIn(datasAfter).stream()
-				.filter(t -> t.actionData().isPresent()).collect(Collectors.toList());
+				.collect(Collectors.toList());
 			
 			Tokens updatedTokens = new Tokens(updatedTokenList);
 			return updatedTokens;
@@ -123,6 +123,11 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			        	return mergedList; 
 			        })
 			    );
+			
+			// Remove all elements that don't have actionData set
+			mergedTokenMaps.replaceAll((key, value) -> value.stream()
+				.filter(t -> t.actionData().isPresent())
+			    .collect(Collectors.toList()));
 			
 			List<Token> tokensList = mergedTokenMaps.values().stream().flatMap(tkns -> tkns.stream()).collect(Collectors.toList());
 			return tokensList;
