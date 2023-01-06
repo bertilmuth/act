@@ -28,15 +28,6 @@ public class ExecutableNode implements Node {
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
-		return actOn(inputData);
-	}
-
-	@Override
-	public String toString() {
-		return "ExecutableNode[" + name + "]";
-	}
-	
-	private Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
 		Data<WorkflowState, ActionData> functionInputData = unboxActionData(inputData);
 		ActionData outputActionData = executeBehavior(functionInputData).value().orElse(null);
 
@@ -45,6 +36,11 @@ public class ExecutableNode implements Node {
 
 		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(inputToken, outputToken);
 		return updatedWorkflow;
+	}
+
+	@Override
+	public String toString() {
+		return "ExecutableNode[" + name + "]";
 	}
 	
 	private Data<WorkflowState, ActionData> unboxActionData(Data<WorkflowState, Token> inputData) {
