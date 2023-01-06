@@ -6,6 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -124,8 +125,11 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			return new Tokens(mergedTokenMap);
 		}
 		
-		private ActionData actionDataOfFirstOf(Tokens token) {
-			return token.streamAsList().findFirst().flatMap(Token::actionData).orElse(null);
+		private ActionData actionDataOfFirstOf(Tokens tokens) {
+			return tokens.asMap().values().stream()
+				.flatMap(Collection::stream).findFirst()
+				.flatMap(Token::actionData)
+				.orElse(null);
 		}
 	}
 }
