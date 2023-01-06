@@ -35,7 +35,7 @@ class WorkflowTest {
 		Data<WorkflowState, Token> afterStart = workflow.start(str(""));
 		assertFalse(afterStart.value().isPresent());
 		WorkflowState afterStartState = afterStart.state();
-		assertTrue(tokensList(afterStartState).isEmpty());
+		assertEquals(0, nrOfTokensIn(afterStartState));
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ class WorkflowTest {
 		WorkflowState state = afterAction1.state();
 
 		assertEquals(str(ACTION1), state.actionOutput().get());
-		assertEquals(1, tokensList(state).size());
+		assertEquals(1, nrOfTokensIn(state));
 		assertEquals(str(ACTION1), actionDataIn(action1, state));
 	}
 	
@@ -74,7 +74,7 @@ class WorkflowTest {
 		
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
 		assertEquals(action1_2, state.actionOutput().get());
-		assertEquals(1, tokensList(state).size());
+		assertEquals(1, nrOfTokensIn(state));
 		assertEquals(action1_2, actionDataIn(action2, state));
 	}
 	
@@ -95,7 +95,7 @@ class WorkflowTest {
 		WorkflowState state = afterAction2.state();
 		
 		assertEquals(str(ACTION1), state.actionOutput().get());
-		assertEquals(1, tokensList(state).size());
+		assertEquals(1, nrOfTokensIn(state));
 		assertEquals(str(ACTION1), actionDataIn(action1, state));
 	}
 	
@@ -141,7 +141,7 @@ class WorkflowTest {
 
 		assertEquals(str(ACTION1 + "." + ACTION2A), actionDataIn(action2a, state));
 		assertEquals(str(ACTION1 + "." + ACTION2B), actionDataIn(action2b, state));
-		assertEquals(2, tokensList(state).size());
+		assertEquals(2, nrOfTokensIn(state));
 	}
 	
 	@Test
@@ -168,7 +168,7 @@ class WorkflowTest {
 		StringData expectedTokenData = str(ACTION3);
 		assertEquals(expectedTokenData, tokensInAction3.get(0).actionData().get());
 		assertEquals(expectedTokenData, tokensInAction3.get(1).actionData().get());
-		assertEquals(2, tokensList(state).size());
+		assertEquals(2, nrOfTokensIn(state));
 	}
 	
 	@Test
@@ -182,7 +182,7 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState state = workflow.start(new UnknownData()).state();
-		assertTrue(tokensList(state).isEmpty());
+		assertEquals(0, nrOfTokensIn(state));
 	}
 
 	private StringData str(String str) {
@@ -217,6 +217,10 @@ class WorkflowTest {
 		String previousValue = workflowState.actionOutput().map(Object::toString).orElse("");
 		StringData concatenatedStringValue = new StringData(previousValue + "." + actionNameToBeAdded);
 		return concatenatedStringValue;
+	}
+	
+	private int nrOfTokensIn(WorkflowState state) {
+		return tokensList(state).size();
 	}
 	
 	private List<Token> tokensList(WorkflowState state) {
