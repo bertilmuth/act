@@ -53,7 +53,7 @@ class WorkflowTest {
 
 		assertEquals(str(ACTION1), state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(str(ACTION1), state.firstTokenIn(action1).get().actionData().get());
+		assertEquals(str(ACTION1), actionDataIn(action1, state));
 	}
 	
 	@Test
@@ -75,7 +75,7 @@ class WorkflowTest {
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
 		assertEquals(action1_2, state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(action1_2, state.firstTokenIn(action2).get().actionData().get());
+		assertEquals(action1_2, actionDataIn(action2, state));
 	}
 	
 	@Test
@@ -96,7 +96,7 @@ class WorkflowTest {
 		
 		assertEquals(str(ACTION1), state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(str(ACTION1), state.firstTokenIn(action1).get().actionData().get());
+		assertEquals(str(ACTION1), actionDataIn(action1, state));
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ class WorkflowTest {
 		
 		//assertEquals(new IntegerData(2), afterAction2i.value().get());
 		//assertEquals(1, tokensList(state).size());
-		assertEquals(new IntegerData(2), state.firstTokenIn(action2i).get().actionData().get());
+		assertEquals(new IntegerData(2), actionDataIn(action2i, state));
 	}
 	
 	@Test
@@ -139,8 +139,8 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
-		assertEquals(str(ACTION1 + "." + ACTION2A), state.firstTokenIn(action2a).get().actionData().get());
-		assertEquals(str(ACTION1 + "." + ACTION2B), state.firstTokenIn(action2b).get().actionData().get());
+		assertEquals(str(ACTION1 + "." + ACTION2A), actionDataIn(action2a, state));
+		assertEquals(str(ACTION1 + "." + ACTION2B), actionDataIn(action2b, state));
 		assertEquals(2, tokensList(state).size());
 	}
 	
@@ -221,6 +221,10 @@ class WorkflowTest {
 	
 	private List<Token> tokensList(WorkflowState state) {
 		return state.tokens().stream().collect(Collectors.toList());
+	}
+	
+	private ActionData actionDataIn(Node action1, WorkflowState state) {
+		return state.firstTokenIn(action1).get().actionData().get();
 	}
 }
 
