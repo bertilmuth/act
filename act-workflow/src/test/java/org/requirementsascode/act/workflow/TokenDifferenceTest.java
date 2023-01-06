@@ -8,6 +8,8 @@ import static org.requirementsascode.act.workflow.TokensDifference.removedTokens
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -82,23 +84,25 @@ class TokenDifferenceTest {
 	}
 	
 	private Map<Node, List<Token>> token1inAction() {
-		return mapOf(TOKEN1);
+		return tokensInAction(TOKEN1);
 	}
 	
 	private Map<Node, List<Token>> token2inAction() {
-		return mapOf(TOKEN2);
+		return tokensInAction(TOKEN2);
 	}
 	
 	private Map<Node, List<Token>> tokens1_1inAction() {
-		return mapOf(TOKEN1, TOKEN1);
+		return tokensInAction(TOKEN1, TOKEN1);
 	}
 	
 	private Map<Node, List<Token>> tokens1_2inAction() {
-		return mapOf(TOKEN1, TOKEN2);
+		return tokensInAction(TOKEN1, TOKEN2);
 	}
 	
-	private Map<Node, List<Token>> mapOf(Token... tokens) {
-		return Stream.of(tokens)
-			.collect(Collectors.groupingBy(Token::node));
+	private Map<Node, List<Token>> tokensInAction(Token... tokens){
+		List<Token> tokenList = Arrays.asList(tokens);
+		Map<Node, List<Token>> tokenMap = new HashMap<>();
+		tokenMap.put(ACTION, tokenList);
+		return tokenMap;
 	}
 }
