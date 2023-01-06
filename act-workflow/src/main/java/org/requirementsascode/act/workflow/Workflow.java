@@ -119,7 +119,6 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			        Map.Entry::getValue,
 			        (v1, v2) -> { 
 			        	List<Token> mergedList = Stream.concat(v1.stream(), v2.stream())
-			        		.filter(t -> t.actionData().isPresent())
 			        		.collect(Collectors.toList());
 			        	return mergedList; 
 			        })
