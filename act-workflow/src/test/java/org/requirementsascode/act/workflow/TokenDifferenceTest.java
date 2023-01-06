@@ -42,7 +42,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(tokens1_2inAction());
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(token2inAction(), tokensList(tokensAdded));
+		assertEquals(token2inAction(), tokensAdded.asMap());
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(token1inAction());
 
 		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
-		assertEquals(token2inAction(), tokensList(tokensRemoved));
+		assertEquals(token2inAction(), tokensRemoved.asMap());
 	}
 	
 	private static StringData runStep(WorkflowState state, StringData inputData) {
@@ -88,8 +88,8 @@ class TokenDifferenceTest {
 		return mapOf(TOKEN1);
 	}
 	
-	private List<Token> token2inAction() {
-		return asList(TOKEN2);
+	private Map<Node, List<Token>> token2inAction() {
+		return mapOf(TOKEN2);
 	}
 	
 	private List<Token> tokens1_1inAction() {
