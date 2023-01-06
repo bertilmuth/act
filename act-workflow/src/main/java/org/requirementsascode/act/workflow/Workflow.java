@@ -95,7 +95,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		}
 
 		private ActionData actionDataOfFirstOf(Tokens token) {
-			return token.stream().findFirst().flatMap(Token::actionData).orElse(null);
+			return token.streamAsList().findFirst().flatMap(Token::actionData).orElse(null);
 		}
 
 		private Statemachine<WorkflowState, Token> statemachineOf(Data<WorkflowState, Token> dataBefore) {
@@ -113,7 +113,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		}
 
 		private List<Token> tokensBeforeList(Data<WorkflowState, Token> dataBefore) {
-			return dataBefore.state().tokens().stream().collect(Collectors.toList());
+			return dataBefore.state().tokens().streamAsList().collect(Collectors.toList());
 		}
 
 		private List<Token> removedTokensList(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
@@ -121,7 +121,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 
 			List<Token> removedTokensList = datasAfter.stream()
 				.map(Data::state).map(s -> s.tokens())
-				.flatMap(tkns -> TokensDifference.removedTokens(tokensBefore, tkns).stream())
+				.flatMap(tkns -> TokensDifference.removedTokens(tokensBefore, tkns).streamAsList())
 				.collect(Collectors.toList());
 			return removedTokensList;
 		}
@@ -131,7 +131,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 
 			List<Token> addedTokensList = datasAfter.stream()
 				.map(Data::state).map(s -> s.tokens())
-				.flatMap(tkns -> TokensDifference.addedTokens(tokensBefore, tkns).stream())
+				.flatMap(tkns -> TokensDifference.addedTokens(tokensBefore, tkns).streamAsList())
 				.collect(Collectors.toList());
 			return addedTokensList;
 		}	

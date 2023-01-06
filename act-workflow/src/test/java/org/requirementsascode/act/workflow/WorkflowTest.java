@@ -220,7 +220,7 @@ class WorkflowTest {
 	}
 	
 	private List<Token> tokensList(WorkflowState state) {
-		return state.tokens().stream().collect(Collectors.toList());
+		return state.tokens().streamAsList().collect(Collectors.toList());
 	}
 	
 	private ActionData actionDataIn(Node action1, WorkflowState state) {

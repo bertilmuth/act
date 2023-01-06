@@ -8,7 +8,9 @@ import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -31,7 +33,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(token1inAction());
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(token1inAction(), tokensList(tokensAdded));
+		assertEquals(token1inAction(), tokensAdded.asMap());
 	}
 	
 	@Test
@@ -49,7 +51,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(tokens1_1inAction());
 
 		Tokens tokensAdded = addedTokens(tokensBefore, tokensAfter);
-		assertEquals(token1inAction(), tokensList(tokensAdded));
+		assertEquals(token1inAction(), tokensAdded.asMap());
 	}
 	
 	@Test
@@ -58,7 +60,7 @@ class TokenDifferenceTest {
 		Tokens tokensAfter = new Tokens(emptyList());
 
 		Tokens tokensRemoved = removedTokens(tokensBefore, tokensAfter);
-		assertEquals(token1inAction(), tokensList(tokensRemoved));
+		assertEquals(token1inAction(), tokensRemoved.asMap());
 	}
 	
 	@Test
@@ -75,15 +77,15 @@ class TokenDifferenceTest {
 	}
 	
 	private List<Token> tokensList(Tokens tokens) {
-		return tokens.stream().collect(Collectors.toList());
+		return tokens.streamAsList().collect(Collectors.toList());
 	}
 	
 	private List<Token> asList(Token...tokens){
 		return Arrays.asList(tokens);
 	}
 	
-	private List<Token> token1inAction() {
-		return asList(TOKEN1);
+	private Map<Node, List<Token>> token1inAction() {
+		return mapOf(TOKEN1);
 	}
 	
 	private List<Token> token2inAction() {
@@ -96,5 +98,10 @@ class TokenDifferenceTest {
 	
 	private List<Token> tokens1_2inAction() {
 		return asList(TOKEN1, TOKEN2);
+	}
+	
+	private Map<Node, List<Token>> mapOf(Token... tokens) {
+		return Stream.of(tokens)
+			.collect(Collectors.groupingBy(Token::node));
 	}
 }

@@ -23,7 +23,7 @@ class TokensDifference {
 	}
 
 	private static List<Token> asList(Tokens tokensBefore) {
-		return tokensBefore.stream().collect(Collectors.toList());
+		return tokensBefore.streamAsList().collect(Collectors.toList());
 	}
 
 }

@@ -3,6 +3,7 @@ package org.requirementsascode.act.workflow;
 import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,8 +26,12 @@ public class Tokens {
 		return tokens.stream()
 			.collect(Collectors.groupingBy(Token::node));
 	}
+	
+	public Map<Node, List<Token>> asMap() {
+		return Collections.unmodifiableMap(tokens);
+	}
 
-	public Stream<Token> stream() {
+	public Stream<Token> streamAsList() {
 		return tokens.values().stream().flatMap(List::stream);
 	}
 
