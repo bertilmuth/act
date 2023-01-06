@@ -103,15 +103,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		}
 
 		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datasAfter) {	
-			List<Token> updatedTokenList = tokensIn(datasAfter).stream()
-				.collect(Collectors.toList());
-			
-			Tokens updatedTokens = new Tokens(updatedTokenList);
-			return updatedTokens;
-		}
-
-		private List<Token> tokensIn(List<Data<WorkflowState, Token>> datasAfter) {
-			Map<Node, List<Token>> mergedTokenMaps = datasAfter.stream()
+			Map<Node, List<Token>> mergedTokenMap = datasAfter.stream()
 				.map(Data::state).map(WorkflowState::tokens)
 				.flatMap(tkns -> tkns.asMap().entrySet().stream())
 			    .collect(Collectors.toMap(
@@ -125,13 +117,13 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			    );
 			
 			// Remove all elements that don't have actionData set
-			mergedTokenMaps.replaceAll((key, value) -> value.stream()
+			mergedTokenMap.replaceAll((key, value) -> value.stream()
 				.filter(t -> t.actionData().isPresent())
 			    .collect(Collectors.toList()));
+			Map<Node, List<Token>> tokens = mergedTokenMap;
 			
-			List<Token> tokensList = mergedTokenMaps.values().stream().flatMap(tkns -> tkns.stream()).collect(Collectors.toList());
-			return tokensList;
-		}	
+			return new Tokens(tokens);
+		}
 		
 		private ActionData actionDataOfFirstOf(Tokens token) {
 			return token.streamAsList().findFirst().flatMap(Token::actionData).orElse(null);
