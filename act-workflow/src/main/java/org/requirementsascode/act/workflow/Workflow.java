@@ -114,9 +114,13 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 				.map(Data::state).map(WorkflowState::tokens)
 				.flatMap(tkns -> tkns.asMap().entrySet().stream())
 			    .collect(Collectors.toMap(
-				        Map.Entry::getKey,
-				        Map.Entry::getValue,
-				        (v1, v2) -> { v1.addAll(v2); return v1; }));
+			        Map.Entry::getKey,
+			        Map.Entry::getValue,
+			        (v1, v2) -> { 
+			        	v1.addAll(v2); 
+			        	return v1; 
+			        })
+			    );
 			
 			List<Token> tokensList = mergedTokenMaps.values().stream().flatMap(tkns -> tkns.stream()).collect(Collectors.toList());
 			return tokensList;
