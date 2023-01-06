@@ -103,9 +103,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		}
 
 		private Tokens mergeTokens(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {	
-			List<Token> tokensAfterList = new ArrayList<>(tokensBeforeList(dataBefore));
+			List<Token> tokensAfterList = new ArrayList<>();
 			tokensAfterList.addAll(addedTokensList(dataBefore, datasAfter));
-			removedTokensList(dataBefore, datasAfter).stream().forEach(tokensAfterList::remove);
 			List<Token> updatedTokenList = tokensAfterList.stream().filter(t -> t.actionData().isPresent()).collect(Collectors.toList());
 			
 			Tokens updatedTokens = new Tokens(updatedTokenList);
@@ -131,7 +130,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 
 			List<Token> addedTokensList = datasAfter.stream()
 				.map(Data::state).map(s -> s.tokens())
-				.flatMap(tkns -> TokensDifference.addedTokens(tokensBefore, tkns).streamAsList())
+				.flatMap(tkns -> tkns.streamAsList())
 				.collect(Collectors.toList());
 			return addedTokensList;
 		}	
