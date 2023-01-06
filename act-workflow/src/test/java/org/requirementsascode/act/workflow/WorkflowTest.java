@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +53,7 @@ class WorkflowTest {
 
 		assertEquals(str(ACTION1), state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(token(action1, str(ACTION1)), state.firstTokenIn(action1).get());
+		assertEquals(str(ACTION1), state.firstTokenIn(action1).get().actionData().get());
 	}
 	
 	@Test
@@ -76,7 +75,7 @@ class WorkflowTest {
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
 		assertEquals(action1_2, state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(token(action2, action1_2), state.firstTokenIn(action2).get());
+		assertEquals(action1_2, state.firstTokenIn(action2).get().actionData().get());
 	}
 	
 	@Test
@@ -97,7 +96,7 @@ class WorkflowTest {
 		
 		assertEquals(str(ACTION1), state.actionOutput().get());
 		assertEquals(1, tokensList(state).size());
-		assertEquals(token(action1, str(ACTION1)), state.firstTokenIn(action1).get());
+		assertEquals(str(ACTION1), state.firstTokenIn(action1).get().actionData().get());
 	}
 	
 	@Test
@@ -120,7 +119,7 @@ class WorkflowTest {
 		
 		//assertEquals(new IntegerData(2), afterAction2i.value().get());
 		//assertEquals(1, tokensList(state).size());
-		assertEquals(token(action2i, new IntegerData(2)), state.firstTokenIn(action2i).get());
+		assertEquals(new IntegerData(2), state.firstTokenIn(action2i).get().actionData().get());
 	}
 	
 	@Test
@@ -140,8 +139,8 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
-		assertEquals(token(action2a, str(ACTION1 + "." + ACTION2A)), state.firstTokenIn(action2a).get());
-		assertEquals(token(action2b, str(ACTION1 + "." + ACTION2B)), state.firstTokenIn(action2b).get());
+		assertEquals(str(ACTION1 + "." + ACTION2A), state.firstTokenIn(action2a).get().actionData().get());
+		assertEquals(str(ACTION1 + "." + ACTION2B), state.firstTokenIn(action2b).get().actionData().get());
 		assertEquals(2, tokensList(state).size());
 	}
 	
@@ -166,9 +165,9 @@ class WorkflowTest {
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
 		List<Token> tokensInAction3 = state.tokensIn(action3).collect(Collectors.toList());
-		Token expectedToken = token(action3, str(ACTION3));
-		assertEquals(expectedToken, tokensInAction3.get(0));
-		assertEquals(expectedToken, tokensInAction3.get(1));
+		StringData expectedTokenData = str(ACTION3);
+		assertEquals(expectedTokenData, tokensInAction3.get(0).actionData().get());
+		assertEquals(expectedTokenData, tokensInAction3.get(1).actionData().get());
 		assertEquals(2, tokensList(state).size());
 	}
 	
