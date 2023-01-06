@@ -111,7 +111,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 
 		private List<Token> tokensIn(List<Data<WorkflowState, Token>> datasAfter) {
 			Map<Node, List<Token>> map = datasAfter.stream()
-				.map(Data::state).map(s -> s.tokens())
+				.map(Data::state).map(WorkflowState::tokens)
 				.flatMap(tkns -> tkns.asMap().entrySet().stream())
 			    .collect(Collectors.toMap(
 				        Map.Entry::getKey,
