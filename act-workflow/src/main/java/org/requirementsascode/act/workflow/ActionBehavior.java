@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
-class ActionBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
+class ActionBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, ActionData, ActionData> {
 	private final BiFunction<WorkflowState, T, U> functionOnActionData;
 	private final Behavior<WorkflowState, ActionData, ActionData> typedFunction;
 
@@ -18,19 +18,8 @@ class ActionBehavior<T extends ActionData, U extends ActionData> implements Beha
 	}
 
 	@Override
-	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, ActionData> functionInputData = unboxActionData(inputData);
-		ActionData outputActionData = typedFunction.actOn(functionInputData).value().orElse(null);
-
-		Token inputToken = Token.from(inputData);
-		Token outputToken = inputToken.replaceActionData(outputActionData);
-
-		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(inputToken, outputToken);
-		return updatedWorkflow;
-	}
-
-	private Data<WorkflowState, ActionData> unboxActionData(Data<WorkflowState, Token> inputData) {
-		return data(inputData.state(), ActionData.from(inputData));
+	public Data<WorkflowState, ActionData> actOn(Data<WorkflowState, ActionData> inputData) {
+		return typedFunction.actOn(inputData);
 	}
 
 	private Data<WorkflowState, U> applyFunctionOnActionData(Data<WorkflowState, T> input) {
