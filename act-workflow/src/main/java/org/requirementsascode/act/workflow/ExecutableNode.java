@@ -3,6 +3,9 @@ package org.requirementsascode.act.workflow;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.when;
+
+import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -12,10 +15,21 @@ public class ExecutableNode implements Node {
 	private final String name;
 	private final Behavior<WorkflowState, ActionData, ActionData> actionBehavior;
 
-	ExecutableNode(String name, Behavior<WorkflowState, ActionData, ActionData> actionBehavior) {
+	<T extends ActionData, U extends ActionData> ExecutableNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(name, "name must be non-null!");
-		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
+		requireNonNull(actionFunction, "actionFunction must be non-null!");
+		this.actionBehavior = when(inputClass, behaviorOf(actionFunction));
 	}
+
+
+	private <T extends ActionData, U extends ActionData> Behavior<WorkflowState, T, U> behaviorOf(BiFunction<WorkflowState, T, U> functionOnActionData) {
+		return d -> {
+			WorkflowState state = d.state();
+			U functionResult = functionOnActionData.apply(state, d.value().orElse(null));
+			return data(state, functionResult);
+		};
+	}
+	
 
 	@Override
 	public String name() {
