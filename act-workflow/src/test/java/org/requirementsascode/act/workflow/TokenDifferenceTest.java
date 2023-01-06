@@ -80,10 +80,6 @@ class TokenDifferenceTest {
 		return tokens.streamAsList().collect(Collectors.toList());
 	}
 	
-	private List<Token> asList(Token...tokens){
-		return Arrays.asList(tokens);
-	}
-	
 	private Map<Node, List<Token>> token1inAction() {
 		return mapOf(TOKEN1);
 	}
@@ -92,12 +88,12 @@ class TokenDifferenceTest {
 		return mapOf(TOKEN2);
 	}
 	
-	private List<Token> tokens1_1inAction() {
-		return asList(TOKEN1, TOKEN1);
+	private Map<Node, List<Token>> tokens1_1inAction() {
+		return mapOf(TOKEN1, TOKEN1);
 	}
 	
-	private List<Token> tokens1_2inAction() {
-		return asList(TOKEN1, TOKEN2);
+	private Map<Node, List<Token>> tokens1_2inAction() {
+		return mapOf(TOKEN1, TOKEN2);
 	}
 	
 	private Map<Node, List<Token>> mapOf(Token... tokens) {
