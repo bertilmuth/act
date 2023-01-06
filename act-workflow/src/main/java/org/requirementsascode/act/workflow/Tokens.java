@@ -8,23 +8,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Tokens {
 	private final Map<Node, List<Token>> tokens;
-
-	Tokens(List<Token> tokensList) {
-		this(mapOf(tokensList));
-	}
 	
 	Tokens(Map<Node, List<Token>> tokensMap) {
 		this.tokens = tokensMap;
-	}
-
-	private static Map<Node, List<Token>> mapOf(List<Token> tokens) {
-		return tokens.stream()
-			.collect(Collectors.groupingBy(Token::node));
 	}
 	
 	public Map<Node, List<Token>> asMap() {

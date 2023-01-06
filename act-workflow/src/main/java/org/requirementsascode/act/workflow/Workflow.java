@@ -120,9 +120,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			mergedTokenMap.replaceAll((key, value) -> value.stream()
 				.filter(t -> t.actionData().isPresent())
 			    .collect(Collectors.toList()));
-			Map<Node, List<Token>> tokens = mergedTokenMap;
 			
-			return new Tokens(tokens);
+			return new Tokens(mergedTokenMap);
 		}
 		
 		private ActionData actionDataOfFirstOf(Tokens token) {
