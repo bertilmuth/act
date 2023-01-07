@@ -46,14 +46,12 @@ public class Tokens {
 		return newTokensMap;
 	}
 	
-	private Map<Node, List<Token>> addTokenToMap(Node node, Map<Node, List<Token>> tokens, Token tokenToAdd) {
-		LinkedHashMap<Node, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
-		newTokensMap.merge(node, singletonList(tokenToAdd), (oldValue, value) -> {
-			List<Token> newList = new ArrayList<>(oldValue);
-			newList.addAll(value);
-			return newList;
+	private Map<Node, List<Token>> addTokenToMap(Node node, Map<Node, List<Token>> tokensMap, Token tokenToAdd) {
+		tokensMap.merge(node, singletonList(tokenToAdd), (oldValue, value) -> {
+			oldValue.addAll(value);
+			return oldValue;
 		});
-		return newTokensMap;
+		return tokensMap;
 	}
 	
 	@Override
