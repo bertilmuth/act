@@ -8,7 +8,7 @@ public class WorkflowApi {
 		return new ActionNode(name, inputClass, actionFunction);
 	}
 	
-	public static Token token(Node node, ActionData actionData) {
+	public static Token token(ActionData actionData) {
 		return new Token(actionData);
 	}
 	

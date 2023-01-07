@@ -22,7 +22,6 @@ import org.requirementsascode.act.statemachine.Transitionable;
 public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final WorkflowState initialWorkflowState;
 	private final Statemachine<WorkflowState, Token> statemachine;
-	private static final AnyNode anyNode = new AnyNode();
 	
 	Workflow(Statemachine<WorkflowState, Token> statemachine) {
 		this.statemachine = statemachine;
@@ -42,8 +41,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public Data<WorkflowState, Token> nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, ActionData> inputData = data(workflowState, actionData);
-		return actOn(tokenize(inputData));
+		Data<WorkflowState, Token> tokenizedData = tokenize(workflowState, actionData);
+		return actOn(tokenizedData);
 	}
 	
 	@Override
@@ -51,13 +50,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return statemachine.actOn(inputData);
 	}
 	
-	private Data<WorkflowState, Token> tokenize(Data<WorkflowState,ActionData> inputData) {
-		ActionData actionData = inputData.value().orElse(null);
-		return data(inputData.state(), tokenInAnyNode(actionData));
-	}
-
-	private Token tokenInAnyNode(ActionData actionData) {
-		return token(anyNode, actionData);
+	private Data<WorkflowState, Token> tokenize(WorkflowState state, ActionData actionData) {
+		return data(state, token(actionData));
 	}
 	
 	static Workflow create(Nodes nodes, DataFlows dataFlows, StartFlows startFlows){
