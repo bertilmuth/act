@@ -34,7 +34,7 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 
 		return inputToken.actionData()
 			.filter(ad -> guardCondition.test((T) ad))
-			.map(ad -> moveTokenToToNode(state, inputToken))
+			.map(ad -> moveToken(state, inputToken))
 			.orElse(clearToken(state));
 	}
 
@@ -42,7 +42,7 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 		return data(state, null);
 	}
 	
-	private Data<WorkflowState,Token> moveTokenToToNode(WorkflowState state, Token inputToken){
-		return toNode.moveTokenToMe(state, inputToken);
+	private Data<WorkflowState,Token> moveToken(WorkflowState state, Token tokenToMove){
+		return state.moveToken(tokenToMove, toNode);
 	}
 }
