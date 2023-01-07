@@ -75,7 +75,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private static Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows,
 			StartFlows startFlows) {
 		
-		State[] nodeStates = nodes.asStates().toArray(State[]::new);
+		State[] nodeStates = nodes.asStates()
+			.toArray(State[]::new);
 		Transitionable[] transitionables = concat(startFlows.stream(), dataFlows.stream())
 				.toArray(Transitionable[]::new);
 

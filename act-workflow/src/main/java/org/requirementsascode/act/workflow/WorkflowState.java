@@ -3,7 +3,6 @@ package org.requirementsascode.act.workflow;
 import static java.util.Collections.emptyMap;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,8 +48,11 @@ public class WorkflowState {
 		State<WorkflowState, Token> nodeState = node.asState();
 		Transitions<WorkflowState, Token> incomingTransitions = statemachine.incomingTransitions(nodeState);
 		List<State<WorkflowState, Token>> statesBefore = statesBefore(incomingTransitions);
+		List<Node> nodesBefore = workflow.nodes().stream()
+			.filter(n -> statesBefore.contains(n.asState()))
+			.collect(Collectors.toList());
 			
-		return Collections.singletonList(new InitialNode(null));
+		return nodesBefore;
 	}
 
 	private List<State<WorkflowState, Token>> statesBefore(Transitions<WorkflowState, Token> incomingTransitions) {

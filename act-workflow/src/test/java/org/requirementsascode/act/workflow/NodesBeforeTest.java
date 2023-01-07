@@ -1,11 +1,12 @@
 package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
+import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
@@ -26,12 +27,10 @@ class NodesBeforeTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
 		List<Node> nodesBefore = state.nodesBefore(workflow, action1);
-		assertEquals(1, nodesBefore.size());
-		assertEquals(InitialNode.class, nodesBefore.get(0).getClass());
+		assertTrue(nodesBefore.isEmpty());
 	}
 	
 	@Test
-	@Disabled
 	void action1Before() {
 		Node action1 = action(ACTION1, StringData.class, this::actionPerformed);
 		Node action2 = action(ACTION2, StringData.class, this::actionPerformed);
@@ -39,7 +38,9 @@ class NodesBeforeTest {
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
 			.startNodes(action1)
-			.dataFlows()
+			.dataFlows(
+				dataFlow(action1, action2)
+			)
 			.build();
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
