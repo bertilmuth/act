@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Tokens {
@@ -39,8 +40,9 @@ public class Tokens {
 	}
 	
 	private Map<Node, List<Token>> removeTokenFromMap(Node node, Token tokenToBeRemoved) {
+		List<Token> tokensWithTokenRemoved = tokensIn(node).filter(t -> !tokenToBeRemoved.equals(t)).collect(Collectors.toList());
 		Map<Node, List<Token>> newTokensMap = new HashMap<>(tokens);
-		newTokensMap.remove(node);
+		newTokensMap.put(node, tokensWithTokenRemoved);
 		return newTokensMap;
 	}
 	
