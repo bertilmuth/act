@@ -45,7 +45,7 @@ public class WorkflowState {
 		return updateTokens(tokensAfter, tokenAfter);
 	}
 	
-	Data<WorkflowState, Token> moveToken(Token tokenToMove, Node toNode) {
+	Data<WorkflowState, Token> moveToken(Token tokenToMove, Node fromNode, Node toNode) {
 		Token movedToken = tokenToMove.moveTo(toNode);
 		return replaceToken(tokenToMove, movedToken);
 	}

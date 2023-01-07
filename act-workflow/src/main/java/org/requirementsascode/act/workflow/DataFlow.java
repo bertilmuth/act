@@ -43,6 +43,6 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 	}
 	
 	private Data<WorkflowState,Token> moveToken(WorkflowState state, Token tokenToMove){
-		return state.moveToken(tokenToMove, toNode);
+		return state.moveToken(tokenToMove, fromNode, toNode);
 	}
 }
