@@ -28,7 +28,7 @@ public class Tokens {
 	
 	Tokens moveToken(Token tokenToMove, Node fromNode, Node toNode) {
 		Token movedToken = tokenToMove.moveTo(toNode);
-		return replaceToken(fromNode, tokenToMove, movedToken);
+		return replaceToken(fromNode, tokenToMove, toNode, movedToken);
 	}
 
 	Tokens replaceToken(Node nodeBefore, Token tokenBefore, Token tokenAfter) {
@@ -37,7 +37,7 @@ public class Tokens {
 	
 	private Tokens replaceToken(Node nodeBefore, Token tokenBefore, Node nodeAfter, Token tokenAfter) {
 		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(nodeBefore, tokenBefore);
-		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(mapWithTokenRemoved, tokenAfter);
+		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(nodeAfter, mapWithTokenRemoved, tokenAfter);
 		return new Tokens(mapWithTokenAdded);
 	}
 	
@@ -47,9 +47,9 @@ public class Tokens {
 		return newTokensMap;
 	}
 	
-	private Map<Node, List<Token>> addTokenToMap(Map<Node, List<Token>> tokens, Token tokenToAdd) {
+	private Map<Node, List<Token>> addTokenToMap(Node node, Map<Node, List<Token>> tokens, Token tokenToAdd) {
 		LinkedHashMap<Node, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
-		newTokensMap.merge(tokenToAdd.node(), singletonList(tokenToAdd), (oldValue, value) -> {
+		newTokensMap.merge(node, singletonList(tokenToAdd), (oldValue, value) -> {
 			List<Token> newList = new ArrayList<>(oldValue);
 			newList.addAll(value);
 			return newList;
