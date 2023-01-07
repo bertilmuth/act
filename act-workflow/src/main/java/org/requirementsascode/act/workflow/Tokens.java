@@ -31,10 +31,16 @@ public class Tokens {
 		return replaceToken(fromNode, tokenToMove, movedToken);
 	}
 
-	Tokens replaceToken(Node node, Token tokenBefore, Token tokenAfter) {
-		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(node, tokenBefore);
+	Tokens replaceToken(Node nodeBefore, Token tokenBefore, Token tokenAfter) {
+		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(nodeBefore, tokenBefore);
 		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(mapWithTokenRemoved, tokenAfter);
 		return new Tokens(mapWithTokenAdded);
+	}
+	
+	private Map<Node, List<Token>> removeTokenFromMap(Node node, Token tokenToBeRemoved) {
+		Map<Node, List<Token>> newTokensMap = new HashMap<>(tokens);
+		newTokensMap.remove(node);
+		return newTokensMap;
 	}
 	
 	private Map<Node, List<Token>> addTokenToMap(Map<Node, List<Token>> tokens, Token tokenToAdd) {
@@ -47,12 +53,6 @@ public class Tokens {
 		return newTokensMap;
 	}
 	
-	private Map<Node, List<Token>> removeTokenFromMap(Node node, Token tokenToBeRemoved) {
-		Map<Node, List<Token>> newTokensMap = new HashMap<>(tokens);
-		newTokensMap.remove(node);
-		return newTokensMap;
-	}
-
 	@Override
 	public String toString() {
 		return "Tokens[" + tokens + "]";
