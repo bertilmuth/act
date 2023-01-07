@@ -32,6 +32,10 @@ public class Tokens {
 	}
 
 	Tokens replaceToken(Node nodeBefore, Token tokenBefore, Token tokenAfter) {
+		return replaceToken(nodeBefore, tokenBefore, nodeBefore, tokenAfter);
+	}
+	
+	private Tokens replaceToken(Node nodeBefore, Token tokenBefore, Node nodeAfter, Token tokenAfter) {
 		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(nodeBefore, tokenBefore);
 		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(mapWithTokenRemoved, tokenAfter);
 		return new Tokens(mapWithTokenAdded);
