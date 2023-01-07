@@ -1,19 +1,14 @@
 package org.requirementsascode.act.workflow;
 
-import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
-
 import java.util.Objects;
 import java.util.Optional;
 
 import org.requirementsascode.act.core.Data;
 
 public class Token {
-	private final Node node;
 	private final ActionData actionData;
 
-	Token(Node node, ActionData actionData) {
-		this.node = requireNonNull(node, "node must be non-null!");
+	Token(ActionData actionData) {
 		this.actionData = actionData;
 	}
 	
@@ -21,30 +16,26 @@ public class Token {
 		return data.value().orElse(null);
 	}
 	
-	public Node node() {
-		return node;
-	}
-	
 	public Optional<ActionData> actionData() {
 		return Optional.ofNullable(actionData);
 	}
 	
 	Token replaceActionData(ActionData outputActionData) {
-		return token(node(), outputActionData);
+		return new Token(outputActionData);
 	}
 	
 	Token moveTo(Node node) {
-		return new Token(node, actionData);
+		return new Token(actionData);
 	}
 
 	@Override
 	public String toString() {
-		return "Token[node=" + node + ", actionData=" + actionData + "]";
+		return "Token[" + actionData + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(node, actionData);
+		return Objects.hash(actionData);
 	}
 
 	@Override
@@ -56,6 +47,6 @@ public class Token {
 		if (getClass() != obj.getClass())
 			return false;
 		Token other = (Token) obj;
-		return Objects.equals(node, other.node) && Objects.equals(actionData, other.actionData);
+		return Objects.equals(actionData, other.actionData);
 	}
 }

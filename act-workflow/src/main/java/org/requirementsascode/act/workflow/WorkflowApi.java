@@ -9,7 +9,7 @@ public class WorkflowApi {
 	}
 	
 	public static Token token(Node node, ActionData actionData) {
-		return new Token(node, actionData);
+		return new Token(actionData);
 	}
 	
 	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode) {		
