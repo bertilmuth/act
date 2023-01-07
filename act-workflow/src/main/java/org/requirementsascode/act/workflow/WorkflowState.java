@@ -3,11 +3,16 @@ package org.requirementsascode.act.workflow;
 import static java.util.Collections.emptyMap;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
+import org.requirementsascode.act.statemachine.Transitions;
 
 public class WorkflowState {
 	private final Statemachine<WorkflowState, Token> statemachine;
@@ -38,6 +43,20 @@ public class WorkflowState {
 	
 	public boolean areTokensIn(Node node){
 		return firstTokenIn(node).isPresent();
+	}
+	
+	public List<Node> nodesBefore(Workflow workflow, Node node) {
+		State<WorkflowState, Token> nodeState = node.asState();
+		Transitions<WorkflowState, Token> incomingTransitions = statemachine.incomingTransitions(nodeState);
+		List<State<WorkflowState, Token>> statesBefore = statesBefore(incomingTransitions);
+			
+		return Collections.singletonList(new InitialNode(null));
+	}
+
+	private List<State<WorkflowState, Token>> statesBefore(Transitions<WorkflowState, Token> incomingTransitions) {
+		return incomingTransitions.stream()
+			.map(t -> t.asTransition(statemachine).fromState())
+			.collect(Collectors.toList());
 	}
 	
 	Data<WorkflowState, Token> replaceToken(Node beforeNode, Token tokenBefore, Token tokenAfter) {
