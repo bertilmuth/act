@@ -40,8 +40,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return nextStep(initialWorkflowState, actionData);
 	}
 	
-	public Data<WorkflowState, Token> nextStep(WorkflowState workflowState, ActionData actionData) {
-		Data<WorkflowState, Token> tokenizedData = tokenize(workflowState, actionData);
+	public Data<WorkflowState, Token> nextStep(WorkflowState state, ActionData actionData) {
+		Data<WorkflowState, Token> tokenizedData = tokenize(state, actionData);
 		return actOn(tokenizedData);
 	}
 	
