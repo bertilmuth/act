@@ -5,11 +5,7 @@ import java.util.function.Predicate;
 
 public class WorkflowApi {
 	public static <T extends ActionData, U extends ActionData> Node action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
-		return executableNode(name, inputClass, actionFunction);
-	}
-	
-	public static <T extends ActionData, U extends ActionData> ExecutableNode executableNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
-		return new ExecutableNode(name, inputClass, actionFunction);
+		return new ActionNode(name, inputClass, actionFunction);
 	}
 	
 	public static Token token(Node node, ActionData actionData) {

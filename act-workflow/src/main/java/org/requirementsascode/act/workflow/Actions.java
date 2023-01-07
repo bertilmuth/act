@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 import org.requirementsascode.act.statemachine.State;
 
 public class Actions {
-	private final List<ExecutableNode> actions;
+	private final List<ActionNode> actions;
 
-	Actions(List<ExecutableNode> actions) {
+	Actions(List<ActionNode> actions) {
 		this.actions = requireNonNull(actions, "actions must be non-null!");
 	}
 
@@ -19,7 +19,7 @@ public class Actions {
 		return statesStream;
 	}
 
-	public Stream<ExecutableNode> stream() {
+	public Stream<ActionNode> stream() {
 		return actions.stream();
 	}
 }

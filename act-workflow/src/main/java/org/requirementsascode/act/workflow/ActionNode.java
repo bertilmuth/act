@@ -11,11 +11,11 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
-public class ExecutableNode implements Node {
+public class ActionNode implements Node {
 	private final String name;
 	private final Behavior<WorkflowState, ActionData, ActionData> actionBehavior;
 
-	<T extends ActionData, U extends ActionData> ExecutableNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
+	<T extends ActionData, U extends ActionData> ActionNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		requireNonNull(actionFunction, "actionFunction must be non-null!");
 		this.actionBehavior = when(inputClass, behaviorOf(actionFunction));
@@ -33,8 +33,8 @@ public class ExecutableNode implements Node {
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, ActionData> functionInputData = unboxActionData(inputData);
-		ActionData outputActionData = actionBehavior.actOn(functionInputData).value().orElse(null);
+		Data<WorkflowState, ActionData> behaviorInputData = unboxActionData(inputData);
+		ActionData outputActionData = actionBehavior.actOn(behaviorInputData).value().orElse(null);
 
 		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
@@ -45,7 +45,7 @@ public class ExecutableNode implements Node {
 
 	@Override
 	public String toString() {
-		return "ExecutableNode[" + name + "]";
+		return "ActionNode[" + name + "]";
 	}
 	
 	private <T extends ActionData, U extends ActionData> Behavior<WorkflowState, T, U> behaviorOf(BiFunction<WorkflowState, T, U> actionFunction) {
