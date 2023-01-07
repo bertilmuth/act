@@ -23,10 +23,6 @@ public class Token {
 	Token replaceActionData(ActionData outputActionData) {
 		return new Token(outputActionData);
 	}
-	
-	Token moveTo(Node node) {
-		return new Token(actionData);
-	}
 
 	@Override
 	public String toString() {

@@ -27,8 +27,7 @@ public class Tokens {
 	}
 	
 	Tokens moveToken(Token tokenToMove, Node fromNode, Node toNode) {
-		Token movedToken = tokenToMove.moveTo(toNode);
-		return replaceToken(fromNode, tokenToMove, toNode, movedToken);
+		return replaceToken(fromNode, tokenToMove, toNode, tokenToMove);
 	}
 
 	Tokens replaceToken(Node nodeBefore, Token tokenBefore, Token tokenAfter) {
