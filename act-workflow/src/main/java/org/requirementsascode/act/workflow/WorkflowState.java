@@ -40,14 +40,14 @@ public class WorkflowState {
 		return firstTokenIn(node).isPresent();
 	}
 	
-	Data<WorkflowState, Token> replaceToken(Token tokenBefore, Token tokenAfter) {
-		Tokens tokensAfter = tokens().replaceToken(tokenBefore, tokenAfter);
+	Data<WorkflowState, Token> replaceToken(Node node, Token tokenBefore, Token tokenAfter) {
+		Tokens tokensAfter = tokens().replaceToken(node, tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);
 	}
 	
 	Data<WorkflowState, Token> moveToken(Token tokenToMove, Node fromNode, Node toNode) {
 		Token movedToken = tokenToMove.moveTo(toNode);
-		Tokens tokensAfter = tokens().replaceToken(tokenToMove, movedToken);
+		Tokens tokensAfter = tokens().moveToken(tokenToMove, fromNode, toNode);
 		return updateTokens(tokensAfter, movedToken);
 	}
 	

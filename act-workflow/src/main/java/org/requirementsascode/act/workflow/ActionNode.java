@@ -39,7 +39,7 @@ public class ActionNode implements Node {
 		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
 
-		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(inputToken, outputToken);
+		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(this, inputToken, outputToken);
 		return updatedWorkflow;
 	}
 

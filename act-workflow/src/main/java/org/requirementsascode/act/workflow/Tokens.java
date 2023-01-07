@@ -25,8 +25,13 @@ public class Tokens {
 	public Stream<Token> tokensIn(Node node) {
 		return tokens.getOrDefault(node, emptyList()).stream();
 	}
+	
+	Tokens moveToken(Token tokenToMove, Node fromNode, Node toNode) {
+		Token movedToken = tokenToMove.moveTo(toNode);
+		return replaceToken(toNode, tokenToMove, movedToken);
+	}
 
-	Tokens replaceToken(Token tokenBefore, Token tokenAfter) {
+	Tokens replaceToken(Node node, Token tokenBefore, Token tokenAfter) {
 		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(tokens, tokenBefore);
 		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(mapWithTokenRemoved, tokenAfter);
 		return new Tokens(mapWithTokenAdded);
