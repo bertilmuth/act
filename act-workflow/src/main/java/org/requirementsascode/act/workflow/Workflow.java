@@ -20,14 +20,19 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Workflow implements Behavior<WorkflowState, Token, Token>{
+	private final Nodes nodes;
+	private final DataFlows dataFlows;
 	private final WorkflowState initialWorkflowState;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	
-	Workflow(Statemachine<WorkflowState, Token> statemachine) {
-		this.statemachine = statemachine;
+	public Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
+		this.nodes = requireNonNull(nodes, "nodes must be non-null!");
+		this.dataFlows = requireNonNull(dataFlows, "dataFlows must be non-null!");
+		requireNonNull(startFlows, "startFlows must be non-null!");
+		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);		
 		this.initialWorkflowState = intialWorkflowState(statemachine);
 	}
-	
+
 	public final static WorkflowBuilder builder() {
 		return new WorkflowBuilder();
 	}
@@ -45,6 +50,14 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return actOn(tokenizedData);
 	}
 	
+	public Nodes nodes() {
+		return nodes;
+	}
+	
+	public DataFlows dataFlows() {
+		return dataFlows;
+	}
+	
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState,Token> inputData) {
 		return statemachine.actOn(inputData);
@@ -55,12 +68,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	static Workflow create(Nodes nodes, DataFlows dataFlows, StartFlows startFlows){
-		requireNonNull(nodes, "nodes must be non-null!");
-		requireNonNull(dataFlows, "dataFlows must be non-null!");
-		requireNonNull(startFlows, "startFlows must be non-null!");
-
-		Statemachine<WorkflowState, Token> statemachine = statemachineWith(nodes, dataFlows, startFlows);		
-		return new Workflow(statemachine);
+		return new Workflow(nodes, dataFlows, startFlows);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
