@@ -30,7 +30,7 @@ class InitialNode implements Node{
 
 	@Override
 	public String name() {
-		return "Initial Node";
+		return owningStatemachine.initialState().name();
 	}
 
 	@Override
