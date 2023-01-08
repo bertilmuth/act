@@ -28,7 +28,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		this.dataFlows = dataFlows;
 		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);				
 		this.nodes = createNodes(statemachine, nodes);
-		this.initialWorkflowState = createInitialWorkflowState(statemachine);
+		this.initialWorkflowState = createInitialWorkflowState(this, statemachine);
 	}
 	
 	private Nodes createNodes(Statemachine<WorkflowState, Token> statemachine, Nodes nodes) {
@@ -78,7 +78,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows,
+	private Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows,
 			StartFlows startFlows) {
 		
 		State[] nodeStates = nodes.asStates()
@@ -97,14 +97,14 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return statemachine;
 	}
 	
-	private static class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
+	private class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Statemachine<WorkflowState, Token> statemachine = statemachineOf(dataBefore);
 			Tokens mergedTokens = mergeTokens(datasAfter);
 			ActionData actionData = actionDataOfFirstOf(mergedTokens);
 			
-			WorkflowState state = new WorkflowState(statemachine, mergedTokens, actionData);
+			WorkflowState state = new WorkflowState(Workflow.this, statemachine, mergedTokens, actionData);
 			return data(state, null);
 		}
 

@@ -15,18 +15,20 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitions;
 
 public class WorkflowState {
+	private final Workflow workflow;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	private final Tokens tokens;
 	private final ActionData actionOutput;
 	
-	WorkflowState(Statemachine<WorkflowState, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+	WorkflowState(Workflow workflow, Statemachine<WorkflowState, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+		this.workflow = workflow;
 		this.statemachine = statemachine;
 		this.tokens = tokens;
 		this.actionOutput = actionOutput;
 	}
 	
-	static WorkflowState createInitialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
-		return new WorkflowState(statemachine, new Tokens(emptyMap()), null);
+	static WorkflowState createInitialWorkflowState(Workflow workflow, Statemachine<WorkflowState, Token> statemachine) {
+		return new WorkflowState(workflow, statemachine, new Tokens(emptyMap()), null);
 	}
 	
 	public Tokens tokens() {
@@ -45,12 +47,16 @@ public class WorkflowState {
 		return firstTokenIn(node).isPresent();
 	}
 	
-	Predicate<WorkflowState> predicateBefore(Workflow workflow, Node action) {
+	Predicate<WorkflowState> tokensInNodesBefore(Node action) {
+		return tokensInNodesBefore(workflow, action);
+	}
+	
+	Predicate<WorkflowState> tokensInNodesBefore(Workflow workflow, Node action) {
 		List<Node> nodesBefore = nodesBefore(workflow, action);
-		Predicate<WorkflowState> predicateBefore = nodesBefore.stream()
-			.map(Node::asState)
-			.map(State::invariant)
-			.reduce(s -> true, Predicate::and);
+		Predicate<WorkflowState> predicateBefore = 
+		  s -> nodesBefore.stream()
+			.map(s::areTokensIn)
+			.reduce(true, (a,b) -> a && b);
 		return predicateBefore;
 	}
 	
@@ -83,7 +89,7 @@ public class WorkflowState {
 	
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
 		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
-		WorkflowState newWorkflowState = new WorkflowState(statemachine, tokens, actionOutput);
+		WorkflowState newWorkflowState = new WorkflowState(workflow, statemachine, tokens, actionOutput);
 		return data(newWorkflowState, token);
 	}
 
