@@ -6,6 +6,8 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 import static org.requirementsascode.act.workflow.WorkflowState.createInitialWorkflowState;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,21 +21,23 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Workflow implements Behavior<WorkflowState, Token, Token>{
-	private final Nodes nodes;
 	private final DataFlows dataFlows;
-	private final WorkflowState initialWorkflowState;
 	private final Statemachine<WorkflowState, Token> statemachine;
+	private final InitialNode initialNode;
+	private final Nodes nodes;
+	private final WorkflowState initialWorkflowState;
 	
 	public Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
 		this.dataFlows = dataFlows;
-		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);				
-		this.nodes = createNodes(statemachine, nodes);
+		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);		
+		this.initialNode = new InitialNode(statemachine);
+		this.nodes = createNodes(statemachine, nodes, initialNode);
 		this.initialWorkflowState = createInitialWorkflowState(this, statemachine);
 	}
 	
-	private Nodes createNodes(Statemachine<WorkflowState, Token> statemachine, Nodes nodes) {
+	private Nodes createNodes(Statemachine<WorkflowState, Token> statemachine, Nodes nodes, InitialNode initialNode) {
 		List<Node> nodesIncludingInitialNode = Stream.concat(
-			Stream.of(new InitialNode(statemachine)), 
+			Stream.of(initialNode), 
 			nodes.stream())
 			.collect(Collectors.toList());
 		return new Nodes(nodesIncludingInitialNode);
@@ -48,6 +52,11 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public Data<WorkflowState, Token> start(ActionData actionData) {
+		HashMap<Node, List<Token>> initialNodeTokenMap = new HashMap<>();
+		Token initialToken = token(actionData);
+		initialNodeTokenMap.put(initialNode, Collections.singletonList(initialToken));
+		
+		WorkflowState initialWorkflowState = new WorkflowState(this, new Tokens(initialNodeTokenMap), null);
 		return nextStep(initialWorkflowState, actionData);
 	}
 	
