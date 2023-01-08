@@ -37,7 +37,7 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 		return inputToken.actionData()
 			.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
 			.filter(ad -> guardCondition.test((T) ad))
-			.map(ad -> moveToken(state, inputToken))
+			.map(ad -> inputData)
 			.orElse(clearToken(state));
 	}
 

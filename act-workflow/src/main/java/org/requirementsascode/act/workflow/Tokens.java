@@ -33,6 +33,12 @@ public class Tokens {
 		return replaceToken(nodeBefore, tokenBefore, nodeBefore, tokenAfter);
 	}
 	
+	public Tokens addToken(Node node, Token token) {
+		Map<Node, List<Token>> newTokensMap = new HashMap<>(tokens);
+		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(node, newTokensMap, token);
+		return new Tokens(mapWithTokenAdded);
+	}
+	
 	private Tokens replaceToken(Node nodeBefore, Token tokenBefore, Node nodeAfter, Token tokenAfter) {
 		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(nodeBefore, tokenBefore);
 		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(nodeAfter, mapWithTokenRemoved, tokenAfter);

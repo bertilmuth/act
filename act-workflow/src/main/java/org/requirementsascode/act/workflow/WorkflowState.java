@@ -69,8 +69,13 @@ public class WorkflowState {
 			.collect(Collectors.toList());
 	}
 	
-	Data<WorkflowState, Token> replaceToken(Node beforeNode, Token tokenBefore, Token tokenAfter) {
-		Tokens tokensAfter = tokens().replaceToken(beforeNode, tokenBefore, tokenAfter);
+	public Data<WorkflowState, Token> addToken(Node node, Token token) {
+		Tokens tokensAfter = tokens().addToken(node, token);
+		return updateTokens(tokensAfter, token);
+	}
+	
+	Data<WorkflowState, Token> replaceToken(Node node, Token tokenBefore, Token tokenAfter) {
+		Tokens tokensAfter = tokens().replaceToken(node, tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);
 	}
 	

@@ -32,7 +32,7 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		return state(name(), s -> s.areTokensIn(this),  
+		return state(name(), this::areTokensInNodesBefore,  
 			inCase(this::isActionDataOfInputClass, this::consumeToken));
 	}
 	
@@ -45,7 +45,7 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
 
-		return inputData.state().replaceToken(this, inputToken, outputToken);
+		return inputData.state().addToken(this, outputToken);
 	}
 	
 	private boolean isActionDataOfInputClass(Data<WorkflowState,Token> inputData) {
