@@ -5,7 +5,6 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,9 +46,9 @@ public class WorkflowState {
 		return firstTokenIn(node).isPresent();
 	}
 	
-	Predicate<WorkflowState> areTokensInNodesBefore(Node node) {
-		return s -> nodesBefore(workflow, node).stream()
-			.map(s::areTokensIn)
+	boolean areTokensInNodesBefore(Node node) {
+		return nodesBefore(workflow, node).stream()
+			.map(this::areTokensIn)
 			.reduce(true, (a,b) -> a && b);
 	}
 	

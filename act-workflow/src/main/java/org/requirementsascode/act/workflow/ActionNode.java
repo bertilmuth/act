@@ -35,6 +35,10 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 		return state(name(), s -> s.areTokensIn(this),  
 			inCase(this::isActionDataOfInputClass, this::consumeToken));
 	}
+	
+	private boolean areTokensInNodesBefore(WorkflowState state) {
+		return state.areTokensInNodesBefore(this);
+	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
 		U outputActionData = applyActionFunction(inputData);
