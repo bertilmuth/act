@@ -85,6 +85,25 @@ class NodesBeforeTest {
 		Predicate<WorkflowState> predicateBefore = state.predicateBefore(workflow, action2i);
 		assertTrue(predicateBefore.test(state));
 	}
+	
+	@Test
+	void predicateBeforeAction2IsFalse() {
+		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Node action2 = action(ACTION2, StringData.class, this::action1Performed);
+		Node action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
+		
+		Workflow workflow = Workflow.builder()
+			.nodes(action1, action2, action2i)
+			.startNodes(action1)
+			.dataFlows(
+				dataFlow(action2, action2i),
+				dataFlow(action1, action2i)
+			)
+			.build();
+		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
+		Predicate<WorkflowState> predicateBefore = state.predicateBefore(workflow, action2i);
+		assertFalse(predicateBefore.test(state));
+	}
 
 	private StringData action1Performed(WorkflowState state, StringData input) {
 		return new StringData("ActionPerformed");
