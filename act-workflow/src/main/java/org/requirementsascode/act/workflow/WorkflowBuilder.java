@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collections;
+import java.util.List;
 
 public class WorkflowBuilder {
 	WorkflowBuilder() {
@@ -15,13 +16,13 @@ public class WorkflowBuilder {
 	}
 
 	public class NodesBuilder {
-		private Nodes builderNodes = new Nodes(Collections.emptyList());		
+		private List<Node> builderNodes = Collections.emptyList();		
 		private DataFlows builderDataFlows = new DataFlows(Collections.emptyList());
 		private StartFlows builderStartFlows = new StartFlows(Collections.emptyList());
 
 		private NodesBuilder(Node[] nodes) {
 			requireNonNull(nodes, "nodes must be non-null!");
-			this.builderNodes = new Nodes(asList(nodes));
+			this.builderNodes = asList(nodes);
 		}
 		
 		@SafeVarargs
@@ -46,7 +47,19 @@ public class WorkflowBuilder {
 				private DataFlowsBuilder(){}
 				
 				public final Workflow build() {
-					return Workflow.create(builderNodes, builderDataFlows, builderStartFlows);
+					return Workflow.create(nodes(), dataFlows(), startFlows());
+				}
+
+				private StartFlows startFlows() {
+					return builderStartFlows;
+				}
+
+				private DataFlows dataFlows() {
+					return builderDataFlows;
+				}
+
+				private Nodes nodes() {
+					return new Nodes(builderNodes);
 				}
 			}
 		}
