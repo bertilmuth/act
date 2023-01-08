@@ -14,11 +14,13 @@ import org.requirementsascode.act.statemachine.Transitionable;
 public class DataFlow<T extends ActionData> implements Transitionable<WorkflowState, Token>{
 	private final Node fromNode;
 	private final Node toNode;
+	private final Class<T> inputClass;
 	private final Predicate<T> guardCondition;
 
-	DataFlow(Node fromNode, Node toNode, Predicate<T> guardCondition) {
+	DataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {
 		this.fromNode = requireNonNull(fromNode, "fromNode must be non-null!");
 		this.toNode = requireNonNull(toNode, "toNode must be non-null!");
+		this.inputClass = inputClass;
 		this.guardCondition = requireNonNull(guardCondition, "guardCondition must be non-null!");
 	}
 
@@ -33,6 +35,7 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 		WorkflowState state = inputData.state();
 
 		return inputToken.actionData()
+			.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
 			.filter(ad -> guardCondition.test((T) ad))
 			.map(ad -> moveToken(state, inputToken))
 			.orElse(clearToken(state));
