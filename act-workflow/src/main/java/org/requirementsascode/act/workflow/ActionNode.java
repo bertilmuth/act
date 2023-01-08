@@ -13,11 +13,14 @@ import org.requirementsascode.act.statemachine.State;
 
 public class ActionNode implements Node {
 	private final String name;
+	private final Class<? extends ActionData> inputClass;
 	private final Behavior<WorkflowState, ActionData, ActionData> actionBehavior;
 
 	<T extends ActionData, U extends ActionData> ActionNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(name, "name must be non-null!");
+		this.inputClass = requireNonNull(inputClass, "inputClass must be non-null!");
 		requireNonNull(actionFunction, "actionFunction must be non-null!");
+		
 		this.actionBehavior = when(inputClass, behaviorOf(actionFunction));
 	}
 	
@@ -25,6 +28,11 @@ public class ActionNode implements Node {
 	@Override
 	public String name() {
 		return name;
+	}
+	
+	@Override
+	public Class<? extends ActionData> inputClass() {
+		return inputClass;
 	}
 
 	@Override

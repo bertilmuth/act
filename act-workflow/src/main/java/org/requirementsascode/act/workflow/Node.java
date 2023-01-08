@@ -4,6 +4,6 @@ import org.requirementsascode.act.statemachine.State;
 
 public interface Node {
 	String name();
-
 	State<WorkflowState, Token> asState();
+	Class<? extends ActionData> inputClass();
 }
