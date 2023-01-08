@@ -18,7 +18,7 @@ public class WorkflowBuilder {
 	public class NodesBuilder {
 		private List<Node> builderNodes = Collections.emptyList();		
 		private List<DataFlow<?>> builderDataFlows = Collections.emptyList();
-		private StartFlows builderStartFlows = new StartFlows(Collections.emptyList());
+		private List<Node> builderStartNodes = Collections.emptyList();
 
 		private NodesBuilder(Node[] nodes) {
 			requireNonNull(nodes, "nodes must be non-null!");
@@ -28,7 +28,7 @@ public class WorkflowBuilder {
 		@SafeVarargs
 		public final StartNodesBuilder startNodes(Node... nodesArray) {
 			requireNonNull(nodesArray, "nodesArray must be non-null!");
-			builderStartFlows = new StartFlows(asList(nodesArray));
+			builderStartNodes = asList(nodesArray);
 			return new StartNodesBuilder();
 		}
 
@@ -51,7 +51,7 @@ public class WorkflowBuilder {
 				}
 
 				private StartFlows startFlows() {
-					return builderStartFlows;
+					return new StartFlows(builderStartNodes);
 				}
 
 				private DataFlows dataFlows() {
