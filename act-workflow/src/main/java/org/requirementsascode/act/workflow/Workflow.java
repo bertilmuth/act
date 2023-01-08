@@ -64,6 +64,10 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return dataFlows;
 	}
 	
+	Statemachine<WorkflowState, Token> statemachine() {
+		return statemachine;
+	}
+	
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState,Token> inputData) {
 		return statemachine.actOn(inputData);
@@ -100,16 +104,11 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			Statemachine<WorkflowState, Token> statemachine = statemachineOf(dataBefore);
 			Tokens mergedTokens = mergeTokens(datasAfter);
 			ActionData actionData = actionDataOfFirstOf(mergedTokens);
 			
-			WorkflowState state = new WorkflowState(Workflow.this, statemachine, mergedTokens, actionData);
+			WorkflowState state = new WorkflowState(Workflow.this, mergedTokens, actionData);
 			return data(state, null);
-		}
-
-		private Statemachine<WorkflowState, Token> statemachineOf(Data<WorkflowState, Token> dataBefore) {
-			return dataBefore.state().statemachine();
 		}
 
 		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datasAfter) {	

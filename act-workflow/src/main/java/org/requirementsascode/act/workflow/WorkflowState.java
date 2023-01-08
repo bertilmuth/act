@@ -20,15 +20,15 @@ public class WorkflowState {
 	private final Tokens tokens;
 	private final ActionData actionOutput;
 	
-	WorkflowState(Workflow workflow, Statemachine<WorkflowState, Token> statemachine, Tokens tokens, ActionData actionOutput) {
+	WorkflowState(Workflow workflow, Tokens tokens, ActionData actionOutput) {
 		this.workflow = workflow;
-		this.statemachine = statemachine;
+		this.statemachine = workflow.statemachine();
 		this.tokens = tokens;
 		this.actionOutput = actionOutput;
 	}
 	
 	static WorkflowState createInitialWorkflowState(Workflow workflow, Statemachine<WorkflowState, Token> statemachine) {
-		return new WorkflowState(workflow, statemachine, new Tokens(emptyMap()), null);
+		return new WorkflowState(workflow, new Tokens(emptyMap()), null);
 	}
 	
 	public Tokens tokens() {
@@ -94,7 +94,7 @@ public class WorkflowState {
 	
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
 		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
-		WorkflowState newWorkflowState = new WorkflowState(workflow, statemachine, tokens, actionOutput);
+		WorkflowState newWorkflowState = new WorkflowState(workflow, tokens, actionOutput);
 		return data(newWorkflowState, token);
 	}
 
