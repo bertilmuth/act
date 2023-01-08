@@ -10,16 +10,18 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
+import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class NodesBeforeTest {
 	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
 	private static final String ACTION2 = "Action2";
+	private static final String ACTION2I = "Action2i";
 
 	@Test
 	void initialNodeBefore() {
-		Node action1 = action(ACTION1, StringData.class, this::actionPerformed);
+		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -35,8 +37,8 @@ class NodesBeforeTest {
 	
 	@Test
 	void action1Before() {
-		Node action1 = action(ACTION1, StringData.class, this::actionPerformed);
-		Node action2 = action(ACTION2, StringData.class, this::actionPerformed);
+		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Node action2 = action(ACTION2, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -53,8 +55,8 @@ class NodesBeforeTest {
 	}
 	
 	@Test
-	void predicateBeforeAction1AreFalse() {
-		Node action1 = action(ACTION1, StringData.class, this::actionPerformed);
+	void predicateBeforeAction1IsFalse() {
+		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -66,9 +68,30 @@ class NodesBeforeTest {
 		Predicate<WorkflowState> predicateBefore = state.predicateBefore(workflow, action1);
 		assertFalse(predicateBefore.test(state));
 	}
+	
+	@Test
+	void predicateBeforeAction2IsTrue() {
+		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Node action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
+		
+		Workflow workflow = Workflow.builder()
+			.nodes(action1, action2i)
+			.startNodes(action1)
+			.dataFlows(
+				dataFlow(action1, action2i)
+			)
+			.build();
+		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
+		Predicate<WorkflowState> predicateBefore = state.predicateBefore(workflow, action2i);
+		assertTrue(predicateBefore.test(state));
+	}
 
-	private StringData actionPerformed(WorkflowState state, StringData input) {
+	private StringData action1Performed(WorkflowState state, StringData input) {
 		return new StringData("ActionPerformed");
+	}
+	
+	private IntegerData action2iPerformed(WorkflowState state, IntegerData input) {
+		return new IntegerData(input.integer + 1);
 	}
 	
 	private StringData str(String str) {
