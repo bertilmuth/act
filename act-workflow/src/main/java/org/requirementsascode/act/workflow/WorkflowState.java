@@ -45,6 +45,15 @@ public class WorkflowState {
 		return firstTokenIn(node).isPresent();
 	}
 	
+	Predicate<WorkflowState> predicateBefore(Workflow workflow, Node action) {
+		List<Node> nodesBefore = nodesBefore(workflow, action);
+		Predicate<WorkflowState> predicateBefore = nodesBefore.stream()
+			.map(Node::asState)
+			.map(State::invariant)
+			.reduce(s -> true, Predicate::and);
+		return predicateBefore;
+	}
+	
 	List<Node> nodesBefore(Workflow workflow, Node node) {
 		State<WorkflowState, Token> nodeState = node.asState();
 		Transitions<WorkflowState, Token> incomingTransitions = statemachine.incomingTransitions(nodeState);
@@ -60,10 +69,6 @@ public class WorkflowState {
 		return incomingTransitions.stream()
 			.map(t -> t.asTransition(statemachine).fromState())
 			.collect(Collectors.toList());
-	}
-	
-	Predicate<WorkflowState> predicateBefore(Workflow workflow, Node action1) {
-		return state -> false;
 	}
 	
 	Data<WorkflowState, Token> replaceToken(Node beforeNode, Token tokenBefore, Token tokenAfter) {
