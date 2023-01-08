@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
@@ -37,7 +38,8 @@ public class ActionNode implements Node {
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		return state(name(), s -> s.areTokensIn(this), this::consumeToken);
+		return state(name(), s -> s.areTokensIn(this),  
+			inCase(this::isActionDataInstanceOfInputClass, this::consumeToken));
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
@@ -54,6 +56,11 @@ public class ActionNode implements Node {
 	@Override
 	public String toString() {
 		return "ActionNode[" + name + "]";
+	}
+	
+	private boolean isActionDataInstanceOfInputClass(Data<WorkflowState,Token> inputData) {
+		ActionData actionData = ActionData.from(inputData);
+		return inputClass.isAssignableFrom(actionData.getClass());
 	}
 	
 	private <T extends ActionData, U extends ActionData> Behavior<WorkflowState, T, U> behaviorOf(BiFunction<WorkflowState, T, U> actionFunction) {
