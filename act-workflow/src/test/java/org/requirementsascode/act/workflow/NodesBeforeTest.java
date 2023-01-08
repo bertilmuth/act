@@ -1,11 +1,13 @@
 package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -48,6 +50,21 @@ class NodesBeforeTest {
 		List<Node> nodesBefore = state.nodesBefore(workflow, action2);
 		assertEquals(1, nodesBefore.size());
 		assertEquals(action1, nodesBefore.get(0));
+	}
+	
+	@Test
+	void predicateBeforeAction1AreFalse() {
+		Node action1 = action(ACTION1, StringData.class, this::actionPerformed);
+		
+		Workflow workflow = Workflow.builder()
+			.nodes(action1)
+			.startNodes(action1)
+			.dataFlows()
+			.build();
+		
+		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
+		Predicate<WorkflowState> predicateBefore = state.predicateBefore(workflow, action1);
+		assertFalse(predicateBefore.test(state));
 	}
 
 	private StringData actionPerformed(WorkflowState state, StringData input) {

@@ -5,6 +5,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,7 +45,7 @@ public class WorkflowState {
 		return firstTokenIn(node).isPresent();
 	}
 	
-	public List<Node> nodesBefore(Workflow workflow, Node node) {
+	List<Node> nodesBefore(Workflow workflow, Node node) {
 		State<WorkflowState, Token> nodeState = node.asState();
 		Transitions<WorkflowState, Token> incomingTransitions = statemachine.incomingTransitions(nodeState);
 		List<State<WorkflowState, Token>> statesBefore = statesBefore(incomingTransitions);
@@ -54,11 +55,15 @@ public class WorkflowState {
 			
 		return nodesBefore;
 	}
-
+	
 	private List<State<WorkflowState, Token>> statesBefore(Transitions<WorkflowState, Token> incomingTransitions) {
 		return incomingTransitions.stream()
 			.map(t -> t.asTransition(statemachine).fromState())
 			.collect(Collectors.toList());
+	}
+	
+	Predicate<WorkflowState> predicateBefore(Workflow workflow, Node action1) {
+		return state -> false;
 	}
 	
 	Data<WorkflowState, Token> replaceToken(Node beforeNode, Token tokenBefore, Token tokenAfter) {
