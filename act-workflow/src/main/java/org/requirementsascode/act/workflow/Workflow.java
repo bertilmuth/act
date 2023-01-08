@@ -1,10 +1,9 @@
 package org.requirementsascode.act.workflow;
 
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Stream.concat;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
-import static org.requirementsascode.act.workflow.WorkflowState.intialWorkflowState;
+import static org.requirementsascode.act.workflow.WorkflowState.createInitialWorkflowState;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,17 +23,20 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final DataFlows dataFlows;
 	private final WorkflowState initialWorkflowState;
 	private final Statemachine<WorkflowState, Token> statemachine;
-	private final InitialNode initialNode;
 	
 	public Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
-		this.nodes = requireNonNull(nodes, "nodes must be non-null!");
-		this.dataFlows = requireNonNull(dataFlows, "dataFlows must be non-null!");
-		
-		requireNonNull(startFlows, "startFlows must be non-null!");
-		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);		
-		
-		this.initialWorkflowState = intialWorkflowState(statemachine);
-		this.initialNode = new InitialNode(statemachine);
+		this.dataFlows = dataFlows;
+		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);				
+		this.nodes = createNodes(statemachine, nodes);
+		this.initialWorkflowState = createInitialWorkflowState(statemachine);
+	}
+	
+	private Nodes createNodes(Statemachine<WorkflowState, Token> statemachine, Nodes nodes) {
+		List<Node> nodesIncludingInitialNode = Stream.concat(
+			Stream.of(new InitialNode(statemachine)), 
+			nodes.stream())
+			.collect(Collectors.toList());
+		return new Nodes(nodesIncludingInitialNode);
 	}
 
 	public final static WorkflowBuilder builder() {
@@ -55,9 +57,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public Nodes nodes() {
-		List<Node> allNodes = Stream.concat(Stream.of(initialNode), nodes.stream())
-			.collect(Collectors.toList());
-		return new Nodes(allNodes);
+		return nodes;
 	}
 	
 	public DataFlows dataFlows() {

@@ -24,7 +24,7 @@ public class WorkflowState {
 		this.actionOutput = actionOutput;
 	}
 	
-	static WorkflowState intialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
+	static WorkflowState createInitialWorkflowState(Statemachine<WorkflowState, Token> statemachine) {
 		return new WorkflowState(statemachine, new Tokens(emptyMap()), null);
 	}
 	
