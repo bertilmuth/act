@@ -3,7 +3,6 @@ package org.requirementsascode.act.workflow;
 import static java.util.stream.Stream.concat;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
-import static org.requirementsascode.act.workflow.WorkflowState.createInitialWorkflowState;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,14 +24,12 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final Statemachine<WorkflowState, Token> statemachine;
 	private final InitialNode initialNode;
 	private final Nodes nodes;
-	private final WorkflowState initialWorkflowState;
 	
 	public Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
 		this.dataFlows = dataFlows;
 		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);		
 		this.initialNode = new InitialNode(statemachine);
 		this.nodes = createNodes(statemachine, nodes, initialNode);
-		this.initialWorkflowState = createInitialWorkflowState(this, statemachine);
 	}
 	
 	private Nodes createNodes(Statemachine<WorkflowState, Token> statemachine, Nodes nodes, InitialNode initialNode) {
