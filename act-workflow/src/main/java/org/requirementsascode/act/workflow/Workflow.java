@@ -24,13 +24,17 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final DataFlows dataFlows;
 	private final WorkflowState initialWorkflowState;
 	private final Statemachine<WorkflowState, Token> statemachine;
+	private final InitialNode initialNode;
 	
 	public Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
 		this.nodes = requireNonNull(nodes, "nodes must be non-null!");
 		this.dataFlows = requireNonNull(dataFlows, "dataFlows must be non-null!");
+		
 		requireNonNull(startFlows, "startFlows must be non-null!");
 		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);		
+		
 		this.initialWorkflowState = intialWorkflowState(statemachine);
+		this.initialNode = new InitialNode(statemachine);
 	}
 
 	public final static WorkflowBuilder builder() {
@@ -51,7 +55,9 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public Nodes nodes() {
-		return nodes;
+		List<Node> allNodes = Stream.concat(Stream.of(initialNode), nodes.stream())
+			.collect(Collectors.toList());
+		return new Nodes(allNodes);
 	}
 	
 	public DataFlows dataFlows() {

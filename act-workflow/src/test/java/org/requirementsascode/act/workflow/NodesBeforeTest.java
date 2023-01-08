@@ -27,7 +27,8 @@ class NodesBeforeTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
 		List<Node> nodesBefore = state.nodesBefore(workflow, action1);
-		assertTrue(nodesBefore.isEmpty());
+		assertEquals(1, nodesBefore.size());
+		assertTrue(nodesBefore.get(0) instanceof InitialNode);
 	}
 	
 	@Test
