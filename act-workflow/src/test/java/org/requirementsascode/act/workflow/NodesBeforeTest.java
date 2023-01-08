@@ -65,7 +65,7 @@ class NodesBeforeTest {
 			.build();
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
-		Predicate<WorkflowState> predicateBefore = state.tokensInNodesBefore(workflow, action1);
+		Predicate<WorkflowState> predicateBefore = state.tokensInNodesBefore(action1);
 		assertFalse(predicateBefore.test(state));
 	}
 	
@@ -82,7 +82,7 @@ class NodesBeforeTest {
 			)
 			.build();
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
-		Predicate<WorkflowState> predicateBefore = state.tokensInNodesBefore(workflow, action2i);
+		Predicate<WorkflowState> predicateBefore = state.tokensInNodesBefore(action2i);
 		assertTrue(predicateBefore.test(state));
 	}
 	
@@ -101,7 +101,7 @@ class NodesBeforeTest {
 			)
 			.build();
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
-		Predicate<WorkflowState> predicateBefore = state.tokensInNodesBefore(workflow, action2i);
+		Predicate<WorkflowState> predicateBefore = state.tokensInNodesBefore(action2i);
 		assertFalse(predicateBefore.test(state));
 	}
 
