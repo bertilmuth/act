@@ -47,22 +47,10 @@ public class WorkflowState {
 		return firstTokenIn(node).isPresent();
 	}
 	
-	Predicate<WorkflowState> tokensInNodesBefore(Node action) {
-		List<Node> nodesBefore = nodesBefore(workflow, action);
-		Predicate<WorkflowState> predicateBefore = 
-		  s -> nodesBefore.stream()
+	Predicate<WorkflowState> areTokensInNodesBefore(Node node) {
+		return s -> nodesBefore(workflow, node).stream()
 			.map(s::areTokensIn)
 			.reduce(true, (a,b) -> a && b);
-		return predicateBefore;
-	}
-	
-	Predicate<WorkflowState> tokensInNodesBefore(Workflow workflow, Node action) {
-		List<Node> nodesBefore = nodesBefore(workflow, action);
-		Predicate<WorkflowState> predicateBefore = 
-		  s -> nodesBefore.stream()
-			.map(s::areTokensIn)
-			.reduce(true, (a,b) -> a && b);
-		return predicateBefore;
 	}
 	
 	List<Node> nodesBefore(Workflow workflow, Node node) {
