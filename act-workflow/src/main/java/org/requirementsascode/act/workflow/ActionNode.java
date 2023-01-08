@@ -2,29 +2,23 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
 import java.util.function.BiFunction;
 
-import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
-public class ActionNode implements Node {
+public class ActionNode<T extends ActionData, U extends ActionData> implements Node {
 	private final String name;
 	private final Class<? extends ActionData> inputClass;
-	private final Behavior<WorkflowState, ActionData, ActionData> actionBehavior;
+	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	<T extends ActionData, U extends ActionData> ActionNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
+	ActionNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(name, "name must be non-null!");
-		this.inputClass = requireNonNull(inputClass, "inputClass must be non-null!");
-		requireNonNull(actionFunction, "actionFunction must be non-null!");
-		
-		this.actionBehavior = when(inputClass, behaviorOf(actionFunction));
+		this.inputClass = requireNonNull(inputClass, "inputClass must be non-null!");		
+		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
-	
 
 	@Override
 	public String name() {
@@ -43,35 +37,26 @@ public class ActionNode implements Node {
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, ActionData> behaviorInputData = unboxActionData(inputData);
-		ActionData outputActionData = actionBehavior.actOn(behaviorInputData).value().orElse(null);
-
+		U outputActionData = applyActionFunction(inputData);
 		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
 
-		Data<WorkflowState, Token> updatedWorkflow = inputData.state().replaceToken(this, inputToken, outputToken);
-		return updatedWorkflow;
-	}
-
-	@Override
-	public String toString() {
-		return "ActionNode[" + name + "]";
+		return inputData.state().replaceToken(this, inputToken, outputToken);
 	}
 	
 	private boolean isActionDataInstanceOfInputClass(Data<WorkflowState,Token> inputData) {
 		ActionData actionData = ActionData.from(inputData);
 		return inputClass.isAssignableFrom(actionData.getClass());
 	}
-	
-	private <T extends ActionData, U extends ActionData> Behavior<WorkflowState, T, U> behaviorOf(BiFunction<WorkflowState, T, U> actionFunction) {
-		return d -> {
-			WorkflowState state = d.state();
-			U functionResult = actionFunction.apply(state, d.value().orElse(null));
-			return data(state, functionResult);
-		};
+
+	@SuppressWarnings("unchecked")
+	private U applyActionFunction(Data<WorkflowState, Token> inputData) {
+		U outputActionData = actionFunction.apply(inputData.state(), (T) ActionData.from(inputData));
+		return outputActionData;
 	}
-	
-	private Data<WorkflowState, ActionData> unboxActionData(Data<WorkflowState, Token> inputData) {
-		return data(inputData.state(), ActionData.from(inputData));
+
+	@Override
+	public String toString() {
+		return "ActionNode[" + name + "]";
 	}
 }
