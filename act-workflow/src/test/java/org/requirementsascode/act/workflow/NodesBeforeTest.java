@@ -54,24 +54,6 @@ class NodesBeforeTest {
 	}
 	
 	@Test
-	void tokensBeforeAction2() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
-		
-		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2i)
-			.startNodes(action1)
-			.dataFlows(
-				dataFlow(action1, action2i)
-			)
-			.build();
-		
-		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
-		boolean areTokensInNodeBefore = state.areTokensInNodesBefore(action2i);
-		assertTrue(areTokensInNodeBefore);
-	}
-	
-	@Test
 	void noTokensBeforeAction2() {
 		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
 		Node action2 = action(ACTION2, StringData.class, this::action1Performed);

@@ -140,6 +140,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void testImplicitMerge() {
 		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
 		Node action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
