@@ -4,6 +4,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,9 +55,10 @@ public class Tokens {
 	}
 	
 	private Map<Node, List<Token>> addTokenToMap(Node node, Map<Node, List<Token>> tokensMap, Token tokenToAdd) {
-		tokensMap.merge(node, singletonList(tokenToAdd), (oldValue, value) -> {
-			oldValue.addAll(value);
-			return oldValue;
+		tokensMap.merge(node, singletonList(tokenToAdd), (oldValue, newValue) -> {
+			List<Token> newList = new ArrayList<>(oldValue);
+			newList.addAll(newValue);
+			return newList;
 		});
 		return tokensMap;
 	}
