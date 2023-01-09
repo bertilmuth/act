@@ -72,7 +72,6 @@ class WorkflowTest {
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
 		assertEquals(action1_2, state.actionOutput().get());
 		assertEquals(1, nrOfTokensIn(state));
-		assertEquals(action1_2, actionDataIn(action2, state));
 	}
 	
 	@Test
