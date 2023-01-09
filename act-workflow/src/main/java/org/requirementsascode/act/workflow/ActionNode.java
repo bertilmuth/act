@@ -44,8 +44,8 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 		U outputActionData = applyActionFunction(inputData);
 		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
-
-		return inputData.state().addToken(this, outputToken);
+		Data<WorkflowState, Token> updatedData = inputData.state().replaceToken(this, inputToken, outputToken);
+		return updatedData;
 	}
 	
 	private boolean isActionDataOfInputClass(Data<WorkflowState,Token> inputData) {

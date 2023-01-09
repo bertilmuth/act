@@ -34,6 +34,10 @@ public class WorkflowState {
 		return tokens;
 	}
 	
+	Workflow workflow() {
+		return workflow;
+	}
+	
 	public Stream<Token> tokensIn(Node node) {
 		return tokens().tokensIn(node);
 	}
@@ -47,12 +51,12 @@ public class WorkflowState {
 	}
 	
 	boolean areTokensInNodesBefore(Node node) {
-		return nodesBefore(workflow, node).stream()
+		return nodesBefore(node, workflow).stream()
 			.map(this::areTokensIn)
 			.reduce(true, (a,b) -> a && b);
 	}
 	
-	List<Node> nodesBefore(Workflow workflow, Node node) {
+	List<Node> nodesBefore(Node node, Workflow workflow) {
 		State<WorkflowState, Token> nodeState = node.asState();
 		Transitions<WorkflowState, Token> incomingTransitions = statemachine.incomingTransitions(nodeState);
 		List<State<WorkflowState, Token>> statesBefore = statesBefore(incomingTransitions);
@@ -74,16 +78,16 @@ public class WorkflowState {
 		return updateTokens(tokensAfter, token);
 	}
 	
+	public Data<WorkflowState, Token> removeToken(Node node, Token token) {
+		Tokens tokensAfter = tokens().removeToken(node, token);
+		return updateTokens(tokensAfter, token);
+	}
+	
 	Data<WorkflowState, Token> replaceToken(Node node, Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(node, tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);
 	}
-	
-	Data<WorkflowState, Token> moveToken(Token tokenToMove, Node fromNode, Node toNode) {
-		Tokens tokensAfter = tokens().moveToken(tokenToMove, fromNode, toNode);
-		return updateTokens(tokensAfter, tokenToMove);
-	}
-	
+
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
 		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
 		WorkflowState newWorkflowState = new WorkflowState(workflow, tokens, actionOutput);

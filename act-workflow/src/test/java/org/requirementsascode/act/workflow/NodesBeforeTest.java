@@ -29,7 +29,7 @@ class NodesBeforeTest {
 			.build();
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
-		List<Node> nodesBefore = state.nodesBefore(workflow, action1);
+		List<Node> nodesBefore = state.nodesBefore(action1, workflow);
 		assertEquals(1, nodesBefore.size());
 		assertTrue(nodesBefore.get(0) instanceof InitialNode);
 	}
@@ -48,24 +48,9 @@ class NodesBeforeTest {
 			.build();
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
-		List<Node> nodesBefore = state.nodesBefore(workflow, action2);
+		List<Node> nodesBefore = state.nodesBefore(action2, workflow);
 		assertEquals(1, nodesBefore.size());
 		assertEquals(action1, nodesBefore.get(0));
-	}
-	
-	@Test
-	void noTokensInNodesBeforeAction1() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		
-		Workflow workflow = Workflow.builder()
-			.nodes(action1)
-			.startNodes(action1)
-			.dataFlows()
-			.build();
-		
-		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
-		boolean areTokensInNodeBefore = state.areTokensInNodesBefore(action1);
-		assertFalse(areTokensInNodeBefore);
 	}
 	
 	@Test
@@ -80,6 +65,7 @@ class NodesBeforeTest {
 				dataFlow(action1, action2i)
 			)
 			.build();
+		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();
 		boolean areTokensInNodeBefore = state.areTokensInNodesBefore(action2i);
 		assertTrue(areTokensInNodeBefore);

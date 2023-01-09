@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Data;
@@ -37,7 +39,11 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 		return inputToken.actionData()
 			.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
 			.filter(ad -> guardCondition.test((T) ad))
-			.map(ad -> inputData)
+			.map(ad -> {
+				WorkflowState stateWithTokenAdded = inputData.state().addToken(fromNode, inputToken).state();
+				WorkflowState stateWithTokensBeforeRemoved = removeTokensInNodesBefore(fromNode, stateWithTokenAdded);
+				return data(stateWithTokensBeforeRemoved, inputToken);
+			})
 			.orElse(clearToken(state));
 	}
 
@@ -45,7 +51,14 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 		return data(state, null);
 	}
 	
-	private Data<WorkflowState,Token> moveToken(WorkflowState state, Token tokenToMove){
-		return state.moveToken(tokenToMove, fromNode, toNode);
+	private WorkflowState removeTokensInNodesBefore(Node node, WorkflowState state) {
+		List<Node> nodesBefore = state.nodesBefore(node, state.workflow());
+		for (Node nodeBefore : nodesBefore) {
+			Optional<Token> firstTokenInNode = state.firstTokenIn(nodeBefore);
+			if(firstTokenInNode.isPresent()) {
+				state = state.removeToken(nodeBefore, firstTokenInNode.get()).state();
+			}
+		}
+		return state;
 	}
 }
