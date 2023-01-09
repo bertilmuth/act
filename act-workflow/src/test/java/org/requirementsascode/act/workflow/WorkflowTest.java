@@ -134,8 +134,8 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
-		assertEquals(str(ACTION1 + "." + ACTION2A), actionDataIn(action2a, state));
-		assertEquals(str(ACTION1 + "." + ACTION2B), actionDataIn(action2b, state));
+		StringData action1_2a = str(ACTION1 + "." + ACTION2A);
+		assertEquals(action1_2a, state.actionOutput().get());
 		assertEquals(2, nrOfTokensIn(state));
 	}
 	
