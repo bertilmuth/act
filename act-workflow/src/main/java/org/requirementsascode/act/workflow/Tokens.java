@@ -14,7 +14,7 @@ public class Tokens {
 	private final Map<Node, List<Token>> tokens;
 	
 	Tokens(Map<Node, List<Token>> tokensMap) {
-		this.tokens = tokensMap;
+		this.tokens = new LinkedHashMap<>(tokensMap);
 	}
 	
 	public Map<Node, List<Token>> asMap() {
