@@ -47,7 +47,8 @@ public class WorkflowState {
 	}
 	
 	public boolean areTokensIn(Node node){
-		return firstTokenIn(node).isPresent();
+		boolean result = firstTokenIn(node).isPresent();
+		return result;
 	}
 	
 	boolean areTokensInNodesBefore(Node node) {

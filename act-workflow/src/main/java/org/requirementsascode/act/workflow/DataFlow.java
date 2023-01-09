@@ -36,7 +36,7 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 		Token inputToken = Token.from(inputData);
 		WorkflowState state = inputData.state();
 
-		return inputToken.actionData()
+		Data<WorkflowState, Token> outputData = inputToken.actionData()
 			.filter(ad -> inputClass.isAssignableFrom(ad.getClass()))
 			.filter(ad -> guardCondition.test((T) ad))
 			.map(ad -> {
@@ -45,6 +45,8 @@ public class DataFlow<T extends ActionData> implements Transitionable<WorkflowSt
 				return data(stateWithTokensBeforeRemoved, inputToken);
 			})
 			.orElse(clearToken(state));
+		
+		return outputData;
 	}
 
 	private Data<WorkflowState, Token> clearToken(WorkflowState state) {

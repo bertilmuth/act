@@ -42,4 +42,14 @@ class InitialNode implements Node{
 	public Class<? extends ActionData> inputClass() {
 		return ActionData.class;
 	}
+	
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj != null && getClass().equals(obj.getClass());
+	}
 }
