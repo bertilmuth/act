@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.NoOp;
 import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
 
@@ -111,7 +112,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 
 	private State<S, V0> createInitialState(State<S, V0> definedState) {
-		return state(INITIAL_STATE, notIn(definedState), identity());
+		return state(INITIAL_STATE, notIn(definedState), new NoOp<>());
 	}
 	
 	private State<S, V0> createFinalState(State<S, V0> definedState) {
