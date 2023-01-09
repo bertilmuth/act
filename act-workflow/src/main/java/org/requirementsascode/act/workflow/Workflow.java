@@ -4,7 +4,6 @@ import static java.util.stream.Stream.concat;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +105,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Tokens mergedTokens = mergeTokens(datasAfter);
-			ActionData actionData = actionDataOfFirstOf(mergedTokens);
+			ActionData actionData = actionOutputOfFirstStateOf(datasAfter);
 			
 			WorkflowState state = new WorkflowState(Workflow.this, mergedTokens, actionData);
 			return data(state, null);
@@ -134,11 +133,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			return new Tokens(mergedTokenMap);
 		}
 		
-		private ActionData actionDataOfFirstOf(Tokens tokens) {
-			return tokens.asMap().values().stream()
-				.flatMap(Collection::stream).findFirst()
-				.flatMap(Token::actionData)
-				.orElse(null);
+		private ActionData actionOutputOfFirstStateOf(List<Data<WorkflowState, Token>> datasAfter) {
+			return datasAfter.isEmpty()? null : datasAfter.get(0).state().actionOutput().orElse(null);
 		}
 	}
 }

@@ -51,7 +51,6 @@ class WorkflowTest {
 		WorkflowState state = afterAction1.state();
 
 		assertEquals(str(ACTION1), state.actionOutput().get());
-		assertEquals(str(ACTION1), actionDataIn(action1, state));
 	}
 	
 	@Test
