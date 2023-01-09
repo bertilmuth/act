@@ -2,7 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
-import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.function.BiFunction;
 
@@ -44,8 +44,8 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 		U outputActionData = applyActionFunction(inputData);
 		Token inputToken = Token.from(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
-		Data<WorkflowState, Token> updatedData = inputData.state().replaceToken(this, inputToken, outputToken);
-		return updatedData;
+		WorkflowState newState = inputData.state().updateActionOutput(outputActionData);
+		return data(newState, outputToken);
 	}
 	
 	private boolean isActionDataOfInputClass(Data<WorkflowState,Token> inputData) {
