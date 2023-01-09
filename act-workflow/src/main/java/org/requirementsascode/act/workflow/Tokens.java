@@ -5,7 +5,7 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -26,7 +26,7 @@ public class Tokens {
 	}
 
 	public Tokens addToken(Node node, Token token) {
-		Map<Node, List<Token>> newTokensMap = new HashMap<>(tokens);
+		Map<Node, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
 		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(node, newTokensMap, token);
 		return new Tokens(mapWithTokenAdded);
 	}
@@ -48,7 +48,7 @@ public class Tokens {
 	
 	private Map<Node, List<Token>> removeTokenFromMap(Node node, Token tokenToBeRemoved) {
 		List<Token> tokensWithTokenRemoved = tokensIn(node).filter(t -> !tokenToBeRemoved.equals(t)).collect(toList());
-		Map<Node, List<Token>> newTokensMap = new HashMap<>(tokens);
+		Map<Node, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
 		newTokensMap.put(node, tokensWithTokenRemoved);
 		return newTokensMap;
 	}
