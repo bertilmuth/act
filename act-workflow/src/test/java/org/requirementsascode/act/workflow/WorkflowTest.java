@@ -76,8 +76,8 @@ class WorkflowTest {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Node action1 = createAction1(action1_In);
 		
-		Port<StringData> port2 = port(ACTION2_IN, StringData.class);
-		Node action2 = createAction2(port2);
+		Port<StringData> action2_In = port(ACTION2_IN, StringData.class);
+		Node action2 = createAction2(action2_In);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -100,8 +100,8 @@ class WorkflowTest {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Node action1 = createAction1(action1_In);
 		
-		Port<StringData> port2 = port(ACTION2_IN, StringData.class);
-		Node action2 = createAction2(port2);
+		Port<StringData> action2_In = port(ACTION2_IN, StringData.class);
+		Node action2 = createAction2(action2_In);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -124,8 +124,8 @@ class WorkflowTest {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Node action1 = createAction1(action1_In);
 		
-		Port<IntegerData> port2i = port(ACTION2I_IN, IntegerData.class);
-		Node action2i = createAction2i(port2i);
+		Port<IntegerData> action2i_In = port(ACTION2I_IN, IntegerData.class);
+		Node action2i = createAction2i(action2i_In);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2i)
@@ -149,11 +149,11 @@ class WorkflowTest {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Node action1 = createAction1(action1_In);
 		
-		Port<StringData> port2a = port(ACTION2A_IN, StringData.class);
-		Node action2a = createAction2a(port2a);
+		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
+		Node action2a = createAction2a(action2a_In);
 		
-		Port<StringData> port2b = port(ACTION2B_IN, StringData.class);
-		Node action2b = createAction2b(port2b);
+		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
+		Node action2b = createAction2b(action2b_In);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
@@ -177,11 +177,11 @@ class WorkflowTest {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Node action1 = createAction1(action1_In);
 		
-		Port<StringData> port2a = port(ACTION2A_IN, StringData.class);
-		Node action2a = createAction2a(port2a);
+		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
+		Node action2a = createAction2a(action2a_In);
 		
-		Port<StringData> port2b = port(ACTION2B_IN, StringData.class);
-		Node action2b = createAction2b(port2b);
+		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
+		Node action2b = createAction2b(action2b_In);
 		
 		Port<StringData> port3 = port(ACTION3_IN, StringData.class);
 		Node action3 = createAction3(port3);
