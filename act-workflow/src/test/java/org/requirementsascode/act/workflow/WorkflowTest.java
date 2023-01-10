@@ -57,7 +57,7 @@ class WorkflowTest {
 	@Test
 	void runsSingleAction() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(action1_In);
+		Node action1 = createAction1(action1_In, null);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1_In, action1)
@@ -74,10 +74,10 @@ class WorkflowTest {
 	@Test
 	void runsTwoActions_firstOneUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(action1_In);
+		Node action1 = createAction1(action1_In, null);
 		
 		Port<StringData> action2_In = port(ACTION2_IN, StringData.class);
-		Node action2 = createAction2(action2_In);
+		Node action2 = createAction2(action2_In, null);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -98,10 +98,10 @@ class WorkflowTest {
 	@Test
 	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(action1_In);
+		Node action1 = createAction1(action1_In, null);
 		
 		Port<StringData> action2_In = port(ACTION2_IN, StringData.class);
-		Node action2 = createAction2(action2_In);
+		Node action2 = createAction2(action2_In, null);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -122,10 +122,10 @@ class WorkflowTest {
 	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(action1_In);
+		Node action1 = createAction1(action1_In, null);
 		
 		Port<IntegerData> action2i_In = port(ACTION2I_IN, IntegerData.class);
-		Node action2i = createAction2i(action2i_In);
+		Node action2i = createAction2i(action2i_In, null);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2i)
@@ -147,13 +147,13 @@ class WorkflowTest {
 	@Test
 	void testStepAfterImplicitFork() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(action1_In);
+		Node action1 = createAction1(action1_In, null);
 		
 		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
-		Node action2a = createAction2a(action2a_In);
+		Node action2a = createAction2a(action2a_In, null);
 		
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
-		Node action2b = createAction2b(action2b_In);
+		Node action2b = createAction2b(action2b_In, null);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
@@ -175,16 +175,16 @@ class WorkflowTest {
 	@Disabled
 	void testImplicitMerge() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(action1_In);
+		Node action1 = createAction1(action1_In, null);
 		
 		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
-		Node action2a = createAction2a(action2a_In);
+		Node action2a = createAction2a(action2a_In, null);
 		
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
-		Node action2b = createAction2b(action2b_In);
+		Node action2b = createAction2b(action2b_In, null);
 		
 		Port<StringData> action3_In = port(ACTION3_IN, StringData.class);
-		Node action3 = createAction3(action3_In);
+		Node action3 = createAction3(action3_In, null);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b, action3)
@@ -209,7 +209,7 @@ class WorkflowTest {
 	@Test
 	void doesntRunActionForUnknownData() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(action1_In);
+		Node action1 = createAction1(action1_In, null);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -221,27 +221,27 @@ class WorkflowTest {
 		assertEquals(0, nrOfTokensIn(state));
 	}
 	
-	private Node createAction1(Port<StringData> inputPort) {
+	private Node createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(inputPort, inputPort, ACTION1, this::action1Performed);
 	}
 	
-	private Node createAction2(Port<StringData> inputPort) {
+	private Node createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(inputPort, inputPort, ACTION2, this::action2Performed);
 	}
 	
-	private Node createAction2a(Port<StringData> inputPort) {
+	private Node createAction2a(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(inputPort, inputPort, ACTION2A, this::action2aPerformed);
 	}
 	
-	private Node createAction2b(Port<StringData> inputPort) {
+	private Node createAction2b(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(inputPort, inputPort, ACTION2B, this::action2bPerformed);
 	}
 	
-	private Node createAction2i(Port<IntegerData> inputPort) {
+	private Node createAction2i(Port<IntegerData> inputPort, Port<IntegerData> outputPort) {
 		return createAction(inputPort, inputPort, ACTION2I, this::action2iPerformed);
 	}
 	
-	private Node createAction3(Port<StringData> inputPort) {
+	private Node createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(inputPort, inputPort, ACTION3, this::action3Performed);
 	}
 	
