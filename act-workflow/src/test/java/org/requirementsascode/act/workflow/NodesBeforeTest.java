@@ -88,19 +88,19 @@ class NodesBeforeTest {
 		assertFalse(areTokensInNodeBefore);
 	}
 	private Node createAction1(Port<StringData> port1) {
-		return createAction(port1, ACTION1, this::action1Performed);
+		return createAction(port1, port1, ACTION1, this::action1Performed);
 	}
 	
 	private Node createAction2(Port<StringData> port2) {
-		return createAction(port2, ACTION2, this::action2Performed);
+		return createAction(port2, port2, ACTION2, this::action2Performed);
 	}
 	
 	private Node createAction2i(Port<IntegerData> port2i) {
-		return createAction(port2i, ACTION2I, this::action2iPerformed);
+		return createAction(port2i, port2i, ACTION2I, this::action2iPerformed);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Node createAction(Port<T> port, String actionName, BiFunction<WorkflowState, T, U> actionFunction) {
-		return action(port, actionName, actionFunction);
+	private <T extends ActionData, U extends ActionData> Node createAction(Port<T> inputPort, Port<U> outputPort, String actionName, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(actionName, inputPort, outputPort, actionFunction);
 	}
 
 	private StringData action1Performed(WorkflowState state, StringData input) {

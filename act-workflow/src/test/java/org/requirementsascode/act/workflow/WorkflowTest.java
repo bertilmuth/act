@@ -214,31 +214,31 @@ class WorkflowTest {
 	}
 	
 	private Node createAction1(Port<StringData> port1) {
-		return createAction(port1, ACTION1, this::action1Performed);
+		return createAction(port1, port1, ACTION1, this::action1Performed);
 	}
 	
 	private Node createAction2(Port<StringData> port2) {
-		return createAction(port2, ACTION2, this::action2Performed);
+		return createAction(port2, port2, ACTION2, this::action2Performed);
 	}
 	
 	private Node createAction2a(Port<StringData> port2a) {
-		return createAction(port2a, ACTION2A, this::action2aPerformed);
+		return createAction(port2a, port2a, ACTION2A, this::action2aPerformed);
 	}
 	
 	private Node createAction2b(Port<StringData> port2b) {
-		return createAction(port2b, ACTION2B, this::action2bPerformed);
+		return createAction(port2b, port2b, ACTION2B, this::action2bPerformed);
 	}
 	
 	private Node createAction2i(Port<IntegerData> port2i) {
-		return createAction(port2i, ACTION2I, this::action2iPerformed);
+		return createAction(port2i, port2i, ACTION2I, this::action2iPerformed);
 	}
 	
 	private Node createAction3(Port<StringData> port3) {
-		return createAction(port3, ACTION3, this::action3Performed);
+		return createAction(port3, port3, ACTION3, this::action3Performed);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Node createAction(Port<T> port, String actionName, BiFunction<WorkflowState, T, U> actionFunction) {
-		return action(port, actionName, actionFunction);
+	private <T extends ActionData, U extends ActionData> Node createAction(Port<T> inputPort, Port<U> outputPort, String actionName, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(actionName, inputPort, outputPort, actionFunction);
 	}
 
 	private StringData str(String str) {
