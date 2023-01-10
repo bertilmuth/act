@@ -56,11 +56,11 @@ class WorkflowTest {
 	
 	@Test
 	void runsSingleAction() {
-		Port<StringData> port1 = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(port1);
+		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
+		Node action1 = createAction1(action1_In);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(port1, action1)
+			.nodes(action1_In, action1)
 			.startNodes(action1)
 			.dataFlows()
 			.build();
@@ -73,8 +73,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_firstOneUserTriggered() {
-		Port<StringData> port1 = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(port1);
+		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
+		Node action1 = createAction1(action1_In);
 		
 		Port<StringData> port2 = port(ACTION2_IN, StringData.class);
 		Node action2 = createAction2(port2);
@@ -97,8 +97,8 @@ class WorkflowTest {
 	
 	@Test
 	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
-		Port<StringData> port1 = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(port1);
+		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
+		Node action1 = createAction1(action1_In);
 		
 		Port<StringData> port2 = port(ACTION2_IN, StringData.class);
 		Node action2 = createAction2(port2);
@@ -121,8 +121,8 @@ class WorkflowTest {
 	@Test
 	@Disabled
 	void runsTwoActions_bothUserTriggered() {
-		Port<StringData> port1 = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(port1);
+		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
+		Node action1 = createAction1(action1_In);
 		
 		Port<IntegerData> port2i = port(ACTION2I_IN, IntegerData.class);
 		Node action2i = createAction2i(port2i);
@@ -146,8 +146,8 @@ class WorkflowTest {
 	
 	@Test
 	void testStepAfterImplicitFork() {
-		Port<StringData> port1 = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(port1);
+		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
+		Node action1 = createAction1(action1_In);
 		
 		Port<StringData> port2a = port(ACTION2A_IN, StringData.class);
 		Node action2a = createAction2a(port2a);
@@ -174,8 +174,8 @@ class WorkflowTest {
 	@Test
 	@Disabled
 	void testImplicitMerge() {
-		Port<StringData> port1 = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(port1);
+		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
+		Node action1 = createAction1(action1_In);
 		
 		Port<StringData> port2a = port(ACTION2A_IN, StringData.class);
 		Node action2a = createAction2a(port2a);
@@ -208,8 +208,8 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData() {
-		Port<StringData> port1 = port(ACTION1_IN, StringData.class);
-		Node action1 = createAction1(port1);
+		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
+		Node action1 = createAction1(action1_In);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
