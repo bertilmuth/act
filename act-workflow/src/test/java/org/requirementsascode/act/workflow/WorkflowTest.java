@@ -39,7 +39,7 @@ class WorkflowTest {
 	
 	@Test
 	void runsSingleAction() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Node action1 = createAction1();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -55,8 +55,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_firstOneUserTriggered() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2 = action(ACTION2, StringData.class, this::action2Performed);
+		Node action1 = createAction1();
+		Node action2 = createAction2();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -76,8 +76,8 @@ class WorkflowTest {
 	
 	@Test
 	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2 = action(ACTION2, StringData.class, this::action2Performed);
+		Node action1 = createAction1();
+		Node action2 = createAction2();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -97,8 +97,8 @@ class WorkflowTest {
 	@Test
 	@Disabled
 	void runsTwoActions_bothUserTriggered() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
+		Node action1 = createAction1();
+		Node action2i = createAction2i();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2i)
@@ -119,9 +119,9 @@ class WorkflowTest {
 	
 	@Test
 	void testStepAfterImplicitFork() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
-		Node action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
+		Node action1 = createAction1();
+		Node action2a = createAction2a();
+		Node action2b = createAction2b();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
@@ -142,10 +142,10 @@ class WorkflowTest {
 	@Test
 	@Disabled
 	void testImplicitMerge() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2a = action(ACTION2A, StringData.class, this::action2aPerformed);
-		Node action2b = action(ACTION2B, StringData.class, this::action2bPerformed);
-		Node action3 = action(ACTION3, StringData.class, this::action3Performed);
+		Node action1 = createAction1();
+		Node action2a = createAction2a();
+		Node action2b = createAction2b();
+		Node action3 = createAction3();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b, action3)
@@ -169,7 +169,7 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Node action1 = createAction1();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -179,6 +179,30 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(new UnknownData()).state();
 		assertEquals(0, nrOfTokensIn(state));
+	}
+	
+	private Node createAction1() {
+		return action(ACTION1, StringData.class, this::action1Performed);
+	}
+	
+	private Node createAction2() {
+		return action(ACTION2, StringData.class, this::action2Performed);
+	}
+	
+	private Node createAction2a() {
+		return action(ACTION2A, StringData.class, this::action2aPerformed);
+	}
+	
+	private Node createAction2b() {
+		return action(ACTION2B, StringData.class, this::action2bPerformed);
+	}
+	
+	private Node createAction2i() {
+		return action(ACTION2I, IntegerData.class, this::action2iPerformed);
+	}
+	
+	private Node createAction3() {
+		return action(ACTION3, StringData.class, this::action3Performed);
 	}
 
 	private StringData str(String str) {
