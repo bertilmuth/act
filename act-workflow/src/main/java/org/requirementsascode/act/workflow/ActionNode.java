@@ -44,11 +44,17 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
+		Data<WorkflowState, Token> outputData = transform(inputData);
+		return outputData;
+	}
+
+	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> inputData) {
 		Token inputToken = Token.from(inputData);
 		U outputActionData = applyActionFunction(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
 		WorkflowState newState = inputData.state().updateActionOutput(outputActionData);
-		return data(newState, outputToken);
+		Data<WorkflowState, Token> outputData = data(newState, outputToken);
+		return outputData;
 	}
 	
 	private boolean isActionDataOfType(Data<WorkflowState,Token> inputData) {
