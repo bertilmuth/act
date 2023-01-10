@@ -2,8 +2,9 @@ package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
+import static org.requirementsascode.act.workflow.WorkflowApi.port;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -18,13 +19,13 @@ import org.requirementsascode.act.workflow.testdata.StringData;
 class WorkflowTest {
 	private static final String PORT1 = "Port1";
 	private static final String PORT2 = "Port2";
+	private static final String PORT2I = "Port2i";
 	
 	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
 	private static final String ACTION2 = "Action2";
 	private static final String ACTION2A = "Action2a";
 	private static final String ACTION2B = "Action2b";
-	private static final String ACTION2I = "Action2i";
 	private static final String ACTION3 = "Action3";
 	
 	@Test
@@ -110,7 +111,9 @@ class WorkflowTest {
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> port1 = port(PORT1, StringData.class);
 		Node action1 = createAction1(port1);
-		Node action2i = createAction2i();
+		
+		Port<IntegerData> port2i = port(PORT2I, IntegerData.class);
+		Node action2i = createAction2i(port2i);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2i)
@@ -212,8 +215,8 @@ class WorkflowTest {
 		return createAction(ACTION2B, StringData.class, this::action2bPerformed);
 	}
 	
-	private Node createAction2i() {
-		return createAction(ACTION2I, IntegerData.class, this::action2iPerformed);
+	private Node createAction2i(Port<IntegerData> port2i) {
+		return createAction(port2i, this::action2iPerformed);
 	}
 	
 	private Node createAction3() {
