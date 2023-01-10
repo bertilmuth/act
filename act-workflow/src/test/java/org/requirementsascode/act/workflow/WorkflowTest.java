@@ -16,6 +16,8 @@ import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class WorkflowTest {
+	private static final String PORT1 = "Port1";
+	
 	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
 	private static final String ACTION2 = "Action2";
@@ -40,7 +42,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsSingleAction() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -182,11 +185,12 @@ class WorkflowTest {
 		assertEquals(0, nrOfTokensIn(state));
 	}
 	
+	private Node createAction1(Port<StringData> port1) {
+		return createAction(port1, this::action1Performed);
+	}
+	
 	private Node createAction1() {
-		String action12 = ACTION1;
-		Class<StringData> inputClass = StringData.class;
-		BiFunction<WorkflowState, StringData, StringData> actionFunction = this::action1Performed;
-		return createAction(action12, inputClass, actionFunction);
+		return createAction(ACTION1, StringData.class, this::action1Performed);
 	}
 	
 	private Node createAction2() {
@@ -207,6 +211,10 @@ class WorkflowTest {
 	
 	private Node createAction3() {
 		return createAction(ACTION3, StringData.class, this::action3Performed);
+	}
+	
+	private <T extends ActionData, U extends ActionData> Node createAction(Port<T> port, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(port, actionFunction);
 	}
 	
 	private <T extends ActionData, U extends ActionData> Node createAction(String inputPortName, Class<T> inputPortType, BiFunction<WorkflowState, T, U> actionFunction) {
