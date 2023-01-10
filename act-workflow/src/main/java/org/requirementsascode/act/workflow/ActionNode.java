@@ -11,31 +11,27 @@ import org.requirementsascode.act.statemachine.State;
 
 public class ActionNode<T extends ActionData, U extends ActionData> implements Node {
 	private Port<T> inputPort;
-	private final String name;
-	private final Class<? extends ActionData> inputClass;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
 	ActionNode(Port<T> inputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
-		this.name = requireNonNull(inputPort.name(), "input port name must be non-null!");
-		this.inputClass = requireNonNull(inputPort.type(), "input port type must be non-null!");		
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 
 	@Override
 	public String name() {
-		return name;
+		return inputPort.name();
 	}
 	
 	@Override
 	public Class<? extends ActionData> type() {
-		return inputClass;
+		return inputPort.type();
 	}
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		return state(name(), this::areTokensInNodesBefore,  
-			inCase(this::isActionDataOfInputClass, this::consumeToken));
+		return state(inputPort.name(), this::areTokensInNodesBefore,  
+			inCase(this::isActionDataOfType, this::consumeToken));
 	}
 	
 	private boolean areTokensInNodesBefore(WorkflowState state) {
@@ -50,9 +46,9 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 		return data(newState, outputToken);
 	}
 	
-	private boolean isActionDataOfInputClass(Data<WorkflowState,Token> inputData) {
+	private boolean isActionDataOfType(Data<WorkflowState,Token> inputData) {
 		ActionData actionData = ActionData.from(inputData);
-		return inputClass.isAssignableFrom(actionData.getClass());
+		return inputPort.type().isAssignableFrom(actionData.getClass());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,6 +59,6 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 
 	@Override
 	public String toString() {
-		return "ActionNode[" + name + "]";
+		return "ActionNode[" + inputPort.name() + "]";
 	}
 }
