@@ -17,6 +17,7 @@ import org.requirementsascode.act.workflow.testdata.StringData;
 
 class WorkflowTest {
 	private static final String PORT1 = "Port1";
+	private static final String PORT2 = "Port2";
 	
 	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
@@ -61,7 +62,9 @@ class WorkflowTest {
 	void runsTwoActions_firstOneUserTriggered() {
 		Port<StringData> port1 = port(PORT1, StringData.class);
 		Node action1 = createAction1(port1);
-		Node action2 = createAction2();
+		
+		Port<StringData> port2 = port(PORT2, StringData.class);
+		Node action2 = createAction2(port2);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -83,7 +86,9 @@ class WorkflowTest {
 	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
 		Port<StringData> port1 = port(PORT1, StringData.class);
 		Node action1 = createAction1(port1);
-		Node action2 = createAction2();
+		
+		Port<StringData> port2 = port(PORT2, StringData.class);
+		Node action2 = createAction2(port2);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -195,8 +200,8 @@ class WorkflowTest {
 		return createAction(port1, this::action1Performed);
 	}
 	
-	private Node createAction2() {
-		return createAction(ACTION2, StringData.class, this::action2Performed);
+	private Node createAction2(Port<StringData> port2) {
+		return createAction(port2, this::action2Performed);
 	}
 	
 	private Node createAction2a() {
