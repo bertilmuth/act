@@ -44,8 +44,8 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	}
 
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
-		U outputActionData = applyActionFunction(inputData);
 		Token inputToken = Token.from(inputData);
+		U outputActionData = applyActionFunction(inputData);
 		Token outputToken = inputToken.replaceActionData(outputActionData);
 		WorkflowState newState = inputData.state().updateActionOutput(outputActionData);
 		return data(newState, outputToken);
