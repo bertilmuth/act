@@ -7,6 +7,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
@@ -73,15 +74,19 @@ class NodesBeforeTest {
 	}
 	
 	private Node createAction1() {
-		return action(ACTION1, StringData.class, this::action1Performed);
+		return createAction(ACTION1, StringData.class, this::action1Performed);
 	}
 	
 	private Node createAction2() {
-		return action(ACTION2, StringData.class, this::action2Performed);
+		return createAction(ACTION2, StringData.class, this::action2Performed);
 	}
 	
 	private Node createAction2i() {
-		return action(ACTION2I, IntegerData.class, this::action2iPerformed);
+		return createAction(ACTION2I, IntegerData.class, this::action2iPerformed);
+	}
+	
+	private <T extends ActionData, U extends ActionData> Node createAction(String actionName, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(actionName, inputClass, actionFunction);
 	}
 
 	private StringData action1Performed(WorkflowState state, StringData input) {
