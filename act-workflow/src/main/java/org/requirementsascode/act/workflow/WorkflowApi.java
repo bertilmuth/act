@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 
 public class WorkflowApi {
 	public static <T extends ActionData, U extends ActionData> Node action(Port<T> inputPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		return new ActionNode<>(inputPort.name(), inputPort.type(), actionFunction);
+		return new ActionNode<>(inputPort, actionFunction);
 	}
 	
 	public static Token token(ActionData actionData) {

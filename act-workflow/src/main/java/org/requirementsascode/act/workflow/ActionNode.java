@@ -10,13 +10,15 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
 public class ActionNode<T extends ActionData, U extends ActionData> implements Node {
+	private Port<T> inputPort;
 	private final String name;
 	private final Class<? extends ActionData> inputClass;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	ActionNode(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.name = requireNonNull(name, "name must be non-null!");
-		this.inputClass = requireNonNull(inputClass, "inputClass must be non-null!");		
+	ActionNode(Port<T> inputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
+		this.name = requireNonNull(inputPort.name(), "input port name must be non-null!");
+		this.inputClass = requireNonNull(inputPort.type(), "input port type must be non-null!");		
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 
