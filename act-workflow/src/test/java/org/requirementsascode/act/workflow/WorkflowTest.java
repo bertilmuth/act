@@ -6,6 +6,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
@@ -182,27 +183,34 @@ class WorkflowTest {
 	}
 	
 	private Node createAction1() {
-		return action(ACTION1, StringData.class, this::action1Performed);
+		String action12 = ACTION1;
+		Class<StringData> inputClass = StringData.class;
+		BiFunction<WorkflowState, StringData, StringData> actionFunction = this::action1Performed;
+		return createAction(action12, inputClass, actionFunction);
 	}
 	
 	private Node createAction2() {
-		return action(ACTION2, StringData.class, this::action2Performed);
+		return createAction(ACTION2, StringData.class, this::action2Performed);
 	}
 	
 	private Node createAction2a() {
-		return action(ACTION2A, StringData.class, this::action2aPerformed);
+		return createAction(ACTION2A, StringData.class, this::action2aPerformed);
 	}
 	
 	private Node createAction2b() {
-		return action(ACTION2B, StringData.class, this::action2bPerformed);
+		return createAction(ACTION2B, StringData.class, this::action2bPerformed);
 	}
 	
 	private Node createAction2i() {
-		return action(ACTION2I, IntegerData.class, this::action2iPerformed);
+		return createAction(ACTION2I, IntegerData.class, this::action2iPerformed);
 	}
 	
 	private Node createAction3() {
-		return action(ACTION3, StringData.class, this::action3Performed);
+		return createAction(ACTION3, StringData.class, this::action3Performed);
+	}
+	
+	private <T extends ActionData, U extends ActionData> Node createAction(String actionName, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(actionName, inputClass, actionFunction);
 	}
 
 	private StringData str(String str) {
