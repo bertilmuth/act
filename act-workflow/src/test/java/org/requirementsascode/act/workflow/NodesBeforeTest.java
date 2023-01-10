@@ -20,7 +20,7 @@ class NodesBeforeTest {
 
 	@Test
 	void initialNodeBefore() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
+		Node action1 = createAction1();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -36,8 +36,8 @@ class NodesBeforeTest {
 	
 	@Test
 	void action1Before() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2 = action(ACTION2, StringData.class, this::action1Performed);
+		Node action1 = createAction1();
+		Node action2 = createAction2();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -55,9 +55,9 @@ class NodesBeforeTest {
 	
 	@Test
 	void noTokensBeforeAction2() {
-		Node action1 = action(ACTION1, StringData.class, this::action1Performed);
-		Node action2 = action(ACTION2, StringData.class, this::action1Performed);
-		Node action2i = action(ACTION2I, IntegerData.class, this::action2iPerformed);
+		Node action1 = createAction1();
+		Node action2 = createAction2();
+		Node action2i = createAction2i();
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2, action2i)
@@ -71,8 +71,24 @@ class NodesBeforeTest {
 		boolean areTokensInNodeBefore = state.areTokensInNodesBefore(action2i);
 		assertFalse(areTokensInNodeBefore);
 	}
+	
+	private Node createAction1() {
+		return action(ACTION1, StringData.class, this::action1Performed);
+	}
+	
+	private Node createAction2() {
+		return action(ACTION2, StringData.class, this::action2Performed);
+	}
+	
+	private Node createAction2i() {
+		return action(ACTION2I, IntegerData.class, this::action2iPerformed);
+	}
 
 	private StringData action1Performed(WorkflowState state, StringData input) {
+		return new StringData("ActionPerformed");
+	}
+	
+	private StringData action2Performed(WorkflowState state, StringData input) {
 		return new StringData("ActionPerformed");
 	}
 	
