@@ -22,6 +22,7 @@ class WorkflowTest {
 	private static final String PORT2A = "Port2a";
 	private static final String PORT2B = "Port2b";
 	private static final String PORT2I = "Port2i";
+	private static final String PORT3 = "Port3";
 	
 	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
@@ -166,9 +167,15 @@ class WorkflowTest {
 	void testImplicitMerge() {
 		Port<StringData> port1 = port(PORT1, StringData.class);
 		Node action1 = createAction1(port1);
-		Node action2a = createAction2a();
-		Node action2b = createAction2b();
-		Node action3 = createAction3();
+		
+		Port<StringData> port2a = port(PORT2A, StringData.class);
+		Node action2a = createAction2a(port2a);
+		
+		Port<StringData> port2b = port(PORT2B, StringData.class);
+		Node action2b = createAction2b(port2b);
+		
+		Port<StringData> port3 = port(PORT3, StringData.class);
+		Node action3 = createAction3(port3);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b, action3)
@@ -219,6 +226,10 @@ class WorkflowTest {
 	
 	private Node createAction2b(Port<StringData> port2b) {
 		return createAction(port2b, this::action2bPerformed);
+	}
+	
+	private Node createAction3(Port<StringData> port3) {
+		return createAction(port3, this::action3Performed);
 	}
 	
 	private Node createAction2a() {
