@@ -183,8 +183,8 @@ class WorkflowTest {
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
 		Node action2b = createAction2b(action2b_In);
 		
-		Port<StringData> port3 = port(ACTION3_IN, StringData.class);
-		Node action3 = createAction3(port3);
+		Port<StringData> action3_In = port(ACTION3_IN, StringData.class);
+		Node action3 = createAction3(action3_In);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b, action3)
