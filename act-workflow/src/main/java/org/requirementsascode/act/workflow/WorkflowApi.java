@@ -4,6 +4,10 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public class WorkflowApi {
+	public static <T extends ActionData> Port<T> port(String portName, Class<T> portType){
+		return new Port<>(portName, portType);
+	}
+	
 	public static <T extends ActionData, U extends ActionData> Node action(Port<T> inputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		return new ActionNode<>(inputPort, actionFunction);
 	}

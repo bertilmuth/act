@@ -2,7 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.requirementsascode.act.workflow.WorkflowApi.action;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
 
 import java.util.List;
@@ -210,8 +210,7 @@ class WorkflowTest {
 	}
 	
 	private <T extends ActionData, U extends ActionData> Node createAction(String inputPortName, Class<T> inputPortType, BiFunction<WorkflowState, T, U> actionFunction) {
-		Port<T> inputPort = new Port<>(inputPortName, inputPortType);
-		return action(inputPort, actionFunction);
+		return action(port(inputPortName,inputPortType), actionFunction);
 	}
 
 	private StringData str(String str) {

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
+import static org.requirementsascode.act.workflow.WorkflowApi.port;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -86,8 +87,7 @@ class NodesBeforeTest {
 	}
 	
 	private <T extends ActionData, U extends ActionData> Node createAction(String inputPortName, Class<T> inputPortType, BiFunction<WorkflowState, T, U> actionFunction) {
-		Port<T> inputPort = new Port<>(inputPortName, inputPortType);
-		return action(inputPort, actionFunction);
+		return action(port(inputPortName,inputPortType), actionFunction);
 	}
 
 	private StringData action1Performed(WorkflowState state, StringData input) {
