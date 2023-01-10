@@ -19,6 +19,8 @@ import org.requirementsascode.act.workflow.testdata.StringData;
 class WorkflowTest {
 	private static final String PORT1 = "Port1";
 	private static final String PORT2 = "Port2";
+	private static final String PORT2A = "Port2a";
+	private static final String PORT2B = "Port2b";
 	private static final String PORT2I = "Port2i";
 	
 	private static final String START_WORKFLOW = "";
@@ -136,8 +138,12 @@ class WorkflowTest {
 	void testStepAfterImplicitFork() {
 		Port<StringData> port1 = port(PORT1, StringData.class);
 		Node action1 = createAction1(port1);
-		Node action2a = createAction2a();
-		Node action2b = createAction2b();
+		
+		Port<StringData> port2a = port(PORT2A, StringData.class);
+		Node action2a = createAction2a(port2a);
+		
+		Port<StringData> port2b = port(PORT2B, StringData.class);
+		Node action2b = createAction2b(port2b);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2a, action2b)
@@ -205,6 +211,14 @@ class WorkflowTest {
 	
 	private Node createAction2(Port<StringData> port2) {
 		return createAction(port2, this::action2Performed);
+	}
+	
+	private Node createAction2a(Port<StringData> port2a) {
+		return createAction(port2a, this::action2aPerformed);
+	}
+	
+	private Node createAction2b(Port<StringData> port2b) {
+		return createAction(port2b, this::action2bPerformed);
 	}
 	
 	private Node createAction2a() {
