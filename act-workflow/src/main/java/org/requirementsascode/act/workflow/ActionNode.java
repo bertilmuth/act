@@ -10,17 +10,19 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
 public class ActionNode<T extends ActionData, U extends ActionData> implements Node {
-	private Port<T> inputPort;
+	private final Port<T> inputPort;
+	private String actionName;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	ActionNode(Port<T> inputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+	ActionNode(Port<T> inputPort, String actionName, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
+		this.actionName = requireNonNull(actionName, "actionName must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 
 	@Override
 	public String name() {
-		return inputPort.name();
+		return actionName;
 	}
 	
 	@Override
@@ -30,7 +32,7 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 
 	@Override
 	public State<WorkflowState, Token> asState() {
-		return state(inputPort.name(), this::areTokensInNodesBefore,  
+		return state(actionName, this::areTokensInNodesBefore,  
 			inCase(this::isActionDataOfType, this::consumeToken));
 	}
 	
@@ -59,6 +61,6 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 
 	@Override
 	public String toString() {
-		return "ActionNode[" + inputPort.name() + "]";
+		return "ActionNode[" + name() + "]";
 	}
 }

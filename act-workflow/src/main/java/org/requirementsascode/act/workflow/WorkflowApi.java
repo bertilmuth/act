@@ -8,8 +8,8 @@ public class WorkflowApi {
 		return new Port<>(portName, portType);
 	}
 	
-	public static <T extends ActionData, U extends ActionData> Node action(Port<T> inputPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		return new ActionNode<>(inputPort, actionFunction);
+	public static <T extends ActionData, U extends ActionData> Node action(Port<T> inputPort, String actionName, BiFunction<WorkflowState, T, U> actionFunction) {
+		return new ActionNode<>(inputPort, actionName, actionFunction);
 	}
 	
 	public static Token token(ActionData actionData) {
