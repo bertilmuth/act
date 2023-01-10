@@ -51,7 +51,7 @@ class WorkflowTest {
 		Node action1 = createAction1(port1);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1)
+			.nodes(port1, action1)
 			.startNodes(action1)
 			.dataFlows()
 			.build();
