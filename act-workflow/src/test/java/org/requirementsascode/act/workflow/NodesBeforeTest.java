@@ -31,7 +31,7 @@ class NodesBeforeTest {
 		Node action1 = createAction1(port1);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1)
+			.nodes(port1, action1)
 			.startNodes(action1)
 			.dataFlows()
 			.build();
@@ -51,7 +51,7 @@ class NodesBeforeTest {
 		Node action2 = createAction2(port2);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2)
+			.nodes(port1, port2, action1, action2)
 			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action1, action2)
@@ -76,7 +76,7 @@ class NodesBeforeTest {
 		Node action2i = createAction2i(port2i);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2, action2i)
+			.nodes(port1, port2, port2i, action1, action2, action2i)
 			.startNodes(action1)
 			.dataFlows(
 				dataFlow(action2, action2i),
