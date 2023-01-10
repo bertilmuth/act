@@ -85,8 +85,8 @@ class NodesBeforeTest {
 		return createAction(ACTION2I, IntegerData.class, this::action2iPerformed);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Node createAction(String actionName, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
-		return action(actionName, inputClass, actionFunction);
+	private <T extends ActionData, U extends ActionData> Node createAction(String inputPortName, Class<T> inputPortType, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(inputPortName, inputPortType, actionFunction);
 	}
 
 	private StringData action1Performed(WorkflowState state, StringData input) {

@@ -209,8 +209,8 @@ class WorkflowTest {
 		return createAction(ACTION3, StringData.class, this::action3Performed);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Node createAction(String actionName, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
-		return action(actionName, inputClass, actionFunction);
+	private <T extends ActionData, U extends ActionData> Node createAction(String inputPortName, Class<T> inputPortType, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(inputPortName, inputPortType, actionFunction);
 	}
 
 	private StringData str(String str) {
