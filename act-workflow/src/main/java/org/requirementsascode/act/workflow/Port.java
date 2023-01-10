@@ -8,7 +8,7 @@ import org.requirementsascode.act.statemachine.State;
 
 public class Port<T extends ActionData> implements Node {
 	private final String name;
-	private final Class<? extends ActionData> type;
+	private final Class<T> type;
 
 	Port(String name, Class<T> type) {
 		this.name = requireNonNull(name, "name must be non-null!");
@@ -21,7 +21,7 @@ public class Port<T extends ActionData> implements Node {
 	}
 	
 	@Override
-	public Class<? extends ActionData> type() {
+	public Class<T> type() {
 		return type;
 	}
 

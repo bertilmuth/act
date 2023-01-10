@@ -4,8 +4,8 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public class WorkflowApi {
-	public static <T extends ActionData, U extends ActionData> Node action(String name, Class<T> inputClass, BiFunction<WorkflowState, T, U> actionFunction) {
-		return new ActionNode<>(name, inputClass, actionFunction);
+	public static <T extends ActionData, U extends ActionData> Node action(Port<T> inputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		return new ActionNode<>(inputPort.name(), inputPort.type(), actionFunction);
 	}
 	
 	public static Token token(ActionData actionData) {
