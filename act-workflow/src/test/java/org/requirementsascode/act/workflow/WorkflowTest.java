@@ -29,16 +29,22 @@ class WorkflowTest {
 	private static final String _OUT = "_OUT";
 	
 	private static final String ACTION1_IN = ACTION1 + _IN;
+	private static final String ACTION1_OUT = ACTION1 + _OUT;
 	
 	private static final String ACTION2_IN = ACTION2 + _IN;
+	private static final String ACTION2_OUT = ACTION2 + _OUT;
 	
 	private static final String ACTION2A_IN = ACTION2A + _IN;
+	private static final String ACTION2A_OUT = ACTION2A + _OUT;
 	
 	private static final String ACTION2B_IN = ACTION2B + _IN;
+	private static final String ACTION2B_OUT = ACTION2B + _OUT;
 	
 	private static final String ACTION2I_IN = ACTION2I + _IN;
+	private static final String ACTION2I_OUT = ACTION2I + _OUT;
 	
 	private static final String ACTION3_IN = ACTION3 + _IN;
+	private static final String ACTION3_OUT = ACTION3 + _OUT;
 	
 	@Test
 	void runningEmptyWorkflowDoesNothing() {
