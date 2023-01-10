@@ -59,7 +59,8 @@ class WorkflowTest {
 	
 	@Test
 	void runsTwoActions_firstOneUserTriggered() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		Node action2 = createAction2();
 		
 		Workflow workflow = Workflow.builder()
@@ -80,7 +81,8 @@ class WorkflowTest {
 	
 	@Test
 	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		Node action2 = createAction2();
 		
 		Workflow workflow = Workflow.builder()
@@ -101,7 +103,8 @@ class WorkflowTest {
 	@Test
 	@Disabled
 	void runsTwoActions_bothUserTriggered() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		Node action2i = createAction2i();
 		
 		Workflow workflow = Workflow.builder()
@@ -123,7 +126,8 @@ class WorkflowTest {
 	
 	@Test
 	void testStepAfterImplicitFork() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		Node action2a = createAction2a();
 		Node action2b = createAction2b();
 		
@@ -146,7 +150,8 @@ class WorkflowTest {
 	@Test
 	@Disabled
 	void testImplicitMerge() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		Node action2a = createAction2a();
 		Node action2b = createAction2b();
 		Node action3 = createAction3();
@@ -173,7 +178,8 @@ class WorkflowTest {
 	
 	@Test
 	void doesntRunActionForUnknownData() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -187,10 +193,6 @@ class WorkflowTest {
 	
 	private Node createAction1(Port<StringData> port1) {
 		return createAction(port1, this::action1Performed);
-	}
-	
-	private Node createAction1() {
-		return createAction(ACTION1, StringData.class, this::action1Performed);
 	}
 	
 	private Node createAction2() {
