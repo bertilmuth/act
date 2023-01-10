@@ -15,14 +15,16 @@ import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class NodesBeforeTest {
+	private static final String PORT1 = "Port1";
+	private static final String PORT2 = "Port2";
+	private static final String PORT2I = "Port2i";
+	
 	private static final String START_WORKFLOW = "";
-	private static final String ACTION1 = "Action1";
-	private static final String ACTION2 = "Action2";
-	private static final String ACTION2I = "Action2i";
 
 	@Test
 	void initialNodeBefore() {
-		Node action1 = createAction1();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1)
@@ -38,8 +40,11 @@ class NodesBeforeTest {
 	
 	@Test
 	void action1Before() {
-		Node action1 = createAction1();
-		Node action2 = createAction2();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
+		
+		Port<StringData> port2 = port(PORT2, StringData.class);
+		Node action2 = createAction2(port2);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2)
@@ -57,9 +62,14 @@ class NodesBeforeTest {
 	
 	@Test
 	void noTokensBeforeAction2() {
-		Node action1 = createAction1();
-		Node action2 = createAction2();
-		Node action2i = createAction2i();
+		Port<StringData> port1 = port(PORT1, StringData.class);
+		Node action1 = createAction1(port1);
+		
+		Port<StringData> port2 = port(PORT2, StringData.class);
+		Node action2 = createAction2(port2);
+		
+		Port<IntegerData> port2i = port(PORT2I, IntegerData.class);
+		Node action2i = createAction2i(port2i);
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1, action2, action2i)
@@ -74,20 +84,20 @@ class NodesBeforeTest {
 		assertFalse(areTokensInNodeBefore);
 	}
 	
-	private Node createAction1() {
-		return createAction(ACTION1, StringData.class, this::action1Performed);
+	private Node createAction1(Port<StringData> port1) {
+		return createAction(port1, this::action1Performed);
 	}
 	
-	private Node createAction2() {
-		return createAction(ACTION2, StringData.class, this::action2Performed);
+	private Node createAction2(Port<StringData> port2) {
+		return createAction(port2, this::action2Performed);
 	}
 	
-	private Node createAction2i() {
-		return createAction(ACTION2I, IntegerData.class, this::action2iPerformed);
+	private Node createAction2i(Port<IntegerData> port2i) {
+		return createAction(port2i, this::action2iPerformed);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Node createAction(String inputPortName, Class<T> inputPortType, BiFunction<WorkflowState, T, U> actionFunction) {
-		return action(port(inputPortName,inputPortType), actionFunction);
+	private <T extends ActionData, U extends ActionData> Node createAction(Port<T> port, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(port, actionFunction);
 	}
 
 	private StringData action1Performed(WorkflowState state, StringData input) {
