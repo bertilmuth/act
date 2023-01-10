@@ -13,7 +13,7 @@ public class WorkflowApi {
 	}
 	
 	public static DataFlow<? extends ActionData> dataFlow(Node fromNode, Node toNode) {		
-		return dataFlow(fromNode, toNode, toNode.inputClass());
+		return dataFlow(fromNode, toNode, toNode.type());
 	}
 	
 	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass) {		

@@ -26,7 +26,7 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	}
 	
 	@Override
-	public Class<? extends ActionData> inputClass() {
+	public Class<? extends ActionData> type() {
 		return inputClass;
 	}
 

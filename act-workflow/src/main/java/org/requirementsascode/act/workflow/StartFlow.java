@@ -39,7 +39,7 @@ class InitialNode implements Node{
 	}
 
 	@Override
-	public Class<? extends ActionData> inputClass() {
+	public Class<? extends ActionData> type() {
 		return ActionData.class;
 	}
 	
