@@ -210,6 +210,7 @@ class WorkflowTest {
 	}
 	
 	private <T extends ActionData, U extends ActionData> Node createAction(String inputPortName, Class<T> inputPortType, BiFunction<WorkflowState, T, U> actionFunction) {
+		Port<T> inputPort = new Port<>(inputPortName, inputPortType);
 		return action(inputPortName, inputPortType, actionFunction);
 	}
 
