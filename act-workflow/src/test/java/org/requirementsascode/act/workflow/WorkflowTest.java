@@ -50,7 +50,7 @@ class WorkflowTest {
 	void runningEmptyWorkflowDoesNothing() {
 		Workflow workflow = Workflow.builder()
 			.nodes()
-			.startNodes()
+			.startPorts()
 			.dataFlows()
 			.build();
 		
@@ -68,7 +68,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1_In, action1)
-			.startNodes(action1_In)
+			.startPorts(action1_In)
 			.dataFlows()
 			.build();
 		
@@ -93,7 +93,7 @@ class WorkflowTest {
 				action1_In, action1, action1_Out,
 				action2_In, action2,action2_Out
 			)
-			.startNodes(action1_In)
+			.startPorts(action1_In)
 			.dataFlows(
 				dataFlow(action1_Out, action2_In)
 			)
@@ -123,7 +123,7 @@ class WorkflowTest {
 				action1_In, action1, action1_Out,
 				action2i_In, action2i, action2i_Out
 			)
-			.startNodes(action1_In)
+			.startPorts(action1_In)
 			.dataFlows(
 				dataFlow(action1_Out, action2i_In)
 			)
@@ -158,7 +158,7 @@ class WorkflowTest {
 				action2a_In, action2a, action2a_Out,
 				action2b_In, action2b, action2b_Out
 			)
-			.startNodes(action1_In)
+			.startPorts(action1_In)
 			.dataFlows(
 				dataFlow(action1_Out, action2a_In),
 				dataFlow(action1_Out, action2b_In)
@@ -198,7 +198,7 @@ class WorkflowTest {
 				action2b_In, action2b, action2b_Out,
 				action3_In, action3, action3_Out
 			)
-			.startNodes(action1)
+			.startPorts(action1_In)
 			.dataFlows(
 				dataFlow(action1_Out, action2a_In),
 				dataFlow(action1_Out, action2b_In),
@@ -224,7 +224,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1_In, action1, action1_Out)
-			.startNodes(action1_In)
+			.startPorts(action1_In)
 			.dataFlows()
 			.build();
 		

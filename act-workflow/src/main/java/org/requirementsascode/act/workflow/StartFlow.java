@@ -3,22 +3,29 @@ package org.requirementsascode.act.workflow;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
-import org.requirementsascode.act.core.Behavior;
+import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class StartFlow implements Transitionable<WorkflowState, Token> {
-	private final Node startNode;
+	private final Port<?> startPort;
 
-	StartFlow(Node startNode) {
-		this.startNode = requireNonNull(startNode, "startNode must be non-null!");
+	StartFlow(Port<?> startPort) {
+		this.startPort = requireNonNull(startPort, "startPort must be non-null!");
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(owningStatemachine.initialState(), startNode.asState(), Behavior.identity());
+		return transition(owningStatemachine.initialState(), startPort.asState(), this::addTokenToStartNode);
+	}
+	
+	private Data<WorkflowState, Token> addTokenToStartNode(Data<WorkflowState, Token> data) {
+		WorkflowState state = data.state();
+		Token token = Token.from(data);
+		Data<WorkflowState, Token> portData = state.addToken(startPort, token);
+		return portData;
 	}
 }
 
