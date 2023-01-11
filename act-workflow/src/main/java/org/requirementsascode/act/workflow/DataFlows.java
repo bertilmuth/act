@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class DataFlows{
-	private final List<DataFlow<?>> dataFlows;
+	private final List<DataFlow<?,?>> dataFlows;
 
-	DataFlows(List<DataFlow<?>> dataFlows) {
+	DataFlows(List<DataFlow<?,?>> dataFlows) {
 		this.dataFlows = requireNonNull(dataFlows, "dataFlows must be non-null!");
 	}
 
-	public Stream<DataFlow<?>> stream() {
+	public Stream<DataFlow<?,?>> stream() {
 		return dataFlows.stream();
 	}
 }

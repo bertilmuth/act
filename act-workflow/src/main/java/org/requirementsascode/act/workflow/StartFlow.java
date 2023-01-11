@@ -1,8 +1,9 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
@@ -17,7 +18,7 @@ public class StartFlow implements Transitionable<WorkflowState, Token> {
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return dataFlow(new InitialNode(owningStatemachine), startNode).asTransition(owningStatemachine);
+		return transition(owningStatemachine.initialState(), startNode.asState(), Behavior.identity());
 	}
 }
 

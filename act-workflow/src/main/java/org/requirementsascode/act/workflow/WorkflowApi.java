@@ -1,7 +1,6 @@
 package org.requirementsascode.act.workflow;
 
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 public class WorkflowApi {
 	public static <T extends ActionData> Port<T> port(String portName, Class<T> portType){
@@ -16,15 +15,7 @@ public class WorkflowApi {
 		return new Token(actionData);
 	}
 	
-	public static DataFlow<? extends ActionData> dataFlow(Node fromNode, Node toNode) {		
-		return dataFlow(fromNode, toNode, toNode.type());
-	}
-	
-	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass) {		
-		return dataFlow(fromNode, toNode, inputClass, ad -> true);
-	}
-	
-	public static <T extends ActionData> DataFlow<T> dataFlow(Node fromNode, Node toNode, Class<T> inputClass, Predicate<T> guardCondition) {		
-		return new DataFlow<>(fromNode, toNode, inputClass, guardCondition);
+	public static <T extends ActionData, U extends ActionData> DataFlow<T,U> dataFlow(Port<T> inputPort, Port<U> outputPort) {		
+		return dataFlow(inputPort, outputPort);
 	}
 }

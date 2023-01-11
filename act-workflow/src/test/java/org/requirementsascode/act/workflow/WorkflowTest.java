@@ -108,34 +108,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	void runningActions_firstOneUserTriggered_withFalsePredicate_onlyRunsFirstAction() {
-		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Node action1 = createAction1(action1_In, action1_Out);
-		
-		Port<StringData> action2_In = port(ACTION2_IN, StringData.class);
-		Port<StringData> action2_Out = port(ACTION2_OUT, StringData.class);
-		Node action2 = createAction2(action2_In, action2_Out);
-		
-		Workflow workflow = Workflow.builder()
-			.nodes(
-				action1_In, action1, action1_Out,
-				action2_In, action2,action2_Out
-			)
-			.startNodes(action1_In)
-			.dataFlows(
-				dataFlow(action1_Out, action2_In, StringData.class, sd -> !sd.toString().equals(ACTION1))
-			)
-			.build();
-		
-		Data<WorkflowState, Token> afterAction2 = workflow.start(str(START_WORKFLOW));
-		WorkflowState state = afterAction2.state();
-		
-		assertEquals(str(ACTION1), state.actionOutput().get());
-		assertEquals(1, nrOfTokensIn(state));
-	}
-	
-	@Test
 	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
