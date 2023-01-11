@@ -33,7 +33,8 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 		return state(actionName, this::areTokensInInputOrOutputPort,
 			d -> {
 				Statemachine<WorkflowState, Token> sm = d.state().statemachine();
-				Transition<WorkflowState, Token> transition = new DataFlow<>(inputPort, outputPort, actionFunction).asTransition(sm);
+				DataFlow<T, U> actionFlowBehavior = new DataFlow<>(inputPort, outputPort, actionFunction);
+				Transition<WorkflowState, Token> transition = actionFlowBehavior.asTransition(sm);
 				Data<WorkflowState, Token> result = transition.asBehavior(sm).actOn(d);
 				return result;
 			});
