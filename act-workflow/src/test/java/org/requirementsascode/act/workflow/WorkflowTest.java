@@ -68,7 +68,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.nodes(action1_In, action1)
-			.startNodes(action1)
+			.startNodes(action1_In)
 			.dataFlows()
 			.build();
 		
@@ -89,10 +89,13 @@ class WorkflowTest {
 		Node action2 = createAction2(action2_In, action2_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2)
-			.startNodes(action1)
+			.nodes(
+				action1_In, action1, action1_Out,
+				action2_In, action2,action2_Out
+			)
+			.startNodes(action1_In)
 			.dataFlows(
-				dataFlow(action1, action2)
+				dataFlow(action1_Out, action2_In)
 			)
 			.build();
 		
@@ -115,10 +118,13 @@ class WorkflowTest {
 		Node action2 = createAction2(action2_In, action2_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2)
-			.startNodes(action1)
+			.nodes(
+				action1_In, action1, action1_Out,
+				action2_In, action2,action2_Out
+			)
+			.startNodes(action1_In)
 			.dataFlows(
-				dataFlow(action1, action2, StringData.class, sd -> !sd.toString().equals(ACTION1))
+				dataFlow(action1_Out, action2_In, StringData.class, sd -> !sd.toString().equals(ACTION1))
 			)
 			.build();
 		
@@ -141,10 +147,13 @@ class WorkflowTest {
 		Node action2i = createAction2i(action2i_In, action2i_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2i)
-			.startNodes(action1)
+			.nodes(
+				action1_In, action1, action1_Out,
+				action2i_In, action2i, action2i_Out
+			)
+			.startNodes(action1_In)
 			.dataFlows(
-				dataFlow(action1, action2i)
+				dataFlow(action1_Out, action2i_In)
 			)
 			.build();
 		
@@ -172,11 +181,15 @@ class WorkflowTest {
 		Node action2b = createAction2b(action2b_In, action2b_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2a, action2b)
-			.startNodes(action1)
+			.nodes(
+				action1_In, action1, action1_Out,
+				action2a_In, action2a, action2a_Out,
+				action2b_In, action2b, action2b_Out
+			)
+			.startNodes(action1_In)
 			.dataFlows(
-				dataFlow(action1, action2a),
-				dataFlow(action1, action2b)
+				dataFlow(action1_Out, action2a_In),
+				dataFlow(action1_Out, action2b_In)
 			)
 			.build();
 		
@@ -207,13 +220,18 @@ class WorkflowTest {
 		Node action3 = createAction3(action3_In, action3_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1, action2a, action2b, action3)
+			.nodes(
+				action1_In, action1, action1_Out,
+				action2a_In, action2a, action2a_Out,
+				action2b_In, action2b, action2b_Out,
+				action3_In, action3, action3_Out
+			)
 			.startNodes(action1)
 			.dataFlows(
-				dataFlow(action1, action2a),
-				dataFlow(action1, action2b),
-				dataFlow(action2a, action3),
-				dataFlow(action2b, action3)
+				dataFlow(action1_Out, action2a_In),
+				dataFlow(action1_Out, action2b_In),
+				dataFlow(action2a_Out, action3_In),
+				dataFlow(action2b_Out, action3_In)
 			)
 			.build();
 		
@@ -233,8 +251,8 @@ class WorkflowTest {
 		Node action1 = createAction1(action1_In, action1_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1)
-			.startNodes(action1)
+			.nodes(action1_In, action1, action1_Out)
+			.startNodes(action1_In)
 			.dataFlows()
 			.build();
 		
