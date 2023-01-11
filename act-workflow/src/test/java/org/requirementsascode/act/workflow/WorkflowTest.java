@@ -107,7 +107,7 @@ class WorkflowTest {
 		assertEquals(1, nrOfTokensIn(state));
 	}
 	
-	@Test
+	/*@Test
 	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
@@ -136,7 +136,7 @@ class WorkflowTest {
 		//assertEquals(new IntegerData(2), afterAction2i.value().get());
 		//assertEquals(1, tokensList(state).size());
 		assertEquals(new IntegerData(2), actionDataIn(action2i, state));
-	}
+	}*/
 	
 	@Test
 	void testStepAfterImplicitFork() {

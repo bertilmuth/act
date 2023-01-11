@@ -9,6 +9,8 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
+import org.requirementsascode.act.statemachine.Statemachine;
+import org.requirementsascode.act.statemachine.Transition;
 
 public class ActionNode<T extends ActionData, U extends ActionData> implements Node {
 	private String actionName;
@@ -36,7 +38,12 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	@Override
 	public State<WorkflowState, Token> asState() {
 		return state(actionName, this::areTokensInInputOrOutputPort,
-			inCase(this::isActionDataOfType, this::consumeToken));
+			inCase(this::isActionDataOfType, d -> {
+				Statemachine<WorkflowState, Token> sm = d.state().statemachine();
+				Transition<WorkflowState, Token> transition = new DataFlow<>(inputPort, outputPort, actionFunction).asTransition(sm);
+				Data<WorkflowState, Token> result = transition.asBehavior(sm).actOn(d);
+				return result;
+			}));
 	}
 	
 	private boolean areTokensInInputOrOutputPort(WorkflowState state) {
