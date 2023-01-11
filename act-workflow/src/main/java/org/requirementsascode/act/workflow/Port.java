@@ -20,7 +20,6 @@ public class Port<T extends ActionData> implements Node {
 		return name;
 	}
 	
-	@Override
 	public Class<T> type() {
 		return type;
 	}

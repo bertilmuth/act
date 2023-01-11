@@ -45,11 +45,6 @@ class InitialNode implements Node{
 	public State<WorkflowState, Token> asState() {
 		return owningStatemachine.initialState();
 	}
-
-	@Override
-	public Class<? extends ActionData> type() {
-		return ActionData.class;
-	}
 	
 	@Override
 	public int hashCode() {
