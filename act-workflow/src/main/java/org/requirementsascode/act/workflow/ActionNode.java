@@ -42,11 +42,6 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	private boolean areTokensInInputOrOutputPort(WorkflowState state) {
 		return state.areTokensIn(inputPort) || state.areTokensIn(outputPort);
 	}
-	
-	private boolean isActionDataOfType(Data<WorkflowState,Token> inputData) {
-		ActionData actionData = ActionData.from(inputData);
-		return inputPort.type().isAssignableFrom(actionData.getClass());
-	}
 
 	@Override
 	public String toString() {
