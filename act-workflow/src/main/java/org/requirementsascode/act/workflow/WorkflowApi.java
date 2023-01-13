@@ -16,7 +16,7 @@ public class WorkflowApi {
 	}
 	
 	public static <T extends ActionData> DataFlow<T,T> dataFlow(Port<T> inputPort, Port<T> outputPort) {		
-		return new DataFlow<>(inputPort, outputPort, (s,ad) -> ad);
+		return dataFlow(inputPort, outputPort, (s,ad) -> ad);
 	}
 	
 	static <T extends ActionData, U extends ActionData> DataFlow<T,U> dataFlow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {		
