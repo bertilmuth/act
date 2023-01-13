@@ -23,7 +23,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final InitialNode initialNode;
 	private final Nodes nodes;
 	
-	public Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
+	private Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
 		this.dataFlows = dataFlows;
 		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);		
 		this.initialNode = new InitialNode(statemachine);
