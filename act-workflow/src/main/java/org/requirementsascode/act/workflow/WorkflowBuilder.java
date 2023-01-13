@@ -27,7 +27,7 @@ public class WorkflowBuilder {
 		
 		@SafeVarargs
 		public final StartPortsBuilder startPorts(Port<?>... portsArray) {
-			requireNonNull(portsArray, "nodesArray must be non-null!");
+			requireNonNull(portsArray, "portsArray must be non-null!");
 			builderStartPorts = asList(portsArray);
 			return new StartPortsBuilder();
 		}
