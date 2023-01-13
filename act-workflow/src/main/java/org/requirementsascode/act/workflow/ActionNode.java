@@ -14,13 +14,13 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	private String actionName;
 	private final Port<T> inputPort;
 	private final Port<U> outputPort;
-	private final BiFunction<WorkflowState, T, U> actionFunction;
+	private final DataFlow<T,U> actionFlowBehavior;
 
 	ActionNode(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.actionName = requireNonNull(actionName, "actionName must be non-null!");
 		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
 		this.outputPort = requireNonNull(outputPort, "outputPort must be non-null!");
-		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
+		this.actionFlowBehavior = new DataFlow<>(inputPort, outputPort, actionFunction);
 	}
 
 	@Override
@@ -35,7 +35,6 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	
 	private Data<WorkflowState, Token> executeActionBehavior(Data<WorkflowState, Token> inputData){
 		Statemachine<WorkflowState, Token> sm = inputData.state().statemachine();
-		DataFlow<T, U> actionFlowBehavior = new DataFlow<>(inputPort, outputPort, actionFunction);
 		Transition<WorkflowState, Token> transition = actionFlowBehavior.asTransition(sm);
 		Data<WorkflowState, Token> result = transition.asBehavior(sm).actOn(inputData);
 		return result;
