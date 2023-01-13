@@ -12,19 +12,19 @@ import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
-	private final Node inputNode;
-	private final Node outputNode;
+	private final Node inputPort;
+	private final Node outputPort;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	Flow(Node inputNode, Node outputNode, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.inputNode = requireNonNull(inputNode, "inputNode must be non-null!");
-		this.outputNode = requireNonNull(outputNode, "outputNode must be non-null!");
+	Flow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
+		this.outputPort = requireNonNull(outputPort, "outputPort must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inputNode.asState(), outputNode.asState(), this::consumeToken);
+		return transition(inputPort.asState(), outputPort.asState(), this::consumeToken);
 	}
 	
 	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
@@ -36,8 +36,8 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 
 	private Data<WorkflowState, Token> removeTokenFromInputPort(Data<WorkflowState, Token> data) {
 		WorkflowState state = data.state();
-		Token firstTokenInInputPort = state.firstTokenIn(inputNode).get();
-		Data<WorkflowState, Token> updatedData = state.removeToken(inputNode, firstTokenInInputPort);
+		Token firstTokenInInputPort = state.firstTokenIn(inputPort).get();
+		Data<WorkflowState, Token> updatedData = state.removeToken(inputPort, firstTokenInInputPort);
 		return updatedData;
 	}
 	
@@ -53,7 +53,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 	private Data<WorkflowState, Token> addTokenToOutputPort(Data<WorkflowState, Token> transformedData) {
 		WorkflowState transformedState = transformedData.state();
 		Token token = Token.from(transformedData);
-		Data<WorkflowState, Token> outputPortData = transformedState.addToken(outputNode, token);
+		Data<WorkflowState, Token> outputPortData = transformedState.addToken(outputPort, token);
 		return outputPortData;
 	}
 
