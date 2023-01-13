@@ -36,9 +36,13 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	
 	private Data<WorkflowState, Token> executeActionBehavior(Data<WorkflowState, Token> inputData){
 		Statemachine<WorkflowState, Token> sm = inputData.state().statemachine();
-		Behavior<WorkflowState, Token, Token> actionFlowBehavior = actionFlow.asTransition(sm).asBehavior(sm);
-		Data<WorkflowState, Token> result = actionFlowBehavior.actOn(inputData);
+		Data<WorkflowState, Token> result = actionFlowBehavior(sm).actOn(inputData);
 		return result;
+	}
+
+	private Behavior<WorkflowState, Token, Token> actionFlowBehavior(Statemachine<WorkflowState, Token> sm) {
+		Behavior<WorkflowState, Token, Token> actionFlowBehavior = actionFlow.asTransition(sm).asBehavior(sm);
+		return actionFlowBehavior;
 	}
 	
 	private boolean areTokensInInputOrOutputPort(WorkflowState state) {
