@@ -47,7 +47,6 @@ class WorkflowTest {
 	private static final String ACTION3_OUT = ACTION3 + _OUT;
 	
 	@Test
-	@Disabled
 	void runningEmptyWorkflowDoesNothing() {
 		Workflow workflow = Workflow.builder()
 			.nodes()
