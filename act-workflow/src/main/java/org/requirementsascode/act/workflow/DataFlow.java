@@ -16,7 +16,7 @@ public class DataFlow<T extends ActionData, U extends ActionData> implements Tra
 	private final Node outputPort;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	DataFlow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+	DataFlow(Node inputPort, Node outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
 		this.outputPort = requireNonNull(outputPort, "outputPort must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
