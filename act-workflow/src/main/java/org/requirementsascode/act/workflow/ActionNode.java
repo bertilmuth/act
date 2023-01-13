@@ -15,7 +15,7 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	private String actionName;
 	private final Port<T> inputPort;
 	private final Port<U> outputPort;
-	private final DataFlow<T,U> actionFlow;
+	private final Flow<T,U> actionFlow;
 
 	ActionNode(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.actionName = requireNonNull(actionName, "actionName must be non-null!");

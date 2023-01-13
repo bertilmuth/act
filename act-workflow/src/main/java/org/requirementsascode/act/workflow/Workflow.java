@@ -18,14 +18,14 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Workflow implements Behavior<WorkflowState, Token, Token>{
-	private final DataFlows dataFlows;
+	private final Flows flows;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	private final InitialNode initialNode;
 	private final Nodes nodes;
 	
-	private Workflow(Nodes nodes, DataFlows dataFlows, StartFlows startFlows) {
-		this.dataFlows = dataFlows;
-		this.statemachine = statemachineWith(nodes, dataFlows, startFlows);		
+	private Workflow(Nodes nodes, Flows flows, StartFlows startFlows) {
+		this.flows = flows;
+		this.statemachine = statemachineWith(nodes, flows, startFlows);		
 		this.initialNode = new InitialNode(statemachine);
 		this.nodes = createNodes(statemachine, nodes, initialNode);
 	}
@@ -60,8 +60,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return nodes;
 	}
 	
-	public DataFlows dataFlows() {
-		return dataFlows;
+	public Flows dataFlows() {
+		return flows;
 	}
 	
 	Statemachine<WorkflowState, Token> statemachine() {
@@ -77,12 +77,12 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return data(state, token(actionData));
 	}
 	
-	static Workflow create(Nodes nodes, DataFlows dataFlows, StartFlows startFlows){
+	static Workflow create(Nodes nodes, Flows dataFlows, StartFlows startFlows){
 		return new Workflow(nodes, dataFlows, startFlows);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, DataFlows dataFlows,
+	private Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, Flows dataFlows,
 			StartFlows startFlows) {
 		
 		State[] nodeStates = nodes.asStates()

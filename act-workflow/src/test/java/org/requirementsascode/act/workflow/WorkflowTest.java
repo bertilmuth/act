@@ -51,7 +51,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.nodes()
 			.startPorts()
-			.dataFlows()
+			.flows()
 			.build();
 		
 		Data<WorkflowState, Token> afterStart = workflow.start(str(""));
@@ -69,7 +69,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.nodes(action1_In, action1)
 			.startPorts(action1_In)
-			.dataFlows()
+			.flows()
 			.build();
 		
 		WorkflowState workflowStartedState = workflow.start(str(START_WORKFLOW)).state();
@@ -95,7 +95,7 @@ class WorkflowTest {
 				action2_In, action2,action2_Out
 			)
 			.startPorts(action1_In)
-			.dataFlows(
+			.flows(
 				dataFlow(action1_Out, action2_In)
 			)
 			.build();
@@ -161,7 +161,7 @@ class WorkflowTest {
 				action2b_In, action2b, action2b_Out
 			)
 			.startPorts(action1_In)
-			.dataFlows(
+			.flows(
 				dataFlow(action1_Out, action2a_In),
 				dataFlow(action1_Out, action2b_In)
 			)
@@ -201,7 +201,7 @@ class WorkflowTest {
 				action3_In, action3, action3_Out
 			)
 			.startPorts(action1_In)
-			.dataFlows(
+			.flows(
 				dataFlow(action1_Out, action2a_In),
 				dataFlow(action1_Out, action2b_In),
 				dataFlow(action2a_Out, action3_In),
@@ -227,7 +227,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.nodes(action1_In, action1, action1_Out)
 			.startPorts(action1_In)
-			.dataFlows()
+			.flows()
 			.build();
 		
 		WorkflowState state = workflow.start(new UnknownData()).state();

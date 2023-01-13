@@ -11,12 +11,12 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
-public class DataFlow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
+public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
 	private final Node inputNode;
 	private final Node outputNode;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	DataFlow(Node inputNode, Node outputNode, BiFunction<WorkflowState, T, U> actionFunction) {
+	Flow(Node inputNode, Node outputNode, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.inputNode = requireNonNull(inputNode, "inputNode must be non-null!");
 		this.outputNode = requireNonNull(outputNode, "outputNode must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
