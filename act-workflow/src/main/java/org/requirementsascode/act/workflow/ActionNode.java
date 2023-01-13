@@ -9,7 +9,6 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
-import org.requirementsascode.act.statemachine.Transition;
 
 public class ActionNode<T extends ActionData, U extends ActionData> implements Node {
 	private String actionName;
@@ -36,13 +35,11 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	
 	private Data<WorkflowState, Token> executeActionBehavior(Data<WorkflowState, Token> inputData){
 		Statemachine<WorkflowState, Token> sm = inputData.state().statemachine();
-		Data<WorkflowState, Token> result = actionFlowBehavior(sm).actOn(inputData);
-		return result;
+		return actionBehavior(sm).actOn(inputData);
 	}
 
-	private Behavior<WorkflowState, Token, Token> actionFlowBehavior(Statemachine<WorkflowState, Token> sm) {
-		Behavior<WorkflowState, Token, Token> actionFlowBehavior = actionFlow.asTransition(sm).asBehavior(sm);
-		return actionFlowBehavior;
+	private Behavior<WorkflowState, Token, Token> actionBehavior(Statemachine<WorkflowState, Token> sm) {
+		return actionFlow.asTransition(sm).asBehavior(sm);
 	}
 	
 	private boolean areTokensInInputOrOutputPort(WorkflowState state) {
