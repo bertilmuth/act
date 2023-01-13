@@ -12,8 +12,8 @@ import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class DataFlow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
-	private final Port<T> inputPort;
-	private final Port<U> outputPort;
+	private final Node inputPort;
+	private final Node outputPort;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
 	DataFlow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
