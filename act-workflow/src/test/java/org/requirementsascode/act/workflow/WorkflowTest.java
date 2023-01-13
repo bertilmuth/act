@@ -3,7 +3,7 @@ package org.requirementsascode.act.workflow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
-import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
+import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 import static org.requirementsascode.act.workflow.WorkflowApi.port;
 
 import java.util.List;
@@ -96,7 +96,7 @@ class WorkflowTest {
 			)
 			.startPorts(action1_In)
 			.flows(
-				dataFlow(action1_Out, action2_In)
+				flow(action1_Out, action2_In)
 			)
 			.build();
 		
@@ -162,8 +162,8 @@ class WorkflowTest {
 			)
 			.startPorts(action1_In)
 			.flows(
-				dataFlow(action1_Out, action2a_In),
-				dataFlow(action1_Out, action2b_In)
+				flow(action1_Out, action2a_In),
+				flow(action1_Out, action2b_In)
 			)
 			.build();
 		
@@ -202,10 +202,10 @@ class WorkflowTest {
 			)
 			.startPorts(action1_In)
 			.flows(
-				dataFlow(action1_Out, action2a_In),
-				dataFlow(action1_Out, action2b_In),
-				dataFlow(action2a_Out, action3_In),
-				dataFlow(action2b_Out, action3_In)
+				flow(action1_Out, action2a_In),
+				flow(action1_Out, action2b_In),
+				flow(action2a_Out, action3_In),
+				flow(action2b_Out, action3_In)
 			)
 			.build();
 		

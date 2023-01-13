@@ -2,7 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.workflow.WorkflowApi.dataFlow;
+import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 
 import java.util.function.BiFunction;
 
@@ -21,7 +21,7 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 		this.actionName = requireNonNull(actionName, "actionName must be non-null!");
 		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
 		this.outputPort = requireNonNull(outputPort, "outputPort must be non-null!");
-		this.actionFlow = dataFlow(inputPort, outputPort, actionFunction);
+		this.actionFlow = flow(inputPort, outputPort, actionFunction);
 	}
 
 	@Override

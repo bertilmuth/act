@@ -15,11 +15,11 @@ public class WorkflowApi {
 		return new Token(actionData);
 	}
 	
-	public static <T extends ActionData> Flow<T,T> dataFlow(Port<T> inputPort, Port<T> outputPort) {		
-		return dataFlow(inputPort, outputPort, (s,ad) -> ad);
+	public static <T extends ActionData> Flow<T,T> flow(Port<T> inputPort, Port<T> outputPort) {		
+		return flow(inputPort, outputPort, (s,ad) -> ad);
 	}
 	
-	static <T extends ActionData, U extends ActionData> Flow<T,U> dataFlow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {		
+	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {		
 		return new Flow<>(inputPort, outputPort, actionFunction);
 	}
 }
