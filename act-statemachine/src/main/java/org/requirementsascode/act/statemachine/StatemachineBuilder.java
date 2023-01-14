@@ -43,7 +43,7 @@ public class StatemachineBuilder {
 		private StatesBuilder(State<S,V>[] states, MergeStrategy<S, V> mergeStrategy) {
 			requireNonNull(states, "states must be non-null!");
 			this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
-			this.builderStates = States.states(asList(states), mergeStrategy);
+			this.builderStates = States.states(asList(states));
 			this.builderTransitions = new Transitions<>(Collections.emptyList());
 		}
 
