@@ -32,17 +32,16 @@ public class WorkflowState {
 		return workflow;
 	}
 	
-	public Stream<Token> tokensIn(Port<?> port) {
+	Stream<Token> tokensIn(Port<?> port) {
 		return tokens().tokensIn(port);
 	}
 	
-	public Optional<Token> firstTokenIn(Port<?> port) {
+	Optional<Token> firstTokenIn(Port<?> port) {
 		return tokensIn(port).findFirst();
 	}
 	
-	public boolean areTokensIn(Port<?> port){
-		boolean result = firstTokenIn(port).isPresent();
-		return result;
+	boolean areTokensIn(Port<?> port){
+		return firstTokenIn(port).isPresent();
 	}
 	
 	Data<WorkflowState, Token> addToken(Port<?> port, Token token) {
@@ -53,10 +52,6 @@ public class WorkflowState {
 	Data<WorkflowState, Token> removeToken(Port<?> port, Token token) {
 		Tokens tokensAfter = tokens().removeToken(port, token);
 		return updateTokens(tokensAfter, token);
-	}
-	
-	WorkflowState updateActionOutput(ActionData newActionOutput) {
-		return new WorkflowState(workflow, tokens);
 	}
 	
 	Data<WorkflowState, Token> replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
