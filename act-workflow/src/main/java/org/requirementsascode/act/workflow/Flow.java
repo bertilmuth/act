@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
-import java.util.Collections;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Data;
@@ -12,21 +11,19 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class Flow<T extends ActionData, U extends ActionData> implements ExecutableNode{
-	private final Port<T> inPort;
 	private final Ports inPorts;
 	private final Port<U> outPort;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	Flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.inPort = requireNonNull(inPort, "inPort must be non-null!");
-		this.inPorts = new Ports(Collections.singletonList(inPort));
+	Flow(Ports inPorts, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.inPorts = requireNonNull(inPorts, "inPorts must be non-null!");
 		this.outPort = requireNonNull(outPort, "outPort must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPort.asState(), outPort.asState(), this::transformAndMove);
+		return transition(inPorts.asState(), outPort.asState(), this::transformAndMove);
 	}
 	
 	@Override

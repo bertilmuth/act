@@ -2,6 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Collections;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -13,7 +14,9 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 
 	Action(String actionName, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(actionName, "actionName must be non-null!");
-		this.flow = WorkflowApi.flow(inPort, outPort, actionFunction);
+		
+		Ports inPorts = new Ports(Collections.singletonList(inPort));
+		this.flow = WorkflowApi.flow(inPorts, outPort, actionFunction);
 	}
 
 	@Override

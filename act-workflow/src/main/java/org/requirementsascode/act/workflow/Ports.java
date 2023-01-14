@@ -39,9 +39,10 @@ public class Ports{
 	}
 	
 	private boolean areTokensInAllPorts(WorkflowState state) {
-		return asStates()
+		boolean result = asStates()
 			.map(State::invariant)
 			.filter(p -> p.test(state))
 			.count() == ports.size();
+		return result;
 	}
 }
