@@ -52,8 +52,8 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		WorkflowState afterStartState = workflow.start(str(""));
-		assertEquals(0, nrOfTokensIn(afterStartState));
+		WorkflowState state = workflow.start(str(""));
+		assertEquals(0, nrOfTokensIn(state));
 	}
 	
 	@Test
@@ -69,10 +69,8 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		WorkflowState workflowStartedState = workflow.start(str(START_WORKFLOW));
-		WorkflowState afterAction1State = workflow.nextStep(workflowStartedState,str(""));
-
-		assertEquals(str(ACTION1), action1_Out.firstActionData(afterAction1State).get());
+		WorkflowState state = workflow.start(str(START_WORKFLOW));
+		assertEquals(str(ACTION1), action1_Out.firstActionData(state).get());
 	}
 	
 	@Test
