@@ -265,15 +265,15 @@ class WorkflowTest {
 	}
 	
 	private StringData action2Performed(WorkflowState state, StringData input) {
-		return previousValuePlus(ACTION2, state);
+		return previousValuePlus(input, ACTION2);
 	}
 	
 	private StringData action2aPerformed(WorkflowState state, StringData input) {
-		return previousValuePlus(ACTION2A, state);
+		return previousValuePlus(input, ACTION2A);
 	}
 	
 	private StringData action2bPerformed(WorkflowState state, StringData input) {
-		return previousValuePlus(ACTION2B, state);
+		return previousValuePlus(input, ACTION2B);
 	}
 	
 	private IntegerData action2iPerformed(WorkflowState state, IntegerData input) {
@@ -284,8 +284,8 @@ class WorkflowTest {
 		return new StringData(ACTION3);
 	}
 	
-	private StringData previousValuePlus(String actionNameToBeAdded, WorkflowState workflowState) {
-		String previousValue = workflowState.actionOutput().map(Object::toString).orElse("");
+	private StringData previousValuePlus(StringData stringData, String actionNameToBeAdded) {
+		String previousValue = stringData.string;
 		StringData concatenatedStringValue = new StringData(previousValue + "." + actionNameToBeAdded);
 		return concatenatedStringValue;
 	}
