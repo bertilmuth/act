@@ -49,7 +49,8 @@ class WorkflowTest {
 	@Test
 	void runningEmptyWorkflowDoesNothing() {
 		Workflow workflow = Workflow.builder()
-			.nodes()
+			.actions()
+			.ports()
 			.startPorts()
 			.flows()
 			.build();
@@ -64,10 +65,11 @@ class WorkflowTest {
 	void runsSingleAction() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Node action1 = createAction1(action1_In, action1_Out);
+		ActionNode<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1_In, action1)
+			.actions(action1)
+			.ports(action1_In)
 			.startPorts(action1_In)
 			.flows()
 			.build();
@@ -83,16 +85,17 @@ class WorkflowTest {
 	void runsTwoActions_firstOneUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Node action1 = createAction1(action1_In, action1_Out);
+		ActionNode<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
 		
 		Port<StringData> action2_In = port(ACTION2_IN, StringData.class);
 		Port<StringData> action2_Out = port(ACTION2_OUT, StringData.class);
-		Node action2 = createAction2(action2_In, action2_Out);
+		ActionNode<StringData, StringData> action2 = createAction2(action2_In, action2_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(
-				action1_In, action1, action1_Out,
-				action2_In, action2,action2_Out
+			.actions(action1, action2)
+			.ports(
+				action1_In,action1_Out,
+				action2_In, action2_Out
 			)
 			.startPorts(action1_In)
 			.flows(
@@ -113,20 +116,21 @@ class WorkflowTest {
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Node action1 = createAction1(action1_In, action1_Out);
+		ActionNode<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
 		
 		Port<IntegerData> action2i_In = port(ACTION2I_IN, IntegerData.class);
 		Port<IntegerData> action2i_Out = port(ACTION2I_OUT, IntegerData.class);
-		Node action2i = createAction2i(action2i_In, action2i_Out);
+		ActionNode<IntegerData, IntegerData> action2i = createAction2i(action2i_In, action2i_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(
-				action1_In, action1, action1_Out,
-				action2i_In, action2i, action2i_Out
+			.actions(action1, action2i)
+			.ports(
+				action1_In, action1_Out,
+				action2i_In, action2i_Out
 			)
 			.startPorts(action1_In)
-			.dataFlows(
-				dataFlow(action1_Out, action2i_In)
+			.flows(
+				flow(action1_Out, action2i_In)
 			)
 			.build();
 		
@@ -144,21 +148,22 @@ class WorkflowTest {
 	void testStepAfterImplicitFork() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Node action1 = createAction1(action1_In, action1_Out);
+		ActionNode<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
 		
 		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
 		Port<StringData> action2a_Out = port(ACTION2A_OUT, StringData.class);
-		Node action2a = createAction2a(action2a_In, action2a_Out);
+		ActionNode<StringData, StringData> action2a = createAction2a(action2a_In, action2a_Out);
 		
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
 		Port<StringData> action2b_Out = port(ACTION2B_OUT, StringData.class);
-		Node action2b = createAction2b(action2b_In, action2b_Out);
+		ActionNode<StringData, StringData> action2b = createAction2b(action2b_In, action2b_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(
-				action1_In, action1, action1_Out,
-				action2a_In, action2a, action2a_Out,
-				action2b_In, action2b, action2b_Out
+			.actions(action1, action2a, action2b)
+			.ports(
+				action1_In, action1_Out,
+				action2a_In, action2a_Out,
+				action2b_In, action2b_Out
 			)
 			.startPorts(action1_In)
 			.flows(
@@ -179,26 +184,27 @@ class WorkflowTest {
 	void testImplicitMerge() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Node action1 = createAction1(action1_In, action1_Out);
+		ActionNode<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
 		
 		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
 		Port<StringData> action2a_Out = port(ACTION2A_OUT, StringData.class);
-		Node action2a = createAction2a(action2a_In, action2a_Out);
+		ActionNode<StringData, StringData> action2a = createAction2a(action2a_In, action2a_Out);
 		
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
 		Port<StringData> action2b_Out = port(ACTION2B_OUT, StringData.class);
-		Node action2b = createAction2b(action2b_In, action2b_Out);
+		ActionNode<StringData, StringData> action2b = createAction2b(action2b_In, action2b_Out);
 		
 		Port<StringData> action3_In = port(ACTION3_IN, StringData.class);
 		Port<StringData> action3_Out = port(ACTION3_OUT, StringData.class);
-		Node action3 = createAction3(action3_In, action3_Out);
+		ActionNode<StringData, StringData> action3 = createAction3(action3_In, action3_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(
-				action1_In, action1, action1_Out,
-				action2a_In, action2a, action2a_Out,
-				action2b_In, action2b, action2b_Out,
-				action3_In, action3, action3_Out
+			.actions(action1, action2a, action2b, action3)
+			.ports(
+				action1_In, action1_Out,
+				action2a_In, action2a_Out,
+				action2b_In, action2b_Out,
+				action3_In, action3_Out
 			)
 			.startPorts(action1_In)
 			.flows(
@@ -222,10 +228,11 @@ class WorkflowTest {
 	void doesntRunActionForUnknownData() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Node action1 = createAction1(action1_In, action1_Out);
+		ActionNode<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
 		
 		Workflow workflow = Workflow.builder()
-			.nodes(action1_In, action1, action1_Out)
+			.actions(action1)
+			.ports(action1_In, action1_Out)
 			.startPorts(action1_In)
 			.flows()
 			.build();
@@ -234,31 +241,31 @@ class WorkflowTest {
 		assertEquals(0, nrOfTokensIn(state));
 	}
 	
-	private Node createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private ActionNode<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(ACTION1, inputPort, outputPort, this::action1Performed);
 	}
 	
-	private Node createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private ActionNode<StringData,StringData> createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(ACTION2, inputPort, outputPort, this::action2Performed);
 	}
 	
-	private Node createAction2a(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private ActionNode<StringData,StringData> createAction2a(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(ACTION2A, inputPort, outputPort, this::action2aPerformed);
 	}
 	
-	private Node createAction2b(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private ActionNode<StringData,StringData> createAction2b(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(ACTION2B, inputPort, outputPort, this::action2bPerformed);
 	}
 	
-	private Node createAction2i(Port<IntegerData> inputPort, Port<IntegerData> outputPort) {
+	private ActionNode<IntegerData,IntegerData> createAction2i(Port<IntegerData> inputPort, Port<IntegerData> outputPort) {
 		return createAction(ACTION2I, inputPort, outputPort, this::action2iPerformed);
 	}
 	
-	private Node createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private ActionNode<StringData,StringData> createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(ACTION3, inputPort, outputPort, this::action3Performed);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Node createAction(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+	private <T extends ActionData, U extends ActionData> ActionNode<T,U> createAction(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		return action(actionName, inputPort, outputPort, actionFunction);
 	}
 

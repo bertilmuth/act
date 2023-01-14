@@ -11,25 +11,37 @@ public class WorkflowBuilder {
 	}
 
 	@SafeVarargs
-	public final NodesBuilder nodes(Node... nodesArray) {
-		return new NodesBuilder(nodesArray);
+	public final ActionsBuilder actions(ActionNode<?,?>... actionsArray) {
+		return new ActionsBuilder(actionsArray);
 	}
 
-	public class NodesBuilder {
-		private List<Node> builderNodes = Collections.emptyList();		
+	public class ActionsBuilder {
+		private List<ActionNode<?,?>> builderActions = Collections.emptyList();		
 		private List<Flow<?,?>> builderFlows = Collections.emptyList();
+		private List<Node> builderPorts = Collections.emptyList();
 		private List<Port<?>> builderStartPorts = Collections.emptyList();
 
-		private NodesBuilder(Node[] nodes) {
-			requireNonNull(nodes, "nodes must be non-null!");
-			this.builderNodes = asList(nodes);
+		private ActionsBuilder(ActionNode<?,?>[] actions) {
+			requireNonNull(actions, "actions must be non-null!");
+			this.builderActions = asList(actions);
 		}
 		
 		@SafeVarargs
-		public final StartPortsBuilder startPorts(Port<?>... portsArray) {
+		public final PortsBuilder ports(Port<?>... portsArray) {
 			requireNonNull(portsArray, "portsArray must be non-null!");
-			builderStartPorts = asList(portsArray);
-			return new StartPortsBuilder();
+			builderPorts = asList(portsArray);
+			return new PortsBuilder();
+		}
+		
+		public class PortsBuilder {
+			private PortsBuilder(){}
+			
+			@SafeVarargs
+			public final StartPortsBuilder startPorts(Port<?>... portsArray) {
+				requireNonNull(portsArray, "portsArray must be non-null!");
+				builderStartPorts = asList(portsArray);
+				return new StartPortsBuilder();
+			}
 		}
 
 		
@@ -47,19 +59,23 @@ public class WorkflowBuilder {
 				private FlowsBuilder(){}
 				
 				public final Workflow build() {
-					return Workflow.create(nodes(), flows(), startFlows());
+					return Workflow.create(actions(), ports(), flows(), startFlows());
 				}
 
 				private StartFlows startFlows() {
 					return new StartFlows(builderStartPorts);
+				}
+				
+				private Ports ports() {
+					return new Ports(builderPorts);
 				}
 
 				private Flows flows() {
 					return new Flows(builderFlows);
 				}
 
-				private Nodes nodes() {
-					return new Nodes(builderNodes);
+				private Actions actions() {
+					return new Actions(builderActions);
 				}
 			}
 		}

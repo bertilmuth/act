@@ -21,21 +21,11 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final Flows flows;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	private final InitialNode initialNode;
-	private final Nodes nodes;
 	
-	private Workflow(Nodes nodes, Flows flows, StartFlows startFlows) {
+	private Workflow(Actions actions, Ports ports, Flows flows, StartFlows startFlows) {
 		this.flows = flows;
-		this.statemachine = statemachineWith(nodes, flows, startFlows);		
+		this.statemachine = statemachineWith(actions, ports, flows, startFlows);		
 		this.initialNode = new InitialNode(statemachine);
-		this.nodes = createNodes(statemachine, nodes, initialNode);
-	}
-	
-	private Nodes createNodes(Statemachine<WorkflowState, Token> statemachine, Nodes nodes, InitialNode initialNode) {
-		List<Node> nodesIncludingInitialNode = Stream.concat(
-			Stream.of(initialNode), 
-			nodes.stream())
-			.collect(Collectors.toList());
-		return new Nodes(nodesIncludingInitialNode);
 	}
 
 	public final static WorkflowBuilder builder() {
@@ -56,10 +46,6 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return actOn(tokenizedData);
 	}
 	
-	public Nodes nodes() {
-		return nodes;
-	}
-	
 	public Flows dataFlows() {
 		return flows;
 	}
@@ -77,23 +63,23 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return data(state, token(actionData));
 	}
 	
-	static Workflow create(Nodes nodes, Flows dataFlows, StartFlows startFlows){
-		return new Workflow(nodes, dataFlows, startFlows);
+	static Workflow create(Actions actions, Ports ports, Flows dataFlows, StartFlows startFlows){
+		return new Workflow(actions, ports, dataFlows, startFlows);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Statemachine<WorkflowState, Token> statemachineWith(Nodes nodes, Flows dataFlows,
+	private Statemachine<WorkflowState, Token> statemachineWith(Actions actions, Ports ports, Flows dataFlows,
 			StartFlows startFlows) {
 		
-		State[] nodeStates = nodes.asStates()
-			.toArray(State[]::new);
-		Transitionable[] transitionables = concat(startFlows.stream(), dataFlows.stream())
+		State[] portStates = ports.asStates().toArray(State[]::new);
+		Transitionable[] transitionables = concat(actions.stream(),
+				concat(startFlows.stream(), dataFlows.stream()))
 			.toArray(Transitionable[]::new);
 
 		Statemachine<WorkflowState, Token> statemachine = 
 			Statemachine.builder()
 				.mergeStrategy(new TokenMergeStrategy())
-				.states(nodeStates)
+				.states(portStates)
 				.transitions(
 					transitionables
 				)

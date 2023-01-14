@@ -3,15 +3,11 @@ package org.requirementsascode.act.workflow;
 import static java.util.Collections.emptyMap;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
-import org.requirementsascode.act.statemachine.Transitions;
 
 public class WorkflowState {
 	private final Workflow workflow;
@@ -49,29 +45,6 @@ public class WorkflowState {
 	public boolean areTokensIn(Node node){
 		boolean result = firstTokenIn(node).isPresent();
 		return result;
-	}
-	
-	boolean areTokensInNodesBefore(Node node) {
-		return nodesBefore(node, workflow).stream()
-			.map(this::areTokensIn)
-			.reduce(true, (a,b) -> a && b);
-	}
-	
-	List<Node> nodesBefore(Node node, Workflow workflow) {
-		State<WorkflowState, Token> nodeState = node.asState();
-		Transitions<WorkflowState, Token> incomingTransitions = statemachine.incomingTransitions(nodeState);
-		List<State<WorkflowState, Token>> statesBefore = statesBefore(incomingTransitions);
-		List<Node> nodesBefore = workflow.nodes().stream()
-			.filter(n -> statesBefore.contains(n.asState()))
-			.collect(Collectors.toList());
-			
-		return nodesBefore;
-	}
-	
-	private List<State<WorkflowState, Token>> statesBefore(Transitions<WorkflowState, Token> incomingTransitions) {
-		return incomingTransitions.stream()
-			.map(t -> t.asTransition(statemachine).fromState())
-			.collect(Collectors.toList());
 	}
 	
 	public Data<WorkflowState, Token> addToken(Node node, Token token) {

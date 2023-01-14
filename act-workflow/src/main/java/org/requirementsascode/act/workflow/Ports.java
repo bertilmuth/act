@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
 
-public class Nodes {
+public class Ports {
 	private final List<Node> nodes;
 
-	Nodes(List<Node> nodes) {
+	Ports(List<Node> nodes) {
 		this.nodes = requireNonNull(nodes, "nodes must be non-null!");
 	}
 
