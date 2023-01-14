@@ -24,10 +24,10 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inputPort.asState(), outputPort.asState(), this::consumeToken);
+		return transition(inputPort.asState(), outputPort.asState(), this::transformAndMove);
 	}
 	
-	private Data<WorkflowState, Token> consumeToken(Data<WorkflowState, Token> inputData) {
+	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
 		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPort(inputData);
 		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
 		Data<WorkflowState, Token> outputData = addTokenToOutputPort(functionOutputData);
@@ -36,22 +36,18 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 
 	private Data<WorkflowState, Token> removeTokenFromInputPort(Data<WorkflowState, Token> data) {
 		WorkflowState state = data.state();
-		Token firstTokenInInputPort = state.firstTokenIn(inputPort).get();
-		Data<WorkflowState, Token> updatedData = state.removeToken(inputPort, firstTokenInInputPort);
-		return updatedData;
+		Token inputToken = state.firstTokenIn(inputPort).get();
+		return state.removeToken(inputPort, inputToken);
 	}
 	
-	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> inputData) {
-		U outputActionData = applyActionFunction(inputData);
-		Token outputToken = Token.from(inputData).replaceActionData(outputActionData);
-		return data(inputData.state(), outputToken);
+	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> data) {
+		U outputActionData = applyActionFunction(data);
+		Token outputToken = Token.from(data).replaceActionData(outputActionData);
+		return data(data.state(), outputToken);
 	}
 	
-	private Data<WorkflowState, Token> addTokenToOutputPort(Data<WorkflowState, Token> transformedData) {
-		WorkflowState transformedState = transformedData.state();
-		Token token = Token.from(transformedData);
-		Data<WorkflowState, Token> outputPortData = transformedState.addToken(outputPort, token);
-		return outputPortData;
+	private Data<WorkflowState, Token> addTokenToOutputPort(Data<WorkflowState, Token> data) {
+		return data.state().addToken(outputPort, Token.from(data));
 	}
 
 	@SuppressWarnings("unchecked")
