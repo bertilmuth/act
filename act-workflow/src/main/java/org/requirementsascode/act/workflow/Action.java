@@ -11,11 +11,11 @@ import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Action<T extends ActionData, U extends ActionData> implements Node, Transitionable<WorkflowState, Token> {
 	private String name;
-	private final Flow<T,U> flow;
+	private final Flow<T,U> actionFlow;
 
 	Action(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(actionName, "actionName must be non-null!");
-		this.flow = flow(inputPort, outputPort, actionFunction);
+		this.actionFlow = flow(inputPort, outputPort, actionFunction);
 	}
 
 	@Override
@@ -23,9 +23,13 @@ public class Action<T extends ActionData, U extends ActionData> implements Node,
 		return name;
 	}
 	
+	Flow<T,U> actionFlow() {
+		return actionFlow;
+	}
+	
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return flow.asTransition(owningStatemachine);
+		return actionFlow.asTransition(owningStatemachine);
 	}
 
 	@Override

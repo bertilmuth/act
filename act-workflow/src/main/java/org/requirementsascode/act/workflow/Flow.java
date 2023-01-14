@@ -30,6 +30,10 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 		return transition(inputPort.asState(), outputPort.asState(), this::transformAndMove);
 	}
 	
+	public Ports inputPorts() {
+		return inputPorts;
+	}
+	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
 		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPorts(inputPorts, inputData);
 		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
