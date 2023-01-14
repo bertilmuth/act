@@ -42,15 +42,10 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 	}
 	
 	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> inputData) {
-		Token inputToken = Token.from(inputData);
-		Data<WorkflowState, Token> outputData = inputData;
-				
 		U outputActionData = applyActionFunction(inputData);
-		Token outputToken = inputToken.replaceActionData(outputActionData);
+		Token outputToken = Token.from(inputData).replaceActionData(outputActionData);
 		WorkflowState newState = inputData.state().updateActionOutput(outputActionData);
-		outputData = data(newState, outputToken);
-		
-		return outputData;
+		return data(newState, outputToken);
 	}
 	
 	private Data<WorkflowState, Token> addTokenToOutputPort(Data<WorkflowState, Token> transformedData) {
