@@ -10,7 +10,6 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
@@ -296,10 +295,6 @@ class WorkflowTest {
 	
 	private long nrOfTokensIn(WorkflowState state) {
 		return state.tokens().asMap().values().stream().flatMap(List::stream).count();
-	}
-	
-	private ActionData actionDataIn(Port<?> port, WorkflowState state) {
-		return state.firstTokenIn(port).get().actionData().get();
 	}
 }
 
