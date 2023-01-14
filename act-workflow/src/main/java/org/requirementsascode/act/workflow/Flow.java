@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
+import java.util.Collections;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Data;
@@ -13,11 +14,13 @@ import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
 	private final Port<T> inputPort;
+	private final Ports inputPorts;
 	private final Port<U> outputPort;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
 	Flow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
+		this.inputPorts = new Ports(Collections.singletonList(inputPort));
 		this.outputPort = requireNonNull(outputPort, "outputPort must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
