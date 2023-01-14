@@ -1,7 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.InCase.*;
+import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.InCase;
 import org.requirementsascode.act.statemachine.State;
 
 public class Port<T extends ActionData> implements Node {
@@ -44,7 +43,7 @@ public class Port<T extends ActionData> implements Node {
 
 	public State<WorkflowState, Token> asState() {
 		return state(name(), this::areTokensInPort, 
-			inCase(this::firstTokenHasRightType, Behavior.identity(), this::markFirstTokenForDeletion));
+			inCase(this::tokenHasRightType, Behavior.identity(), this::markForDeletion));
 	}
 	
 	private boolean areTokensInPort(WorkflowState state) {
@@ -59,12 +58,12 @@ public class Port<T extends ActionData> implements Node {
 		return firstToken(state).actionData().map(ActionData::getClass);
 	}
 	
-	private boolean firstTokenHasRightType(Data<WorkflowState, Token> data) {
+	private boolean tokenHasRightType(Data<WorkflowState, Token> data) {
 		Optional<Class<?>> firstTokenType = typeOfFirstToken(data.state());
 		return firstTokenType.map(type::isAssignableFrom).orElse(false);
 	}
 	
-	private Data<WorkflowState, Token> markFirstTokenForDeletion(Data<WorkflowState, Token> inputData) {
+	private Data<WorkflowState, Token> markForDeletion(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		Token token = firstToken(state);
 		Token tokenMarkedForDeletion = token.replaceActionData(null);
