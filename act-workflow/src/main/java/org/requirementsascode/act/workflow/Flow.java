@@ -5,9 +5,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -40,14 +38,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 	}
 	
 	private Data<WorkflowState, Token> removeTokenFromInputPorts(Ports inputPorts, Data<WorkflowState, Token> data) {
-		List<Port<?>> ports = inputPorts.stream().collect(Collectors.toList());
-		Data<WorkflowState, Token> updatedData = data;
-		for (Port<?> port : ports) {
-			updatedData = removeTokenFromInputPort(port, updatedData);
-		}
-		return updatedData;
+	    return inputPorts.stream()
+	        .reduce(data, 
+	        	(updatedData, port) -> removeTokenFromInputPort(port, updatedData), 
+	        	(data1, data2) -> data2);
 	}
-
 
 	private Data<WorkflowState, Token> removeTokenFromInputPort(Port<?> inputPort, Data<WorkflowState, Token> data) {
 		WorkflowState state = data.state();
