@@ -1,7 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.Optional;
 
@@ -54,8 +54,8 @@ public class Port<T extends ActionData> implements Node {
 		WorkflowState state = inputData.state();
 		Token token = firstToken(state);
 		Token tokenMarkedForDeletion = token.replaceActionData(null);
-		Data<WorkflowState, Token> newState = state.replaceToken(this, token, tokenMarkedForDeletion);
-		return newState;
+		WorkflowState newState = state.replaceToken(this, token, tokenMarkedForDeletion).state();
+		return data(newState);
 	}
 
 	@Override
