@@ -55,11 +55,7 @@ public class State<S, V> implements Behavioral<S, V> {
 		Transitions<S, V> outgoingTransitions = sm.outgoingTransitions(this);
 		Behavior<S, V, V> transitionsBehavior = outgoingTransitions.asBehavior(sm);
 		return inCase(d -> d.value().isPresent(), 
-			inCase(d -> arePresent(outgoingTransitions), transitionsBehavior, Behavior.identity()));
-	}
-	
-	private boolean arePresent(Transitions<S, V> outgoingTransitions) {
-		return outgoingTransitions.stream().count()>0;
+			inCase(d -> sm.isTerminal(this), Behavior.identity(), transitionsBehavior));
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {

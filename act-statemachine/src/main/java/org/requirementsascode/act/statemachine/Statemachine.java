@@ -91,6 +91,11 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		
 		return new Transitions<>(transitions);
 	}
+	
+	boolean isTerminal(State<S, V0> state) {
+		long outgoingTransitionsSize = outgoingTransitions(state).stream().count();
+		return outgoingTransitionsSize == 0;
+	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
 		return state(DEFINED_STATE, states.stream()
