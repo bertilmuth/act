@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.core.InCase.*;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
@@ -43,7 +44,7 @@ public class Port<T extends ActionData> implements Node {
 
 	public State<WorkflowState, Token> asState() {
 		return state(name(), this::areTokensInPort, 
-			InCase.inCase(this::firstTokenHasRightType, Behavior.identity(), this::markFirstTokenForDeletion));
+			inCase(this::firstTokenHasRightType, Behavior.identity(), this::markFirstTokenForDeletion));
 	}
 	
 	private boolean areTokensInPort(WorkflowState state) {
