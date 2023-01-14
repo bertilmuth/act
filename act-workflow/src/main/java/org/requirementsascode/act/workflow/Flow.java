@@ -45,12 +45,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 		Token inputToken = Token.from(inputData);
 		Data<WorkflowState, Token> outputData = inputData;
 				
-		if(inputToken.actionData().isPresent()) {
-			U outputActionData = applyActionFunction(inputData);
-			Token outputToken = inputToken.replaceActionData(outputActionData);
-			WorkflowState newState = inputData.state().updateActionOutput(outputActionData);
-			outputData = data(newState, outputToken);
-		} 
+		U outputActionData = applyActionFunction(inputData);
+		Token outputToken = inputToken.replaceActionData(outputActionData);
+		WorkflowState newState = inputData.state().updateActionOutput(outputActionData);
+		outputData = data(newState, outputToken);
+		
 		return outputData;
 	}
 	
