@@ -13,17 +13,15 @@ public class WorkflowState {
 	private final Workflow workflow;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	private final Tokens tokens;
-	private final ActionData actionOutput;
 	
-	WorkflowState(Workflow workflow, Tokens tokens, ActionData actionOutput) {
+	WorkflowState(Workflow workflow, Tokens tokens) {
 		this.workflow = workflow;
 		this.statemachine = workflow.statemachine();
 		this.tokens = tokens;
-		this.actionOutput = actionOutput;
 	}
 	
 	static WorkflowState createInitialWorkflowState(Workflow workflow, Statemachine<WorkflowState, Token> statemachine) {
-		return new WorkflowState(workflow, new Tokens(emptyMap()), null);
+		return new WorkflowState(workflow, new Tokens(emptyMap()));
 	}
 	
 	public Tokens tokens() {
@@ -58,7 +56,7 @@ public class WorkflowState {
 	}
 	
 	WorkflowState updateActionOutput(ActionData newActionOutput) {
-		return new WorkflowState(workflow, tokens, newActionOutput);
+		return new WorkflowState(workflow, tokens);
 	}
 	
 	Data<WorkflowState, Token> replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
@@ -67,13 +65,8 @@ public class WorkflowState {
 	}
 
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
-		ActionData actionOutput = token != null? token.actionData().orElse(null) : null;
-		WorkflowState newWorkflowState = new WorkflowState(workflow, tokens, actionOutput);
+		WorkflowState newWorkflowState = new WorkflowState(workflow(), tokens);
 		return data(newWorkflowState, token);
-	}
-
-	Optional<ActionData> actionOutput() {
-		return Optional.ofNullable(actionOutput);
 	}
 	
 	Statemachine<WorkflowState, Token> statemachine() {
@@ -82,6 +75,6 @@ public class WorkflowState {
 
 	@Override
 	public String toString() {
-		return "WorkflowState [tokens=" + tokens + ", actionOutput=" + actionOutput + "]";
+		return "WorkflowState [" + tokens + "]";
 	}
 }

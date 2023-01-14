@@ -35,7 +35,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public WorkflowState start(ActionData actionData) {
-		WorkflowState initialWorkflowState = new WorkflowState(this, new Tokens(Collections.emptyMap()), null);
+		WorkflowState initialWorkflowState = new WorkflowState(this, new Tokens(Collections.emptyMap()));
 		return nextStep(initialWorkflowState, actionData);
 	}
 	
@@ -89,7 +89,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Tokens mergedTokens = mergeTokens(datasAfter);
-			WorkflowState state = new WorkflowState(Workflow.this, mergedTokens, null);
+			WorkflowState state = new WorkflowState(Workflow.this, mergedTokens);
 			return data(state, null);
 		}
 
