@@ -22,7 +22,7 @@ public class WorkflowApi {
 	
 	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
 		Ports inPorts = new Ports(Collections.singletonList(inPort));
-		return new Flow<>(inPorts, outPort, actionFunction);
+		return flow(inPorts, outPort, actionFunction);
 	}
 	
 	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Ports inPorts, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
