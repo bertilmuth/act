@@ -52,10 +52,13 @@ public class State<S, V> implements Behavioral<S, V> {
 	}
 
 	private Behavior<S, V, V> outgoingTransitionsBehavior(Statemachine<S, V> sm) {
-		Transitions<S, V> outgoingTransitions = sm.outgoingTransitions(this);
-		Behavior<S, V, V> transitionsBehavior = outgoingTransitions.asBehavior(sm);
+		Behavior<S, V, V> transitionsBehavior = transitionsBehavior(sm);
 		return inCase(d -> d.value().isPresent(), 
 			inCase(d -> sm.isTerminal(this), Behavior.identity(), transitionsBehavior));
+	}
+
+	private Behavior<S, V, V> transitionsBehavior(Statemachine<S, V> sm) {
+		return sm.outgoingTransitions(this).asBehavior(sm);
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
