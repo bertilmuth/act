@@ -37,12 +37,12 @@ public class Port<T extends ActionData> implements Node {
 		return state.areTokensIn(this);
 	}
 	
-	private Token firstTokenInPort(WorkflowState state) {
+	private Token firstToken(WorkflowState state) {
 		return state.firstTokenIn(this).get();
 	}
 	
 	private Optional<Class<?>> typeOfFirstToken(WorkflowState state) {
-		return firstTokenInPort(state).actionData().map(ActionData::getClass);
+		return firstToken(state).actionData().map(ActionData::getClass);
 	}
 	
 	private boolean firstTokenHasRightType(Data<WorkflowState, Token> data) {
@@ -52,7 +52,7 @@ public class Port<T extends ActionData> implements Node {
 	
 	private Data<WorkflowState, Token> markFirstTokenForDeletion(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
-		Token token = firstTokenInPort(state);
+		Token token = firstToken(state);
 		Token tokenMarkedForDeletion = token.replaceActionData(null);
 		Data<WorkflowState, Token> newState = state.replaceToken(this, token, tokenMarkedForDeletion);
 		return newState;
