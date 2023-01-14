@@ -28,7 +28,6 @@ public class Port<T extends ActionData> implements Node {
 		return type;
 	}
 
-	@Override
 	public State<WorkflowState, Token> asState() {
 		return state(name(), this::areTokensInPort, 
 			InCase.inCase(this::firstTokenHasRightType, Behavior.identity(), this::markFirstTokenForDeletion));

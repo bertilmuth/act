@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 import org.requirementsascode.act.statemachine.State;
 
 public class Ports {
-	private final List<Node> nodes;
+	private final List<Port<?>> ports;
 
-	Ports(List<Node> nodes) {
-		this.nodes = requireNonNull(nodes, "nodes must be non-null!");
+	Ports(List<Port<?>> nodes) {
+		this.ports = requireNonNull(nodes, "nodes must be non-null!");
 	}
 
 	Stream<State<WorkflowState, Token>> asStates() {
@@ -19,7 +19,7 @@ public class Ports {
 		return statesStream;
 	}
 
-	public Stream<Node> stream() {
-		return nodes.stream();
+	public Stream<Port<?>> stream() {
+		return ports.stream();
 	}
 }

@@ -1,14 +1,12 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
@@ -29,11 +27,6 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	@Override
 	public String name() {
 		return actionName;
-	}
-
-	@Override
-	public State<WorkflowState, Token> asState() {
-		return state(actionName, this::areTokensInInputOrOutputPort, this::executeActionBehavior);
 	}
 	
 	@Override

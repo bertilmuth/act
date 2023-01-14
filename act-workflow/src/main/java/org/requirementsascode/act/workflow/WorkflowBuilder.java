@@ -18,7 +18,7 @@ public class WorkflowBuilder {
 	public class ActionsBuilder {
 		private List<ActionNode<?,?>> builderActions = Collections.emptyList();		
 		private List<Flow<?,?>> builderFlows = Collections.emptyList();
-		private List<Node> builderPorts = Collections.emptyList();
+		private List<Port<?>> builderPorts = Collections.emptyList();
 		private List<Port<?>> builderStartPorts = Collections.emptyList();
 
 		private ActionsBuilder(ActionNode<?,?>[] actions) {

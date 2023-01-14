@@ -40,11 +40,6 @@ class InitialNode implements Node{
 	public String name() {
 		return owningStatemachine.initialState().name();
 	}
-
-	@Override
-	public State<WorkflowState, Token> asState() {
-		return owningStatemachine.initialState();
-	}
 	
 	@Override
 	public int hashCode() {
