@@ -28,13 +28,13 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPort(inputData);
+		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPort(inputPort, inputData);
 		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
-		Data<WorkflowState, Token> outputData = addTokenToOutputPort(functionOutputData);
+		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outputPort, functionOutputData);
 		return outputData;
 	}
 
-	private Data<WorkflowState, Token> removeTokenFromInputPort(Data<WorkflowState, Token> data) {
+	private Data<WorkflowState, Token> removeTokenFromInputPort(Port<T> inputPort, Data<WorkflowState, Token> data) {
 		WorkflowState state = data.state();
 		Token inputToken = state.firstTokenIn(inputPort).get();
 		return state.removeToken(inputPort, inputToken);
@@ -46,7 +46,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 		return data(data.state(), outputToken);
 	}
 	
-	private Data<WorkflowState, Token> addTokenToOutputPort(Data<WorkflowState, Token> data) {
+	private Data<WorkflowState, Token> addTokenToOutputPort(Port<U> outputPort, Data<WorkflowState, Token> data) {
 		return data.state().addToken(outputPort, Token.from(data));
 	}
 
