@@ -19,7 +19,7 @@ public class WorkflowBuilder {
 		private List<ActionNode<?,?>> builderActions = Collections.emptyList();		
 		private List<Flow<?,?>> builderFlows = Collections.emptyList();
 		private List<Port<?>> builderPorts = Collections.emptyList();
-		private List<Port<?>> builderStartPorts = Collections.emptyList();
+		private List<Port<?>> builderInPorts = Collections.emptyList();
 
 		private ActionsBuilder(ActionNode<?,?>[] actions) {
 			requireNonNull(actions, "actions must be non-null!");
@@ -37,16 +37,16 @@ public class WorkflowBuilder {
 			private PortsBuilder(){}
 			
 			@SafeVarargs
-			public final StartPortsBuilder startPorts(Port<?>... portsArray) {
+			public final InPortsBuilder inPorts(Port<?>... portsArray) {
 				requireNonNull(portsArray, "portsArray must be non-null!");
-				builderStartPorts = asList(portsArray);
-				return new StartPortsBuilder();
+				builderInPorts = asList(portsArray);
+				return new InPortsBuilder();
 			}
 		}
 
 		
-		public class StartPortsBuilder {
-			private StartPortsBuilder(){}
+		public class InPortsBuilder {
+			private InPortsBuilder(){}
 			
 			@SafeVarargs
 			public final FlowsBuilder flows(Flow<?,?>... flowsArray) {
@@ -59,11 +59,11 @@ public class WorkflowBuilder {
 				private FlowsBuilder(){}
 				
 				public final Workflow build() {
-					return Workflow.create(actions(), ports(), flows(), startFlows());
+					return Workflow.create(actions(), ports(), flows(), inFlows());
 				}
 
-				private StartFlows startFlows() {
-					return new StartFlows(builderStartPorts);
+				private InFlows inFlows() {
+					return new InFlows(builderInPorts);
 				}
 				
 				private Ports ports() {

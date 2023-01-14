@@ -21,7 +21,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final Flows flows;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	
-	private Workflow(Actions actions, Ports ports, Flows flows, StartFlows startFlows) {
+	private Workflow(Actions actions, Ports ports, Flows flows, InFlows startFlows) {
 		this.flows = flows;
 		this.statemachine = statemachineWith(actions, ports, flows, startFlows);		
 	}
@@ -61,17 +61,17 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return data(state, token(actionData));
 	}
 	
-	static Workflow create(Actions actions, Ports ports, Flows dataFlows, StartFlows startFlows){
-		return new Workflow(actions, ports, dataFlows, startFlows);
+	static Workflow create(Actions actions, Ports ports, Flows dataFlows, InFlows inFlows){
+		return new Workflow(actions, ports, dataFlows, inFlows);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Statemachine<WorkflowState, Token> statemachineWith(Actions actions, Ports ports, Flows dataFlows,
-			StartFlows startFlows) {
+			InFlows inFlows) {
 		
 		State[] portStates = ports.asStates().toArray(State[]::new);
 		Transitionable[] transitionables = concat(actions.stream(),
-				concat(startFlows.stream(), dataFlows.stream()))
+				concat(inFlows.stream(), dataFlows.stream()))
 			.toArray(Transitionable[]::new);
 
 		Statemachine<WorkflowState, Token> statemachine = 

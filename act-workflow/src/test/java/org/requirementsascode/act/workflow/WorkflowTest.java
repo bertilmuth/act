@@ -48,7 +48,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions()
 			.ports()
-			.startPorts()
+			.inPorts()
 			.flows()
 			.build();
 		
@@ -65,7 +65,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
 			.ports(action1_In, action1_Out)
-			.startPorts(action1_In)
+			.inPorts(action1_In)
 			.flows()
 			.build();
 		
@@ -89,7 +89,7 @@ class WorkflowTest {
 				action1_In,action1_Out,
 				action2_In, action2_Out
 			)
-			.startPorts(action1_In)
+			.inPorts(action1_In)
 			.flows(
 				flow(action1_Out, action2_In)
 			)
@@ -154,7 +154,7 @@ class WorkflowTest {
 				action2a_In, action2a_Out,
 				action2b_In, action2b_Out
 			)
-			.startPorts(action1_In)
+			.inPorts(action1_In)
 			.flows(
 				flow(action1_Out, action2a_In),
 				flow(action1_Out, action2b_In)
@@ -194,7 +194,7 @@ class WorkflowTest {
 				action2b_In, action2b_Out,
 				action3_In, action3_Out
 			)
-			.startPorts(action1_In)
+			.inPorts(action1_In)
 			.flows(
 				flow(action1_Out, action2a_In),
 				flow(action1_Out, action2b_In),
@@ -220,7 +220,7 @@ class WorkflowTest {
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
 			.ports(action1_In, action1_Out)
-			.startPorts(action1_In)
+			.inPorts(action1_In)
 			.flows()
 			.build();
 		
