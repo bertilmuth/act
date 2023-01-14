@@ -5,7 +5,9 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -31,16 +33,27 @@ public class Flow<T extends ActionData, U extends ActionData> implements Transit
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPort(inputPort, inputData);
+		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPorts(inputPorts, inputData);
 		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
 		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outputPort, functionOutputData);
 		return outputData;
 	}
+	
+	private Data<WorkflowState, Token> removeTokenFromInputPorts(Ports inputPorts, Data<WorkflowState, Token> data) {
+		List<Port<?>> ports = inputPorts.stream().collect(Collectors.toList());
+		Data<WorkflowState, Token> updatedData = data;
+		for (Port<?> port : ports) {
+			updatedData = removeTokenFromInputPort(port, updatedData);
+		}
+		return updatedData;
+	}
 
-	private Data<WorkflowState, Token> removeTokenFromInputPort(Port<T> inputPort, Data<WorkflowState, Token> data) {
+
+	private Data<WorkflowState, Token> removeTokenFromInputPort(Port<?> inputPort, Data<WorkflowState, Token> data) {
 		WorkflowState state = data.state();
 		Token inputToken = state.firstTokenIn(inputPort).get();
-		return state.removeToken(inputPort, inputToken);
+		WorkflowState updatedState = state.removeToken(inputPort, inputToken).state();
+		return data(updatedState, Token.from(data));
 	}
 	
 	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> data) {
