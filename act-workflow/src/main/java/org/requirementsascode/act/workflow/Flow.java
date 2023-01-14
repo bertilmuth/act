@@ -12,32 +12,33 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
-public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
-	private final Port<T> inputPort;
-	private final Ports inputPorts;
-	private final Port<U> outputPort;
+public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>, ExecutableNode{
+	private final Port<T> inPort;
+	private final Ports inPorts;
+	private final Port<U> outPort;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	Flow(Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.inputPort = requireNonNull(inputPort, "inputPort must be non-null!");
-		this.inputPorts = new Ports(Collections.singletonList(inputPort));
-		this.outputPort = requireNonNull(outputPort, "outputPort must be non-null!");
+	Flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.inPort = requireNonNull(inPort, "inPort must be non-null!");
+		this.inPorts = new Ports(Collections.singletonList(inPort));
+		this.outPort = requireNonNull(outPort, "outPort must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inputPort.asState(), outputPort.asState(), this::transformAndMove);
+		return transition(inPort.asState(), outPort.asState(), this::transformAndMove);
 	}
 	
-	public Ports inputPorts() {
-		return inputPorts;
+	@Override
+	public Ports inPorts() {
+		return inPorts;
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPorts(inputPorts, inputData);
+		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPorts(inPorts, inputData);
 		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
-		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outputPort, functionOutputData);
+		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPort, functionOutputData);
 		return outputData;
 	}
 	

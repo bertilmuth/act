@@ -68,7 +68,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		Stream<State<WorkflowState, Token>> portStates = ports.asStates();
 		Stream<State<WorkflowState, Token>> actionPortsStates = actions.stream()
 			.map(Action::flow)
-			.map(Flow::inputPorts)
+			.map(Flow::inPorts)
 			.map(Ports::asState);
 		State[] allStates = Stream.concat(portStates, actionPortsStates).toArray(State[]::new);
 		

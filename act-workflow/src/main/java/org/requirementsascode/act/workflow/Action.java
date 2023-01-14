@@ -8,7 +8,7 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
-public class Action<T extends ActionData, U extends ActionData> implements Named, Transitionable<WorkflowState, Token> {
+public class Action<T extends ActionData, U extends ActionData> implements Named, Transitionable<WorkflowState, Token>, ExecutableNode {
 	private String name;
 	private final Flow<T,U> flow;
 
@@ -20,6 +20,11 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	@Override
 	public String name() {
 		return name;
+	}
+	
+	@Override
+	public Ports inPorts() {
+		return flow.inPorts();
 	}
 	
 	Flow<T,U> flow() {
