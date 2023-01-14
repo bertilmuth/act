@@ -2,7 +2,6 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Collections;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.statemachine.Statemachine;
@@ -25,6 +24,11 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	@Override
 	public Ports inPorts() {
 		return flow.inPorts();
+	}
+	
+	@Override
+	public Ports outPorts() {
+		return flow.outPorts();
 	}
 	
 	Flow<T,U> flow() {

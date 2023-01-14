@@ -31,6 +31,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		return inPorts;
 	}
 	
+	@Override
+	public Ports outPorts() {
+		return outPorts;
+	}
+	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
 		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPorts(inPorts, inputData);
 		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
