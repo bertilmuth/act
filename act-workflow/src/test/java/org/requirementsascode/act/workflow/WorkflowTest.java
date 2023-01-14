@@ -118,7 +118,7 @@ class WorkflowTest {
 				action1_In, action1_Out,
 				action2i_In, action2i_Out
 			)
-			.startPorts(action1_In)
+			.inPorts(action1_In)
 			.flows(
 				flow(action1_Out, action2i_In)
 			)

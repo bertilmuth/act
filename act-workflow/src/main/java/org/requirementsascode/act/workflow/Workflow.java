@@ -21,9 +21,9 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final Flows flows;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	
-	private Workflow(Actions actions, Ports ports, Flows flows, InFlows startFlows) {
+	private Workflow(Actions actions, Ports ports, Flows flows, InFlows inFlows) {
 		this.flows = flows;
-		this.statemachine = statemachineWith(actions, ports, flows, startFlows);		
+		this.statemachine = statemachineWith(actions, ports, flows, inFlows);		
 	}
 
 	public final static WorkflowBuilder builder() {
