@@ -10,8 +10,10 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
+import org.requirementsascode.act.statemachine.Transition;
+import org.requirementsascode.act.statemachine.Transitionable;
 
-public class ActionNode<T extends ActionData, U extends ActionData> implements Node {
+public class ActionNode<T extends ActionData, U extends ActionData> implements Node, Transitionable<WorkflowState, Token> {
 	private String actionName;
 	private final Port<T> inputPort;
 	private final Port<U> outputPort;
@@ -32,6 +34,11 @@ public class ActionNode<T extends ActionData, U extends ActionData> implements N
 	@Override
 	public State<WorkflowState, Token> asState() {
 		return state(actionName, this::areTokensInInputOrOutputPort, this::executeActionBehavior);
+	}
+	
+	@Override
+	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
+		return actionFlow.asTransition(owningStatemachine);
 	}
 	
 	private Data<WorkflowState, Token> executeActionBehavior(Data<WorkflowState, Token> inputData){
