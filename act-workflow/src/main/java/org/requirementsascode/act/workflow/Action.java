@@ -9,11 +9,11 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
-public class ActionNode<T extends ActionData, U extends ActionData> implements Node, Transitionable<WorkflowState, Token> {
+public class Action<T extends ActionData, U extends ActionData> implements Node, Transitionable<WorkflowState, Token> {
 	private String name;
 	private final Flow<T,U> flow;
 
-	ActionNode(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+	Action(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(actionName, "actionName must be non-null!");
 		this.flow = flow(inputPort, outputPort, actionFunction);
 	}

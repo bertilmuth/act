@@ -11,17 +11,17 @@ public class WorkflowBuilder {
 	}
 
 	@SafeVarargs
-	public final ActionsBuilder actions(ActionNode<?,?>... actionsArray) {
+	public final ActionsBuilder actions(Action<?,?>... actionsArray) {
 		return new ActionsBuilder(actionsArray);
 	}
 
 	public class ActionsBuilder {
-		private List<ActionNode<?,?>> builderActions = Collections.emptyList();		
+		private List<Action<?,?>> builderActions = Collections.emptyList();		
 		private List<Flow<?,?>> builderFlows = Collections.emptyList();
 		private List<Port<?>> builderPorts = Collections.emptyList();
 		private List<Port<?>> builderInPorts = Collections.emptyList();
 
-		private ActionsBuilder(ActionNode<?,?>[] actions) {
+		private ActionsBuilder(Action<?,?>[] actions) {
 			requireNonNull(actions, "actions must be non-null!");
 			this.builderActions = asList(actions);
 		}
