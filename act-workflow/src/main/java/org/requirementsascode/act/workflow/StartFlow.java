@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;

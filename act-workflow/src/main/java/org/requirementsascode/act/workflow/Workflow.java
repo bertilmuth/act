@@ -20,12 +20,10 @@ import org.requirementsascode.act.statemachine.Transitionable;
 public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final Flows flows;
 	private final Statemachine<WorkflowState, Token> statemachine;
-	private final InitialNode initialNode;
 	
 	private Workflow(Actions actions, Ports ports, Flows flows, StartFlows startFlows) {
 		this.flows = flows;
 		this.statemachine = statemachineWith(actions, ports, flows, startFlows);		
-		this.initialNode = new InitialNode(statemachine);
 	}
 
 	public final static WorkflowBuilder builder() {
