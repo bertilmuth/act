@@ -34,14 +34,14 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return data.state();
 	}
 	
-	public Data<WorkflowState, Token> start(ActionData actionData) {
+	public WorkflowState start(ActionData actionData) {
 		WorkflowState initialWorkflowState = new WorkflowState(this, new Tokens(Collections.emptyMap()), null);
 		return nextStep(initialWorkflowState, actionData);
 	}
 	
-	public Data<WorkflowState, Token> nextStep(WorkflowState state, ActionData actionData) {
+	public WorkflowState nextStep(WorkflowState state, ActionData actionData) {
 		Data<WorkflowState, Token> tokenizedData = tokenize(state, actionData);
-		return actOn(tokenizedData);
+		return actOn(tokenizedData).state();
 	}
 	
 	public Flows dataFlows() {

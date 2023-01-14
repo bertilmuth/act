@@ -1,7 +1,6 @@
 package org.requirementsascode.act.workflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 import static org.requirementsascode.act.workflow.WorkflowApi.port;
@@ -54,9 +53,7 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		Data<WorkflowState, Token> afterStart = workflow.start(str(""));
-		assertFalse(afterStart.value().isPresent());
-		WorkflowState afterStartState = afterStart.state();
+		WorkflowState afterStartState = workflow.start(str(""));
 		assertEquals(0, nrOfTokensIn(afterStartState));
 	}
 	
@@ -73,10 +70,10 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		WorkflowState workflowStartedState = workflow.start(str(START_WORKFLOW)).state();
-		WorkflowState afterAction1 = workflow.nextStep(workflowStartedState,str("")).state();
+		WorkflowState workflowStartedState = workflow.start(str(START_WORKFLOW));
+		WorkflowState afterAction1State = workflow.nextStep(workflowStartedState,str(""));
 
-		assertEquals(str(ACTION1), afterAction1.actionOutput().get());
+		assertEquals(str(ACTION1), afterAction1State.actionOutput().get());
 	}
 	
 	@Test
@@ -101,12 +98,11 @@ class WorkflowTest {
 			)
 			.build();
 		
-		Data<WorkflowState, Token> afterAction2 = workflow.start(str(START_WORKFLOW));
-		WorkflowState state = afterAction2.state();
+		WorkflowState afterAction2State = workflow.start(str(START_WORKFLOW));
 		
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
-		assertEquals(action1_2, state.actionOutput().get());
-		assertEquals(1, nrOfTokensIn(state));
+		assertEquals(action1_2, afterAction2State.actionOutput().get());
+		assertEquals(1, nrOfTokensIn(afterAction2State));
 	}
 	
 	/*@Test
@@ -169,7 +165,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
+		WorkflowState state = workflow.start(str(START_WORKFLOW));	
 
 		StringData action1_2a = str(ACTION1 + "." + ACTION2A);
 		assertEquals(action1_2a, state.actionOutput().get());
@@ -211,7 +207,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
+		WorkflowState state = workflow.start(str(START_WORKFLOW));	
 
 		List<ActionData> tokensInAction3Out = action3_Out.actionDatas(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
@@ -232,7 +228,7 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		WorkflowState state = workflow.start(new UnknownData()).state();
+		WorkflowState state = workflow.start(new UnknownData());
 		assertEquals(0, nrOfTokensIn(state));
 	}
 	
