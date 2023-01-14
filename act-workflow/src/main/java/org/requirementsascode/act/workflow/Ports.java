@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
+import org.requirementsascode.act.statemachine.Statemachine;
 
 public class Ports{
 	private final List<Port<?>> ports;
@@ -25,7 +26,16 @@ public class Ports{
 	}
 	
 	public State<WorkflowState, Token> asState() {
-		return state("Ports_" + this, this::areTokensInAllPorts, Behavior.identity());
+		return state("Ports_" + this, this::areTokensInAllPorts, portsBehavior());
+	}
+	
+	private Behavior<WorkflowState, Token, Token> portsBehavior(){
+		@SuppressWarnings("unchecked")
+		State<WorkflowState,Token>[] statesArray = asStates().toArray(State[]::new);
+		return Statemachine.builder()
+			.states(statesArray)
+			.transitions()
+			.build();
 	}
 	
 	private boolean areTokensInAllPorts(WorkflowState state) {
