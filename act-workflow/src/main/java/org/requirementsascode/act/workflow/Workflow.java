@@ -96,7 +96,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		}
 
 		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datasAfter) {	
-			Map<Node, List<Token>> mergedTokenMap = datasAfter.stream()
+			Map<Port<?>, List<Token>> mergedTokenMap = datasAfter.stream()
 				.map(Data::state).map(WorkflowState::tokens)
 				.flatMap(tkns -> tkns.asMap().entrySet().stream())
 			    .collect(Collectors.toMap(

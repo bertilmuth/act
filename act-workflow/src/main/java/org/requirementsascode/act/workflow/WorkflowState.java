@@ -61,8 +61,8 @@ public class WorkflowState {
 		return new WorkflowState(workflow, tokens, newActionOutput);
 	}
 	
-	Data<WorkflowState, Token> replaceToken(Node node, Token tokenBefore, Token tokenAfter) {
-		Tokens tokensAfter = tokens().replaceToken(node, tokenBefore, tokenAfter);
+	Data<WorkflowState, Token> replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
+		Tokens tokensAfter = tokens().replaceToken(port, tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);
 	}
 

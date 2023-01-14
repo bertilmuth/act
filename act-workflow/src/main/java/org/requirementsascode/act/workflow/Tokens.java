@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class Tokens {
-	private final Map<Node, List<Token>> tokens;
+	private final Map<Port<?>, List<Token>> tokens;
 	
-	Tokens(Map<Node, List<Token>> tokensMap) {
+	Tokens(Map<Port<?>, List<Token>> tokensMap) {
 		this.tokens = new LinkedHashMap<>(tokensMap);
 	}
 	
-	public Map<Node, List<Token>> asMap() {
+	public Map<Port<?>, List<Token>> asMap() {
 		return Collections.unmodifiableMap(tokens);
 	}
 	
@@ -26,36 +26,32 @@ public class Tokens {
 		return tokens.getOrDefault(node, emptyList()).stream();
 	}
 
-	public Tokens addToken(Node node, Token token) {
-		Map<Node, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
-		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(node, newTokensMap, token);
+	Tokens addToken(Port<?> port, Token token) {
+		Map<Port<?>, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
+		Map<Port<?>, List<Token>> mapWithTokenAdded = addTokenToMap(port, newTokensMap, token);
 		return new Tokens(mapWithTokenAdded);
 	}
 	
-	public Tokens removeToken(Node node, Token token) {
-		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(node, token);
+	Tokens removeToken(Port<?> port, Token token) {
+		Map<Port<?>, List<Token>> mapWithTokenRemoved = removeTokenFromMap(port, token);
 		return new Tokens(mapWithTokenRemoved);
 	}
 	
-	Tokens replaceToken(Node nodeBefore, Token tokenBefore, Token tokenAfter) {
-		return replaceToken(nodeBefore, tokenBefore, nodeBefore, tokenAfter);
-	}
-	
-	private Tokens replaceToken(Node nodeBefore, Token tokenBefore, Node nodeAfter, Token tokenAfter) {
-		Map<Node, List<Token>> mapWithTokenRemoved = removeTokenFromMap(nodeBefore, tokenBefore);
-		Map<Node, List<Token>> mapWithTokenAdded = addTokenToMap(nodeAfter, mapWithTokenRemoved, tokenAfter);
+	Tokens replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
+		Map<Port<?>, List<Token>> mapWithTokenRemoved = removeTokenFromMap(port, tokenBefore);
+		Map<Port<?>, List<Token>> mapWithTokenAdded = addTokenToMap(port, mapWithTokenRemoved, tokenAfter);
 		return new Tokens(mapWithTokenAdded);
 	}
 	
-	private Map<Node, List<Token>> removeTokenFromMap(Node node, Token tokenToBeRemoved) {
-		List<Token> tokensWithTokenRemoved = tokensIn(node).filter(t -> !tokenToBeRemoved.equals(t)).collect(toList());
-		Map<Node, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
-		newTokensMap.put(node, tokensWithTokenRemoved);
+	private Map<Port<?>, List<Token>> removeTokenFromMap(Port<?> port, Token tokenToBeRemoved) {
+		List<Token> tokensWithTokenRemoved = tokensIn(port).filter(t -> !tokenToBeRemoved.equals(t)).collect(toList());
+		Map<Port<?>, List<Token>> newTokensMap = new LinkedHashMap<>(tokens);
+		newTokensMap.put(port, tokensWithTokenRemoved);
 		return newTokensMap;
 	}
 	
-	private Map<Node, List<Token>> addTokenToMap(Node node, Map<Node, List<Token>> tokensMap, Token tokenToAdd) {
-		tokensMap.merge(node, singletonList(tokenToAdd), (oldValue, newValue) -> {
+	private Map<Port<?>, List<Token>> addTokenToMap(Port<?> port, Map<Port<?>, List<Token>> tokensMap, Token tokenToAdd) {
+		tokensMap.merge(port, singletonList(tokenToAdd), (oldValue, newValue) -> {
 			List<Token> newList = new ArrayList<>(oldValue);
 			newList.addAll(newValue);
 			return newList;
