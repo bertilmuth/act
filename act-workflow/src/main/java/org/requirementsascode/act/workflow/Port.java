@@ -12,7 +12,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
-public class Port<T extends ActionData> implements Node {
+public class Port<T extends ActionData> implements Named {
 	private final String name;
 	private final Class<T> type;
 

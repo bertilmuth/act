@@ -1,5 +1,5 @@
 package org.requirementsascode.act.workflow;
 
-public interface Node {
+public interface Named {
 	String name();
 }

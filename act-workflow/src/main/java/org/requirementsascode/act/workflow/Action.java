@@ -8,7 +8,7 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
-public class Action<T extends ActionData, U extends ActionData> implements Node, Transitionable<WorkflowState, Token> {
+public class Action<T extends ActionData, U extends ActionData> implements Named, Transitionable<WorkflowState, Token> {
 	private String name;
 	private final Flow<T,U> flow;
 
