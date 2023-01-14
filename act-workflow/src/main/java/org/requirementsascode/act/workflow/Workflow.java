@@ -65,16 +65,15 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private Statemachine<WorkflowState, Token> statemachineWith(Actions actions, Ports ports, Flows flows,
 			InFlows inFlows) {
 		
-		Stream<Transitionable<WorkflowState, Token>> regularFlows = concat(actions.stream(), flows.stream());
-		Transitionable[] transitionables = concat(inFlows.stream(), regularFlows)
+		Transitionable[] transitionables = concat(inFlows.stream(), executableNodes(actions, flows))
 			.toArray(Transitionable[]::new);
 		
-		Stream<State<WorkflowState, Token>> portStates = ports.asStates();
-		Stream<State<WorkflowState, Token>> actionPortsStates = actions.stream()
-			.map(Action::flow)
-			.map(Flow::inPorts)
-			.map(Ports::asState);
-		State[] allStates = Stream.concat(portStates, actionPortsStates).toArray(State[]::new);
+		State[] allStates = 
+			concat(ports.asStates(), 
+				executableNodes(actions, flows)
+					.map(ExecutableNode::inPorts)
+					.map(Ports::asState))
+			.toArray(State[]::new);
 		
 		Statemachine<WorkflowState, Token> statemachine = 
 			Statemachine.builder()
@@ -85,6 +84,10 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 				)
 				.build();
 		return statemachine;
+	}
+
+	private Stream<ExecutableNode> executableNodes(Actions actions, Flows flows) {
+		return concat(actions.stream(), flows.stream());
 	}
 }
 
