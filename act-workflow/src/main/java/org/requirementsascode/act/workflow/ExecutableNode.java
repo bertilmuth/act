@@ -1,5 +1,7 @@
 package org.requirementsascode.act.workflow;
 
-public interface ExecutableNode {
+import org.requirementsascode.act.statemachine.Transitionable;
+
+public interface ExecutableNode extends Transitionable<WorkflowState, Token>{
 	Ports inPorts();
 }

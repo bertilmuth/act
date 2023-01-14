@@ -10,9 +10,8 @@ import java.util.function.BiFunction;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
-import org.requirementsascode.act.statemachine.Transitionable;
 
-public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>, ExecutableNode{
+public class Flow<T extends ActionData, U extends ActionData> implements ExecutableNode{
 	private final Port<T> inPort;
 	private final Ports inPorts;
 	private final Port<U> outPort;
