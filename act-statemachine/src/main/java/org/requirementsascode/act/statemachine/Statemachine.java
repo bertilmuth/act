@@ -1,16 +1,14 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Stream.concat;
 import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -78,30 +76,21 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	public Transitions<S, V0> incomingTransitions(State<S, V0> toState) {
 		requireNonNull(toState, "toState must be non-null!");
 		
-		List<Transitionable<S, V0>> allTransitions = transitions().stream()
+		List<Transitionable<S, V0>> transitions = transitions().stream()
 			.filter(t -> t.asTransition(this).toState().equals(toState))
 			.collect(Collectors.toList());
 		
-		return new Transitions<>(allTransitions);
+		return new Transitions<>(transitions);
 	}
 	
 	public Transitions<S, V0> outgoingTransitions(State<S, V0> fromState) {
 		requireNonNull(fromState, "fromState must be non-null!");
-		
-		Stream<Transitionable<S, V0>> streamOfTransitions = transitions().stream();
-		Stream<Transition<S, V0>> streamOfFinalStateTransition = Stream.of(finalStateTransition());
-		Stream<Transitionable<S, V0>> streamOfAllTransitions = concat(streamOfTransitions,
-			streamOfFinalStateTransition);
-		
-		List<Transitionable<S, V0>> allTransitions = streamOfAllTransitions
+				
+		List<Transitionable<S, V0>> transitions = transitions().stream()
 			.filter(t -> t.asTransition(this).fromState().equals(fromState))
 			.collect(Collectors.toList());
 		
-		return new Transitions<>(allTransitions);
-	}
-	
-	private Transition<S, V0> finalStateTransition() {
-		return transition(finalState(), finalState, identity());
+		return new Transitions<>(transitions);
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
