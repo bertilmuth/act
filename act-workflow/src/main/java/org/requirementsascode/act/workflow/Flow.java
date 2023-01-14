@@ -12,18 +12,18 @@ import org.requirementsascode.act.statemachine.Transition;
 
 public class Flow<T extends ActionData, U extends ActionData> implements ExecutableNode{
 	private final Ports inPorts;
-	private final Port<U> outPort;
+	private final Ports outPorts;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	Flow(Ports inPorts, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
+	Flow(Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.inPorts = requireNonNull(inPorts, "inPorts must be non-null!");
-		this.outPort = requireNonNull(outPort, "outPort must be non-null!");
+		this.outPorts = requireNonNull(outPorts, "outPorts must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPorts.asState(), outPort.asState(), this::transformAndMove);
+		return transition(inPorts.asState(), outPorts.asState(), this::transformAndMove);
 	}
 	
 	@Override
@@ -34,7 +34,8 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
 		Data<WorkflowState, Token> functionInputData = removeTokenFromInputPorts(inPorts, inputData);
 		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
-		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPort, functionOutputData);
+		Data<WorkflowState, Token> outputData = 
+				addTokenToOutputPort(outPorts, functionOutputData);
 		return outputData;
 	}
 	
@@ -58,8 +59,8 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		return data(data.state(), outputToken);
 	}
 	
-	private Data<WorkflowState, Token> addTokenToOutputPort(Port<U> outputPort, Data<WorkflowState, Token> data) {
-		return data.state().addToken(outputPort, Token.from(data));
+	private Data<WorkflowState, Token> addTokenToOutputPort(Ports outPorts, Data<WorkflowState, Token> data) {
+		return data.state().addToken(outPorts.stream().findFirst().get(), Token.from(data));
 	}
 
 	@SuppressWarnings("unchecked")
