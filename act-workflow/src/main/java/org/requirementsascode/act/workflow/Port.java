@@ -30,7 +30,11 @@ public class Port<T extends ActionData> implements Node {
 		return type;
 	}
 	
-	public Stream<ActionData> actionDatas(WorkflowState state) {
+	public Optional<ActionData> firstActionData(WorkflowState state) {
+		return allActionData(state).findFirst();
+	}
+	
+	public Stream<ActionData> allActionData(WorkflowState state) {
 		return state.tokensIn(this)
 			.map(Token::actionData)
 			.filter(Optional::isPresent)

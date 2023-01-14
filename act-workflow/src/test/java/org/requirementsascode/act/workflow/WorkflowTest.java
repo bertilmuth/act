@@ -72,7 +72,7 @@ class WorkflowTest {
 		WorkflowState workflowStartedState = workflow.start(str(START_WORKFLOW));
 		WorkflowState afterAction1State = workflow.nextStep(workflowStartedState,str(""));
 
-		assertEquals(str(ACTION1), afterAction1State.actionOutput().get());
+		assertEquals(str(ACTION1), action1_Out.firstActionData(afterAction1State).get());
 	}
 	
 	@Test
@@ -208,7 +208,7 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW));	
 
-		List<ActionData> tokensInAction3Out = action3_Out.actionDatas(state).collect(Collectors.toList());
+		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
 		assertEquals(str(ACTION3), tokensInAction3Out.get(1));
 		assertEquals(2, nrOfTokensIn(state));
