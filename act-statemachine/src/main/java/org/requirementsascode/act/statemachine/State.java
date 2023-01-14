@@ -44,16 +44,22 @@ public class State<S, V> implements Behavioral<S, V> {
 
 	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> sm) {
-		return stateBehavior(sm).andThen(outgoingTransitions(sm));
+		return stateBehavior(sm).andThen(outgoingTransitionsBehavior(sm));
 	}
 	
 	private Behavior<S, V, V> stateBehavior(Statemachine<S, V> sm) {
 		return transition(this, this, stateInternalBehavior).asBehavior(sm);
 	}
 
-	private Behavior<S, V, V> outgoingTransitions(Statemachine<S, V> sm) {
-		Behavior<S, V, V> transitionsBehavior = sm.outgoingTransitions(this).asBehavior(sm);
-		return inCase(d -> d.value().isPresent(), transitionsBehavior);
+	private Behavior<S, V, V> outgoingTransitionsBehavior(Statemachine<S, V> sm) {
+		Transitions<S, V> outgoingTransitions = sm.outgoingTransitions(this);
+		Behavior<S, V, V> transitionsBehavior = outgoingTransitions.asBehavior(sm);
+		return inCase(d -> d.value().isPresent(), 
+			inCase(d -> arePresent(outgoingTransitions), transitionsBehavior, Behavior.identity()));
+	}
+	
+	private boolean arePresent(Transitions<S, V> outgoingTransitions) {
+		return outgoingTransitions.stream().count()>0;
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
