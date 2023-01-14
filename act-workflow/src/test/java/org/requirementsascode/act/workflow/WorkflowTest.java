@@ -69,7 +69,7 @@ class WorkflowTest {
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
-			.ports(action1_In)
+			.ports(action1_In, action1_Out)
 			.startPorts(action1_In)
 			.flows()
 			.build();
