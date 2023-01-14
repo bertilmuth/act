@@ -53,7 +53,7 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState state = workflow.start(str(""));
-		assertEquals(0, nrOfTokensIn(state));
+		assertEquals(0, nrOfTokensInState(state));
 	}
 	
 	@Test
@@ -95,11 +95,11 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction2State = workflow.start(str(START_WORKFLOW));
+		WorkflowState state = workflow.start(str(START_WORKFLOW));
 		
 		StringData action1_2 = str(ACTION1 + "." + ACTION2);
-		assertEquals(action1_2, afterAction2State.actionOutput().get());
-		assertEquals(1, nrOfTokensIn(afterAction2State));
+		assertEquals(action1_2, action2_Out.firstActionData(state).get());
+		assertEquals(1, nrOfTokensInState(state));
 	}
 	
 	/*@Test
@@ -166,7 +166,7 @@ class WorkflowTest {
 
 		StringData action1_2a = str(ACTION1 + "." + ACTION2A);
 		assertEquals(action1_2a, state.actionOutput().get());
-		assertEquals(2, nrOfTokensIn(state));
+		assertEquals(2, nrOfTokensInState(state));
 	}
 	
 	@Test
@@ -209,7 +209,7 @@ class WorkflowTest {
 		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
 		assertEquals(str(ACTION3), tokensInAction3Out.get(1));
-		assertEquals(2, nrOfTokensIn(state));
+		assertEquals(2, nrOfTokensInState(state));
 	}
 	
 	@Test
@@ -226,7 +226,7 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState state = workflow.start(new UnknownData());
-		assertEquals(0, nrOfTokensIn(state));
+		assertEquals(0, nrOfTokensInState(state));
 	}
 	
 	private ActionNode<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
@@ -291,7 +291,7 @@ class WorkflowTest {
 		return concatenatedStringValue;
 	}
 	
-	private long nrOfTokensIn(WorkflowState state) {
+	private long nrOfTokensInState(WorkflowState state) {
 		return state.tokens().asMap().values().stream().flatMap(List::stream).count();
 	}
 }
