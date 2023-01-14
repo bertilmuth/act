@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
@@ -178,7 +177,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void testImplicitMerge() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
@@ -215,10 +213,10 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
-		List<Token> tokensInAction3 = state.tokensIn(action3).collect(Collectors.toList());
+		List<Token> tokensInAction3Out = state.tokensIn(action3_Out).collect(Collectors.toList());
 		StringData expectedTokenData = str(ACTION3);
-		assertEquals(expectedTokenData, tokensInAction3.get(0).actionData().get());
-		assertEquals(expectedTokenData, tokensInAction3.get(1).actionData().get());
+		assertEquals(expectedTokenData, tokensInAction3Out.get(0).actionData().get());
+		assertEquals(expectedTokenData, tokensInAction3Out.get(1).actionData().get());
 		assertEquals(2, nrOfTokensIn(state));
 	}
 	
@@ -305,8 +303,8 @@ class WorkflowTest {
 		return state.tokens().asMap().values().stream().flatMap(List::stream).count();
 	}
 	
-	private ActionData actionDataIn(Node action1, WorkflowState state) {
-		return state.firstTokenIn(action1).get().actionData().get();
+	private ActionData actionDataIn(Port<?> port, WorkflowState state) {
+		return state.firstTokenIn(port).get().actionData().get();
 	}
 }
 
