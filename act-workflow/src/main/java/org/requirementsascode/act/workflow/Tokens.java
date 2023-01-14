@@ -22,8 +22,8 @@ public class Tokens {
 		return Collections.unmodifiableMap(tokens);
 	}
 	
-	public Stream<Token> tokensIn(Node node) {
-		return tokens.getOrDefault(node, emptyList()).stream();
+	public Stream<Token> tokensIn(Port<?> port) {
+		return tokens.getOrDefault(port, emptyList()).stream();
 	}
 
 	Tokens addToken(Port<?> port, Token token) {
