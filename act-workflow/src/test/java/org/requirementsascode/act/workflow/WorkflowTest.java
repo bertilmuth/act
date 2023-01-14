@@ -25,7 +25,7 @@ class WorkflowTest {
 	private static final String ACTION2I = "Action2i";
 	private static final String ACTION3 = "Action3";
 	
-	private static final String _IN = "_In";
+	private static final String _IN = "_IN";
 	private static final String _OUT = "_OUT";
 	
 	private static final String ACTION1_IN = ACTION1 + _IN;
@@ -225,7 +225,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void doesntRunActionForUnknownData() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);

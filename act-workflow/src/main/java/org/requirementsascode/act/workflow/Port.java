@@ -41,14 +41,13 @@ public class Port<T extends ActionData> implements Node {
 		return state.firstTokenIn(this).get();
 	}
 	
-	private Class<?> typeOfFirstToken(WorkflowState state) {
-		Optional<Class<?>> firstTokenType = firstTokenInPort(state).actionData().map(ActionData::getClass);
-		return firstTokenType.orElse(null);
+	private Optional<Class<?>> typeOfFirstToken(WorkflowState state) {
+		return firstTokenInPort(state).actionData().map(ActionData::getClass);
 	}
 	
 	private boolean firstTokenHasRightType(Data<WorkflowState, Token> data) {
-		WorkflowState state = data.state();
-		return type.isAssignableFrom(typeOfFirstToken(state));
+		Optional<Class<?>> firstTokenType = typeOfFirstToken(data.state());
+		return firstTokenType.map(type::isAssignableFrom).orElse(false);
 	}
 	
 	private Data<WorkflowState, Token> markFirstTokenForDeletion(Data<WorkflowState, Token> inputData) {
