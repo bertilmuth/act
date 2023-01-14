@@ -1,9 +1,11 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -26,6 +28,13 @@ public class Port<T extends ActionData> implements Node {
 	
 	public Class<T> type() {
 		return type;
+	}
+	
+	public Stream<ActionData> actionDatas(WorkflowState state) {
+		return state.tokensIn(this)
+			.map(Token::actionData)
+			.filter(Optional::isPresent)
+			.map(Optional::get);
 	}
 
 	public State<WorkflowState, Token> asState() {

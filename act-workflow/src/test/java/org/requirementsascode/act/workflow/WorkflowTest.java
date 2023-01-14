@@ -213,10 +213,9 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(START_WORKFLOW)).state();	
 
-		List<Token> tokensInAction3Out = state.tokensIn(action3_Out).collect(Collectors.toList());
-		StringData expectedTokenData = str(ACTION3);
-		assertEquals(expectedTokenData, tokensInAction3Out.get(0).actionData().get());
-		assertEquals(expectedTokenData, tokensInAction3Out.get(1).actionData().get());
+		List<ActionData> tokensInAction3Out = action3_Out.actionDatas(state).collect(Collectors.toList());
+		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
+		assertEquals(str(ACTION3), tokensInAction3Out.get(1));
 		assertEquals(2, nrOfTokensIn(state));
 	}
 	
