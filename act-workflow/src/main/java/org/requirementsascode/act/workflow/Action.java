@@ -1,7 +1,6 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 
 import java.util.function.BiFunction;
 
@@ -11,11 +10,11 @@ import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Action<T extends ActionData, U extends ActionData> implements Node, Transitionable<WorkflowState, Token> {
 	private String name;
-	private final Flow<T,U> actionFlow;
+	private final Flow<T,U> flow;
 
 	Action(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(actionName, "actionName must be non-null!");
-		this.actionFlow = flow(inputPort, outputPort, actionFunction);
+		this.flow = WorkflowApi.flow(inputPort, outputPort, actionFunction);
 	}
 
 	@Override
@@ -23,13 +22,13 @@ public class Action<T extends ActionData, U extends ActionData> implements Node,
 		return name;
 	}
 	
-	Flow<T,U> actionFlow() {
-		return actionFlow;
+	Flow<T,U> flow() {
+		return flow;
 	}
 	
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return actionFlow.asTransition(owningStatemachine);
+		return flow.asTransition(owningStatemachine);
 	}
 
 	@Override
