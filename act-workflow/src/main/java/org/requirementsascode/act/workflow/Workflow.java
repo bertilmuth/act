@@ -76,8 +76,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			.map(Ports::asState);
 		State[] allStates = Stream.concat(portStates, actionPortsStates).toArray(State[]::new);
 		
-		Transitionable[] transitionables = concat(inFlows.stream(),
-				concat(actions.stream(), dataFlows.stream()))
+		Stream<Transitionable<WorkflowState, Token>> regularFlows = concat(actions.stream(), dataFlows.stream());
+		Transitionable[] transitionables = concat(inFlows.stream(), regularFlows)
 			.toArray(Transitionable[]::new);
 
 		Statemachine<WorkflowState, Token> statemachine = 
