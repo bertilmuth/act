@@ -89,9 +89,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Tokens mergedTokens = mergeTokens(datasAfter);
-			ActionData actionData = actionOutputOfFirstStateOf(datasAfter);
-			
-			WorkflowState state = new WorkflowState(Workflow.this, mergedTokens, actionData);
+			WorkflowState state = new WorkflowState(Workflow.this, mergedTokens, null);
 			return data(state, null);
 		}
 
@@ -115,10 +113,6 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 			    .collect(Collectors.toList()));
 			
 			return new Tokens(mergedTokenMap);
-		}
-		
-		private ActionData actionOutputOfFirstStateOf(List<Data<WorkflowState, Token>> datasAfter) {
-			return datasAfter.isEmpty()? null : datasAfter.get(0).state().actionOutput().orElse(null);
 		}
 	}
 }
