@@ -21,9 +21,6 @@ public class InFlow implements Transitionable<WorkflowState, Token> {
 	}
 	
 	private Data<WorkflowState, Token> addTokenToInPort(Data<WorkflowState, Token> data) {
-		WorkflowState state = data.state();
-		Token token = Token.from(data);
-		Data<WorkflowState, Token> portData = state.addToken(inPort, token);
-		return portData;
+		return data.state().addToken(inPort, Token.from(data));
 	}
 }
