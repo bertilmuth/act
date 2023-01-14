@@ -47,7 +47,8 @@ public class Port<T extends ActionData> implements Named {
 	}
 	
 	private boolean areTokensInPort(WorkflowState state) {
-		return state.areTokensIn(this);
+		boolean result = state.areTokensIn(this);
+		return result;
 	}
 	
 	private Token firstToken(WorkflowState state) {

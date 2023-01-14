@@ -10,23 +10,30 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 
-public class Ports{
+public class Ports implements Named{
 	private final List<Port<?>> ports;
+	private final String name;
 
-	Ports(List<Port<?>> nodes) {
-		this.ports = requireNonNull(nodes, "nodes must be non-null!");
-	}
-
-	Stream<State<WorkflowState, Token>> asStates() {
-		return this.stream().map(Port::asState);
+	Ports(List<Port<?>> ports) {
+		this.ports = requireNonNull(ports, "ports must be non-null!");
+		this.name = createName(ports);
 	}
 
 	public Stream<Port<?>> stream() {
 		return ports.stream();
 	}
 	
-	public State<WorkflowState, Token> asState() {
-		return state("Ports_" + this, this::areTokensInAllPorts, portsBehavior());
+	@Override
+	public String name() {
+		return name;
+	}
+	
+	State<WorkflowState, Token> asState() {
+		return state(name(), this::areTokensInAllPorts, portsBehavior());
+	}
+	
+	Stream<State<WorkflowState, Token>> asStates() {
+		return this.stream().map(Port::asState);
 	}
 	
 	private Behavior<WorkflowState, Token, Token> portsBehavior(){
@@ -39,10 +46,15 @@ public class Ports{
 	}
 	
 	private boolean areTokensInAllPorts(WorkflowState state) {
-		boolean result = asStates()
+		long nrOfActivePorts = asStates()
 			.map(State::invariant)
 			.filter(p -> p.test(state))
-			.count() == ports.size();
+			.count();
+		boolean result = nrOfActivePorts == ports.size();
 		return result;
+	}
+	
+	private String createName(List<Port<?>> ports) {
+		return stream().map(Port::name).reduce("Ports", (n1, n2) -> n1 + "_" + n2);
 	}
 }

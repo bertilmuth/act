@@ -13,10 +13,8 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	private final Flow<T,U> flow;
 
 	Action(String actionName, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.name = requireNonNull(actionName, "actionName must be non-null!");
-		
-		Ports inPorts = new Ports(Collections.singletonList(inPort));
-		this.flow = WorkflowApi.flow(inPorts, outPort, actionFunction);
+		this.name = requireNonNull(actionName, "actionName must be non-null!");		
+		this.flow = WorkflowApi.flow(inPort, outPort, actionFunction);
 	}
 
 	@Override
