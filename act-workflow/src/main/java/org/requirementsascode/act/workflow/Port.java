@@ -15,10 +15,12 @@ import org.requirementsascode.act.statemachine.State;
 public class Port<T extends ActionData> implements Named {
 	private final String name;
 	private final Class<T> type;
+	private State<WorkflowState, Token> state;
 
 	Port(String name, Class<T> type) {
 		this.name = requireNonNull(name, "name must be non-null!");
 		this.type = requireNonNull(type, "type must be non-null!");		
+		this.state = createState(name);
 	}
 
 	@Override
@@ -42,8 +44,8 @@ public class Port<T extends ActionData> implements Named {
 	}
 
 	public State<WorkflowState, Token> asState() {
-		return state(name(), this::areTokensInPort, 
-			inCase(this::tokenHasRightType, Behavior.identity(), this::markForDeletion));
+		
+		return state;
 	}
 	
 	private boolean areTokensInPort(WorkflowState state) {
@@ -70,6 +72,11 @@ public class Port<T extends ActionData> implements Named {
 		Token tokenMarkedForDeletion = token.replaceActionData(null);
 		WorkflowState newState = state.replaceToken(this, token, tokenMarkedForDeletion).state();
 		return data(newState);
+	}
+	
+	private State<WorkflowState, Token> createState(String name) {
+		return state(name, this::areTokensInPort, 
+				inCase(this::tokenHasRightType, Behavior.identity(), this::markForDeletion));
 	}
 
 	@Override

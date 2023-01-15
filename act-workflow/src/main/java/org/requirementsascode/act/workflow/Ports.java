@@ -18,7 +18,7 @@ public class Ports implements Named{
 	Ports(List<Port<?>> ports) {
 		this.ports = requireNonNull(ports, "ports must be non-null!");
 		this.name = createName(ports);
-		this.state = state(name, this::areTokensInAllPorts, portsBehavior());
+		this.state = createState(name);
 	}
 
 	public Stream<Port<?>> stream() {
@@ -30,7 +30,7 @@ public class Ports implements Named{
 		return name;
 	}
 	
-	State<WorkflowState, Token> asState() {
+	State<WorkflowState, Token> asOneState() {
 		return state;
 	}
 	
@@ -58,5 +58,9 @@ public class Ports implements Named{
 	
 	private String createName(List<Port<?>> ports) {
 		return stream().map(Port::name).reduce("Ports", (n1, n2) -> n1 + "_" + n2);
+	}
+	
+	private State<WorkflowState, Token> createState(String name) {
+		return state(name, this::areTokensInAllPorts, portsBehavior());
 	}
 }

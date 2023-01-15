@@ -21,7 +21,7 @@ public class InFlow implements Transitionable<WorkflowState, Token> {
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
 		Ports inPorts = new Ports(Collections.singletonList(inPort));
-		State<WorkflowState, Token> inPortsState = inPorts.asState();
+		State<WorkflowState, Token> inPortsState = inPorts.asOneState();
 		return transition(owningStatemachine.initialState(), inPortsState, this::addTokenToInPort);
 	}
 	

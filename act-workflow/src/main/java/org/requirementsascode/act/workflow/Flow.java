@@ -23,7 +23,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPorts.asState(), outPorts.asState(), this::transformAndMove);
+		return transition(inPorts.asOneState(), outPorts.asOneState(), this::transformAndMove);
 	}
 	
 	@Override

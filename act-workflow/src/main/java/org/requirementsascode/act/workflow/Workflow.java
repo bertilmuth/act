@@ -86,11 +86,11 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private Stream<State<WorkflowState, Token>> executableNodesInPortsStates(Actions actions, Flows flows) {
 		Stream<State<WorkflowState, Token>> inPortsStates = streamsOf(actions, flows)
 			.map(ExecutableNode::inPorts)
-			.map(Ports::asState);
+			.map(Ports::asOneState);
 		
 		Stream<State<WorkflowState, Token>> outPortsStates = streamsOf(actions, flows)
 				.map(ExecutableNode::outPorts)
-				.map(Ports::asState);
+				.map(Ports::asOneState);
 		
 		return concat(inPortsStates, outPortsStates);
 	}
