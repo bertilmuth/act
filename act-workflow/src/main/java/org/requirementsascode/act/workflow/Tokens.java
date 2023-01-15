@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
-import static java.util.Collections.emptySet;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.Collections;
@@ -8,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Tokens {
@@ -35,7 +35,7 @@ public class Tokens {
 			        Map.Entry::getValue,
 			        (v1, v2) -> { 
 			        	return Stream.concat(v1.stream(), v2.stream())
-			        		.collect(Collectors.toCollection(LinkedHashSet::new)); 
+			        		.collect(toCollection(LinkedHashSet::new)); 
 			        }));
 		
 		return new Tokens(mergedTokenMaps);
@@ -45,7 +45,7 @@ public class Tokens {
 		Map<Port<?>, Set<Token>> resultMap = new LinkedHashMap<>(asMap());
 		resultMap.replaceAll((key, value) -> value.stream()
 			.filter(t -> t.actionData().isPresent())
-		    .collect(Collectors.toCollection(LinkedHashSet::new)));
+		    .collect(toCollection(LinkedHashSet::new)));
 		return new Tokens(resultMap);
 	}
 
@@ -67,17 +67,19 @@ public class Tokens {
 	}
 	
 	private Map<Port<?>, Set<Token>> removeTokenFromMap(Port<?> port, Token tokenToBeRemoved) {
-		Set<Token> tokensWithTokenRemoved = tokensIn(port).filter(t -> !tokenToBeRemoved.equals(t)).collect(Collectors.toCollection(LinkedHashSet::new));
+		Set<Token> tokensWithTokenRemoved = tokensIn(port).filter(t -> !tokenToBeRemoved.equals(t)).collect(toCollection(LinkedHashSet::new));
 		Map<Port<?>, Set<Token>> newTokensMap = new LinkedHashMap<>(tokensMap);
 		newTokensMap.put(port, tokensWithTokenRemoved);
 		return newTokensMap;
 	}
 	
 	private Map<Port<?>, Set<Token>> addTokenToMap(Port<?> port, Map<Port<?>, Set<Token>> tokensMap, Token tokenToAdd) {
-		tokensMap.merge(port, new LinkedHashSet<>(Collections.singleton(tokenToAdd)), (oldValue, newValue) -> {
-			oldValue.addAll(newValue);
-			return oldValue;
-			});
+		tokensMap.merge(port, 
+			new LinkedHashSet<>(singleton(tokenToAdd)), 
+			(oldValue, newValue) -> {
+				oldValue.addAll(newValue);
+				return oldValue;
+				});
 		return tokensMap;
 	}
 	
