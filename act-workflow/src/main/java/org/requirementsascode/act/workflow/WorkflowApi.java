@@ -20,19 +20,17 @@ public class WorkflowApi {
 		return new Token(actionData);
 	}
 	
-	public static <T extends ActionData> Flow<T,T> flow(Port<T> inPort, Port<T> outPort) {		
-		return flow(inPort, outPort, (s,ad) -> ad);
-	}
-	
 	@SafeVarargs
 	public static Ports ports(Port<? extends ActionData>... ports) {
 		return new Ports(Arrays.asList(ports));
 	}
 	
+	public static <T extends ActionData> Flow<T,T> flow(Port<T> inPort, Port<T> outPort) {		
+		return flow(inPort, outPort, (s,ad) -> ad);
+	}
+	
 	public static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
-		Ports inPorts = ports(inPort);
-		Ports outPorts = ports(outPort);
-		return new Flow<>(inPorts, outPorts, actionFunction);
+		return flow(ports(inPort), ports(outPort), actionFunction);
 	}
 	
 	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {		

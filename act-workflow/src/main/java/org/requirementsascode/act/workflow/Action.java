@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import java.util.function.BiFunction;
 
@@ -12,13 +13,12 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	private final Flow<T,U> flow;
 
 	Action(String actionName, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.name = requireNonNull(actionName, "actionName must be non-null!");		
-		this.flow = WorkflowApi.flow(inPort, outPort, actionFunction);
+		this(actionName, ports(inPort), ports(outPort), actionFunction);
 	}
 	
 	Action(String actionName, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(actionName, "actionName must be non-null!");		
-		this.flow = WorkflowApi.flow(inPorts, outPorts, actionFunction);
+		this.flow = new Flow<>(inPorts, outPorts, actionFunction);
 	}
 
 	@Override
