@@ -8,7 +8,6 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
@@ -44,8 +43,12 @@ public class Port<T extends ActionData> implements Named {
 	}
 
 	public State<WorkflowState, Token> asState() {
-		
 		return state;
+	}
+	
+	private State<WorkflowState, Token> createState(String name) {
+		return state(name, this::areTokensInPort, 
+				inCase(this::tokenHasRightType, d -> data(d.state(), firstToken(d.state())), this::markForDeletion));
 	}
 	
 	private boolean areTokensInPort(WorkflowState state) {
@@ -72,11 +75,6 @@ public class Port<T extends ActionData> implements Named {
 		Token tokenMarkedForDeletion = token.replaceActionData(null);
 		WorkflowState newState = state.replaceToken(this, token, tokenMarkedForDeletion).state();
 		return data(newState);
-	}
-	
-	private State<WorkflowState, Token> createState(String name) {
-		return state(name, this::areTokensInPort, 
-				inCase(this::tokenHasRightType, Behavior.identity(), this::markForDeletion));
 	}
 
 	@Override

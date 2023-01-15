@@ -132,6 +132,7 @@ class WorkflowTest {
 		WorkflowState state = workflow.nextStep(afterAction1, new IntegerData(1));
 		
 		//assertEquals(2, action2i_Out.firstActionData(state).get());
+		System.out.println(state);
 		assertEquals(1, nrOfTokensInState(state));
 	}
 	
