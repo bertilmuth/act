@@ -98,8 +98,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	
 	private Stream<State<WorkflowState, Token>> inNodesPortStates(InFlows inFlows) {
 		Stream<State<WorkflowState, Token>> inPortsStates = inFlows.stream()
-			.map(InFlow::inPort)
-			.map(Port::asState);		
+			.map(InFlow::asState);		
 		return inPortsStates;
 	}
 

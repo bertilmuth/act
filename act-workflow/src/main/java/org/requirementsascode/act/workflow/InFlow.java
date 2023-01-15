@@ -1,7 +1,8 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.Collections;
 
@@ -12,21 +13,21 @@ import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class InFlow implements Transitionable<WorkflowState, Token> {
-	private final Port<?> inPort;
+	private Port<?> inPort;
+	private final State<WorkflowState, Token> state;
 
 	InFlow(Port<?> inPort) {
 		this.inPort = requireNonNull(inPort, "inPort must be non-null!");
+		this.state = new Ports(Collections.singletonList(inPort)).asOneState();
 	}
 	
-	public Port<?> inPort(){
-		return inPort;
+	State<WorkflowState, Token> asState(){
+		return state;
 	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		Ports inPorts = new Ports(Collections.singletonList(inPort));
-		State<WorkflowState, Token> inPortsState = inPorts.asOneState();
-		return transition(anyState(), inPortsState, this::addTokenToInPort);
+		return transition(anyState(), state, this::addTokenToInPort);
 	}
 	
 	private Data<WorkflowState, Token> addTokenToInPort(Data<WorkflowState, Token> data) {
