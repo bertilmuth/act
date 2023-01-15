@@ -1,6 +1,6 @@
 package org.requirementsascode.act.workflow;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.function.BiFunction;
 
 public class WorkflowApi {
@@ -20,9 +20,14 @@ public class WorkflowApi {
 		return flow(inPort, outPort, (s,ad) -> ad);
 	}
 	
+	@SafeVarargs
+	static Ports ports(Port<? extends ActionData>... ports) {
+		return new Ports(Arrays.asList(ports));
+	}
+	
 	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
-		Ports inPorts = new Ports(Collections.singletonList(inPort));
-		Ports outPorts = new Ports(Collections.singletonList(outPort));
+		Ports inPorts = ports(inPort);
+		Ports outPorts = ports(outPort);
 		return flow(inPorts, outPorts, actionFunction);
 	}
 	

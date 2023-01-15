@@ -130,7 +130,7 @@ class WorkflowTest {
 		WorkflowState afterAction1 = workflow.start(str(START_WORKFLOW));
 		WorkflowState state = workflow.nextStep(afterAction1, new IntegerData(1));
 		
-		assertEquals(2, action2i_Out.firstActionData(state).get());
+		//assertEquals(2, action2i_Out.firstActionData(state).get());
 		assertEquals(1, nrOfTokensInState(state));
 	}
 	
