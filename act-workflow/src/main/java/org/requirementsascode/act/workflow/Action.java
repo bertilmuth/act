@@ -15,6 +15,11 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 		this.name = requireNonNull(actionName, "actionName must be non-null!");		
 		this.flow = WorkflowApi.flow(inPort, outPort, actionFunction);
 	}
+	
+	Action(String actionName, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.name = requireNonNull(actionName, "actionName must be non-null!");		
+		this.flow = WorkflowApi.flow(inPorts, outPorts, actionFunction);
+	}
 
 	@Override
 	public String name() {

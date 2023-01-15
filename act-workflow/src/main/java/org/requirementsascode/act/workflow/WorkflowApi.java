@@ -12,6 +12,10 @@ public class WorkflowApi {
 		return new Action<>(actionName, inputPort, outputPort, actionFunction);
 	}
 	
+	public static <T extends ActionData, U extends ActionData> Action<T,U> action(String actionName, Ports inputPorts, Ports outputPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		return new Action<>(actionName, inputPorts, outputPorts, actionFunction);
+	}
+	
 	public static Token token(ActionData actionData) {
 		return new Token(actionData);
 	}
@@ -21,14 +25,14 @@ public class WorkflowApi {
 	}
 	
 	@SafeVarargs
-	static Ports ports(Port<? extends ActionData>... ports) {
+	public static Ports ports(Port<? extends ActionData>... ports) {
 		return new Ports(Arrays.asList(ports));
 	}
 	
-	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
+	public static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
 		Ports inPorts = ports(inPort);
 		Ports outPorts = ports(outPort);
-		return flow(inPorts, outPorts, actionFunction);
+		return new Flow<>(inPorts, outPorts, actionFunction);
 	}
 	
 	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {		

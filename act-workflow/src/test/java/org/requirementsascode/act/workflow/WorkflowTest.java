@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.requirementsascode.act.workflow.WorkflowApi.action;
 import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 import static org.requirementsascode.act.workflow.WorkflowApi.port;
+import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -113,7 +114,7 @@ class WorkflowTest {
 		Port<StringData> action2i_Str_In = port(ACTION2I_STR_IN, StringData.class);
 		Port<IntegerData> action2i_Int_In = port(ACTION2I_INT_IN, IntegerData.class);
 		Port<IntegerData> action2i_Out = port(ACTION2I_OUT, IntegerData.class);
-		Action<IntegerData, IntegerData> action2i = createAction2i(action2i_Int_In, action2i_Out);
+		Action<IntegerData, IntegerData> action2i = createAction2i(action2i_Str_In, action2i_Int_In, action2i_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2i)
@@ -245,8 +246,8 @@ class WorkflowTest {
 		return createAction(ACTION2B, inputPort, outputPort, this::action2bPerformed);
 	}
 	
-	private Action<IntegerData,IntegerData> createAction2i(Port<IntegerData> inputPort, Port<IntegerData> outputPort) {
-		return createAction(ACTION2I, inputPort, outputPort, this::action2iPerformed);
+	private Action<IntegerData,IntegerData> createAction2i(Port<StringData> strInputPort, Port<IntegerData> intInPort, Port<IntegerData> outputPort) {
+		return createAction(ACTION2I, ports(strInputPort, intInPort), ports(outputPort), this::action2iPerformed);
 	}
 	
 	private Action<StringData,StringData> createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
@@ -255,6 +256,10 @@ class WorkflowTest {
 	
 	private <T extends ActionData, U extends ActionData> Action<T,U> createAction(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
 		return action(actionName, inputPort, outputPort, actionFunction);
+	}
+	
+	private <T extends ActionData, U extends ActionData> Action<T,U> createAction(String actionName, Ports inputPorts, Ports outputPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(actionName, inputPorts, outputPorts, actionFunction);
 	}
 
 	private StringData str(String str) {
