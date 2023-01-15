@@ -2,13 +2,16 @@ package org.requirementsascode.act.workflow;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.requirementsascode.act.core.Data;
 
 public class Token {
+	private final UUID uuid;
 	private final ActionData actionData;
 
 	Token(ActionData actionData) {
+		this.uuid = UUID.randomUUID();
 		this.actionData = actionData;
 	}
 	
@@ -43,6 +46,6 @@ public class Token {
 		if (getClass() != obj.getClass())
 			return false;
 		Token other = (Token) obj;
-		return Objects.equals(actionData, other.actionData);
+		return Objects.equals(uuid, other.uuid);
 	}
 }
