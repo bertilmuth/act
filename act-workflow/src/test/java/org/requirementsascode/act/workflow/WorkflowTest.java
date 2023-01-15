@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -37,7 +38,8 @@ class WorkflowTest {
 	private static final String ACTION2B_IN = ACTION2B + _IN;
 	private static final String ACTION2B_OUT = ACTION2B + _OUT;
 	
-	private static final String ACTION2I_IN = ACTION2I + _IN;
+	private static final String ACTION2I_STR_IN = ACTION2I + "_Str" + _IN;
+	private static final String ACTION2I_INT_IN = ACTION2I + "_Int" + _IN;
 	private static final String ACTION2I_OUT = ACTION2I + _OUT;
 	
 	private static final String ACTION3_IN = ACTION3 + _IN;
@@ -101,37 +103,36 @@ class WorkflowTest {
 		assertEquals(1, nrOfTokensInState(state));
 	}
 	
-	/*@Test
+	@Test
 	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		ActionNode<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
+		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
 		
-		Port<IntegerData> action2i_In = port(ACTION2I_IN, IntegerData.class);
+		Port<StringData> action2i_Str_In = port(ACTION2I_STR_IN, StringData.class);
+		Port<IntegerData> action2i_Int_In = port(ACTION2I_INT_IN, IntegerData.class);
 		Port<IntegerData> action2i_Out = port(ACTION2I_OUT, IntegerData.class);
-		ActionNode<IntegerData, IntegerData> action2i = createAction2i(action2i_In, action2i_Out);
+		Action<IntegerData, IntegerData> action2i = createAction2i(action2i_Int_In, action2i_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2i)
 			.ports(
 				action1_In, action1_Out,
-				action2i_In, action2i_Out
+				action2i_Str_In, action2i_Int_In, action2i_Out
 			)
-			.inPorts(action1_In)
+			.inPorts(action1_In, action2i_Int_In)
 			.flows(
-				flow(action1_Out, action2i_In)
+				flow(action1_Out, action2i_Str_In)
 			)
 			.build();
 		
-		WorkflowState afterAction1State = workflow.start(str(START_WORKFLOW)).state();
-		Data<WorkflowState, Token> afterAction2i = workflow.nextStep(afterAction1State, new IntegerData(1));
-		WorkflowState state = afterAction2i.state();
+		WorkflowState afterAction1 = workflow.start(str(START_WORKFLOW));
+		WorkflowState state = workflow.nextStep(afterAction1, new IntegerData(1));
 		
-		//assertEquals(new IntegerData(2), afterAction2i.value().get());
-		//assertEquals(1, tokensList(state).size());
-		assertEquals(new IntegerData(2), actionDataIn(action2i, state));
-	}*/
+		assertEquals(2, action2i_Out.firstActionData(state).get());
+		assertEquals(1, nrOfTokensInState(state));
+	}
 	
 	@Test
 	void testStepAfterImplicitFork() {
