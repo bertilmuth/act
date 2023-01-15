@@ -17,6 +17,10 @@ public class InFlow implements Transitionable<WorkflowState, Token> {
 	InFlow(Port<?> inPort) {
 		this.inPort = requireNonNull(inPort, "inPort must be non-null!");
 	}
+	
+	public Port<?> inPort(){
+		return inPort;
+	}
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
