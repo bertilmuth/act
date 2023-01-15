@@ -51,7 +51,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 			transitionBehavior().andThen(
 				inCase(this::hasFired, 
 					inCase(this::isInToState, 
-						d -> toStateBehavior(d, sm), 
+						inCase(this::toStateEqualsFromState, identity(), toStateBehavior(sm)), 
 						this::errorIfNotInToState))));
 	}
 
@@ -59,12 +59,12 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		return toState().matchesStateIn(d);
 	}
 	
-	public Data<S, V0> toStateBehavior(Data<S, V0> d, Statemachine<S, V0> sm) {
-		return inCase(this::toStateEqualsFromState, identity(), toState().asBehavior(sm)).actOn(d);
-	}
-	
 	private boolean toStateEqualsFromState(Data<S,V0> data) {
 		return toState().equals(fromState());
+	}
+	
+	private Behavior<S, V0, V0> toStateBehavior(Statemachine<S, V0> sm) {
+		return d -> toState().asBehavior(sm).actOn(d);
 	}
 
 	private boolean hasFired(Data<?, ?> data) {
