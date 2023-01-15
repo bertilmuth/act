@@ -13,10 +13,12 @@ import org.requirementsascode.act.statemachine.Statemachine;
 public class Ports implements Named{
 	private final List<Port<?>> ports;
 	private final String name;
+	private State<WorkflowState, Token> state;
 
 	Ports(List<Port<?>> ports) {
 		this.ports = requireNonNull(ports, "ports must be non-null!");
 		this.name = createName(ports);
+		this.state = state(name, this::areTokensInAllPorts, portsBehavior());
 	}
 
 	public Stream<Port<?>> stream() {
@@ -29,7 +31,7 @@ public class Ports implements Named{
 	}
 	
 	State<WorkflowState, Token> asState() {
-		return state(name(), this::areTokensInAllPorts, portsBehavior());
+		return state;
 	}
 	
 	Stream<State<WorkflowState, Token>> asStates() {
