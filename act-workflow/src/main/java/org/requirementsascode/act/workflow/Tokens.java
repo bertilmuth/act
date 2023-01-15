@@ -5,7 +5,7 @@ import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +15,7 @@ public class Tokens {
 	private final Map<Port<?>, Set<Token>> tokensMap;
 	
 	Tokens(Map<Port<?>, Set<Token>> tokensMap) {
-		this.tokensMap = new LinkedHashMap<>(tokensMap);
+		this.tokensMap = new HashMap<>(tokensMap);
 	}
 	
 	public Map<Port<?>, Set<Token>> asMap() {
@@ -42,7 +42,7 @@ public class Tokens {
 	}
 	
 	Tokens removeDirtyTokens() {
-		Map<Port<?>, Set<Token>> resultMap = new LinkedHashMap<>(asMap());
+		Map<Port<?>, Set<Token>> resultMap = new HashMap<>(asMap());
 		resultMap.replaceAll((key, value) -> value.stream()
 			.filter(t -> t.actionData().isPresent())
 		    .collect(toCollection(LinkedHashSet::new)));
@@ -50,7 +50,7 @@ public class Tokens {
 	}
 
 	Tokens addToken(Port<?> port, Token token) {
-		Map<Port<?>, Set<Token>> newTokensMap = new LinkedHashMap<>(tokensMap);
+		Map<Port<?>, Set<Token>> newTokensMap = new HashMap<>(tokensMap);
 		Map<Port<?>, Set<Token>> mapWithTokenAdded = addTokenToMap(port, newTokensMap, token);
 		return new Tokens(mapWithTokenAdded);
 	}
@@ -68,7 +68,7 @@ public class Tokens {
 	
 	private Map<Port<?>, Set<Token>> removeTokenFromMap(Port<?> port, Token tokenToBeRemoved) {
 		Set<Token> tokensWithTokenRemoved = tokensIn(port).filter(t -> !tokenToBeRemoved.equals(t)).collect(toCollection(LinkedHashSet::new));
-		Map<Port<?>, Set<Token>> newTokensMap = new LinkedHashMap<>(tokensMap);
+		Map<Port<?>, Set<Token>> newTokensMap = new HashMap<>(tokensMap);
 		newTokensMap.put(port, tokensWithTokenRemoved);
 		return newTokensMap;
 	}
