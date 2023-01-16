@@ -46,7 +46,7 @@ class WorkflowTest {
 	private static final String ACTION3_IN = ACTION3 + _IN;
 	private static final String ACTION3_OUT = ACTION3 + _OUT;
 	
-	@Test
+	/*@Test
 	void runningEmptyWorkflowDoesNothing() {
 		Workflow workflow = Workflow.builder()
 			.actions()
@@ -57,7 +57,7 @@ class WorkflowTest {
 		
 		WorkflowState state = workflow.start(str(""));
 		assertEquals(0, nrOfTokensInState(state));
-	}
+	}*/
 	
 	@Test
 	void runsSingleAction() {
@@ -72,7 +72,7 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		WorkflowState state = workflow.start(str(START_WORKFLOW));
+		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));
 		assertEquals(str(ACTION1), action1_Out.firstActionData(state).get());
 	}
 	
@@ -98,7 +98,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(str(START_WORKFLOW));
+		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));
 		
 		assertEquals(str(ACTION1 + "." + ACTION2), action2_Out.firstActionData(state).get());
 		assertEquals(1, nrOfTokensInState(state));
@@ -127,8 +127,8 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1 = workflow.start(str(START_WORKFLOW));
-		WorkflowState state = workflow.nextStep(afterAction1, new IntegerData(1));
+		WorkflowState afterAction1 = workflow.start(action1_In, str(START_WORKFLOW));
+		WorkflowState state = workflow.nextStep(afterAction1, action2i_Int_In, new IntegerData(1));
 		
 		//assertEquals(2, action2i_Out.firstActionData(state).get());
 		assertEquals(1, nrOfTokensInState(state));
@@ -162,7 +162,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(str(START_WORKFLOW));	
+		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));	
 
 		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state).get());
 		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state).get());
@@ -204,29 +204,12 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(str(START_WORKFLOW));	
+		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));	
 
 		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
 		assertEquals(str(ACTION3), tokensInAction3Out.get(1));
 		assertEquals(2, nrOfTokensInState(state));
-	}
-	
-	@Test
-	void doesntRunActionForUnknownData() {
-		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
-		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
-		
-		Workflow workflow = Workflow.builder()
-			.actions(action1)
-			.ports(action1_In, action1_Out)
-			.inPorts(action1_In)
-			.flows()
-			.build();
-		
-		WorkflowState state = workflow.start(new UnknownData());
-		assertEquals(0, nrOfTokensInState(state));
 	}
 	
 	private Action<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
