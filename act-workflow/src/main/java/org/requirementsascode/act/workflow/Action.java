@@ -12,11 +12,11 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	private String name;
 	private final Flow<T,U> flow;
 
-	Action(String actionName, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		this(actionName, ports(inPort), ports(outPort), actionFunction);
+	Action(String actionName, Class<T> actionType, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		this(actionName, actionType, ports(inPort), ports(outPort), actionFunction);
 	}
 	
-	Action(String actionName, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+	Action(String actionName, Class<T> actionType, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(actionName, "actionName must be non-null!");		
 		this.flow = new Flow<>(inPorts, outPorts, actionFunction);
 	}

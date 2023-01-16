@@ -232,35 +232,35 @@ class WorkflowTest {
 	}
 	
 	private Action<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return createAction(ACTION1, inputPort, outputPort, this::action1Performed);
+		return createAction(ACTION1, StringData.class, inputPort, outputPort, this::action1Performed);
 	}
 	
 	private Action<StringData,StringData> createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return createAction(ACTION2, inputPort, outputPort, this::action2Performed);
+		return createAction(ACTION2, StringData.class, inputPort, outputPort, this::action2Performed);
 	}
 	
 	private Action<StringData,StringData> createAction2a(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return createAction(ACTION2A, inputPort, outputPort, this::action2aPerformed);
+		return createAction(ACTION2A, StringData.class, inputPort, outputPort, this::action2aPerformed);
 	}
 	
 	private Action<StringData,StringData> createAction2b(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return createAction(ACTION2B, inputPort, outputPort, this::action2bPerformed);
+		return createAction(ACTION2B, StringData.class, inputPort, outputPort, this::action2bPerformed);
 	}
 	
 	private Action<IntegerData,IntegerData> createAction2i(Port<StringData> strInputPort, Port<IntegerData> intInPort, Port<IntegerData> outputPort) {
-		return createAction(ACTION2I, ports(strInputPort, intInPort), ports(outputPort), this::action2iPerformed);
+		return createAction(ACTION2I, IntegerData.class, ports(strInputPort, intInPort), ports(outputPort), this::action2iPerformed);
 	}
 	
 	private Action<StringData,StringData> createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return createAction(ACTION3, inputPort, outputPort, this::action3Performed);
+		return createAction(ACTION3, StringData.class, inputPort, outputPort, this::action3Performed);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Action<T,U> createAction(String actionName, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		return action(actionName, inputPort, outputPort, actionFunction);
+	private <T extends ActionData, U extends ActionData> Action<T,U> createAction(String actionName, Class<T> actionType, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(actionName, actionType, inputPort, outputPort, actionFunction);
 	}
 	
-	private <T extends ActionData, U extends ActionData> Action<T,U> createAction(String actionName, Ports inputPorts, Ports outputPorts, BiFunction<WorkflowState, T, U> actionFunction) {
-		return action(actionName, inputPorts, outputPorts, actionFunction);
+	private <T extends ActionData, U extends ActionData> Action<T,U> createAction(String actionName, Class<T> actionType, Ports inputPorts, Ports outputPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		return action(actionName, actionType, inputPorts, outputPorts, actionFunction);
 	}
 
 	private StringData str(String str) {
