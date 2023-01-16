@@ -1,6 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.stream.Stream.concat;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.Collections;
@@ -36,7 +37,15 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	
 	public <T extends ActionData> WorkflowState enterData(WorkflowState state, Port<T> inPort, T actionData) {
 		Data<WorkflowState, Token> dataWithToken = state.addToken(inPort, token(actionData));
-		return actOn(dataWithToken).state();
+		return nextStep(dataWithToken.state());
+	}
+	
+	public WorkflowState nextStep(WorkflowState state) {
+		return runStep(state).state();
+	}
+
+	private Data<WorkflowState, Token> runStep(WorkflowState state) {
+		return actOn(data(state));
 	}
 	
 	public Flows dataFlows() {
