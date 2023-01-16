@@ -12,13 +12,17 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	private String name;
 	private final Flow<T,U> flow;
 
-	Action(String actionName, Class<T> actionType, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		this(actionName, actionType, ports(inPort), ports(outPort), actionFunction);
+	Action(String actionName, Class<T> inputType, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
+		this(actionName, inputType, ports(inPort), ports(outPort), actionFunction);
 	}
 	
-	Action(String actionName, Class<T> actionType, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.name = requireNonNull(actionName, "actionName must be non-null!");		
-		this.flow = new Flow<>(inPorts, outPorts, actionFunction);
+	Action(String actionName, Class<T> inputType, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.name = requireNonNull(actionName, "actionName must be non-null!");	
+		requireNonNull(inputType, "inputType must be non-null!");	
+		requireNonNull(inPorts, "inPorts must be non-null!");	
+		requireNonNull(outPorts, "outPorts must be non-null!");	
+		requireNonNull(actionFunction, "actionFunction must be non-null!");	
+		this.flow = new Flow<>(inputType, inPorts, outPorts, actionFunction);
 	}
 
 	@Override

@@ -11,11 +11,13 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class Flow<T extends ActionData, U extends ActionData> implements ExecutableNode{
+	private final Class<T> dataType;
 	private final Ports inPorts;
 	private final Ports outPorts;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	Flow(Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+	Flow(Class<T> dataType, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.dataType = requireNonNull(dataType, "actionType must be non-null!");
 		this.inPorts = requireNonNull(inPorts, "inPorts must be non-null!");
 		this.outPorts = requireNonNull(outPorts, "outPorts must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");

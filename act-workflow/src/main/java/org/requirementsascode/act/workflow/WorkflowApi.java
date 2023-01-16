@@ -26,14 +26,14 @@ public class WorkflowApi {
 	}
 	
 	public static <T extends ActionData> Flow<T,T> flow(Port<T> inPort, Port<T> outPort) {		
-		return flow(inPort, outPort, (s,ad) -> ad);
+		return flow(inPort.type(), inPort, outPort, (s,ad) -> ad);
 	}
 	
-	public static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
-		return flow(ports(inPort), ports(outPort), actionFunction);
+	public static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Class<T> dataType, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {		
+		return flow(dataType, ports(inPort), ports(outPort), actionFunction);
 	}
 	
-	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {		
-		return new Flow<>(inPorts, outPorts, actionFunction);
+	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Class<T> dataType, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {		
+		return new Flow<>(dataType, inPorts, outPorts, actionFunction);
 	}
 }
