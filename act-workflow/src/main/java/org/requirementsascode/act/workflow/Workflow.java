@@ -36,8 +36,8 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public <T extends ActionData> WorkflowState nextStep(WorkflowState state, Port<T> inPort, T actionData) {
-		Data<WorkflowState, Token> tokenizedData = tokenize(state, actionData);
-		return actOn(tokenizedData).state();
+		Data<WorkflowState, Token> dataWithToken = state.addToken(inPort, token(actionData));
+		return actOn(dataWithToken).state();
 	}
 	
 	public Flows dataFlows() {
@@ -51,10 +51,6 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState,Token> inputData) {
 		return statemachine.actOn(inputData);
-	}
-	
-	private Data<WorkflowState, Token> tokenize(WorkflowState state, ActionData actionData) {
-		return data(state, token(actionData));
 	}
 	
 	static Workflow create(Actions actions, Ports ports, Flows dataFlows, InFlows inFlows){
