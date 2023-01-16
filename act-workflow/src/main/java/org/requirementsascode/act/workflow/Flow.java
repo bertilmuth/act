@@ -1,11 +1,12 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.function.BiFunction;
 
+import static org.requirementsascode.act.core.InCase.inCase;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
@@ -25,7 +26,13 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPorts.asOneState(), outPorts.asOneState(), this::transformAndMove);
+		return transition(inPorts.asOneState(), outPorts.asOneState(), 
+			inCase(this::tokenHasRightType,this::transformAndMove));
+	}
+	
+	private boolean tokenHasRightType(Data<WorkflowState, Token> inputData) {
+		Class<? extends ActionData> inputDataType = ActionData.from(inputData).getClass();
+		return dataType.isAssignableFrom(inputDataType);
 	}
 	
 	@Override
