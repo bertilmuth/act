@@ -30,7 +30,10 @@ public class Ports implements Named{
 	}
 	
 	public Optional<ActionData> firstActionData(WorkflowState state) {
-		return stream().flatMap(p -> p.firstActionData(state).stream()).findFirst();
+		return stream()
+			.filter(state::areTokensIn)
+			.map(p -> p.firstActionData(state).get())
+			.findFirst();
 	}
 	
 	State<WorkflowState, Token> asOneState() {

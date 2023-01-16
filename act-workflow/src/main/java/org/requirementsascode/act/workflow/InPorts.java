@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InFlows{
+public class InPorts{
 	private final List<InFlow> inFlows;
 
-	InFlows(List<Port<?>> inPorts) {
+	InPorts(List<Port<?>> inPorts) {
 		requireNonNull(inPorts, "inPorts must be non-null!");
 		this.inFlows = createInFlowsFrom(inPorts);
 	}

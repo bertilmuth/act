@@ -59,15 +59,15 @@ public class WorkflowBuilder {
 				private FlowsBuilder(){}
 				
 				public final Workflow build() {
-					return Workflow.create(actions(), ports(), flows(), inFlows());
-				}
-
-				private InFlows inFlows() {
-					return new InFlows(builderInPorts);
+					return Workflow.create(actions(), ports(), flows(), inPorts());
 				}
 				
 				private Ports ports() {
 					return new Ports(builderPorts);
+				}
+				
+				private Ports inPorts() {
+					return new Ports(builderInPorts);
 				}
 
 				private Flows flows() {

@@ -1,7 +1,6 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.stream.Stream.concat;
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.Collections;
@@ -17,9 +16,9 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	private final Flows flows;
 	private final Statemachine<WorkflowState, Token> statemachine;
 	
-	private Workflow(Actions actions, Ports ports, Flows flows, InFlows inFlows) {
+	private Workflow(Actions actions, Ports ports, Flows flows, Ports inPorts) {
 		this.flows = flows;
-		this.statemachine = statemachineWith(actions, ports, flows, inFlows);		
+		this.statemachine = statemachineWith(actions, ports, flows, inPorts);		
 	}
 
 	public final static WorkflowBuilder builder() {
@@ -53,20 +52,19 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return statemachine.actOn(inputData);
 	}
 	
-	static Workflow create(Actions actions, Ports ports, Flows dataFlows, InFlows inFlows){
-		return new Workflow(actions, ports, dataFlows, inFlows);
+	static Workflow create(Actions actions, Ports ports, Flows flows, Ports inPorts){
+		return new Workflow(actions, ports, flows, inPorts);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Statemachine<WorkflowState, Token> statemachineWith(Actions actions, Ports ports, Flows flows,
-			InFlows inFlows) {
+	private Statemachine<WorkflowState, Token> statemachineWith(Actions actions, Ports ports, Flows flows, Ports inPorts) {
 		
-		Transitionable[] transitionables = concat(inFlows.stream(), streamsOf(actions, flows))
+		Transitionable[] transitionables = concat(inPorts.stream(), streamsOf(actions, flows))
 			.toArray(Transitionable[]::new);
 		
 		State[] states = concat(
 			concat(ports.asStates(), executableNodesPortsStates(actions, flows)),
-			inNodesPortStates(inFlows))
+			inPorts.asStates())
 			.toArray(State[]::new);
 		
 		Statemachine<WorkflowState, Token> statemachine = 
@@ -90,12 +88,6 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 				.map(Ports::asOneState);
 		
 		return concat(inPortsStates, outPortsStates);
-	}
-	
-	private Stream<State<WorkflowState, Token>> inNodesPortStates(InFlows inFlows) {
-		Stream<State<WorkflowState, Token>> inPortsStates = inFlows.stream()
-			.map(InFlow::asState);		
-		return inPortsStates;
 	}
 
 	private Stream<ExecutableNode> streamsOf(Actions actions, Flows flows) {
