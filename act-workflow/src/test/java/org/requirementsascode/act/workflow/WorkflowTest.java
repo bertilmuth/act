@@ -72,7 +72,7 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));
+		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
 		assertEquals(str(ACTION1), action1_Out.firstActionData(state).get());
 	}
 	
@@ -98,7 +98,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));
+		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
 		
 		assertEquals(str(ACTION1 + "." + ACTION2), action2_Out.firstActionData(state).get());
 		assertEquals(1, nrOfTokensInState(state));
@@ -127,8 +127,8 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1 = workflow.start(action1_In, str(START_WORKFLOW));
-		WorkflowState state = workflow.enterActionData(afterAction1, action2i_Int_In, new IntegerData(1));
+		WorkflowState afterAction1 = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
+		WorkflowState state = workflow.enterData(afterAction1, action2i_Int_In, new IntegerData(1));
 		
 		//assertEquals(2, action2i_Out.firstActionData(state).get());
 		assertEquals(1, nrOfTokensInState(state));
@@ -162,7 +162,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));	
+		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
 
 		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state).get());
 		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state).get());
@@ -204,7 +204,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.start(action1_In, str(START_WORKFLOW));	
+		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
 
 		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
