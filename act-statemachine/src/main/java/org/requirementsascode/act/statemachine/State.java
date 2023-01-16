@@ -57,7 +57,7 @@ public class State<S, V> implements Behavioral<S, V> {
 	}
 
 	private Behavior<S, V, V> transitionsBehavior(Statemachine<S, V> sm) {
-		return sm.outgoingTransitions(this).asBehavior(sm);
+		return sm.transitions().asBehavior(sm);
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
