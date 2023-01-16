@@ -99,7 +99,7 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState state1 = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
-		WorkflowState state2 = workflow.run(state1);
+		WorkflowState state2 = workflow.next(state1);
 		
 		assertEquals(str(ACTION1 + "." + ACTION2), action2_Out.firstActionData(state2).get());
 		assertEquals(1, nrOfTokensInState(state2));
@@ -131,7 +131,7 @@ class WorkflowTest {
 		WorkflowState afterAction1 = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
 		WorkflowState state = workflow.enterData(afterAction1, action2i_Int_In, new IntegerData(1));
 		
-		//assertEquals(2, action2i_Out.firstActionData(state).get());
+		assertEquals(2, action2i_Out.firstActionData(state).get().integer);
 		assertEquals(1, nrOfTokensInState(state));
 	}
 	

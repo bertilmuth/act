@@ -29,7 +29,7 @@ public class Ports implements Named{
 		return name;
 	}
 	
-	public Optional<ActionData> firstActionData(WorkflowState state) {
+	public Optional<? extends ActionData> firstActionData(WorkflowState state) {
 		return stream()
 			.filter(state::areTokensIn)
 			.map(p -> p.firstActionData(state).get())

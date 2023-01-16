@@ -1,7 +1,6 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
@@ -13,13 +12,13 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class Flow<T extends ActionData, U extends ActionData> implements ExecutableNode{
-	private final Class<T> actionDataType;
+	private final Class<T> type;
 	private final Ports inPorts;
 	private final Ports outPorts;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	Flow(Class<T> actionDataType, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
-		this.actionDataType = requireNonNull(actionDataType, "actionDataType must be non-null!");
+	Flow(Class<T> type, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.type = requireNonNull(type, "type must be non-null!");
 		this.inPorts = requireNonNull(inPorts, "inPorts must be non-null!");
 		this.outPorts = requireNonNull(outPorts, "outPorts must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
@@ -37,29 +36,24 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPorts.asOneState(), outPorts.asOneState(), 
-			inCase(this::tokenHasRightType,this::transformAndMove));
-	}
-	
-	private boolean tokenHasRightType(Data<WorkflowState, Token> inData) {
-		Class<?> inActionDataType = firstInActionDataType(inData);
-		return actionDataType.isAssignableFrom(inActionDataType);
-	}
-
-	private ActionData firstInActionData(Data<WorkflowState, Token> inData) {
-		return inPorts().firstActionData(inData.state())
-			.orElseThrow(() -> new RuntimeException("Unexpected error: no action data present in input ports of " + this + "!"));
-	}
-	
-	private Class<? extends ActionData> firstInActionDataType(Data<WorkflowState, Token> inData) {
-		return firstInActionData(inData).getClass();
+		return transition(inPorts.asOneState(), outPorts.asOneState(), this::transformAndMove);
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
+		ActionData actionData = firstActionDataOfType(inputData.state(), type);
+
 		WorkflowState stateAfterRemoval = removeTokenFromInputPorts(inPorts(), inputData.state());
-		Data<WorkflowState, Token> functionOutputData = transform(stateAfterRemoval, firstInActionData(inputData));
+		Data<WorkflowState, Token> functionOutputData = transform(stateAfterRemoval, actionData);
 		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts, functionOutputData);
 		return outputData;
+	}
+	
+	private ActionData firstActionDataOfType(WorkflowState state, Class<T> actionDataType) {		
+		return inPorts().stream()
+			.flatMap(p -> p.allActionData(state))
+			.filter(actionData -> actionDataType.isAssignableFrom(actionData.getClass()))
+			.findFirst()
+			.orElseThrow(() -> new RuntimeException("Unexpected error: no action data present in input ports of " + this + "!"));
 	}
 	
 	private WorkflowState removeTokenFromInputPorts(Ports inputPorts, WorkflowState state) {
