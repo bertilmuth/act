@@ -63,4 +63,9 @@ public class Ports implements Named{
 	private State<WorkflowState, Token> createState(String name) {
 		return state(name, this::areTokensInAllPorts, portsBehavior());
 	}
+	
+	@Override
+	public String toString() {
+		return name();
+	}
 }
