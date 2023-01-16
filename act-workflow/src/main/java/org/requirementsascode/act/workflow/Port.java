@@ -48,12 +48,17 @@ public class Port<T extends ActionData> implements Named {
 	
 	private State<WorkflowState, Token> createState(String name) {
 		return state(name, this::areTokensInPort, 
-				inCase(this::firstTokenHasRightType, d -> data(d.state(), firstToken(d.state())), this::markForDeletion));
+				inCase(this::firstTokenHasWrongType, this::markForDeletion));
+	}
+	
+	private boolean firstTokenHasWrongType(Data<WorkflowState, Token> data) {
+		Optional<Class<?>> firstTokenType = typeOfFirstToken(data.state());
+		boolean tokenHasRightType = firstTokenType.map(type::isAssignableFrom).orElse(false);
+		return !tokenHasRightType;
 	}
 	
 	private boolean areTokensInPort(WorkflowState state) {
-		boolean result = state.areTokensIn(this);
-		return result;
+		return state.areTokensIn(this);
 	}
 	
 	private Token firstToken(WorkflowState state) {
@@ -62,11 +67,6 @@ public class Port<T extends ActionData> implements Named {
 	
 	private Optional<Class<?>> typeOfFirstToken(WorkflowState state) {
 		return firstToken(state).actionData().map(ActionData::getClass);
-	}
-	
-	private boolean firstTokenHasRightType(Data<WorkflowState, Token> data) {
-		Optional<Class<?>> firstTokenType = typeOfFirstToken(data.state());
-		return firstTokenType.map(type::isAssignableFrom).orElse(false);
 	}
 	
 	private Data<WorkflowState, Token> markForDeletion(Data<WorkflowState, Token> inputData) {

@@ -6,9 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
-import org.requirementsascode.act.statemachine.Statemachine;
 
 public class Ports implements Named{
 	private final List<Port<?>> ports;
@@ -38,13 +36,8 @@ public class Ports implements Named{
 		return this.stream().map(Port::asState);
 	}
 	
-	private Behavior<WorkflowState, Token, Token> portsBehavior(){
-		@SuppressWarnings("unchecked")
-		State<WorkflowState,Token>[] statesArray = asStates().toArray(State[]::new);
-		return Statemachine.builder()
-			.states(statesArray)
-			.transitions()
-			.build();
+	private State<WorkflowState, Token> createState(String name) {
+		return state(name, this::areTokensInAllPorts);
 	}
 	
 	private boolean areTokensInAllPorts(WorkflowState state) {
@@ -52,16 +45,11 @@ public class Ports implements Named{
 			.map(State::invariant)
 			.filter(p -> p.test(state))
 			.count();
-		boolean result = nrOfActivePorts == ports.size();
-		return result;
+		return nrOfActivePorts == ports.size();
 	}
 	
 	private String createName(List<Port<?>> ports) {
 		return stream().map(Port::name).reduce("Ports", (n1, n2) -> n1 + "_" + n2);
-	}
-	
-	private State<WorkflowState, Token> createState(String name) {
-		return state(name, this::areTokensInAllPorts, portsBehavior());
 	}
 	
 	@Override
