@@ -1,12 +1,13 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.core.InCase.inCase;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 
-import static org.requirementsascode.act.core.InCase.inCase;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
@@ -31,7 +32,9 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	}
 	
 	private boolean tokenHasRightType(Data<WorkflowState, Token> inputData) {
-		Class<? extends ActionData> inputDataType = ActionData.from(inputData).getClass();
+		Optional<ActionData> firstInActionData = inPorts().firstActionData(inputData.state());
+		Class<?> inputDataType = firstInActionData.map(ActionData::getClass)
+			.orElseThrow(() -> new RuntimeException("Unexpected error: no token present in input ports of " + this + "!"));
 		return dataType.isAssignableFrom(inputDataType);
 	}
 	

@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.statemachine.State;
@@ -26,6 +27,10 @@ public class Ports implements Named{
 	@Override
 	public String name() {
 		return name;
+	}
+	
+	public Optional<ActionData> firstActionData(WorkflowState state) {
+		return stream().flatMap(p -> p.firstActionData(state).stream()).findFirst();
 	}
 	
 	State<WorkflowState, Token> asOneState() {
