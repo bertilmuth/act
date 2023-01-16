@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
