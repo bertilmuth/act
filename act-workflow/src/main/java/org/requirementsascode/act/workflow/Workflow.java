@@ -59,11 +59,10 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Statemachine<WorkflowState, Token> statemachineWith(Actions actions, Ports ports, Flows flows, Ports inPorts) {
 		
-		Transitionable[] transitionables = concat(inPorts.stream(), streamsOf(actions, flows))
-			.toArray(Transitionable[]::new);
+		Transitionable[] transitionables = streamsOf(actions, flows).toArray(Transitionable[]::new);
 		
 		State[] states = concat(
-			concat(ports.asStates(), executableNodesPortsStates(actions, flows)),
+			concat(ports.asStates(), inOutPortsStates(actions, flows)),
 			inPorts.asStates())
 			.toArray(State[]::new);
 		
@@ -78,7 +77,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return statemachine;
 	}
 
-	private Stream<State<WorkflowState, Token>> executableNodesPortsStates(Actions actions, Flows flows) {
+	private Stream<State<WorkflowState, Token>> inOutPortsStates(Actions actions, Flows flows) {
 		Stream<State<WorkflowState, Token>> inPortsStates = streamsOf(actions, flows)
 			.map(ExecutableNode::inPorts)
 			.map(Ports::asOneState);
