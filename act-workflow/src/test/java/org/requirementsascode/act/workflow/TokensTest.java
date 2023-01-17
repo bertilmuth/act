@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class TokensTest {
-	private static final String TESTING_PORT1 = "TestingPort";
+	private static final String PORT1 = "TestingPort";
 	
 	private static final Token TOKEN_1 = token(new StringData("Token1"));
 	
@@ -25,22 +25,22 @@ class TokensTest {
 	
 	@Test
 	void unionOfEmptyTokensWithOneToken() {
-		Tokens union = emptyTokens().union(oneToken());
-		assertEquals(oneToken(), union);
+		Tokens union = emptyTokens().union(token1());
+		assertEquals(token1(), union);
 	}
 	
 	@Test
 	void unionOfOneTokenWithEmptyTokens() {
-		Tokens union = oneToken().union(emptyTokens());
-		assertEquals(oneToken(), union);
+		Tokens union = token1().union(emptyTokens());
+		assertEquals(token1(), union);
 	}
 	
 	private Tokens emptyTokens() {
 		return new Tokens(emptyMap());
 	}
 
-	private Tokens oneToken() {
-		Port<?> port1 = port(TESTING_PORT1, ActionData.class);
+	private Tokens token1() {
+		Port<?> port1 = port(PORT1, ActionData.class);
 		HashMap<Port<?>, Set<Token>> oneTokenMap = new HashMap<>();
 		oneTokenMap.put(port1, singleton(TOKEN_1));
 		return new Tokens(oneTokenMap);
