@@ -89,7 +89,7 @@ class TokensTest {
 	}
 	
 	@Test
-	void twoTokensMinusTokenIsOmeToken() {
+	void twoTokensMinusTokenIsOneToken() {
 		Tokens twoTokens = token1().union(token2());
 		Tokens diff = twoTokens.minus(token1());
 		assertEquals(token2(), diff);
