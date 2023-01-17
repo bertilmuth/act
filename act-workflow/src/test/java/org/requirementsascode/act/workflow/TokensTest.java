@@ -78,6 +78,8 @@ class TokensTest {
 	
 	@Test
 	void oneTokenMinusOneTokenIsEmpty() {
+		Tokens diff = token1().minus(token1());
+		assertEquals(emptyTokens(), diff);
 	}
 	
 	private Tokens emptyTokens() {

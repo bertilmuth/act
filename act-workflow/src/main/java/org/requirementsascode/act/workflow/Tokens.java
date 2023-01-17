@@ -51,7 +51,7 @@ public class Tokens {
 			minusTokens.merge(key, value, (minusTkns, tkns) -> {
 				Set<Token> tknsMinusTkns = new HashSet<>(tkns);
 				tknsMinusTkns.removeAll(minusTkns);
-		        return tknsMinusTkns;
+		        return tknsMinusTkns.isEmpty()? null : tknsMinusTkns;
 		    })
 		);
 		return new Tokens(minusTokens);
