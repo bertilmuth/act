@@ -17,42 +17,42 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class TokensTest {
-	private static final String PORT1 = "TestingPort1";
-	private static final String PORT2 = "TestingPort2";
+	private static final String PORT_1 = "TestingPort1";
+	private static final String PORT_2 = "TestingPort2";
 	
 	private static final Token TOKEN_1 = token(new StringData("Token1"));
 	private static final Token TOKEN_2 = token(new StringData("Token2"));
 	
 	@Test
 	void unionOfEmptyTokensIsEmpty() {
-		Tokens union = emptyTokens().union(emptyTokens());
-		assertTrue(union.asMap().entrySet().isEmpty());
+		Tokens unifiedTokens = emptyTokens().union(emptyTokens());
+		assertTrue(unifiedTokens.asMap().entrySet().isEmpty());
 	}
 	
 	@Test
 	void unionOfEmptyTokensWithOneToken() {
-		Tokens union = emptyTokens().union(token1());
-		assertEquals(token1(), union);
+		Tokens unifiedTokens = emptyTokens().union(token1());
+		assertEquals(token1(), unifiedTokens);
 	}
 	
 	@Test
 	void unionOfOneTokenWithEmptyTokens() {
-		Tokens union = token1().union(emptyTokens());
-		assertEquals(token1(), union);
+		Tokens unifiedTokens = token1().union(emptyTokens());
+		assertEquals(token1(), unifiedTokens);
 	}
 	
 	@Test
 	void unionOfOneTokenWithItselfIsTheToken() {
-		Tokens union = token1().union(token1());
-		assertEquals(token1(), union);
+		Tokens unifiedTokens = token1().union(token1());
+		assertEquals(token1(), unifiedTokens);
 	}
 	
 	@Test
 	void unionOfTwoTokens() {
-		Tokens union = token1().union(token2());
+		Tokens unifiedTokens = token1().union(token2());
 		
-		List<Token> unifiedTokens = asTokenList(union);
-		assertEquals(asList(TOKEN_1, TOKEN_2), unifiedTokens);
+		List<Token> unifiedTokensList = asTokenList(unifiedTokens);
+		assertEquals(asList(TOKEN_1, TOKEN_2), unifiedTokensList);
 	}
 	
 	private Tokens emptyTokens() {
@@ -60,14 +60,14 @@ class TokensTest {
 	}
 
 	private Tokens token1() {
-		Port<?> port1 = port(PORT1, ActionData.class);
+		Port<?> port1 = port(PORT_1, ActionData.class);
 		HashMap<Port<?>, Set<Token>> oneTokenMap = new HashMap<>();
 		oneTokenMap.put(port1, singleton(TOKEN_1));
 		return new Tokens(oneTokenMap);
 	}
 	
 	private Tokens token2() {
-		Port<?> port1 = port(PORT2, ActionData.class);
+		Port<?> port1 = port(PORT_2, ActionData.class);
 		HashMap<Port<?>, Set<Token>> oneTokenMap = new HashMap<>();
 		oneTokenMap.put(port1, singleton(TOKEN_2));
 		return new Tokens(oneTokenMap);
