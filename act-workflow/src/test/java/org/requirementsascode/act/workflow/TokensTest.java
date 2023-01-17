@@ -17,11 +17,14 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class TokensTest {
-	private static final String PORT_1 = "TestingPort1";
-	private static final String PORT_2 = "TestingPort2";
+	private static final String PORT_1 = "Port_1";
+	private static final String PORT_2 = "Port_2";
+	private static final String PORT_3 = "Port_3";
 	
-	private static final Token TOKEN_1 = token(new StringData("Token1"));
-	private static final Token TOKEN_2 = token(new StringData("Token2"));
+	private static final Token TOKEN_1 = token(new StringData("Token_1"));
+	private static final Token TOKEN_2 = token(new StringData("Token_2"));
+	private static final Token TOKEN_3 = token(new StringData("Token_3"));
+
 	
 	@Test
 	void unionOfEmptyTokensIsEmpty() {
@@ -52,7 +55,19 @@ class TokensTest {
 		Tokens unifiedTokens = token1().union(token2());
 		
 		List<Token> unifiedTokensList = asTokenList(unifiedTokens);
-		assertEquals(asList(TOKEN_1, TOKEN_2), unifiedTokensList);
+		List<Token> expectedTokenList = asList(TOKEN_1, TOKEN_2);
+		assertEquals(expectedTokenList.size(), unifiedTokensList.size());
+		assertTrue(unifiedTokensList.containsAll(expectedTokenList));
+	}
+	
+	@Test
+	void unionOfTwoTokensWithAnotherToken() {
+		Tokens unifiedTokens = (token1().union(token2())).union(token3());
+		
+		List<Token> unifiedTokensList = asTokenList(unifiedTokens);
+		List<Token> expectedTokenList = asList(TOKEN_1, TOKEN_2, TOKEN_3);
+		assertEquals(expectedTokenList.size(), unifiedTokensList.size());
+		assertTrue(unifiedTokensList.containsAll(expectedTokenList));
 	}
 	
 	private Tokens emptyTokens() {
@@ -60,16 +75,21 @@ class TokensTest {
 	}
 
 	private Tokens token1() {
-		Port<?> port1 = port(PORT_1, ActionData.class);
-		HashMap<Port<?>, Set<Token>> oneTokenMap = new HashMap<>();
-		oneTokenMap.put(port1, singleton(TOKEN_1));
-		return new Tokens(oneTokenMap);
+		return createToken(PORT_1, TOKEN_1);
 	}
 	
 	private Tokens token2() {
-		Port<?> port1 = port(PORT_2, ActionData.class);
+		return createToken(PORT_2, TOKEN_2);
+	}
+	
+	private Tokens token3() {
+		return createToken(PORT_3, TOKEN_3);
+	}
+	
+	private Tokens createToken(String portName, Token token) {
+		Port<?> port1 = port(portName, ActionData.class);
 		HashMap<Port<?>, Set<Token>> oneTokenMap = new HashMap<>();
-		oneTokenMap.put(port1, singleton(TOKEN_2));
+		oneTokenMap.put(port1, singleton(token));
 		return new Tokens(oneTokenMap);
 	}
 	
