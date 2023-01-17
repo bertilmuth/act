@@ -28,6 +28,11 @@ public class Tokens {
 		return tokensMap.getOrDefault(port, emptySet()).stream();
 	}
 	
+	public Stream<Token> stream(){
+		return asMap().values().stream()
+			.flatMap(Set::stream);
+	}
+	
 	Tokens union(Tokens tokens) {
 		Map<Port<?>, Set<Token>> thisTokens = this.asMap();
 		Map<Port<?>, Set<Token>> unifiedTokens = new HashMap<>(tokens.asMap());
