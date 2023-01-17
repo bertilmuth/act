@@ -19,14 +19,24 @@ class TokensTest {
 	
 	@Test
 	void unionOfEmptyTokensIsEmpty() {
-		Tokens union = new Tokens(emptyMap()).union(new Tokens(emptyMap()));
+		Tokens union = emptyTokens().union(emptyTokens());
 		assertTrue(union.asMap().entrySet().isEmpty());
 	}
 	
 	@Test
 	void unionOfEmptyTokensWithOneToken() {
-		Tokens union = new Tokens(emptyMap()).union(oneToken());
+		Tokens union = emptyTokens().union(oneToken());
 		assertEquals(oneToken(), union);
+	}
+	
+	@Test
+	void unionOfOneTokenWithEmptyTokens() {
+		Tokens union = oneToken().union(emptyTokens());
+		assertEquals(oneToken(), union);
+	}
+	
+	private Tokens emptyTokens() {
+		return new Tokens(emptyMap());
 	}
 
 	private Tokens oneToken() {
