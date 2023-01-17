@@ -3,7 +3,6 @@ package org.requirementsascode.act.workflow;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toMap;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,25 +30,22 @@ public class Tokens {
 	
 	Tokens union(Tokens tokens) {
 		Map<Port<?>, Set<Token>> thisTokens = this.asMap();
-		Map<Port<?>, Set<Token>> tokensToMerge = tokens.asMap();
+		Map<Port<?>, Set<Token>> unifiedTokens = new HashMap<>(tokens.asMap());
 		
-		Map<Port<?>, Set<Token>> mergedTokenMaps = 
-			Stream.of(thisTokens, tokensToMerge)
-		    	.flatMap(m -> m.entrySet().stream())
-		    	.collect(toMap(
-			        Map.Entry::getKey,
-			        Map.Entry::getValue,
-			        (v1, v2) -> { 
-			        	return Stream.concat(v1.stream(), v2.stream())
-			        		.collect(toCollection(LinkedHashSet::new)); 
-			        }));
+		thisTokens.forEach((key, value) -> 
+			unifiedTokens.merge(key, value, (addedTkns, tkns) -> {
+				Set<Token> tknsPlusTkns = new HashSet<>(tkns);
+				tknsPlusTkns.addAll(addedTkns);
+		        return tknsPlusTkns;
+		    })
+		);
 		
-		return new Tokens(mergedTokenMaps);
+		return new Tokens(unifiedTokens);
 	}
 	
 	public Tokens minus(Tokens tokens) {
 		Map<Port<?>, Set<Token>> thisTokens = this.asMap();
-		Map<Port<?>, Set<Token>> minusTokens = tokens.asMap();
+		Map<Port<?>, Set<Token>> minusTokens = new HashMap<>(tokens.asMap());
 	
 		thisTokens.forEach((key, value) -> 
 			minusTokens.merge(key, value, (minusTkns, tkns) -> {
@@ -58,7 +54,7 @@ public class Tokens {
 		        return tknsMinusTkns;
 		    })
 		);
-		return tokens;
+		return new Tokens(minusTokens);
 	}
 	
 	Tokens removeDirtyTokens() {
