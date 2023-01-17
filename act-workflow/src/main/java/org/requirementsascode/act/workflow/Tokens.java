@@ -1,13 +1,16 @@
 package org.requirementsascode.act.workflow;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -28,7 +31,7 @@ public class Tokens {
 	
 	Tokens union(Tokens tokensToMerge) {
 		Map<Port<?>, Set<Token>> mergedTokenMaps = 
-			Stream.of(asMap(), tokensToMerge.asMap())
+			Stream.of(this.asMap(), tokensToMerge.asMap())
 		    	.flatMap(m -> m.entrySet().stream())
 		    	.collect(toMap(
 			        Map.Entry::getKey,
@@ -39,6 +42,20 @@ public class Tokens {
 			        }));
 		
 		return new Tokens(mergedTokenMaps);
+	}
+	
+	public Tokens minus(Tokens tokensToSubtract) {
+		Map<Port<?>, Set<Token>> thisTokens = this.asMap();
+		Map<Port<?>, Set<Token>> minusTokens = tokensToSubtract.asMap();
+	
+		thisTokens.forEach((key, value) -> 
+			minusTokens.merge(key, value, (minusTkns, tkns) -> {
+				Set<Token> tknsMinusTkns = new HashSet<>(tkns);
+				tknsMinusTkns.removeAll(minusTkns);
+		        return tknsMinusTkns;
+		    })
+		);
+		return tokensToSubtract;
 	}
 	
 	Tokens removeDirtyTokens() {
@@ -86,5 +103,22 @@ public class Tokens {
 	@Override
 	public String toString() {
 		return "Tokens[" + tokensMap + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(tokensMap);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tokens other = (Tokens) obj;
+		return Objects.equals(tokensMap, other.tokensMap);
 	}
 }

@@ -83,4 +83,15 @@ public class Port<T extends ActionData> implements Named {
 	public String toString() {
 		return "Port[" + name + "]";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Named && 
+			name().equals(((Named)obj).name());
+	}
+	
+	@Override
+	public int hashCode() {
+		return name().hashCode();
+	}
 }

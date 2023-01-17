@@ -64,4 +64,15 @@ public class Ports implements Named{
 	public String toString() {
 		return name();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Named && 
+			name().equals(((Named)obj).name());
+	}
+	
+	@Override
+	public int hashCode() {
+		return name().hashCode();
+	}
 }

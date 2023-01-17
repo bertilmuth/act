@@ -34,7 +34,7 @@ public class Token {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(actionData);
+		return Objects.hash(uuid);
 	}
 
 	@Override

@@ -17,17 +17,20 @@ class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 	
 		@Override
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
-			Tokens mergedTokens = mergeTokens(datasAfter);
+			Tokens tokensBefore = dataBefore.state().tokens();
+			Tokens mergedTokens = mergeTokens(tokensBefore, datasAfter);
 			WorkflowState state = new WorkflowState(workflow, mergedTokens);
 			return data(state, null);
 		}
 
-		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datasAfter) {	
+		private Tokens mergeTokens(Tokens tokensBefore, List<Data<WorkflowState, Token>> datasAfter) {	
 			Optional<Tokens> mergedTokenMap = datasAfter.stream()
 				.map(Data::state)
 				.map(WorkflowState::tokens)
 				.reduce((t1,t2) -> {
-					return t1.union(t2);
+					Tokens delta = t2.minus(tokensBefore);
+					Tokens union = t1.union(t2);
+					return union;
 				})
 				.map(Tokens::removeDirtyTokens);
 			return mergedTokenMap.orElse(null);
