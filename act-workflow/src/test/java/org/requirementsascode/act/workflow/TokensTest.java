@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.StringData;
 
 class TokensTest {
+	private static final String TESTING_PORT1 = "TestingPort";
+	
 	private static final Token TOKEN_1 = token(new StringData("Token1"));
 	
 	@Test
@@ -28,10 +30,9 @@ class TokensTest {
 	}
 
 	private Tokens oneToken() {
-		Port<?> port = port("TestingPort", ActionData.class);
+		Port<?> port1 = port(TESTING_PORT1, ActionData.class);
 		HashMap<Port<?>, Set<Token>> oneTokenMap = new HashMap<>();
-		oneTokenMap.put(port, singleton(TOKEN_1));
-		Tokens oneToken = new Tokens(oneTokenMap);
-		return oneToken;
+		oneTokenMap.put(port1, singleton(TOKEN_1));
+		return new Tokens(oneTokenMap);
 	}
 }
