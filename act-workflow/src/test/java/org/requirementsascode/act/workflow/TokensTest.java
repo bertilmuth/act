@@ -29,7 +29,7 @@ class TokensTest {
 	@Test
 	void unionOfEmptyTokensIsEmpty() {
 		Tokens unifiedTokens = emptyTokens().union(emptyTokens());
-		assertTrue(unifiedTokens.asMap().entrySet().isEmpty());
+		assertEquals(emptyTokens(), unifiedTokens);
 	}
 	
 	@Test
@@ -73,7 +73,11 @@ class TokensTest {
 	@Test
 	void differenceOfEmptyTokensIsEmpty() {
 		Tokens diff = emptyTokens().minus(emptyTokens());
-		assertTrue(diff.asMap().entrySet().isEmpty());
+		assertEquals(emptyTokens(), diff);
+	}
+	
+	@Test
+	void oneTokenMinusOneTokenIsEmpty() {
 	}
 	
 	private Tokens emptyTokens() {
