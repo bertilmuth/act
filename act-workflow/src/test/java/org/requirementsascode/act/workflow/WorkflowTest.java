@@ -163,11 +163,12 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
+		WorkflowState state1 = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
+		WorkflowState state2 = workflow.next(state1);
 
-		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state).get());
-		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state).get());
-		assertEquals(2, nrOfTokensInState(state));
+		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state2).get());
+		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state2).get());
+		assertEquals(2, nrOfTokensInState(state2));
 	}
 	
 	@Test
@@ -205,12 +206,14 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
+		WorkflowState state1 = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
+		WorkflowState state2 = workflow.next(state1);
+		WorkflowState state3 = workflow.next(state2);
 
-		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state).collect(Collectors.toList());
+		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state3).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
 		assertEquals(str(ACTION3), tokensInAction3Out.get(1));
-		assertEquals(2, nrOfTokensInState(state));
+		assertEquals(2, nrOfTokensInState(state2));
 	}
 	
 	private Action<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {

@@ -24,8 +24,11 @@ class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 
 		private Tokens mergeTokens(List<Data<WorkflowState, Token>> datasAfter) {	
 			Optional<Tokens> mergedTokenMap = datasAfter.stream()
-				.map(Data::state).map(WorkflowState::tokens)
-				.reduce((t1,t2) -> t1.union(t2))
+				.map(Data::state)
+				.map(WorkflowState::tokens)
+				.reduce((t1,t2) -> {
+					return t1.union(t2);
+				})
 				.map(Tokens::removeDirtyTokens);
 			return mergedTokenMap.orElse(null);
 		}
