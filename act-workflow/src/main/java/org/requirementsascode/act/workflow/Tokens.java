@@ -33,9 +33,9 @@ public class Tokens {
 		Map<Port<?>, Set<Token>> unifiedTokens = new HashMap<>(tokens.asMap());
 		
 		thisTokens.forEach((key, value) -> 
-			unifiedTokens.merge(key, value, (addedTkns, tkns) -> {
-				Set<Token> tknsPlusTkns = new HashSet<>(tkns);
-				tknsPlusTkns.addAll(addedTkns);
+			unifiedTokens.merge(key, value, (t1, t2) -> {
+				Set<Token> tknsPlusTkns = new HashSet<>(t2);
+				tknsPlusTkns.addAll(t1);
 		        return tknsPlusTkns;
 		    })
 		);
@@ -44,17 +44,19 @@ public class Tokens {
 	}
 	
 	public Tokens minus(Tokens tokens) {
-		Map<Port<?>, Set<Token>> thisTokens = this.asMap();
-		Map<Port<?>, Set<Token>> minusTokens = new HashMap<>(tokens.asMap());
+		Map<Port<?>, Set<Token>> thisTokens = asMap();
+		Map<Port<?>, Set<Token>> minusTokens = tokens.asMap();
+		Map<Port<?>, Set<Token>> resultTokens = new HashMap<>();
 	
-		thisTokens.forEach((key, value) -> 
-			minusTokens.merge(key, value, (minusTkns, tkns) -> {
-				Set<Token> tknsMinusTkns = new HashSet<>(tkns);
-				tknsMinusTkns.removeAll(minusTkns);
-		        return tknsMinusTkns.isEmpty()? null : tknsMinusTkns;
-		    })
-		);
-		return new Tokens(minusTokens);
+		thisTokens.forEach((port, tkns) -> {
+			Set<Token> tokensForPort = new HashSet<>(tkns);
+			Set<Token> minusTokensForPort = minusTokens.getOrDefault(port, emptySet());
+			tokensForPort.removeAll(minusTokensForPort);
+			if(!tokensForPort.isEmpty()) {
+				resultTokens.put(port, tokensForPort);
+			}
+		});
+		return new Tokens(resultTokens);
 	}
 	
 	Tokens removeDirtyTokens() {

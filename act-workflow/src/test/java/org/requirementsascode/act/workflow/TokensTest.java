@@ -77,9 +77,15 @@ class TokensTest {
 	}
 	
 	@Test
-	void oneTokenMinusOneTokenIsEmpty() {
+	void oneTokenMinusItselfIsEmpty() {
 		Tokens diff = token1().minus(token1());
 		assertEquals(emptyTokens(), diff);
+	}
+	
+	@Test
+	void oneTokenMinusDifferentTokenIsToken() {
+		Tokens diff = token1().minus(token2());
+		assertEquals(token1(), diff);
 	}
 	
 	private Tokens emptyTokens() {
