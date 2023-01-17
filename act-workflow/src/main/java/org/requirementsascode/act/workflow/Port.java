@@ -50,7 +50,7 @@ public class Port<T extends ActionData> implements Named {
 	
 	private State<WorkflowState, Token> createState(String name) {
 		return state(name, this::areTokensInPort, 
-				inCase(this::firstTokenHasWrongType, this::markForDeletion));
+				inCase(this::firstTokenHasWrongType, this::markAsDirty));
 	}
 	
 	private boolean firstTokenHasWrongType(Data<WorkflowState, Token> data) {
@@ -71,12 +71,15 @@ public class Port<T extends ActionData> implements Named {
 		return firstToken(state).actionData().map(ActionData::getClass);
 	}
 	
-	private Data<WorkflowState, Token> markForDeletion(Data<WorkflowState, Token> inputData) {
+	private Data<WorkflowState, Token> markAsDirty(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		Token token = firstToken(state);
-		Token tokenMarkedForDeletion = token.replaceActionData(null);
-		WorkflowState newState = state.replaceToken(this, token, tokenMarkedForDeletion).state();
+		WorkflowState newState = state.replaceToken(this, token, dirty(token)).state();
 		return data(newState);
+	}
+
+	private Token dirty(Token token) {
+		return token.replaceActionData(null);
 	}
 
 	@Override
