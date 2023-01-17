@@ -70,6 +70,12 @@ class TokensTest {
 		assertTrue(unifiedTokensList.containsAll(expectedTokenList));
 	}
 	
+	@Test
+	void differenceOfEmptyTokensIsEmpty() {
+		Tokens diff = emptyTokens().minus(emptyTokens());
+		assertTrue(diff.asMap().entrySet().isEmpty());
+	}
+	
 	private Tokens emptyTokens() {
 		return new Tokens(emptyMap());
 	}
