@@ -29,9 +29,12 @@ public class Tokens {
 		return tokensMap.getOrDefault(port, emptySet()).stream();
 	}
 	
-	Tokens union(Tokens tokensToMerge) {
+	Tokens union(Tokens tokens) {
+		Map<Port<?>, Set<Token>> thisTokens = this.asMap();
+		Map<Port<?>, Set<Token>> tokensToMerge = tokens.asMap();
+		
 		Map<Port<?>, Set<Token>> mergedTokenMaps = 
-			Stream.of(this.asMap(), tokensToMerge.asMap())
+			Stream.of(thisTokens, tokensToMerge)
 		    	.flatMap(m -> m.entrySet().stream())
 		    	.collect(toMap(
 			        Map.Entry::getKey,
@@ -44,9 +47,9 @@ public class Tokens {
 		return new Tokens(mergedTokenMaps);
 	}
 	
-	public Tokens minus(Tokens tokensToSubtract) {
+	public Tokens minus(Tokens tokens) {
 		Map<Port<?>, Set<Token>> thisTokens = this.asMap();
-		Map<Port<?>, Set<Token>> minusTokens = tokensToSubtract.asMap();
+		Map<Port<?>, Set<Token>> minusTokens = tokens.asMap();
 	
 		thisTokens.forEach((key, value) -> 
 			minusTokens.merge(key, value, (minusTkns, tkns) -> {
@@ -55,7 +58,7 @@ public class Tokens {
 		        return tknsMinusTkns;
 		    })
 		);
-		return tokensToSubtract;
+		return tokens;
 	}
 	
 	Tokens removeDirtyTokens() {
