@@ -14,6 +14,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
+import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
 public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String DEFINED_STATE = "Defined State";
@@ -120,7 +121,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		validate(this);
 
 		Behavior<S, V0, V0> behavior = 
-			unitedBehavior(new FirstOneWhoActsWins<>(), 
+			unitedBehavior(new OnlyOneBehaviorMayAct<>(), 
 				states().asBehavior(this),
 				transitions().asBehavior(this));
 

@@ -64,7 +64,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	private Behavior<S, V0, V0> toStateBehavior(Statemachine<S, V0> sm) {
-		return d -> toState().asBehavior(sm).actOn(d);
+		return d -> toState().asBehavior(sm).andThen(sm.transitions().asBehavior(sm)).actOn(d);
 	}
 
 	private boolean hasFired(Data<?, ?> data) {
