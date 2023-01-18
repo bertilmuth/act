@@ -46,19 +46,6 @@ class WorkflowTest {
 	private static final String ACTION3_IN = ACTION3 + _IN;
 	private static final String ACTION3_OUT = ACTION3 + _OUT;
 	
-	/*@Test
-	void runningEmptyWorkflowDoesNothing() {
-		Workflow workflow = Workflow.builder()
-			.actions()
-			.ports()
-			.inPorts()
-			.flows()
-			.build();
-		
-		WorkflowState state = workflow.start(str(""));
-		assertEquals(0, nrOfTokensInState(state));
-	}*/
-	
 	@Test
 	void runsSingleAction() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
