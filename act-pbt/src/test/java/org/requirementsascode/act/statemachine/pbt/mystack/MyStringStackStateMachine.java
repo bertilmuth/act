@@ -4,7 +4,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.HandleChange;
+import org.requirementsascode.act.core.ChangeHandler;
 import org.requirementsascode.act.statemachine.State;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.pbt.mystack.MyStringStack.Clear;
@@ -16,11 +16,11 @@ import org.requirementsascode.act.statemachine.pbt.mystack.MyStringStack.Value;
 public class MyStringStackStateMachine implements Behavior<MyStringStack, Value, Value>{
 	private static int MAX_STACK_SIZE = 50000;
 	
-	private HandleChange<MyStringStack, Push, Push> pushValidator;
-	private HandleChange<MyStringStack, Pop, PoppedElement> popValidator;
+	private ChangeHandler<MyStringStack, Push, Push> pushValidator;
+	private ChangeHandler<MyStringStack, Pop, PoppedElement> popValidator;
 	private Statemachine<MyStringStack, Value> statemachine;
 
-	public MyStringStackStateMachine(HandleChange<MyStringStack, Push, Push> pushValidator, HandleChange<MyStringStack, Pop, PoppedElement> popValidator) {
+	public MyStringStackStateMachine(ChangeHandler<MyStringStack, Push, Push> pushValidator, ChangeHandler<MyStringStack, Pop, PoppedElement> popValidator) {
 		this.pushValidator = pushValidator;
 		this.popValidator = popValidator;
 		this.statemachine = createStateMachine();

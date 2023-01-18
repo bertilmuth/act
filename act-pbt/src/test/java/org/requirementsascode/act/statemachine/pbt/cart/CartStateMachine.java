@@ -1,8 +1,15 @@
 package org.requirementsascode.act.statemachine.pbt.cart;
 
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
+import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
+import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
+import static org.requirementsascode.act.statemachine.StatemachineApi.init;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.when;
+import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 import static org.requirementsascode.act.statemachine.pbt.Property.property;
-import static org.requirementsascode.act.statemachine.pbt.PropertyValidator.propertyValidator;
+import static org.requirementsascode.act.statemachine.pbt.PropertyValidator.validate;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,8 +40,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 		State<Cart, Value> empty = state("Empty", cart -> cart != null && cart.items().size() == 0);
 		State<Cart, Value> nonEmpty = state("Non-Empty", cart -> cart != null && cart.items().size() > 0);
 		
-		PropertyValidator<Cart, RemoveItem, RemoveItem> itemRemoved = itemRemoved();
-		PropertyValidator<Cart, RemoveItem, RemoveItem> itemNotRemoved = itemNotRemoved();
+		PropertyValidator<Cart, RemoveItem> itemRemoved = itemRemoved();
+		PropertyValidator<Cart, RemoveItem> itemNotRemoved = itemNotRemoved();
 		
 		Statemachine<Cart, Value> statemachine = Statemachine.builder()
 			.states(empty,nonEmpty)
@@ -61,8 +68,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 		return statemachine;
 	}
 	
-	private PropertyValidator<Cart, RemoveItem, RemoveItem> itemRemoved() {
-		return propertyValidator(
+	private PropertyValidator<Cart, RemoveItem> itemRemoved() {
+		return validate(
 				property(c -> sizeAfter(c) == sizeBeforeMinus1(c),
 						c -> "itemRemoved property: Expected cart size of " + sizeBeforeMinus1(c) + ", but was " + sizeAfter(c)),
 				property(c -> itemOccurencesAfter(c) == itemOccurencesBeforeMinus1(c),
@@ -70,8 +77,8 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 								+ itemOccurencesAfter(c)));
 	}
 
-	private PropertyValidator<Cart, RemoveItem, RemoveItem> itemNotRemoved() {
-		return propertyValidator(property(c -> sizeAfter(c) == sizeBefore(c),
+	private PropertyValidator<Cart, RemoveItem> itemNotRemoved() {
+		return validate(property(c -> sizeAfter(c) == sizeBefore(c),
 				c -> "itemNotRemoved property: Expected cart size: " + sizeBefore(c) + ", but was: " + sizeAfter(c)));
 	}
 	

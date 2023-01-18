@@ -12,7 +12,7 @@ public interface Behavior<S, V1, V2> {
 		return before -> nextBehavior.actOn(actOn(before));
 	}
 
-	default Behavior<S, V1, V2> andHandleChangeWith(HandleChange<S, V1, V2> changeHandler) {
+	default Behavior<S, V1, V2> andHandleChangeWith(ChangeHandler<S, V1, V2> changeHandler) {
 		Objects.requireNonNull(changeHandler, "changeHandler must be non-null!");
 		return before -> {
 			Data<S, V2> after = actOn(before);
