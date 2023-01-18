@@ -191,14 +191,11 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state1 = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
-		WorkflowState state2 = workflow.next(state1);
-		WorkflowState state3 = workflow.next(state2);
-		WorkflowState state4 = workflow.next(state3);
+		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
 
-		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state4).collect(Collectors.toList());
+		List<ActionData> tokensInAction3Out = action3_Out.allActionData(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
-		assertEquals(2, nrOfTokensInState(state2));
+		assertEquals(2, nrOfTokensInState(state));
 	}
 	
 	private Action<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
