@@ -22,11 +22,11 @@ public class StatemachineApi {
 	}
 	
 	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant) {
-		return State.state(stateName, stateInvariant);
+		return new State<>(stateName, stateInvariant);
 	}
 	
 	public static <S, V> State<S, V> state(String stateName, Predicate<S> stateInvariant, Behavior<S, V, V> stateBehavior) {
-		return State.state(stateName, stateInvariant, stateBehavior);
+		return new State<>(stateName, stateInvariant, stateBehavior);
 	}
 	
 	public static<S, V> State<S, V> anyState() {

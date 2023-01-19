@@ -17,8 +17,8 @@ class ToStateBehaviorTest {
 	
 	@BeforeEach
 	void setup() {
-		State<String, Trigger> s1 = State.state(S1, s -> S1.equals(s));
-		State<String, Trigger> s2 = State.state(S2, s -> S2.equals(s), consumeWith(this::enterS2));
+		State<String, Trigger> s1 = state(S1, s -> S1.equals(s));
+		State<String, Trigger> s2 = state(S2, s -> S2.equals(s), consumeWith(this::enterS2));
 		
 		statemachine = Statemachine.builder()
 				.states(s1, s2)
