@@ -3,8 +3,6 @@ package org.requirementsascode.act.statemachine;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
-import java.util.Collections;
-
 import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
@@ -27,7 +25,6 @@ public class StatemachineBuilder {
 		private StatesBuilder(State<S,V>[] states) {
 			requireNonNull(states, "states must be non-null!");
 			this.builderStates = States.states(asList(states));
-			this.builderTransitions = new Transitions<>(Collections.emptyList());
 		}
 
 		@SafeVarargs
