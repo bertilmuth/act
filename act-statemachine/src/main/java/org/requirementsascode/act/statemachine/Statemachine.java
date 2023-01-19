@@ -94,13 +94,12 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return new Transitions<>(transitions);
 	}
 	
-	boolean terminatesIn(State<S, V0> state) {
-		return !isRecursive || outgoingTransitionsCount(state) == 0;
+	boolean isRecursive() {
+		return isRecursive;
 	}
-
-	private long outgoingTransitionsCount(State<S, V0> state) {
-		long outgoingTransitionsCount = outgoingTransitions(state).stream().count();
-		return outgoingTransitionsCount;
+	
+	boolean hasOutgoingTransitions(State<S, V0> state) {
+		return outgoingTransitions(state).stream().count() != 0;
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
