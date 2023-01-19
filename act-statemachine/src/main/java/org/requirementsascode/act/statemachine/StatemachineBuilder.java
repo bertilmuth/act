@@ -15,35 +15,17 @@ public class StatemachineBuilder {
 	
 	@SafeVarargs
 	public final <S,V> StatesBuilder<S,V> states(State<S,V>... states) {
-		return new StatesBuilder<>(states, new OnlyOneBehaviorMayAct<>());
-	}
-	
-	public <S,V> MergeStrategyBuilder<S,V> mergeStrategy(MergeStrategy<S,V> mergeStrategy) {
-		return new MergeStrategyBuilder<>(mergeStrategy);
-	}
-	
-	public class MergeStrategyBuilder<S,V>{
-		private MergeStrategy<S, V> mergeStrategy;
-		
-		private MergeStrategyBuilder(MergeStrategy<S,V> mergeStrategy){
-			this.mergeStrategy = mergeStrategy;
-		}
-		
-		@SuppressWarnings("unchecked")
-		public StatesBuilder<S,V> states(State<S,V>... states) {
-			return new StatesBuilder<>(states, mergeStrategy);
-		}
+		return new StatesBuilder<>(states);
 	}
 
 	public class StatesBuilder<S,V> {
-		private final MergeStrategy<S, V> mergeStrategy;
 		private final States<S, V> builderStates;
 		private Transitions<S, V> builderTransitions;
 		private boolean isRecursive = false;
+		private MergeStrategy<S, V> mergeStrategy;
 
-		private StatesBuilder(State<S,V>[] states, MergeStrategy<S, V> mergeStrategy) {
+		private StatesBuilder(State<S,V>[] states) {
 			requireNonNull(states, "states must be non-null!");
-			this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 			this.builderStates = States.states(asList(states));
 			this.builderTransitions = new Transitions<>(Collections.emptyList());
 		}
@@ -68,12 +50,26 @@ public class StatemachineBuilder {
 		}
 		
 		public class RecursivenessBuilder{
-			public RecursivenessBuilder(boolean isRecursive) {
+			private RecursivenessBuilder(boolean isRecursive) {
 				StatesBuilder.this.isRecursive = isRecursive;
 			}
-
+			
+			public MergeStrategyBuilder mergeStrategy(MergeStrategy<S,V> mergeStrategy) {
+				return new MergeStrategyBuilder(mergeStrategy);
+			}
+			
 			public final Statemachine<S,V> build() {
-				return new Statemachine<>(builderStates, builderTransitions, mergeStrategy, isRecursive);
+				return new MergeStrategyBuilder(new OnlyOneBehaviorMayAct<>()).build();
+			}
+			
+			public class MergeStrategyBuilder{				
+				private MergeStrategyBuilder(MergeStrategy<S,V> mergeStrategy){
+					StatesBuilder.this.mergeStrategy = mergeStrategy;
+				}
+
+				public Statemachine<S, V> build() {
+					return new Statemachine<>(builderStates, builderTransitions, mergeStrategy, isRecursive);
+				}
 			}
 		}
 	}

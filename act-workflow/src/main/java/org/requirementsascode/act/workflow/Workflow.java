@@ -79,12 +79,12 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		
 		Statemachine<WorkflowState, Token> statemachine = 
 			Statemachine.builder()
-				.mergeStrategy(new TokenMergeStrategy(this))
 				.states(states)
 				.transitions(
 					transitionables
 				)
 				.isRecursive(true)
+				.mergeStrategy(new TokenMergeStrategy(this))
 				.build();
 		return statemachine;
 	}
