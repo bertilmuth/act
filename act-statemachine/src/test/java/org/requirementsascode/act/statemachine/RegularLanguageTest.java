@@ -1,5 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.core.InCase.inCase;
@@ -7,8 +8,10 @@ import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTer
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S1;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S2;
 import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.S3;
-import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTerminal.WordTooLong;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
+import static org.requirementsascode.act.statemachine.StatemachineApi.state;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.function.Predicate;
 
@@ -37,6 +40,7 @@ class RegularLanguageTest {
 		Data<NonTerminal, String> before = data(S0, "bbb");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
 		assertTrue(after.state().isAccepting());
+		assertEquals("", after.value().get());
 	}
 	
 	@Test
@@ -44,6 +48,15 @@ class RegularLanguageTest {
 		Data<NonTerminal, String> before = data(S0, "aab");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
 		assertTrue(after.state().isAccepting());
+		assertEquals("", after.value().get());
+	}
+	
+	@Test
+	void acceptsFourLetterStringWithLastOneBeingB_bRemains() {
+		Data<NonTerminal, String> before = data(S0, "bbbb");
+		Data<NonTerminal, String> after = statemachine.actOn(before);
+		assertTrue(after.state().isAccepting());
+		assertEquals("b", after.value().get());
 	}
 	
 	@Test
@@ -51,13 +64,7 @@ class RegularLanguageTest {
 		Data<NonTerminal, String> before = data(S0, "cab");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
 		assertFalse(after.state().isAccepting());
-	}
-	
-	@Test
-	void rejectsFourLetterStringWithLastOneBeingB() {
-		Data<NonTerminal, String> before = data(S0, "bbbb");
-		Data<NonTerminal, String> after = statemachine.actOn(before);
-		assertFalse(after.state().isAccepting());
+		assertEquals("cab", after.value().get());
 	}
 	
 	@Test
@@ -65,6 +72,7 @@ class RegularLanguageTest {
 		Data<NonTerminal, String> before = data(S0, "");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
 		assertFalse(after.state().isAccepting());
+		assertEquals("", after.value().get());
 	}
 	
 	////////////////////////////////////////
@@ -75,15 +83,13 @@ class RegularLanguageTest {
 		State<NonTerminal, String> s1 = s(S1);
 		State<NonTerminal, String> s2 = s(S2);
 		State<NonTerminal, String> s3 = s(S3);
-		State<NonTerminal, String> wordTooLong = s(WordTooLong);
 
 		Statemachine<NonTerminal, String> statemachine = Statemachine.builder()
-			.states(s1, s2, s3, wordTooLong)
+			.states(s1, s2, s3)
 			.transitions(
 				transition(s1, s2, accept('a', S2)),
 				transition(s1, s2, accept('b', S2)),
 				transition(s2, s3, accept('b', S3)),
-				transition(s3, wordTooLong, inCase(i -> !i.value().get().isEmpty(), i -> data(WordTooLong))),
 				entryFlow(s1, accept('a', S1)),
 				entryFlow(s1, accept('b', S1))
 			)
@@ -94,7 +100,7 @@ class RegularLanguageTest {
 	}
 	
 	enum NonTerminal{
-		S0(false), S1(false), S2(false), S3(true), WordTooLong(false);
+		S0(false), S1(false), S2(false), S3(true);
 
 		private final boolean accepting;
 		
@@ -115,7 +121,7 @@ class RegularLanguageTest {
 		// The Behavior.identity() part is the state behavior.
 		// The purpose of the state behavior is to pass on the after value of each transition that fires 
 		// to another transition, unchanged.
-		return state(nonTerminal.toString(), stateInvariantOf(nonTerminal));
+		return state(nonTerminal.toString(), stateInvariantOf(nonTerminal), Behavior.identity());
 	}
 	
 	private Predicate<NonTerminal> stateInvariantOf(NonTerminal nonTerminal) {
