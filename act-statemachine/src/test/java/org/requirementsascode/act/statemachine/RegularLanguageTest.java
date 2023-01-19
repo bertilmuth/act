@@ -87,6 +87,7 @@ class RegularLanguageTest {
 				entryFlow(s1, accept('a', S1)),
 				entryFlow(s1, accept('b', S1))
 			)
+			.isRecursive(true)
 			.build();
 		
 		return statemachine;
@@ -114,7 +115,7 @@ class RegularLanguageTest {
 		// The Behavior.identity() part is the state behavior.
 		// The purpose of the state behavior is to pass on the after value of each transition that fires 
 		// to another transition, unchanged.
-		return state(nonTerminal.toString(), stateInvariantOf(nonTerminal), Behavior.identity());
+		return state(nonTerminal.toString(), stateInvariantOf(nonTerminal));
 	}
 	
 	private Predicate<NonTerminal> stateInvariantOf(NonTerminal nonTerminal) {

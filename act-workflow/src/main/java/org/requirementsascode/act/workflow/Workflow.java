@@ -84,6 +84,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 				.transitions(
 					transitionables
 				)
+				.isRecursive(true)
 				.build();
 		return statemachine;
 	}

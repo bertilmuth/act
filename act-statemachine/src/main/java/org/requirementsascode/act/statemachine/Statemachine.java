@@ -27,14 +27,16 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private final State<S, V0> definedState;
 	private final State<S, V0> finalState;
 	private final MergeStrategy<S, V0> mergeStrategy;
+	private final boolean isRecursive;
 
-	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, MergeStrategy<S, V0> mergeStrategy) {
+	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, MergeStrategy<S, V0> mergeStrategy, boolean isRecursive) {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 		this.definedState = createDefinedState(states);
 		this.initialState = createInitialState(definedState);
 		this.finalState = createFinalState(definedState);
 		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
+		this.isRecursive = isRecursive;
 
 		this.statemachineBehavior = createStatemachineBehavior();
 	}
@@ -92,9 +94,13 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return new Transitions<>(transitions);
 	}
 	
-	boolean isTerminal(State<S, V0> state) {
-		long outgoingTransitionsSize = outgoingTransitions(state).stream().count();
-		return outgoingTransitionsSize == 0;
+	boolean terminatesIn(State<S, V0> state) {
+		return !isRecursive || outgoingTransitionsCount(state) == 0;
+	}
+
+	private long outgoingTransitionsCount(State<S, V0> state) {
+		long outgoingTransitionsCount = outgoingTransitions(state).stream().count();
+		return outgoingTransitionsCount;
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
@@ -127,7 +133,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 	private Behavior<S, V0, V0> statesBehaviorOrIdentity() {
 		Behavior<S, V0, V0> statesBehavior = states().asBehavior(this);
-		
 		return unitedBehavior(new FirstOneWhoActsWins<>(),
 			statesBehavior, 
 			identity());

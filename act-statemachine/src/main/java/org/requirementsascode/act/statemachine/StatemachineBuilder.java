@@ -39,6 +39,7 @@ public class StatemachineBuilder {
 		private final MergeStrategy<S, V> mergeStrategy;
 		private final States<S, V> builderStates;
 		private Transitions<S, V> builderTransitions;
+		private boolean isRecursive = false;
 
 		private StatesBuilder(State<S,V>[] states, MergeStrategy<S, V> mergeStrategy) {
 			requireNonNull(states, "states must be non-null!");
@@ -57,8 +58,22 @@ public class StatemachineBuilder {
 		public class TransitionsBuilder {
 			private TransitionsBuilder(){}
 			
+			public Statemachine<S,V> build() {
+				return new RecursivenessBuilder(false).build();
+			}
+
+			public RecursivenessBuilder isRecursive(boolean isRecursive) {
+				return new RecursivenessBuilder(isRecursive);
+			}
+		}
+		
+		public class RecursivenessBuilder{
+			public RecursivenessBuilder(boolean isRecursive) {
+				StatesBuilder.this.isRecursive = isRecursive;
+			}
+
 			public final Statemachine<S,V> build() {
-				return new Statemachine<>(builderStates, builderTransitions, mergeStrategy);
+				return new Statemachine<>(builderStates, builderTransitions, mergeStrategy, isRecursive);
 			}
 		}
 	}

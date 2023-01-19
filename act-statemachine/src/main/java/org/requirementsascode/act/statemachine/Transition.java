@@ -66,11 +66,9 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	private Behavior<S, V0, V0> toStateBehavior(Statemachine<S, V0> sm) {
-		return d -> toState().asBehavior(sm).andThen(
-				inCase(x -> sm.isTerminal(toState()), 
-					identity(), 
-					sm.transitions().asBehavior(sm))
-			)
+		return d -> inCase(x -> sm.terminatesIn(toState()),
+				toState().asBehavior(sm),
+				sm)
 			.actOn(d);
 	}
 
