@@ -2,6 +2,7 @@ package org.requirementsascode.act.statemachine.testdata;
 import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
+import static org.requirementsascode.act.statemachine.StatemachineApi.exitFlow;
 import static org.requirementsascode.act.statemachine.StatemachineApi.init;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
@@ -74,7 +75,8 @@ public class HierarchicalCartStateMachine {
 			.transitions(
 				transition(nonFullCartSubState, fullCartSubState, when(AddItem.class, consumeWith(HierarchicalCart::addItem))),
 				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCart::removeItem))),
-				entryFlow(nonFullCartSubState, consumeWith(HierarchicalCart::enterSubstate))
+				entryFlow(nonFullCartSubState, consumeWith(HierarchicalCart::enterSubstate)),
+				exitFlow(nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCart::exitSubstate)))
 			)
 			.build();
 		
