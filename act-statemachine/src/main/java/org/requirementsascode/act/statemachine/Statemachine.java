@@ -94,12 +94,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return new Transitions<>(transitions);
 	}
 	
-	boolean isRecursive() {
+	public boolean isRecursive() {
 		return isRecursive;
-	}
-	
-	boolean hasOutgoingTransitions(State<S, V0> state) {
-		return outgoingTransitions(state).stream().count() != 0;
 	}
 
 	private State<S, V0> createDefinedState(States<S, V0> states) {
