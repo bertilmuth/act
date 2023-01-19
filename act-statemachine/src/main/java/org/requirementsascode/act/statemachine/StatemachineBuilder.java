@@ -30,19 +30,21 @@ public class StatemachineBuilder {
 		@SafeVarargs
 		public final TransitionsBuilder transitions(Transitionable<S, V>... transitionsArray) {
 			requireNonNull(transitionsArray, "transitionsArray must be non-null!");
-			builderTransitions = new Transitions<>(asList(transitionsArray));
-			return new TransitionsBuilder();
+			return new TransitionsBuilder(transitionsArray);
 		}
 
 		public class TransitionsBuilder {
-			private TransitionsBuilder(){}
+			private TransitionsBuilder(Transitionable<S, V>[] transitions){
+				requireNonNull(transitions, "transitions must be non-null!");
+				StatesBuilder.this.builderTransitions = new Transitions<>(asList(transitions));
+			}
 			
 			public Statemachine<S,V> build() {
 				return new RecursivenessBuilder(false).build();
 			}
 
-			public RecursivenessBuilder isRecursive(boolean isRecursive) {
-				return new RecursivenessBuilder(isRecursive);
+			public RecursivenessBuilder isRecursive(boolean recursive) {
+				return new RecursivenessBuilder(recursive);
 			}
 		}
 		
