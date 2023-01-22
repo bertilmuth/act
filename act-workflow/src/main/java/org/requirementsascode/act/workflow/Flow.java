@@ -78,11 +78,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	
 	@SuppressWarnings("unchecked")
 	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> inputData) {
-		assert(inputData.value().isPresent());
 		WorkflowState state = inputData.state();
 		Optional<Token> token = inputData.value();
 		
-		U outActionData = token.get().actionData()
+		U outActionData = token
+			.flatMap(Token::actionData)
 			.map(ad -> applyActionFunction(state, (T)ad))
 			.orElse(null);
 		
