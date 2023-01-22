@@ -32,11 +32,11 @@ public class Port<T extends ActionData> implements Named {
 	}
 	
 	public Optional<T> firstActionData(WorkflowState state) {
-		return allActionData(state).findFirst();
+		return actionDatas(state).findFirst();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Stream<T> allActionData(WorkflowState state) {
+	public Stream<T> actionDatas(WorkflowState state) {
 		return state.tokensIn(this)
 			.map(Token::actionData)
 			.filter(Optional::isPresent)

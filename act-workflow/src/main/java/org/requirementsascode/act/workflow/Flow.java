@@ -54,7 +54,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	
 	private ActionData firstActionDataOfType(WorkflowState state, Class<T> actionDataType) {		
 		return inPorts().stream()
-			.flatMap(p -> p.allActionData(state))
+			.flatMap(p -> p.actionDatas(state))
 			.filter(actionData -> actionDataType.isAssignableFrom(actionData.getClass()))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Unexpected error: no action data present in input ports of " + this + "!"));
