@@ -5,7 +5,6 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Data;
@@ -16,13 +15,17 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	private final Class<T> type;
 	private final Ports inPorts;
 	private final Ports outPorts;
-	private final BiFunction<WorkflowState, T, U> actionFunction;
+	private final ActionBehavior<T, U> actionBehavior;
 
 	Flow(Class<T> type, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+		this(type, inPorts, outPorts, new ActionBehavior<>(actionFunction));
+	}
+	
+	Flow(Class<T> type, Ports inPorts, Ports outPorts, ActionBehavior<T, U> actionBehavior) {
 		this.type = requireNonNull(type, "type must be non-null!");
 		this.inPorts = requireNonNull(inPorts, "inPorts must be non-null!");
 		this.outPorts = requireNonNull(outPorts, "outPorts must be non-null!");
-		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
+		this.actionBehavior = requireNonNull(actionBehavior, "actionBehavior must be non-null!");
 	}
 	
 	public Class<T> type(){
@@ -48,9 +51,9 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		Token token = firstTokenWithType(inputData.state(), type());
 
 		WorkflowState stateAfterRemoval = removeTokenFromInputPorts(inPorts(), inputData.state());
-		Data<WorkflowState, Token> functionInputData = data(stateAfterRemoval, token);
-		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
-		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts(), functionOutputData);
+		Data<WorkflowState, Token> behaviorInputData = data(stateAfterRemoval, token);
+		Data<WorkflowState, Token> behaviorOutputData = actionBehavior.actOn(behaviorInputData);
+		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts(), behaviorOutputData);
 		return outputData;
 	}
 	
@@ -76,24 +79,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		return updatedState;
 	}
 	
-	@SuppressWarnings("unchecked")
-	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> inputData) {
-		WorkflowState state = inputData.state();
-		Optional<Token> token = inputData.value();
-		
-		U outActionData = token
-			.flatMap(Token::actionData)
-			.map(ad -> applyActionFunction(state, (T)ad))
-			.orElse(null);
-		
-		return data(state, token(outActionData));
-	}
-	
 	private Data<WorkflowState, Token> addTokenToOutputPort(Ports outPorts, Data<WorkflowState, Token> data) {
 		return data.state().addToken(outPorts.stream().findFirst().get(), Token.from(data));
-	}
-
-	private U applyActionFunction(WorkflowState state, T actionData) {
-		return actionFunction.apply(state, actionData);
 	}
 }
