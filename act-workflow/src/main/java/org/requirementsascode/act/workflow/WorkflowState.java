@@ -7,29 +7,20 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.statemachine.Statemachine;
 
 public class WorkflowState {
-	private final Workflow workflow;
-	private final Statemachine<WorkflowState, Token> statemachine;
 	private final Tokens tokens;
 	
-	WorkflowState(Workflow workflow, Tokens tokens) {
-		this.workflow = workflow;
-		this.statemachine = workflow.statemachine();
+	WorkflowState(Tokens tokens) {
 		this.tokens = tokens;
 	}
 	
-	static WorkflowState createInitialWorkflowState(Workflow workflow, Statemachine<WorkflowState, Token> statemachine) {
-		return new WorkflowState(workflow, new Tokens(emptyMap()));
+	static WorkflowState createInitialWorkflowState() {
+		return new WorkflowState(new Tokens(emptyMap()));
 	}
 	
 	public Tokens tokens() {
 		return tokens;
-	}
-	
-	Workflow workflow() {
-		return workflow;
 	}
 	
 	Stream<Token> tokensIn(Port<?> port) {
@@ -60,12 +51,8 @@ public class WorkflowState {
 	}
 
 	private Data<WorkflowState, Token> updateTokens(Tokens tokens, Token token) {
-		WorkflowState newWorkflowState = new WorkflowState(workflow(), tokens);
+		WorkflowState newWorkflowState = new WorkflowState(tokens);
 		return data(newWorkflowState, token);
-	}
-	
-	Statemachine<WorkflowState, Token> statemachine() {
-		return statemachine;
 	}
 
 	@Override

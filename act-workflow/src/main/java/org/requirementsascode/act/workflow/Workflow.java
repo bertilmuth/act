@@ -31,7 +31,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public <T extends ActionData> WorkflowState enterInitialData(Port<T> inPort, T actionData) {
-		WorkflowState initialWorkflowState = new WorkflowState(this, new Tokens(Collections.emptyMap()));
+		WorkflowState initialWorkflowState = new WorkflowState(new Tokens(Collections.emptyMap()));
 		return enterData(initialWorkflowState, inPort, actionData);
 	}
 	

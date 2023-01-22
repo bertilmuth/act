@@ -20,7 +20,7 @@ class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		public Data<WorkflowState, Token> merge(Data<WorkflowState, Token> dataBefore, List<Data<WorkflowState, Token>> datasAfter) {
 			Tokens tokensBefore = dataBefore.state().tokens();
 			Tokens mergedTokens = mergeTokens(tokensBefore, datasAfter);
-			WorkflowState state = new WorkflowState(workflow, mergedTokens);
+			WorkflowState state = new WorkflowState(mergedTokens);
 			return data(state, null);
 		}
 
