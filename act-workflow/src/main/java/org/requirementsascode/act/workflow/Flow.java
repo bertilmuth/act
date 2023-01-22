@@ -49,11 +49,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
 		Token token = firstTokenWithType(inputData.state());
-
-		WorkflowState stateAfterRemoval = removeTokenFromInPorts(inputData);
-		Data<WorkflowState, Token> behaviorInputData = data(stateAfterRemoval, token);
+		Data<WorkflowState, Token> behaviorInputData = data(inputData.state(), token);
 		Data<WorkflowState, Token> behaviorOutputData = actionBehavior.actOn(behaviorInputData);
-		Data<WorkflowState, Token> outputData = addTokenToOutPorts(behaviorOutputData);
+		
+		Data<WorkflowState, Token> afterRemoval = removeTokenFromInPorts(behaviorOutputData);
+		Data<WorkflowState, Token> outputData = addTokenToOutPorts(afterRemoval);
 		return outputData;
 	}
 	
@@ -66,11 +66,12 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 			.orElse(token(null));
 	}
 	
-	private WorkflowState removeTokenFromInPorts(Data<WorkflowState, Token> inputData) {
-		return inPorts().stream()
+	private Data<WorkflowState, Token> removeTokenFromInPorts(Data<WorkflowState, Token> inputData) {
+		WorkflowState outputState = inPorts().stream()
 	        .reduce(inputData.state(), 
 	        	(s, port) -> removeTokenFromInputPort(s, port), 
 	        	(data1, data2) -> data2);
+		return data(outputState, Token.from(inputData));
 	} 
 
 	private WorkflowState removeTokenFromInputPort(WorkflowState state, Port<?> inputPort) {
