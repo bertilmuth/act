@@ -24,6 +24,10 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 	
+	public Class<T> type(){
+		return type;
+	}
+	
 	@Override
 	public Ports inPorts() {
 		return inPorts;
@@ -36,15 +40,15 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPorts.asOneState(), outPorts.asOneState(), this::transformAndMove);
+		return transition(inPorts().asOneState(), outPorts().asOneState(), this::transformAndMove);
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		ActionData actionData = firstActionDataOfType(inputData.state(), type);
+		ActionData actionData = firstActionDataOfType(inputData.state(), type());
 
 		WorkflowState stateAfterRemoval = removeTokenFromInputPorts(inPorts(), inputData.state());
 		Data<WorkflowState, Token> functionOutputData = transform(stateAfterRemoval, actionData);
-		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts, functionOutputData);
+		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts(), functionOutputData);
 		return outputData;
 	}
 	
