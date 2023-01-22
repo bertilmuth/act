@@ -37,11 +37,19 @@ public class Port<T extends ActionData> implements Named {
 	
 	@SuppressWarnings("unchecked")
 	public Stream<T> actionDatas(WorkflowState state) {
-		return state.tokensIn(this)
+		return tokens(state)
 			.map(Token::actionData)
 			.filter(Optional::isPresent)
 			.map(Optional::get)
 			.map(actionData -> (T)actionData);
+	}
+	
+	public Optional<Token> firstToken(WorkflowState state) {
+		return tokens(state).findFirst();
+	}
+	
+	public Stream<Token> tokens(WorkflowState state) {
+		return state.tokensIn(this);
 	}
 
 	public State<WorkflowState, Token> asState() {
@@ -63,17 +71,13 @@ public class Port<T extends ActionData> implements Named {
 		return state.areTokensIn(this);
 	}
 	
-	private Token firstToken(WorkflowState state) {
-		return state.firstTokenIn(this).get();
-	}
-	
 	private Optional<Class<?>> typeOfFirstToken(WorkflowState state) {
-		return firstToken(state).actionData().map(ActionData::getClass);
+		return firstToken(state).get().actionData().map(ActionData::getClass);
 	}
 	
 	private Data<WorkflowState, Token> markAsDirty(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
-		Token token = firstToken(state);
+		Token token = firstToken(state).get();
 		WorkflowState newState = state.replaceToken(this, token, dirty(token)).state();
 		return data(newState);
 	}
