@@ -10,10 +10,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.merge.MergeStrategy;
 
 class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
-		private final Workflow workflow;
-
-		public TokenMergeStrategy(Workflow workflow) {
-			this.workflow = workflow;
+		public TokenMergeStrategy() {
 		}
 	
 		@Override
