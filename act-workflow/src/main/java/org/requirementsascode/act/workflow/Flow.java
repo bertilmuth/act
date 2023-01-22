@@ -44,18 +44,19 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		ActionData actionData = firstActionDataOfType(inputData.state(), type());
+		Token token = firstTokenWithType(inputData.state(), type());
 
 		WorkflowState stateAfterRemoval = removeTokenFromInputPorts(inPorts(), inputData.state());
-		Data<WorkflowState, Token> functionOutputData = transform(stateAfterRemoval, actionData);
+		Data<WorkflowState, Token> functionOutputData = transform(stateAfterRemoval, token);
 		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts(), functionOutputData);
 		return outputData;
 	}
 	
-	private ActionData firstActionDataOfType(WorkflowState state, Class<T> actionDataType) {		
+	private Token firstTokenWithType(WorkflowState state, Class<T> actionDataType) {		
 		return inPorts().stream()
-			.flatMap(p -> p.actionDatas(state))
-			.filter(actionData -> actionDataType.isAssignableFrom(actionData.getClass()))
+			.flatMap(p -> p.tokens(state))
+			.filter(t -> t.actionData().isPresent())
+			.filter(t -> actionDataType.isAssignableFrom(t.actionData().get().getClass()))
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("Unexpected error: no action data present in input ports of " + this + "!"));
 	}
@@ -74,8 +75,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Data<WorkflowState, Token> transform(WorkflowState state, ActionData firstInActionData) {
-		U outActionData = applyActionFunction(state, (T)firstInActionData);
+	private Data<WorkflowState, Token> transform(WorkflowState state, Token token) {
+		U outActionData = token.actionData()
+			.map(ad -> applyActionFunction(state, (T)ad))
+			.orElse(null);
+		
 		return data(state, token(outActionData));
 	}
 	
