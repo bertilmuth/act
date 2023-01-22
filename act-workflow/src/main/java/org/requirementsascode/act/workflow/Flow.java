@@ -53,7 +53,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		WorkflowState stateAfterRemoval = removeTokenFromInPorts(inputData);
 		Data<WorkflowState, Token> behaviorInputData = data(stateAfterRemoval, token);
 		Data<WorkflowState, Token> behaviorOutputData = actionBehavior.actOn(behaviorInputData);
-		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts(), behaviorOutputData);
+		Data<WorkflowState, Token> outputData = addTokenToOutPorts(behaviorOutputData);
 		return outputData;
 	}
 	
@@ -79,7 +79,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		return updatedState;
 	}
 	
-	private Data<WorkflowState, Token> addTokenToOutputPort(Ports outPorts, Data<WorkflowState, Token> data) {
+	private Data<WorkflowState, Token> addTokenToOutPorts(Data<WorkflowState, Token> data) {
 		return data.state().addToken(outPorts.stream().findFirst().get(), Token.from(data));
 	}
 }
