@@ -47,7 +47,8 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		Token token = firstTokenWithType(inputData.state(), type());
 
 		WorkflowState stateAfterRemoval = removeTokenFromInputPorts(inPorts(), inputData.state());
-		Data<WorkflowState, Token> functionOutputData = transform(stateAfterRemoval, token);
+		Data<WorkflowState, Token> functionInputData = data(stateAfterRemoval, token);
+		Data<WorkflowState, Token> functionOutputData = transform(functionInputData);
 		Data<WorkflowState, Token> outputData = addTokenToOutputPort(outPorts(), functionOutputData);
 		return outputData;
 	}
@@ -58,7 +59,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 			.filter(t -> t.actionData().isPresent())
 			.filter(t -> actionDataType.isAssignableFrom(t.actionData().get().getClass()))
 			.findFirst()
-			.orElseThrow(() -> new RuntimeException("Unexpected error: no action data present in input ports of " + this + "!"));
+			.orElse(token(null));
 	}
 	
 	private WorkflowState removeTokenFromInputPorts(Ports inputPorts, WorkflowState state) {
@@ -66,7 +67,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	        .reduce(state, 
 	        	(updatedState, port) -> removeTokenFromInputPort(port, updatedState), 
 	        	(data1, data2) -> data2);
-	}
+	} 
 
 	private WorkflowState removeTokenFromInputPort(Port<?> inputPort, WorkflowState state) {
 		Token inputToken = state.firstTokenIn(inputPort).get();
@@ -75,7 +76,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Data<WorkflowState, Token> transform(WorkflowState state, Token token) {
+	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> inputData) {
+		assert(inputData.value().isPresent());
+		WorkflowState state = inputData.state();
+		Token token = inputData.value().get();
+		
 		U outActionData = token.actionData()
 			.map(ad -> applyActionFunction(state, (T)ad))
 			.orElse(null);
