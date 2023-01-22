@@ -5,6 +5,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Data;
@@ -79,9 +80,9 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	private Data<WorkflowState, Token> transform(Data<WorkflowState, Token> inputData) {
 		assert(inputData.value().isPresent());
 		WorkflowState state = inputData.state();
-		Token token = inputData.value().get();
+		Optional<Token> token = inputData.value();
 		
-		U outActionData = token.actionData()
+		U outActionData = token.get().actionData()
 			.map(ad -> applyActionFunction(state, (T)ad))
 			.orElse(null);
 		
