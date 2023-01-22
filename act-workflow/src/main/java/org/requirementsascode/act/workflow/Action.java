@@ -1,7 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.workflow.WorkflowApi.ports;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.function.BiFunction;
 
@@ -22,7 +22,7 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 		requireNonNull(inPorts, "inPorts must be non-null!");	
 		requireNonNull(outPorts, "outPorts must be non-null!");	
 		requireNonNull(actionFunction, "actionFunction must be non-null!");	
-		this.flow = new Flow<>(inputType, inPorts, outPorts, actionFunction);
+		this.flow = WorkflowApi.flow(inputType, inPorts, outPorts, actionFunction);
 	}
 
 	@Override
