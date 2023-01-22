@@ -48,7 +48,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Token token = firstTokenWithType(inputData.state(), type());
+		Token token = firstTokenWithType(inputData.state());
 
 		WorkflowState stateAfterRemoval = removeTokenFromInPorts(inputData);
 		Data<WorkflowState, Token> behaviorInputData = data(stateAfterRemoval, token);
@@ -57,11 +57,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		return outputData;
 	}
 	
-	private Token firstTokenWithType(WorkflowState state, Class<T> actionDataType) {		
+	private Token firstTokenWithType(WorkflowState state) {		
 		return inPorts().stream()
 			.flatMap(p -> p.tokens(state))
 			.filter(t -> t.actionData().isPresent())
-			.filter(t -> actionDataType.isAssignableFrom(t.actionData().get().getClass()))
+			.filter(t -> type.isAssignableFrom(t.actionData().get().getClass()))
 			.findFirst()
 			.orElse(token(null));
 	}
