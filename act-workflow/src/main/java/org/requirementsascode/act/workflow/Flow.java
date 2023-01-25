@@ -1,8 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.function.BiFunction;
 
@@ -10,6 +9,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.workflow.behavior.ActionBehavior;
+import org.requirementsascode.act.workflow.behavior.RemoveTokensFromPorts;
 import org.requirementsascode.act.workflow.behavior.SelectOneTokenByType;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Part{
@@ -51,23 +51,9 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
 		return new SelectOneTokenByType<>(inPorts(), type())
 			.andThen(actionBehavior)
-			.andThen(this::removeTokenFromInPorts)
+			.andThen(new RemoveTokensFromPorts(inPorts()))
 			.andThen(this::addTokensToOutPorts)
 			.actOn(inputData);
-	}
-	
-	private Data<WorkflowState, Token> removeTokenFromInPorts(Data<WorkflowState, Token> inputData) {
-		WorkflowState outputState = inPorts().stream()
-	        .reduce(inputData.state(), 
-	        	(s, port) -> removeTokenFromInputPort(s, port), 
-	        	(data1, data2) -> data2);
-		return data(outputState, Token.from(inputData));
-	} 
-
-	private WorkflowState removeTokenFromInputPort(WorkflowState state, Port<?> inputPort) {
-		Token inputToken = state.firstTokenIn(inputPort).get();
-		WorkflowState updatedState = state.removeToken(inputPort, inputToken).state();
-		return updatedState;
 	}
 	
 	private Data<WorkflowState, Token> addTokensToOutPorts(Data<WorkflowState, Token> data) {
