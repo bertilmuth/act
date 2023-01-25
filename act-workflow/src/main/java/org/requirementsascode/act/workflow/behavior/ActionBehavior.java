@@ -1,4 +1,4 @@
-package org.requirementsascode.act.workflow;
+package org.requirementsascode.act.workflow.behavior;
 
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
@@ -9,6 +9,9 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.workflow.ActionData;
+import org.requirementsascode.act.workflow.Token;
+import org.requirementsascode.act.workflow.WorkflowState;
 
 public class ActionBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
 	private final BiFunction<WorkflowState, T, U> actionFunction;

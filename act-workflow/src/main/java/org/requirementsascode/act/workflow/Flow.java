@@ -10,6 +10,7 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
+import org.requirementsascode.act.workflow.behavior.ActionBehavior;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	private final Class<T> type;
