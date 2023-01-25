@@ -7,6 +7,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
 import java.util.function.BiFunction;
 
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
@@ -48,22 +49,24 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Token token = firstTokenWithType(inputData.state());
-		Data<WorkflowState, Token> behaviorInputData = data(inputData.state(), token);
-		Data<WorkflowState, Token> behaviorOutputData = actionBehavior.actOn(behaviorInputData);
+		Behavior<WorkflowState,Token,Token> selectTokenBehavior = this::firstTokenWithType;
 		
-		Data<WorkflowState, Token> afterRemoval = removeTokenFromInPorts(behaviorOutputData);
-		Data<WorkflowState, Token> outputData = addTokenToOutPorts(afterRemoval);
-		return outputData;
+		return selectTokenBehavior
+				.andThen(actionBehavior)
+				.andThen(this::removeTokenFromInPorts)
+				.andThen(this::addTokensToOutPorts)
+				.actOn(inputData);
 	}
 	
-	private Token firstTokenWithType(WorkflowState state) {		
-		return inPorts().stream()
+	private Data<WorkflowState, Token> firstTokenWithType(Data<WorkflowState, Token> inputData) {
+		WorkflowState state = inputData.state();
+		Token outToken = inPorts().stream()
 			.flatMap(p -> p.tokens(state))
 			.filter(t -> t.actionData().isPresent())
-			.filter(t -> type.isAssignableFrom(t.actionData().get().getClass()))
+			.filter(t -> type().isAssignableFrom(t.actionData().get().getClass()))
 			.findFirst()
 			.orElse(token(null));
+		return data(state, outToken);
 	}
 	
 	private Data<WorkflowState, Token> removeTokenFromInPorts(Data<WorkflowState, Token> inputData) {
@@ -80,7 +83,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 		return updatedState;
 	}
 	
-	private Data<WorkflowState, Token> addTokenToOutPorts(Data<WorkflowState, Token> data) {
+	private Data<WorkflowState, Token> addTokensToOutPorts(Data<WorkflowState, Token> data) {
 		return data.state().addToken(outPorts.stream().findFirst().get(), Token.from(data));
 	}
 }
