@@ -1,16 +1,16 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.function.BiFunction;
 
-import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.workflow.behavior.ActionBehavior;
+import org.requirementsascode.act.workflow.behavior.SelectOneTokenByType;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	private final Class<T> type;
@@ -49,24 +49,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		return selectOneTokenByType(inPorts(), type())
+		return new SelectOneTokenByType<>(inPorts(), type())
 				.andThen(actionBehavior)
 				.andThen(this::removeTokenFromInPorts)
 				.andThen(this::addTokensToOutPorts)
 				.actOn(inputData);
-	}
-	
-	private Behavior<WorkflowState, Token, Token> selectOneTokenByType(Ports ports, Class<T> type) {
-		return d -> {
-			WorkflowState state = d.state();
-			Token outToken = ports.stream()
-				.flatMap(p -> p.tokens(state))
-				.filter(t -> t.actionData().isPresent())
-				.filter(t -> type.isAssignableFrom(t.actionData().get().getClass()))
-				.findFirst()
-				.orElse(emptyToken());
-			return data(state, outToken);
-		};
 	}
 	
 	private Data<WorkflowState, Token> removeTokenFromInPorts(Data<WorkflowState, Token> inputData) {
