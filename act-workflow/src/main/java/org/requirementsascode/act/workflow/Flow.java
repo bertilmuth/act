@@ -50,10 +50,10 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
 		return new SelectOneTokenByType<>(inPorts(), type())
-				.andThen(actionBehavior)
-				.andThen(this::removeTokenFromInPorts)
-				.andThen(this::addTokensToOutPorts)
-				.actOn(inputData);
+			.andThen(actionBehavior)
+			.andThen(this::removeTokenFromInPorts)
+			.andThen(this::addTokensToOutPorts)
+			.actOn(inputData);
 	}
 	
 	private Data<WorkflowState, Token> removeTokenFromInPorts(Data<WorkflowState, Token> inputData) {
