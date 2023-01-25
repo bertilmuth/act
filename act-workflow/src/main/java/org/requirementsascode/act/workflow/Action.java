@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class Action<T extends ActionData, U extends ActionData> implements Named, ExecutableNode {
+public class Action<T extends ActionData, U extends ActionData> implements Named, Part {
 	private String name;
 	private final Flow<T,U> flow;
 

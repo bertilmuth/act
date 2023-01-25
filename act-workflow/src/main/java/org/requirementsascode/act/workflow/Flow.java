@@ -3,7 +3,7 @@ package org.requirementsascode.act.workflow;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.function.BiFunction;
 
@@ -12,7 +12,7 @@ import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
-public class Flow<T extends ActionData, U extends ActionData> implements ExecutableNode{
+public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	private final Class<T> type;
 	private final Ports inPorts;
 	private final Ports outPorts;
@@ -49,24 +49,24 @@ public class Flow<T extends ActionData, U extends ActionData> implements Executa
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Behavior<WorkflowState,Token,Token> selectTokenBehavior = this::firstTokenWithType;
-		
-		return selectTokenBehavior
+		return selectOneToken(this)
 				.andThen(actionBehavior)
 				.andThen(this::removeTokenFromInPorts)
 				.andThen(this::addTokensToOutPorts)
 				.actOn(inputData);
 	}
 	
-	private Data<WorkflowState, Token> firstTokenWithType(Data<WorkflowState, Token> inputData) {
-		WorkflowState state = inputData.state();
-		Token outToken = inPorts().stream()
-			.flatMap(p -> p.tokens(state))
-			.filter(t -> t.actionData().isPresent())
-			.filter(t -> type().isAssignableFrom(t.actionData().get().getClass()))
-			.findFirst()
-			.orElse(token(null));
-		return data(state, outToken);
+	private Behavior<WorkflowState, Token, Token> selectOneToken(Flow<T,U> part) {
+		return d -> {
+			WorkflowState state = d.state();
+			Token outToken = part.inPorts().stream()
+				.flatMap(p -> p.tokens(state))
+				.filter(t -> t.actionData().isPresent())
+				.filter(t -> part.type().isAssignableFrom(t.actionData().get().getClass()))
+				.findFirst()
+				.orElse(token(null));
+			return data(state, outToken);
+		};
 	}
 	
 	private Data<WorkflowState, Token> removeTokenFromInPorts(Data<WorkflowState, Token> inputData) {
