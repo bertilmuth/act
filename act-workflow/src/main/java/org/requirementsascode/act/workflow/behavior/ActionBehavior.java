@@ -1,9 +1,9 @@
 package org.requirementsascode.act.workflow.behavior;
 
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
-import static org.requirementsascode.act.workflow.WorkflowApi.token;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -14,27 +14,29 @@ import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
 public class ActionBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
+	private final Class<T> type;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	public ActionBehavior(BiFunction<WorkflowState, T, U> actionFunction) {
-		this.actionFunction = Objects.requireNonNull(actionFunction, "actionFunction must be non-null!");
+	public ActionBehavior(Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
+		this.type = requireNonNull(type, "type must be non-null!");
+		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
+		return applyActionFunction(inputData);	
+	}
+
+	private Data<WorkflowState, Token> applyActionFunction(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		Optional<Token> token = inputData.value();
 		
+		@SuppressWarnings("unchecked")
 		U outActionData = token
 			.flatMap(Token::actionData)
-			.map(ad -> applyActionFunction(state, (T)ad))
+			.map(ad -> actionFunction.apply(state, (T)ad))
 			.orElse(null);
 		
-		return data(state, token(outActionData));	
-	}
-	
-	private U applyActionFunction(WorkflowState state, T actionData) {
-		return actionFunction.apply(state, actionData);
+		return data(state, token(outActionData));
 	}
 }
