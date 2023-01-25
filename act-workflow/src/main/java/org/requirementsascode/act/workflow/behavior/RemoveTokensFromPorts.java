@@ -1,5 +1,6 @@
 package org.requirementsascode.act.workflow.behavior;
 
+import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import org.requirementsascode.act.core.Behavior;
@@ -13,7 +14,7 @@ public class RemoveTokensFromPorts implements Behavior<WorkflowState, Token, Tok
 	private final Ports ports;
 	
 	public RemoveTokensFromPorts(Ports ports) {
-		this.ports = ports;
+		this.ports = requireNonNull(ports, "ports must be non-null!");
 	}
 
 	@Override

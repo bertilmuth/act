@@ -1,7 +1,8 @@
 package org.requirementsascode.act.workflow.behavior;
 
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
-import static org.requirementsascode.act.workflow.WorkflowApi.emptyToken;
+import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -14,8 +15,9 @@ public class SelectOneTokenByType<T> implements Behavior<WorkflowState, Token, T
 	private final Class<T> type;
 
 	public SelectOneTokenByType(Ports ports, Class<T> type) {
-		this.ports = ports;
-		this.type = type;
+		this.ports = requireNonNull(ports, "ports must be non-null!");
+		this.type = requireNonNull(type, "type must be non-null!");
+
 	}
 
 	@Override

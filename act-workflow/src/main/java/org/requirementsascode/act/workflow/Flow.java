@@ -52,11 +52,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 		return new SelectOneTokenByType<>(inPorts(), type())
 			.andThen(actionBehavior)
 			.andThen(new RemoveTokensFromPorts(inPorts()))
-			.andThen(this::addTokensToOutPorts)
+			.andThen(this::addTokensToPorts)
 			.actOn(inputData);
 	}
 	
-	private Data<WorkflowState, Token> addTokensToOutPorts(Data<WorkflowState, Token> data) {
+	private Data<WorkflowState, Token> addTokensToPorts(Data<WorkflowState, Token> data) {
 		return data.state().addToken(outPorts.stream().findFirst().get(), Token.from(data));
 	}
 }
