@@ -15,6 +15,10 @@ public class Token {
 		this.actionData = actionData;
 	}
 	
+	public static Token emptyToken() {
+		return new Token(null);
+	}
+	
 	public static Token from(Data<WorkflowState, Token> data) {
 		return data.value().orElse(null);
 	}

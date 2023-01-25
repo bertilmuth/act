@@ -1,8 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import java.util.function.BiFunction;
@@ -49,22 +48,22 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	}
 	
 	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		return selectOneToken(this)
+		return selectOneTokenByType(inPorts(), type())
 				.andThen(actionBehavior)
 				.andThen(this::removeTokenFromInPorts)
 				.andThen(this::addTokensToOutPorts)
 				.actOn(inputData);
 	}
 	
-	private Behavior<WorkflowState, Token, Token> selectOneToken(Flow<T,U> part) {
+	private Behavior<WorkflowState, Token, Token> selectOneTokenByType(Ports ports, Class<T> type) {
 		return d -> {
 			WorkflowState state = d.state();
-			Token outToken = part.inPorts().stream()
+			Token outToken = ports.stream()
 				.flatMap(p -> p.tokens(state))
 				.filter(t -> t.actionData().isPresent())
-				.filter(t -> part.type().isAssignableFrom(t.actionData().get().getClass()))
+				.filter(t -> type.isAssignableFrom(t.actionData().get().getClass()))
 				.findFirst()
-				.orElse(token(null));
+				.orElse(emptyToken());
 			return data(state, outToken);
 		};
 	}

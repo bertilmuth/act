@@ -16,6 +16,10 @@ public class WorkflowApi {
 		return new Action<>(actionName, actionType, inputPorts, outputPorts, actionFunction);
 	}
 	
+	public static Token emptyToken() {
+		return Token.emptyToken();
+	}
+	
 	public static Token token(ActionData actionData) {
 		return new Token(actionData);
 	}
