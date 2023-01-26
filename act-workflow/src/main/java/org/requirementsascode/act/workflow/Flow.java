@@ -10,7 +10,7 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.workflow.behavior.ActionBehavior;
 import org.requirementsascode.act.workflow.behavior.AddTokenToPorts;
-import org.requirementsascode.act.workflow.behavior.RemoveTokensFromPorts;
+import org.requirementsascode.act.workflow.behavior.RemoveFirstTokenFromPorts;
 import org.requirementsascode.act.workflow.behavior.SelectOneTokenByType;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Part{
@@ -53,7 +53,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 		return new SelectOneTokenByType<>(inPorts(), type())
 			.andThen(actionBehavior)
 			.andThen(new AddTokenToPorts(outPorts()))
-			.andThen(new RemoveTokensFromPorts(inPorts()))
+			.andThen(new RemoveFirstTokenFromPorts(inPorts()))
 			.actOn(inputData);
 	}
 }
