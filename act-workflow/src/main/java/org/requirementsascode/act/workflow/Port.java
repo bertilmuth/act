@@ -56,11 +56,11 @@ public class Port<T extends ActionData> implements Named {
 		return state.addToken(this, token);
 	}
 	
-	public WorkflowState removeFirstToken(WorkflowState state) {
+	public Data<WorkflowState,Token> removeFirstToken(Data<WorkflowState,Token> inputData) {
+		WorkflowState state = inputData.state();
 		return firstToken(state)
 			.map(token -> state.removeToken(this, token))
-			.map(Data::state)
-			.orElse(state);
+			.orElse(inputData);
 	}
 
 	public State<WorkflowState, Token> asState() {

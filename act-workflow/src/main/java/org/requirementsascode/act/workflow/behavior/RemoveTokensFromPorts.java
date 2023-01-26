@@ -1,7 +1,7 @@
 package org.requirementsascode.act.workflow.behavior;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -18,10 +18,10 @@ public class RemoveTokensFromPorts implements Behavior<WorkflowState, Token, Tok
 
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		WorkflowState outputState = ports.stream()
-	        .reduce(inputData.state(), 
-	        	(state, port) -> port.removeFirstToken(state), 
-	        	(state1, state2) -> state2);
-		return data(outputState, Token.from(inputData));
+		Data<WorkflowState, Token> outputData = ports.stream()
+	        .reduce(inputData, 
+	        	(d, port) -> port.removeFirstToken(d), 
+	        	(d1, d2) -> d2);
+		return data(outputData.state(), Token.from(inputData));
 	}
 }
