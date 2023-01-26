@@ -45,7 +45,7 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return flow(inputType, this, actionFunction).asTransition(owningStatemachine);
+		return flow(this, inputType, actionFunction).asTransition(owningStatemachine);
 	}
 
 	@Override

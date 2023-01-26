@@ -19,11 +19,11 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	private final Ports outPorts;
 	private final ActionBehavior<T, U> actionBehavior;
 
-	Flow(Class<T> type, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
-		this(type, inPorts, outPorts, new ActionBehavior<>(type, inPorts, outPorts, actionFunction));
+	Flow(Ports inPorts, Ports outPorts, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
+		this(inPorts, outPorts, type, new ActionBehavior<>(type, inPorts, outPorts, actionFunction));
 	}
 	
-	Flow(Class<T> type, Ports inPorts, Ports outPorts, ActionBehavior<T, U> actionBehavior) {
+	Flow(Ports inPorts, Ports outPorts, Class<T> type, ActionBehavior<T, U> actionBehavior) {
 		this.type = requireNonNull(type, "type must be non-null!");
 		this.inPorts = requireNonNull(inPorts, "inPorts must be non-null!");
 		this.outPorts = requireNonNull(outPorts, "outPorts must be non-null!");
