@@ -48,6 +48,13 @@ public class Port<T extends ActionData> implements Named {
 		return tokens(state).findFirst();
 	}
 	
+	public WorkflowState removeFirstToken(WorkflowState state) {
+		return firstToken(state)
+			.map(token -> state.removeToken(this, token))
+			.map(Data::state)
+			.orElse(state);
+	}
+	
 	public Stream<Token> tokens(WorkflowState state) {
 		return state.tokensIn(this);
 	}
