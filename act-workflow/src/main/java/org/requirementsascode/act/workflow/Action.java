@@ -9,7 +9,7 @@ import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 
 public class Action<T extends ActionData, U extends ActionData> implements Named, Part {
-	private String name;
+	private final String name;
 	private final Flow<T,U> flow;
 
 	Action(String actionName, Class<T> inputType, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
