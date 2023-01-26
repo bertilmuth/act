@@ -52,8 +52,9 @@ public class Port<T extends ActionData> implements Named {
 		return state.tokensIn(this);
 	}
 	
-	public Data<WorkflowState, Token> addToken(WorkflowState state, Token token) {
-		return state.addToken(this, token);
+	public Data<WorkflowState, Token> addToken(Data<WorkflowState,Token> inputData) {
+		WorkflowState state = inputData.state();
+		return state.addToken(this, Token.from(inputData));
 	}
 	
 	public Data<WorkflowState,Token> removeFirstToken(Data<WorkflowState,Token> inputData) {

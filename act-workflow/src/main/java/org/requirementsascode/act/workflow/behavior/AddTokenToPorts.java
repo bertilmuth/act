@@ -19,6 +19,6 @@ public class AddTokenToPorts implements Behavior<WorkflowState, Token, Token> {
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
 		Port<?> port = ports.stream().findFirst().get();
-		return port.addToken(inputData.state(), Token.from(inputData));
+		return port.addToken(inputData);
 	}
 }
