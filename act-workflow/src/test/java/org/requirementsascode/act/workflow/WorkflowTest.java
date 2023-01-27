@@ -8,7 +8,6 @@ import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
