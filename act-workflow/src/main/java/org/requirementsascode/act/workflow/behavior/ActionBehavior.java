@@ -1,14 +1,15 @@
 package org.requirementsascode.act.workflow.behavior;
 
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
-
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+
 import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.ActionData;
+import org.requirementsascode.act.workflow.Part;
 import org.requirementsascode.act.workflow.Ports;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
@@ -17,13 +18,13 @@ public class ActionBehavior<T extends ActionData, U extends ActionData> implemen
 	private final Class<T> type;
 	private final Ports inPorts;
 	private final Ports outPorts;
-
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	public ActionBehavior(Class<T> type, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+	public ActionBehavior(Part owner, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
+		requireNonNull(owner, "owner must be non-nulll!");
+		this.inPorts = owner.inPorts();
+		this.outPorts = owner.outPorts();
 		this.type = requireNonNull(type, "type must be non-null!");
-		this.inPorts = inPorts;
-		this.outPorts = outPorts;
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 	

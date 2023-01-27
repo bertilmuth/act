@@ -13,13 +13,12 @@ import org.requirementsascode.act.workflow.behavior.ActionBehavior;
 public class Flow<T extends ActionData, U extends ActionData> implements Part, Transitionable<WorkflowState, Token>{
 	private final Part owner;
 	private final Class<T> type;
-
 	private final ActionBehavior<T, U> actionBehavior;
 	
 	Flow(Part owner, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.owner = requireNonNull(owner, "owner must be non-null!");
 		this.type = requireNonNull(type, "type must be non-null!");
-		this.actionBehavior = new ActionBehavior<>(type, owner.inPorts(), owner.outPorts(), actionFunction);
+		this.actionBehavior = new ActionBehavior<>(owner, type, actionFunction);
 	}
 	
 	public Class<T> type(){
