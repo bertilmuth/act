@@ -44,9 +44,13 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 		return outPorts;
 	}
 	
+	public Flow<T, U> asFlow() {
+		return flow(this, inputType, actionFunction);
+	}
+	
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return flow(this, inputType, actionFunction).asTransition(owningStatemachine);
+		return asFlow().asTransition(owningStatemachine);
 	}
 
 	@Override
