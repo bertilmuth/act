@@ -5,7 +5,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import java.util.function.BiFunction;
 
-import org.requirementsascode.act.workflow.behavior.PartBehavior;
+import org.requirementsascode.act.workflow.function.Apply;
 
 public class Action<T extends ActionData, U extends ActionData> implements Named, Part{
 	private final String name;
@@ -44,7 +44,7 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	
 	@Override
 	public Flow asFlow() {
-		PartBehavior<T,U> partBehavior = new PartBehavior<>(this, inputType, actionFunction);
+		Apply<T,U> partBehavior = new Apply<>(this, inputType, actionFunction);
 		return new Flow(this, partBehavior);
 	}
 

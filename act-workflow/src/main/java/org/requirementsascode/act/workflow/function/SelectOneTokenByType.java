@@ -1,4 +1,4 @@
-package org.requirementsascode.act.workflow.behavior;
+package org.requirementsascode.act.workflow.function;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
@@ -10,7 +10,7 @@ import org.requirementsascode.act.workflow.Ports;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
-public class SelectOneTokenByType<T> implements Behavior<WorkflowState, Token, Token> {
+class SelectOneTokenByType<T> implements Behavior<WorkflowState, Token, Token> {
 	private final Ports ports;
 	private final Class<T> type;
 
