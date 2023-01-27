@@ -1,7 +1,8 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Collections.singletonList;
-import static org.requirementsascode.act.workflow.WorkflowApi.flow;
+
+import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
 public class BinaryConnection<T extends ActionData> implements Part<T,T> {
 	private Port<T> inPort;
@@ -23,6 +24,11 @@ public class BinaryConnection<T extends ActionData> implements Part<T,T> {
 	}
 	
 	public Flow<T, T> asFlow() {
-		return flow(this, inPort.type(), (s,ad) -> ad);
+		PartBehavior<T,T> partBehavior = new PartBehavior<>(this, inPort.type(), this::transmitUnchanged);
+		return new Flow<>(partBehavior);
+	}
+	
+	private T transmitUnchanged(WorkflowState state, T actionData) {
+		return actionData;
 	}
 }

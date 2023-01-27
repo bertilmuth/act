@@ -1,10 +1,11 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import java.util.function.BiFunction;
+
+import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
 public class Action<T extends ActionData, U extends ActionData> implements Named, Part<T, U>{
 	private final String name;
@@ -42,7 +43,8 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	}
 	
 	public Flow<T, U> asFlow() {
-		return flow(this, inputType, actionFunction);
+		PartBehavior<T,U> partBehavior = new PartBehavior<>(this, inputType, actionFunction);
+		return new Flow<>(partBehavior);
 	}
 
 	@Override
