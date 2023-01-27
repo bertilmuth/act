@@ -44,7 +44,7 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	
 	public Flow<T, U> asFlow() {
 		PartBehavior<T,U> partBehavior = new PartBehavior<>(this, inputType, actionFunction);
-		return new Flow<>(partBehavior);
+		return new Flow<>(this, partBehavior);
 	}
 
 	@Override

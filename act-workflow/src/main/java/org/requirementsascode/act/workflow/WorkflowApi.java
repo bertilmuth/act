@@ -3,8 +3,6 @@ package org.requirementsascode.act.workflow;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
-import org.requirementsascode.act.workflow.behavior.PartBehavior;
-
 public class WorkflowApi {
 	public static <T extends ActionData> Port<T> port(String portName, Class<T> portType){
 		return new Port<>(portName, portType);
