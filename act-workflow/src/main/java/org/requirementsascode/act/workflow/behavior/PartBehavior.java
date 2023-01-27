@@ -21,7 +21,7 @@ public class PartBehavior<T extends ActionData, U extends ActionData> implements
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
 	public PartBehavior(Part owner, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
-		requireNonNull(owner, "owner must be non-nulll!");
+		requireNonNull(owner, "owner must be non-null!");
 		this.inPorts = owner.inPorts();
 		this.outPorts = owner.outPorts();
 		this.type = requireNonNull(type, "type must be non-null!");
