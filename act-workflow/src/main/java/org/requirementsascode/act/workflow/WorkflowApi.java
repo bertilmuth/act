@@ -8,12 +8,12 @@ public class WorkflowApi {
 		return new Port<>(portName, portType);
 	}
 	
-	public static <T extends ActionData, U extends ActionData> Action<T,U> action(String actionName, Class<T> actionType, Port<T> inputPort, Port<U> outputPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		return new Action<>(actionName, actionType, inputPort, outputPort, actionFunction);
+	public static <T extends ActionData, U extends ActionData> Action<T,U> action(String actionName, Port<T> inputPort, Port<U> outputPort, Class<T> actionType, BiFunction<WorkflowState, T, U> actionFunction) {
+		return new Action<>(actionName, inputPort, outputPort, actionType, actionFunction);
 	}
 	
-	public static <T extends ActionData, U extends ActionData> Action<T,U> action(String actionName, Class<T> actionType, Ports inputPorts, Ports outputPorts, BiFunction<WorkflowState, T, U> actionFunction) {
-		return new Action<>(actionName, actionType, inputPorts, outputPorts, actionFunction);
+	public static <T extends ActionData, U extends ActionData> Action<T,U> action(String actionName, Ports inputPorts, Ports outputPorts, Class<T> actionType, BiFunction<WorkflowState, T, U> actionFunction) {
+		return new Action<>(actionName, inputPorts, outputPorts, actionType, actionFunction);
 	}
 	
 	public static Token emptyToken() {

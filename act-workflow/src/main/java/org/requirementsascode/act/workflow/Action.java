@@ -15,11 +15,11 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	private final Class<T> inputType;
 	private BiFunction<WorkflowState, T, U> actionFunction;
 
-	Action(String actionName, Class<T> inputType, Port<T> inPort, Port<U> outPort, BiFunction<WorkflowState, T, U> actionFunction) {
-		this(actionName, inputType, ports(inPort), ports(outPort), actionFunction);
+	Action(String actionName, Port<T> inPort, Port<U> outPort, Class<T> inputType, BiFunction<WorkflowState, T, U> actionFunction) {
+		this(actionName, ports(inPort), ports(outPort), inputType, actionFunction);
 	}
 	
-	Action(String actionName, Class<T> inputType, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
+	Action(String actionName, Ports inPorts, Ports outPorts, Class<T> inputType, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.name = requireNonNull(actionName, "actionName must be non-null!");	
 		this.inputType = requireNonNull(inputType, "inputType must be non-null!");	
 		this.inPorts = requireNonNull(inPorts, "inPorts must be non-null!");	

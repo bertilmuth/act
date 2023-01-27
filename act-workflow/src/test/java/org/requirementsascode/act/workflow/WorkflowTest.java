@@ -240,31 +240,31 @@ class WorkflowTest {
 	}
 	
 	private Action<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return action(ACTION1, StringData.class, inputPort, outputPort, this::action1Performed);
+		return action(ACTION1, inputPort, outputPort, StringData.class, this::action1Performed);
 	}
 	
 	private Action<StringData,StringData> createAction1x(Port<StringData> inputPort, Port<StringData> outputPort1, Port<StringData> outputPort2) {
-		return action(ACTION1X, StringData.class, ports(inputPort), ports(outputPort1, outputPort2), this::action1Performed);
+		return action(ACTION1X, ports(inputPort), ports(outputPort1, outputPort2), StringData.class, this::action1Performed);
 	}
 	
 	private Action<StringData,StringData> createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return action(ACTION2, StringData.class, inputPort, outputPort, this::action2Performed);
+		return action(ACTION2, inputPort, outputPort, StringData.class, this::action2Performed);
 	}
 	
 	private Action<StringData,StringData> createAction2a(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return action(ACTION2A, StringData.class, inputPort, outputPort, this::action2aPerformed);
+		return action(ACTION2A, inputPort, outputPort, StringData.class, this::action2aPerformed);
 	}
 	
 	private Action<StringData,StringData> createAction2b(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return action(ACTION2B, StringData.class, inputPort, outputPort, this::action2bPerformed);
+		return action(ACTION2B, inputPort, outputPort, StringData.class, this::action2bPerformed);
 	}
 	
 	private Action<IntegerData,IntegerData> createAction2i(Port<StringData> strInputPort, Port<IntegerData> intInPort, Port<IntegerData> outputPort) {
-		return action(ACTION2I, IntegerData.class, ports(strInputPort, intInPort), ports(outputPort), this::action2iPerformed);
+		return action(ACTION2I, ports(strInputPort, intInPort), ports(outputPort), IntegerData.class, this::action2iPerformed);
 	}
 	
 	private Action<StringData,StringData> createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
-		return action(ACTION3, StringData.class, inputPort, outputPort, this::action3Performed);
+		return action(ACTION3, inputPort, outputPort, StringData.class, this::action3Performed);
 	}
 
 	private StringData str(String str) {
