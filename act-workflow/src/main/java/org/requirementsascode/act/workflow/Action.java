@@ -1,15 +1,12 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
+import static org.requirementsascode.act.workflow.WorkflowApi.flow;
+import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import java.util.function.BiFunction;
 
-import org.requirementsascode.act.statemachine.Statemachine;
-import org.requirementsascode.act.statemachine.Transition;
-import org.requirementsascode.act.statemachine.Transitionable;
-
-public class Action<T extends ActionData, U extends ActionData> implements Named, Part, Transitionable<WorkflowState, Token> {
+public class Action<T extends ActionData, U extends ActionData> implements Named, Part{
 	private final String name;
 	private final Ports inPorts;
 	private final Ports outPorts;
@@ -46,11 +43,6 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 	
 	public Flow<T, U> asFlow() {
 		return flow(this, inputType, actionFunction);
-	}
-	
-	@Override
-	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return asFlow().asTransition(owningStatemachine);
 	}
 
 	@Override
