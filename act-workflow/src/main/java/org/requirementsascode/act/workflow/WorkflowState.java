@@ -35,17 +35,17 @@ public class WorkflowState {
 		return firstTokenIn(port).isPresent();
 	}
 	
-	public Data<WorkflowState, Token> addToken(Port<?> port, Token token) {
+	Data<WorkflowState, Token> addToken(Port<?> port, Token token) {
 		Tokens tokensAfter = tokens().addToken(port, token);
 		return updateTokens(tokensAfter, token);
 	}
 	
-	public Data<WorkflowState, Token> removeToken(Port<?> port, Token token) {
+	Data<WorkflowState, Token> removeToken(Port<?> port, Token token) {
 		Tokens tokensAfter = tokens().removeToken(port, token);
 		return updateTokens(tokensAfter, token);
 	}
 	
-	public Data<WorkflowState, Token> replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
+	Data<WorkflowState, Token> replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(port, tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);
 	}
