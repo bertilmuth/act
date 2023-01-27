@@ -30,7 +30,8 @@ public class WorkflowApi {
 	}
 	
 	public static <T extends ActionData> Flow<T,T> flow(Port<T> inPort, Port<T> outPort) {		
-		return new Flow<>(ports(inPort), ports(outPort), inPort.type(), (s,ad) -> ad);
+		BinaryConnection<T> connection = new BinaryConnection<>(inPort, outPort);
+		return new Flow<>(connection, inPort.type(), (s,ad) -> ad);
 	}
 	
 	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Part owner, Class<T> dataType, BiFunction<WorkflowState, T, U> actionFunction) {		
