@@ -9,7 +9,7 @@ import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
-	private final Part owner;
+	private final Part<T,U> owner;
 	private PartBehavior<T, U> partBehavior;
 	
 	Flow(PartBehavior<T, U> partBehavior) {

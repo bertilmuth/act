@@ -15,13 +15,13 @@ import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
 public class PartBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
-	private final Part owner;
+	private final Part<T,U> owner;
 	private final Class<T> type;
 	private final Ports inPorts;
 	private final Ports outPorts;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	public PartBehavior(Part owner, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
+	public PartBehavior(Part<T,U> owner, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.owner = requireNonNull(owner, "owner must be non-nulll!");
 		this.inPorts = owner.inPorts();
 		this.outPorts = owner.outPorts();
@@ -29,7 +29,7 @@ public class PartBehavior<T extends ActionData, U extends ActionData> implements
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 	
-	public Part owner() {
+	public Part<T,U> owner() {
 		return owner;
 	}
 	

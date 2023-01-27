@@ -6,7 +6,7 @@ import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import java.util.function.BiFunction;
 
-public class Action<T extends ActionData, U extends ActionData> implements Named, Part{
+public class Action<T extends ActionData, U extends ActionData> implements Named, Part<T, U>{
 	private final String name;
 	private final Ports inPorts;
 	private final Ports outPorts;

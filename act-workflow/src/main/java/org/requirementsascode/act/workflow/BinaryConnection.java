@@ -3,7 +3,7 @@ package org.requirementsascode.act.workflow;
 import static java.util.Collections.singletonList;
 import static org.requirementsascode.act.workflow.WorkflowApi.flow;
 
-public class BinaryConnection<T extends ActionData> implements Part {
+public class BinaryConnection<T extends ActionData> implements Part<T,T> {
 	private Port<T> inPort;
 	private Port<? super T> outPort;
 
