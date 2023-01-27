@@ -89,11 +89,11 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 
 	private Stream<State<WorkflowState, Token>> inOutPortsStates(Actions actions, Flows flows) {
 		Stream<State<WorkflowState, Token>> inPortsStates = allFlowsOf(actions, flows)
-			.map(Part::inPorts)
+			.map(Flow::inPorts)
 			.map(Ports::asOneState);
 		
 		Stream<State<WorkflowState, Token>> outPortsStates = allFlowsOf(actions, flows)
-				.map(Part::outPorts)
+				.map(Flow::outPorts)
 				.map(Ports::asOneState);
 		
 		return concat(inPortsStates, outPortsStates);
