@@ -19,6 +19,7 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part, T
 		this.actionBehavior = new ActionBehavior<>(owner, type, actionFunction);
 	}
 
+	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
 		return transition(inPorts().asOneState(), outPorts().asOneState(), actionBehavior);
 	}
