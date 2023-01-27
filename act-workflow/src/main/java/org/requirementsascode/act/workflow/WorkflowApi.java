@@ -3,6 +3,8 @@ package org.requirementsascode.act.workflow;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
+import org.requirementsascode.act.workflow.behavior.PartBehavior;
+
 public class WorkflowApi {
 	public static <T extends ActionData> Port<T> port(String portName, Class<T> portType){
 		return new Port<>(portName, portType);
@@ -31,10 +33,12 @@ public class WorkflowApi {
 	
 	public static <T extends ActionData> Flow<T,T> flow(Port<T> inPort, Port<T> outPort) {		
 		BinaryConnection<T> connection = new BinaryConnection<>(inPort, outPort);
-		return new Flow<>(connection, inPort.type(), (s,ad) -> ad);
+		PartBehavior<T,T> partBehavior = new PartBehavior<>(connection, inPort.type(), (s,ad) -> ad);
+		return new Flow<>(partBehavior);
 	}
 	
-	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Part owner, Class<T> dataType, BiFunction<WorkflowState, T, U> actionFunction) {		
-		return new Flow<>(owner, dataType, actionFunction);
+	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Part owner, Class<T> dataType, BiFunction<WorkflowState, T, U> actionFunction) {	
+		PartBehavior<T,U> partBehavior = new PartBehavior<>(owner, dataType, actionFunction);
+		return new Flow<>(partBehavior);
 	}
 }
