@@ -1,17 +1,13 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.function.BiFunction;
 
-import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.workflow.behavior.ActionBehavior;
-import org.requirementsascode.act.workflow.behavior.AddTokenToPorts;
-import org.requirementsascode.act.workflow.behavior.RemoveFirstTokenFromPorts;
-import org.requirementsascode.act.workflow.behavior.SelectOneTokenByType;
 
 public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	private final Class<T> type;
@@ -46,15 +42,6 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPorts().asOneState(), outPorts().asOneState(), this::transformAndMove);
-	}
-	
-	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, Token> result = new SelectOneTokenByType<>(inPorts(), type())
-			.andThen(actionBehavior)
-			.andThen(new AddTokenToPorts(outPorts()))
-			.andThen(new RemoveFirstTokenFromPorts(inPorts()))
-			.actOn(inputData);
-		return result;
+		return transition(inPorts().asOneState(), outPorts().asOneState(), actionBehavior);
 	}
 }

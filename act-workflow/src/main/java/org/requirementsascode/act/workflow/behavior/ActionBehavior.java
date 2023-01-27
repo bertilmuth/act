@@ -15,18 +15,32 @@ import org.requirementsascode.act.workflow.WorkflowState;
 
 public class ActionBehavior<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
 	private final Class<T> type;
+	private final Ports inPorts;
+	private final Ports outPorts;
+
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
 	public ActionBehavior(Class<T> type, Ports inPorts, Ports outPorts, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.type = requireNonNull(type, "type must be non-null!");
+		this.inPorts = inPorts;
+		this.outPorts = outPorts;
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 	
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		return applyActionFunction(inputData);	
+		return transformAndMove(inputData);	
 	}
-
+	
+	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
+		Data<WorkflowState, Token> result = new SelectOneTokenByType<>(inPorts, type)
+			.andThen(this::applyActionFunction)
+			.andThen(new AddTokenToPorts(outPorts))
+			.andThen(new RemoveFirstTokenFromPorts(inPorts))
+			.actOn(inputData);
+		return result;
+	}
+	
 	private Data<WorkflowState, Token> applyActionFunction(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		Optional<Token> token = inputData.value();
