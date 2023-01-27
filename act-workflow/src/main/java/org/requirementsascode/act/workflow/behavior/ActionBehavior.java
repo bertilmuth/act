@@ -1,7 +1,6 @@
 package org.requirementsascode.act.workflow.behavior;
 
 import static org.requirementsascode.act.statemachine.StatemachineApi.*;
-import static org.requirementsascode.act.workflow.WorkflowApi.*;
 
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -33,11 +32,12 @@ public class ActionBehavior<T extends ActionData, U extends ActionData> implemen
 		Optional<Token> token = inputData.value();
 		
 		@SuppressWarnings("unchecked")
-		U outActionData = token
+		Token outToken = token
 			.flatMap(Token::actionData)
 			.map(ad -> actionFunction.apply(state, (T)ad))
+			.map(ad -> token.get().replaceActionData(ad))
 			.orElse(null);
 		
-		return data(state, token(outActionData));
+		return data(state, outToken);
 	}
 }

@@ -18,6 +18,7 @@ import org.requirementsascode.act.workflow.testdata.StringData;
 class WorkflowTest {
 	private static final String START_WORKFLOW = "";
 	private static final String ACTION1 = "Action1";
+	private static final String ACTION1X = "Action1X";
 	private static final String ACTION2 = "Action2";
 	private static final String ACTION2A = "Action2a";
 	private static final String ACTION2B = "Action2b";
@@ -29,6 +30,10 @@ class WorkflowTest {
 	
 	private static final String ACTION1_IN = ACTION1 + _IN;
 	private static final String ACTION1_OUT = ACTION1 + _OUT;
+	
+	private static final String ACTION1X_IN = ACTION1X + _IN;
+	private static final String ACTION1XA_OUT = ACTION1X + "A" + _OUT;
+	private static final String ACTION1XB_OUT = ACTION1X + "B" +_OUT;
 	
 	private static final String ACTION2_IN = ACTION2 + _IN;
 	private static final String ACTION2_OUT = ACTION2 + _OUT;
@@ -122,7 +127,7 @@ class WorkflowTest {
 	}
 	
 	@Test
-	void testStepAfterImplicitFork() {
+	void testImplicitFork_withOneOutPort() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
 		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
@@ -150,6 +155,42 @@ class WorkflowTest {
 			.build();
 		
 		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
+
+		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state).get());
+		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state).get());
+		assertEquals(2, nrOfTokensInState(state));
+	}
+	
+	@Test
+	void testImplicitFork_withTwoOutPorts() {
+		Port<StringData> action1x_In = port(ACTION1X_IN, StringData.class);
+		Port<StringData> action1xa_Out = port(ACTION1XA_OUT, StringData.class);
+		Port<StringData> action1xb_Out = port(ACTION1XB_OUT, StringData.class);
+		Action<StringData, StringData> action1 = createAction1x(action1x_In, action1xa_Out, action1xb_Out);
+		
+		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
+		Port<StringData> action2a_Out = port(ACTION2A_OUT, StringData.class);
+		Action<StringData, StringData> action2a = createAction2a(action2a_In, action2a_Out);
+		
+		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
+		Port<StringData> action2b_Out = port(ACTION2B_OUT, StringData.class);
+		Action<StringData, StringData> action2b = createAction2b(action2b_In, action2b_Out);
+		
+		Workflow workflow = Workflow.builder()
+			.actions(action1, action2a, action2b)
+			.ports(
+				action1x_In, action1xa_Out,
+				action2a_In, action2a_Out,
+				action2b_In, action2b_Out
+			)
+			.inPorts(action1x_In)
+			.flows(
+				flow(action1xa_Out, action2a_In),
+				flow(action1xb_Out, action2b_In)
+			)
+			.build();
+		
+		WorkflowState state = workflow.enterInitialData(action1x_In, str(START_WORKFLOW));	
 
 		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state).get());
 		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state).get());
@@ -195,11 +236,15 @@ class WorkflowTest {
 
 		List<ActionData> tokensInAction3Out = action3_Out.actionDatas(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
-		assertEquals(2, nrOfTokensInState(state));
+		assertEquals(1, nrOfTokensInState(state));
 	}
 	
 	private Action<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return createAction(ACTION1, StringData.class, inputPort, outputPort, this::action1Performed);
+	}
+	
+	private Action<StringData,StringData> createAction1x(Port<StringData> inputPort, Port<StringData> outputPort1, Port<StringData> outputPort2) {
+		return createAction(ACTION1X, StringData.class, ports(inputPort), ports(outputPort1, outputPort2), this::action1Performed);
 	}
 	
 	private Action<StringData,StringData> createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {

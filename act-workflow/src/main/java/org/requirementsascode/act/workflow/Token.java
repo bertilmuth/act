@@ -11,7 +11,11 @@ public class Token {
 	private final ActionData actionData;
 
 	Token(ActionData actionData) {
-		this.uuid = UUID.randomUUID();
+		this(UUID.randomUUID(), actionData);
+	}
+	
+	Token(UUID uuid, ActionData actionData) {
+		this.uuid = uuid;
 		this.actionData = actionData;
 	}
 	
@@ -27,8 +31,8 @@ public class Token {
 		return Optional.ofNullable(actionData);
 	}
 	
-	Token replaceActionData(ActionData outputActionData) {
-		return new Token(outputActionData);
+	public Token replaceActionData(ActionData outputActionData) {
+		return new Token(uuid, outputActionData);
 	}
 
 	@Override

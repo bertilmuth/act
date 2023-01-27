@@ -45,7 +45,7 @@ public class WorkflowState {
 		return updateTokens(tokensAfter, token);
 	}
 	
-	Data<WorkflowState, Token> replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
+	public Data<WorkflowState, Token> replaceToken(Port<?> port, Token tokenBefore, Token tokenAfter) {
 		Tokens tokensAfter = tokens().replaceToken(port, tokenBefore, tokenAfter);
 		return updateTokens(tokensAfter, tokenAfter);
 	}

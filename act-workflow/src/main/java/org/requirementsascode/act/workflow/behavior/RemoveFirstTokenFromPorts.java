@@ -17,9 +17,10 @@ public class RemoveFirstTokenFromPorts implements Behavior<WorkflowState, Token,
 
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		return ports.stream()
+		Data<WorkflowState, Token> result = ports.stream()
 	        .reduce(inputData, 
 	        	(d, port) -> port.removeFirstToken(d), 
 	        	(d1, d2) -> d2);
+		return result;
 	}
 }
