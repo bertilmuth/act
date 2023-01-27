@@ -1,6 +1,6 @@
 package org.requirementsascode.act.workflow;
 
-import java.util.Collections;
+import static java.util.Collections.singletonList;
 
 public class BinaryConnection<T extends ActionData> implements Part {
 	private Port<T> inPort;
@@ -13,11 +13,11 @@ public class BinaryConnection<T extends ActionData> implements Part {
 	
 	@Override
 	public Ports inPorts() {
-		return new Ports(Collections.singletonList(inPort));
+		return new Ports(singletonList(inPort));
 	}
 
 	@Override
 	public Ports outPorts() {
-		return new Ports(Collections.singletonList(outPort));
+		return new Ports(singletonList(outPort));
 	}
 }
