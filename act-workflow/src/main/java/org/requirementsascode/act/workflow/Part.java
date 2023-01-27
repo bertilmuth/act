@@ -1,6 +1,6 @@
 package org.requirementsascode.act.workflow;
 
-public interface Part<T extends ActionData, U extends ActionData>{
+public interface Part{
 	Ports inPorts();
 	Ports outPorts();
 	Flow asFlow();

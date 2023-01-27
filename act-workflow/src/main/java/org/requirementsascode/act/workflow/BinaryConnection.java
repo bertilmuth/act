@@ -4,7 +4,7 @@ import static java.util.Collections.singletonList;
 
 import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
-public class BinaryConnection<T extends ActionData> implements Part<T,T> {
+public class BinaryConnection<T extends ActionData> implements Part {
 	private Port<T> inPort;
 	private Port<? super T> outPort;
 

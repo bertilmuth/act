@@ -9,10 +9,10 @@ import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 
 public class Flow implements Transitionable<WorkflowState, Token>{
-	private final Part<?,?> owner;
+	private final Part owner;
 	private Behavior<WorkflowState, Token, Token> behavior;
 	
-	Flow(Part<?,?> owner, Behavior<WorkflowState, Token, Token> behavior) {
+	Flow(Part owner, Behavior<WorkflowState, Token, Token> behavior) {
 		this.owner = requireNonNull(owner, "owner must be non-null!");
 		this.behavior = requireNonNull(behavior, "behavior must be non-null!");
 	}

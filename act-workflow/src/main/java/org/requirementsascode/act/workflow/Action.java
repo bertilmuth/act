@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
-public class Action<T extends ActionData, U extends ActionData> implements Named, Part<T, U>{
+public class Action<T extends ActionData, U extends ActionData> implements Named, Part{
 	private final String name;
 	private final Ports inPorts;
 	private final Ports outPorts;
