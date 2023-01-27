@@ -1,8 +1,6 @@
 package org.requirementsascode.act.workflow;
 
-import org.requirementsascode.act.statemachine.Transitionable;
-
-public interface Part extends Transitionable<WorkflowState, Token>{
+public interface Part{
 	Ports inPorts();
 	Ports outPorts();
 }

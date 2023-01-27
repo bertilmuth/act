@@ -7,8 +7,9 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
+import org.requirementsascode.act.statemachine.Transitionable;
 
-public class Action<T extends ActionData, U extends ActionData> implements Named, Part {
+public class Action<T extends ActionData, U extends ActionData> implements Named, Part, Transitionable<WorkflowState, Token> {
 	private final String name;
 	private final Ports inPorts;
 	private final Ports outPorts;
