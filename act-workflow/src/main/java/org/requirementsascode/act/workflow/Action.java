@@ -42,9 +42,10 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 		return outPorts;
 	}
 	
-	public Flow<T, U> asFlow() {
+	@Override
+	public Flow asFlow() {
 		PartBehavior<T,U> partBehavior = new PartBehavior<>(this, inputType, actionFunction);
-		return new Flow<>(this, partBehavior);
+		return new Flow(this, partBehavior);
 	}
 
 	@Override

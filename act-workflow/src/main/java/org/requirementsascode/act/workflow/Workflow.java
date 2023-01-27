@@ -99,7 +99,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 		return concat(inPortsStates, outPortsStates);
 	}
 
-	private Stream<Flow<?,?>> allFlowsOf(Actions actions, Flows flows) {
+	private Stream<Flow> allFlowsOf(Actions actions, Flows flows) {
 		return concat(actions.asFlows(), flows.stream());
 	}
 }

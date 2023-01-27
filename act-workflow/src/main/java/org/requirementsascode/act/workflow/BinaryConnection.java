@@ -23,9 +23,10 @@ public class BinaryConnection<T extends ActionData> implements Part<T,T> {
 		return new Ports(singletonList(outPort));
 	}
 	
-	public Flow<T, T> asFlow() {
+	@Override
+	public Flow asFlow() {
 		PartBehavior<T,T> partBehavior = new PartBehavior<>(this, inPort.type(), this::transmitUnchanged);
-		return new Flow<>(this, partBehavior);
+		return new Flow(this, partBehavior);
 	}
 	
 	private T transmitUnchanged(WorkflowState state, T actionData) {
