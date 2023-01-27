@@ -15,4 +15,8 @@ public class Actions {
 	public Stream<Action<?,?>> stream() {
 		return actions.stream();
 	}
+	
+	Stream<Flow<?,?>> asFlows() {
+		return stream().map(Action::asFlow);
+	}
 }

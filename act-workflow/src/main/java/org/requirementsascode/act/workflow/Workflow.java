@@ -100,7 +100,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 
 	private Stream<Part> streamsOf(Actions actions, Flows flows) {
-		return concat(actions.stream(), flows.stream());
+		return concat(actions.asFlows(), flows.stream());
 	}
 }
 
