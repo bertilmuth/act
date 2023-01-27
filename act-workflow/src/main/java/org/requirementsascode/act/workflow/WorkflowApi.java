@@ -34,6 +34,6 @@ public class WorkflowApi {
 	}
 	
 	static <T extends ActionData, U extends ActionData> Flow<T,U> flow(Part owner, Class<T> dataType, BiFunction<WorkflowState, T, U> actionFunction) {		
-		return new Flow<>(owner.inPorts(), owner.outPorts(), dataType, actionFunction);
+		return new Flow<>(owner, dataType, actionFunction);
 	}
 }

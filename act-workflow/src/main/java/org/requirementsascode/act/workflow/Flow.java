@@ -15,6 +15,10 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part{
 	private final Ports outPorts;
 	private final ActionBehavior<T, U> actionBehavior;
 
+	Flow(Part owner, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
+		this(owner.inPorts(), owner.outPorts(), type, actionFunction);
+	}
+	
 	Flow(Ports inPorts, Ports outPorts, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
 		this(inPorts, outPorts, type, new ActionBehavior<>(type, inPorts, outPorts, actionFunction));
 	}
