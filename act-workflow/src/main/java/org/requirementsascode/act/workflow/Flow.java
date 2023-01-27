@@ -8,7 +8,7 @@ import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
 import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
-public class Flow<T extends ActionData, U extends ActionData> implements Part, Transitionable<WorkflowState, Token>{
+public class Flow<T extends ActionData, U extends ActionData> implements Transitionable<WorkflowState, Token>{
 	private final Part owner;
 	private PartBehavior<T, U> partBehavior;
 	
@@ -22,12 +22,10 @@ public class Flow<T extends ActionData, U extends ActionData> implements Part, T
 		return transition(inPorts().asOneState(), outPorts().asOneState(), partBehavior);
 	}
 
-	@Override
 	public Ports inPorts() {
 		return owner.inPorts();
 	}
 
-	@Override
 	public Ports outPorts() {
 		return owner.outPorts();
 	}
