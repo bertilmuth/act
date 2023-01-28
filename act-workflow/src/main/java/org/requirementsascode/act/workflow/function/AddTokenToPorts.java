@@ -19,7 +19,7 @@ class AddTokenToPorts implements Behavior<WorkflowState, Token, Token> {
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
 		Data<WorkflowState, Token> result = ports.stream()
 	        .reduce(inputData, 
-	        	(d, port) -> port.addToken(d), 
+	        	(d, port) -> port.addToken(d.state(), Token.from(d)), 
 	        	(d1, d2) -> d2);
 		return result;
 	}
