@@ -54,7 +54,7 @@ class WorkflowTest {
 	void runsSingleAction() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
+		Action action1 = createAction1(action1_In, action1_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1)
@@ -71,11 +71,11 @@ class WorkflowTest {
 	void runsTwoActions_firstOneUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
+		Action action1 = createAction1(action1_In, action1_Out);
 		
 		Port<StringData> action2_In = port(ACTION2_IN, StringData.class);
 		Port<StringData> action2_Out = port(ACTION2_OUT, StringData.class);
-		Action<StringData, StringData> action2 = createAction2(action2_In, action2_Out);
+		Action action2 = createAction2(action2_In, action2_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2)
@@ -99,12 +99,12 @@ class WorkflowTest {
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
+		Action action1 = createAction1(action1_In, action1_Out);
 		
 		Port<StringData> action2i_Str_In = port(ACTION2I_STR_IN, StringData.class);
 		Port<IntegerData> action2i_Int_In = port(ACTION2I_INT_IN, IntegerData.class);
 		Port<IntegerData> action2i_Out = port(ACTION2I_OUT, IntegerData.class);
-		Action<IntegerData, IntegerData> action2i = createAction2i(action2i_Str_In, action2i_Int_In, action2i_Out);
+		Action action2i = createAction2i(action2i_Str_In, action2i_Int_In, action2i_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2i)
@@ -129,15 +129,15 @@ class WorkflowTest {
 	void testImplicitFork_withOneOutPort() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
+		Action action1 = createAction1(action1_In, action1_Out);
 		
 		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
 		Port<StringData> action2a_Out = port(ACTION2A_OUT, StringData.class);
-		Action<StringData, StringData> action2a = createAction2a(action2a_In, action2a_Out);
+		Action action2a = createAction2a(action2a_In, action2a_Out);
 		
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
 		Port<StringData> action2b_Out = port(ACTION2B_OUT, StringData.class);
-		Action<StringData, StringData> action2b = createAction2b(action2b_In, action2b_Out);
+		Action action2b = createAction2b(action2b_In, action2b_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2a, action2b)
@@ -165,15 +165,15 @@ class WorkflowTest {
 		Port<StringData> action1x_In = port(ACTION1X_IN, StringData.class);
 		Port<StringData> action1xa_Out = port(ACTION1XA_OUT, StringData.class);
 		Port<StringData> action1xb_Out = port(ACTION1XB_OUT, StringData.class);
-		Action<StringData, StringData> action1 = createAction1x(action1x_In, action1xa_Out, action1xb_Out);
+		Action action1 = createAction1x(action1x_In, action1xa_Out, action1xb_Out);
 		
 		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
 		Port<StringData> action2a_Out = port(ACTION2A_OUT, StringData.class);
-		Action<StringData, StringData> action2a = createAction2a(action2a_In, action2a_Out);
+		Action action2a = createAction2a(action2a_In, action2a_Out);
 		
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
 		Port<StringData> action2b_Out = port(ACTION2B_OUT, StringData.class);
-		Action<StringData, StringData> action2b = createAction2b(action2b_In, action2b_Out);
+		Action action2b = createAction2b(action2b_In, action2b_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2a, action2b)
@@ -200,19 +200,19 @@ class WorkflowTest {
 	void testImplicitMerge() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
-		Action<StringData, StringData> action1 = createAction1(action1_In, action1_Out);
+		Action action1 = createAction1(action1_In, action1_Out);
 		
 		Port<StringData> action2a_In = port(ACTION2A_IN, StringData.class);
 		Port<StringData> action2a_Out = port(ACTION2A_OUT, StringData.class);
-		Action<StringData, StringData> action2a = createAction2a(action2a_In, action2a_Out);
+		Action action2a = createAction2a(action2a_In, action2a_Out);
 		
 		Port<StringData> action2b_In = port(ACTION2B_IN, StringData.class);
 		Port<StringData> action2b_Out = port(ACTION2B_OUT, StringData.class);
-		Action<StringData, StringData> action2b = createAction2b(action2b_In, action2b_Out);
+		Action action2b = createAction2b(action2b_In, action2b_Out);
 		
 		Port<StringData> action3_In = port(ACTION3_IN, StringData.class);
 		Port<StringData> action3_Out = port(ACTION3_OUT, StringData.class);
-		Action<StringData, StringData> action3 = createAction3(action3_In, action3_Out);
+		Action action3 = createAction3(action3_In, action3_Out);
 		
 		Workflow workflow = Workflow.builder()
 			.actions(action1, action2a, action2b, action3)
@@ -238,31 +238,31 @@ class WorkflowTest {
 		assertEquals(1, nrOfTokensInState(state));
 	}
 	
-	private Action<StringData,StringData> createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private Action createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return action(ACTION1, inputPort, outputPort, StringData.class, this::action1Performed);
 	}
 	
-	private Action<StringData,StringData> createAction1x(Port<StringData> inputPort, Port<StringData> outputPort1, Port<StringData> outputPort2) {
+	private Action createAction1x(Port<StringData> inputPort, Port<StringData> outputPort1, Port<StringData> outputPort2) {
 		return action(ACTION1X, ports(inputPort), ports(outputPort1, outputPort2), StringData.class, this::action1Performed);
 	}
 	
-	private Action<StringData,StringData> createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private Action createAction2(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return action(ACTION2, inputPort, outputPort, StringData.class, this::action2Performed);
 	}
 	
-	private Action<StringData,StringData> createAction2a(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private Action createAction2a(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return action(ACTION2A, inputPort, outputPort, StringData.class, this::action2aPerformed);
 	}
 	
-	private Action<StringData,StringData> createAction2b(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private Action createAction2b(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return action(ACTION2B, inputPort, outputPort, StringData.class, this::action2bPerformed);
 	}
 	
-	private Action<IntegerData,IntegerData> createAction2i(Port<StringData> strInputPort, Port<IntegerData> intInPort, Port<IntegerData> outputPort) {
+	private Action createAction2i(Port<StringData> strInputPort, Port<IntegerData> intInPort, Port<IntegerData> outputPort) {
 		return action(ACTION2I, ports(strInputPort, intInPort), ports(outputPort), IntegerData.class, this::action2iPerformed);
 	}
 	
-	private Action<StringData,StringData> createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
+	private Action createAction3(Port<StringData> inputPort, Port<StringData> outputPort) {
 		return action(ACTION3, inputPort, outputPort, StringData.class, this::action3Performed);
 	}
 

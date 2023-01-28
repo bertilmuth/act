@@ -5,13 +5,13 @@ import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
 import org.requirementsascode.act.workflow.function.PartBehavior;
 
-public class Action<T extends ActionData, U extends ActionData> implements Named, Part{
+public class Action implements Named, Part{
 	private final String name;
 	private final Ports inPorts;
 	private final Ports outPorts;
 	private final PartBehavior partBehavior;
 
-	Action(String actionName, Port<T> inPort, Port<U> outPort, PartBehavior partBehavior) {
+	Action(String actionName, Port<?> inPort, Port<?> outPort, PartBehavior partBehavior) {
 		this(actionName, ports(inPort), ports(outPort), partBehavior);
 	}
 	
