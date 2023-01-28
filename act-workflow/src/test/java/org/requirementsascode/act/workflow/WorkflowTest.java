@@ -63,7 +63,7 @@ class WorkflowTest {
 			.flows()
 			.build();
 		
-		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
+		WorkflowState state = enterInitialData(workflow, action1_In);
 		assertEquals(str(ACTION1), action1_Out.firstActionData(state).get());
 	}
 	
@@ -89,7 +89,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
+		WorkflowState state = enterInitialData(workflow, action1_In);
 		
 		assertEquals(str(ACTION1 + "." + ACTION2), action2_Out.firstActionData(state).get());
 		assertEquals(1, nrOfTokensInState(state));
@@ -118,7 +118,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState afterAction1 = workflow.enterInitialData(action1_In, str(START_WORKFLOW));
+		WorkflowState afterAction1 = enterInitialData(workflow, action1_In);
 		WorkflowState state = workflow.enterData(afterAction1, action2i_Int_In, new IntegerData(1));
 		
 		assertEquals(2, action2i_Out.firstActionData(state).get().integer);
@@ -153,7 +153,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
+		WorkflowState state = enterInitialData(workflow, action1_In);	
 
 		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state).get());
 		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state).get());
@@ -189,7 +189,7 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.enterInitialData(action1x_In, str(START_WORKFLOW));	
+		WorkflowState state = enterInitialData(workflow, action1x_In);	
 
 		assertEquals(str(ACTION1 + "." + ACTION2A), action2a_Out.firstActionData(state).get());
 		assertEquals(str(ACTION1 + "." + ACTION2B), action2b_Out.firstActionData(state).get());
@@ -231,11 +231,15 @@ class WorkflowTest {
 			)
 			.build();
 		
-		WorkflowState state = workflow.enterInitialData(action1_In, str(START_WORKFLOW));	
+		WorkflowState state = enterInitialData(workflow, action1_In);	
 
 		List<ActionData> tokensInAction3Out = action3_Out.actionDatas(state).collect(Collectors.toList());
 		assertEquals(str(ACTION3), tokensInAction3Out.get(0));
 		assertEquals(1, nrOfTokensInState(state));
+	}
+	
+	private WorkflowState enterInitialData(Workflow workflow, Port<StringData> initialInputPort) {
+		return workflow.enterData(WorkflowState.initial(), initialInputPort, str(START_WORKFLOW));
 	}
 	
 	private Action createAction1(Port<StringData> inputPort, Port<StringData> outputPort) {

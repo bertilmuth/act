@@ -4,7 +4,6 @@ import static java.util.stream.Stream.concat;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.workflow.WorkflowApi.token;
 
-import java.util.Collections;
 import java.util.stream.Stream;
 
 import org.requirementsascode.act.core.Behavior;
@@ -28,11 +27,6 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	
 	public static Workflow from(Data<Workflow, ?> data) {
 		return data.state();
-	}
-	
-	public <T extends ActionData> WorkflowState enterInitialData(Port<T> inPort, T actionData) {
-		WorkflowState initialWorkflowState = new WorkflowState(new Tokens(Collections.emptyMap()));
-		return enterData(initialWorkflowState, inPort, actionData);
 	}
 	
 	public <T extends ActionData> WorkflowState enterData(WorkflowState state, Port<T> inPort, T actionData) {

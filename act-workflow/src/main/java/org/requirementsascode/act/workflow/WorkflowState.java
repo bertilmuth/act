@@ -15,7 +15,7 @@ public class WorkflowState {
 		this.tokens = tokens;
 	}
 	
-	static WorkflowState createInitialWorkflowState() {
+	static WorkflowState initial() {
 		return new WorkflowState(new Tokens(emptyMap()));
 	}
 	
