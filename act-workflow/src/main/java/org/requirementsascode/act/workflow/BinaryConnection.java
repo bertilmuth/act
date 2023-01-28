@@ -25,7 +25,7 @@ public class BinaryConnection<T extends ActionData> implements Part {
 	
 	@Override
 	public Flow asFlow() {
-		Apply<T,T> partBehavior = new Apply<>(this, inPort.type(), this::transmitUnchanged);
+		Apply<T,T> partBehavior = new Apply<>(inPort.type(), this::transmitUnchanged);
 		return new Flow(this, partBehavior);
 	}
 	

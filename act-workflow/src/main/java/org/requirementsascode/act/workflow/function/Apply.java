@@ -14,32 +14,28 @@ import org.requirementsascode.act.workflow.Ports;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
-public class Apply<T extends ActionData, U extends ActionData> implements Behavior<WorkflowState, Token, Token> {
+public class Apply<T extends ActionData, U extends ActionData> implements PartBehavior {
 	private final Class<T> type;
-	private final Ports inPorts;
-	private final Ports outPorts;
 	private final BiFunction<WorkflowState, T, U> actionFunction;
 
-	public Apply(Part owner, Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
-		requireNonNull(owner, "owner must be non-null!");
-		this.inPorts = owner.inPorts();
-		this.outPorts = owner.outPorts();
+	public Apply(Class<T> type, BiFunction<WorkflowState, T, U> actionFunction) {
 		this.type = requireNonNull(type, "type must be non-null!");
 		this.actionFunction = requireNonNull(actionFunction, "actionFunction must be non-null!");
 	}
 	
 	@Override
-	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		return transformAndMove(inputData);	
+	public Behavior<WorkflowState, Token, Token> asBehavior(Part owner) {
+		return transformAndMove(owner);	
 	}
 	
-	private Data<WorkflowState, Token> transformAndMove(Data<WorkflowState, Token> inputData) {
-		Data<WorkflowState, Token> result = new SelectOneTokenByType<>(inPorts, type)
+	private Behavior<WorkflowState, Token, Token> transformAndMove(Part owner) {
+		Ports inPorts = owner.inPorts();
+		Ports outPorts = owner.outPorts();
+		
+		return new SelectOneTokenByType<>(inPorts, type)
 			.andThen(this::applyActionFunction)
 			.andThen(new AddTokenToPorts(outPorts))
-			.andThen(new RemoveFirstTokenFromPorts(inPorts))
-			.actOn(inputData);
-		return result;
+			.andThen(new RemoveFirstTokenFromPorts(inPorts));
 	}
 	
 	private Data<WorkflowState, Token> applyActionFunction(Data<WorkflowState, Token> inputData) {

@@ -23,7 +23,7 @@ public class Action<T extends ActionData, U extends ActionData> implements Named
 		this.outPorts = requireNonNull(outPorts, "outPorts must be non-null!");	
 		
 		requireNonNull(actionFunction, "actionFunction must be non-null!");
-		this.apply = new Apply<>(this, inputType, actionFunction);	
+		this.apply = new Apply<>(inputType, actionFunction);	
 	}
 
 	@Override

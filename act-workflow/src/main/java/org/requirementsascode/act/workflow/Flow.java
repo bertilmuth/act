@@ -7,10 +7,15 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
+import org.requirementsascode.act.workflow.function.PartBehavior;
 
 public class Flow implements Transitionable<WorkflowState, Token>{
 	private final Part owner;
 	private Behavior<WorkflowState, Token, Token> behavior;
+	
+	Flow(Part owner, PartBehavior partBehavior) {
+		this(owner, partBehavior.asBehavior(owner));
+	}
 	
 	Flow(Part owner, Behavior<WorkflowState, Token, Token> behavior) {
 		this.owner = requireNonNull(owner, "owner must be non-null!");
