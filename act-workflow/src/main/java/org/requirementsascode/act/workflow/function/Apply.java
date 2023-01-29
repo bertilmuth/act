@@ -47,7 +47,7 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 			.flatMap(Token::actionData)
 			.map(ad -> actionFunction.apply(state, (T)ad))
 			.map(ad -> token.get().replaceActionData(ad))
-			.orElse(null);
+			.orElse(Token.emptyToken());
 		
 		return data(state, outToken);
 	}
