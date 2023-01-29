@@ -32,10 +32,14 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 		Ports inPorts = owner.inPorts();
 		Ports outPorts = owner.outPorts();
 		
-		return new SelectOneTokenByType<>(inPorts, type)
-			.andThen(this::applyActionFunction)
+		return actOn(inPorts)
 			.andThen(new AddTokenToPorts(outPorts))
 			.andThen(new RemoveFirstTokenFromPorts(inPorts));
+	}
+
+	private Behavior<WorkflowState, Token, Token> actOn(Ports inPorts) {
+		return new SelectOneTokenByType<>(inPorts, type)
+			.andThen(this::applyActionFunction);
 	}
 	
 	private Data<WorkflowState, Token> applyActionFunction(Data<WorkflowState, Token> inputData) {
