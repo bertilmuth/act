@@ -29,16 +29,18 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 	}
 	
 	private Behavior<WorkflowState, Token, Token> transformAndMove(Part owner) {
-		Ports inPorts = owner.inPorts();
-		Ports outPorts = owner.outPorts();
-		
-		return actOnSingleToken(inPorts)
-			.andThen(new AddTokenToPorts(outPorts))
-			.andThen(new RemoveFirstTokenFromPorts(inPorts));
+		return in -> {
+			return actOnSingleToken()
+				.andThen(new AddTokenToOutPorts(owner))
+				.andThen(new RemoveFirstTokenFromInPorts())
+				.andThen(out -> data(out.state(), Token.empty()))
+				.actOn(data(in.state(), owner));
+		};
+
 	}
 
-	private Behavior<WorkflowState, Token, Token> actOnSingleToken(Ports inPorts) {
-		return new SelectOneTokenByType<>(inPorts, type)
+	private Behavior<WorkflowState, Part, Token> actOnSingleToken() {
+		return new SelectOneTokenByType<>(type)
 			.andThen(this::applyActionFunction);
 	}
 	
