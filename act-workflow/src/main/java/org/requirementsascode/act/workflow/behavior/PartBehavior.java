@@ -1,4 +1,4 @@
-package org.requirementsascode.act.workflow.function;
+package org.requirementsascode.act.workflow.behavior;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.workflow.Part;

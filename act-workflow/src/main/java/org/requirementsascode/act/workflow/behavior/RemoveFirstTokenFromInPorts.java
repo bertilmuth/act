@@ -1,4 +1,4 @@
-package org.requirementsascode.act.workflow.function;
+package org.requirementsascode.act.workflow.behavior;
 
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 

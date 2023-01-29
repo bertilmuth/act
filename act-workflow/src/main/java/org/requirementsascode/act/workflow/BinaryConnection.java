@@ -2,7 +2,7 @@ package org.requirementsascode.act.workflow;
 
 import static java.util.Collections.singletonList;
 
-import org.requirementsascode.act.workflow.function.Apply;
+import org.requirementsascode.act.workflow.behavior.Apply;
 
 public class BinaryConnection<T extends ActionData> implements Part {
 	private Port<T> inPort;

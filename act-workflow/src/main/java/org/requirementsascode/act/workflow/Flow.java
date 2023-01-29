@@ -6,7 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.transition
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
 import org.requirementsascode.act.statemachine.Transitionable;
-import org.requirementsascode.act.workflow.function.PartBehavior;
+import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
 public class Flow implements Transitionable<WorkflowState, Token>{
 	private final Part owner;

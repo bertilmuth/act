@@ -3,7 +3,7 @@ package org.requirementsascode.act.workflow;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.workflow.WorkflowApi.ports;
 
-import org.requirementsascode.act.workflow.function.PartBehavior;
+import org.requirementsascode.act.workflow.behavior.PartBehavior;
 
 public class Action implements Named, Part{
 	private final String name;
