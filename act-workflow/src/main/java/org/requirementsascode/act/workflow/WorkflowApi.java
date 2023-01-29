@@ -21,7 +21,7 @@ public class WorkflowApi {
 	}
 	
 	public static Token emptyToken() {
-		return Token.emptyToken();
+		return Token.empty();
 	}
 	
 	public static Token token(ActionData actionData) {

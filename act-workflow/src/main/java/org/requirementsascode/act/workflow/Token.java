@@ -19,7 +19,7 @@ public class Token {
 		this.actionData = actionData;
 	}
 	
-	public static Token emptyToken() {
+	public static Token empty() {
 		return new Token(null);
 	}
 	
