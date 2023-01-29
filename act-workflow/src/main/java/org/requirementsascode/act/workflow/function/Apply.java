@@ -10,7 +10,6 @@ import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.workflow.ActionData;
 import org.requirementsascode.act.workflow.Part;
-import org.requirementsascode.act.workflow.Ports;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 

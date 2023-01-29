@@ -30,7 +30,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public <T extends ActionData> WorkflowState enterData(WorkflowState state, Port<T> inPort, T actionData) {
-		WorkflowState stateWithTokenAdded = inPort.addToken(state, token(actionData)).state();
+		WorkflowState stateWithTokenAdded = inPort.addToken(state, token(actionData));
 		return nextStep(stateWithTokenAdded);
 	}
 	
