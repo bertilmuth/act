@@ -24,10 +24,6 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 	
 	@Override
 	public Behavior<WorkflowState, Token, Token> asBehavior(Part owner) {
-		return transformAndMove(owner);	
-	}
-	
-	private Behavior<WorkflowState, Token, Token> transformAndMove(Part owner) {
 		return in -> {
 			return actOnSingleToken()
 				.andThen(out -> data(out.state(), Token.empty()))
