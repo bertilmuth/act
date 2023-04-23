@@ -27,14 +27,14 @@ class ToStateBehaviorTest {
 				.states(s1, s2)
 				.transitions(
 						transition(s1,s2, 
-							when(EnterS2.class, consumeWith((s,t) -> S2))
+							when(EnterNextState.class, consumeWith((s,t) -> S2))
 						))
 				.build();
 	}
 
 	@Test
 	void entersS2() {
-		Data<String, Trigger> result = statemachine.actOn(data(S1, new EnterS2()));
+		Data<String, Trigger> result = statemachine.actOn(data(S1, new EnterNextState()));
 		assertThat(result.state()).isEqualTo(S2);
 		assertTrue(s2Entered);
 		assertFalse(s1Entered);
@@ -42,15 +42,15 @@ class ToStateBehaviorTest {
 	
 	@Test
 	void doesntEnterS2() {
-		Data<String, Trigger> result = statemachine.actOn(data(S1, new DontEnterS2()));
+		Data<String, Trigger> result = statemachine.actOn(data(S1, new DontEnterNextState()));
 		assertThat(result.state()).isEqualTo(S1);
 		assertTrue(s1Entered);
 		assertFalse(s2Entered);
 	}
 	
 	interface Trigger {}
-	class EnterS2 implements Trigger{};
-	class DontEnterS2 implements Trigger{};
+	class EnterNextState implements Trigger{};
+	class DontEnterNextState implements Trigger{};
 	
 	String enterS1(String state, Trigger event) {
 		s1Entered = true;
