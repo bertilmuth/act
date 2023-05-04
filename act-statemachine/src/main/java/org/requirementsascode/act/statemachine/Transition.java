@@ -46,14 +46,16 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 
 	@Override
-	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {				
+	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {	
+		Behavior<S, V0, V0> toStateBehavior = toStateBehavior(sm);
+		
 		return inCase(fromState()::matchesStateIn,
 			transitionBehavior().andThen(
 				inCase(this::hasFired, 
 					inCase(this::isInToState, 
 						inCase(this::toStateEqualsFromState, 
 							identity(), 
-							toStateBehavior(sm)), 
+							toStateBehavior), 
 						this::errorIfNotInToState))));
 	}
 
