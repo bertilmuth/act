@@ -34,8 +34,12 @@ public class StatemachineApi {
 	}
 	
 	public static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
-			Behavior<S, V0, V0> behavior) {
-		return Transition.transition(fromState, toState, behavior);
+			Behavior<S, V0, V0> transitionBehavior) {
+		return Transition.transition(fromState, toState, transitionBehavior);
+	}
+
+	public static <S, V0> SelfTransition<S, V0> selfTransition(State<S, V0> state, Behavior<S, V0, V0> transitionBehavior) {
+		return SelfTransition.selfTransition(state, transitionBehavior);
 	}
 	
 	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> when(Class<V1> expectedType, Behavior<S, V1,V2> behavior) {
