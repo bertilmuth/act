@@ -120,23 +120,19 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private Behavior<S, V0, V0> createStatemachineBehavior() {
 		validate(this);
 
-		Behavior<S, V0, V0> behavior = 
-			statesBehaviorOrIdentity().andThen(transitionsBehaviorOrIdentity());
+		Behavior<S, V0, V0> behavior = unitedBehavior(
+			new FirstOneWhoActsWins<>(),
+			statesBehavior(),
+			transitionsBehavior());
 
 		return behavior;
 	}
 
-	private Behavior<S, V0, V0> statesBehaviorOrIdentity() {
-		Behavior<S, V0, V0> statesBehavior = states().asBehavior(this);
-		return unitedBehavior(new FirstOneWhoActsWins<>(),
-			statesBehavior, 
-			identity());
+	private Behavior<S, V0, V0> statesBehavior() {
+		return states().asBehavior(this);
 	}
 	
-	private Behavior<S, V0, V0> transitionsBehaviorOrIdentity() {
-		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
-		return unitedBehavior(new FirstOneWhoActsWins<>(),
-			transitionsBehavior, 
-			identity());
+	private Behavior<S, V0, V0> transitionsBehavior() {
+		return transitions().asBehavior(this);
 	}
 }

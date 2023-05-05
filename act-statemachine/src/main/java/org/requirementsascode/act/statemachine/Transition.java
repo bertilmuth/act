@@ -1,11 +1,11 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import org.requirementsascode.act.core.NoOp;
 
 public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0> {
 	private final State<S, V0> fromState;
@@ -54,7 +54,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 				inCase(this::hasFired, 
 					inCase(this::isInToState, 
 						inCase(this::toStateEqualsFromState, 
-							identity(), 
+							new NoOp<>(), 
 							toStateBehavior), 
 						this::errorIfNotInToState))));
 	}
