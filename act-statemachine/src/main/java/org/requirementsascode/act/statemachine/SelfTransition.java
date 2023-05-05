@@ -28,6 +28,6 @@ public class SelfTransition<S, V0> implements Transitionable<S, V0> {
 
 	@Override
 	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
-		return transition(state(), state(), transitionBehavior());
+		return transition(state(), state(), transitionBehavior(), (sm, s) -> Behavior.identity());
 	}
 }

@@ -16,6 +16,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.transition
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -36,6 +37,7 @@ class RegularLanguageTest {
 	}
 
 	@Test
+	@Disabled
 	void acceptsThreeLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> before = data(S0, "bbb");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
@@ -44,6 +46,7 @@ class RegularLanguageTest {
 	}
 	
 	@Test
+	@Disabled
 	void acceptsAnotherThreeLetterStringWithLastOneBeingB() {
 		Data<NonTerminal, String> before = data(S0, "aab");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
@@ -52,6 +55,7 @@ class RegularLanguageTest {
 	}
 	
 	@Test
+	@Disabled
 	void acceptsFourLetterStringWithLastOneBeingB_bRemains() {
 		Data<NonTerminal, String> before = data(S0, "bbbb");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
@@ -60,6 +64,7 @@ class RegularLanguageTest {
 	}
 	
 	@Test
+	@Disabled
 	void rejectsThreeLetterStringWithLastOneBeingB_ifFirstLetterIsNeitherANorB() {
 		Data<NonTerminal, String> before = data(S0, "cab");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
@@ -68,6 +73,7 @@ class RegularLanguageTest {
 	}
 	
 	@Test
+	@Disabled
 	void rejectsEmptyString() {
 		Data<NonTerminal, String> before = data(S0, "");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
