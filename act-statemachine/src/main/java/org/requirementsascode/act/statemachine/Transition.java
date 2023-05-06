@@ -64,12 +64,6 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		);
 	}
 	
-	private static <S,V0> Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
-		return d -> {
-			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState + ", but invariant was false in toState! Data: " + d);
-		};
-	}
-	
 	private static boolean triggerIsPresent(Data<?, ?> data) {
 		return data.value().isPresent();
 	}
@@ -80,5 +74,11 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	
 	private static <S,V0> Behavior<S, V0, V0> defaultToStateBehaviorProvider(Statemachine<S, V0> sm, State<S,V0> fromState, State<S,V0> toState) {
 		return inCase(toState::matchesStateIn, toState.asBehavior(sm), errorIfNotInToState(fromState, toState));
+	}
+	
+	private static <S,V0> Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
+		return d -> {
+			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState + ", but invariant was false in toState! Data: " + d);
+		};
 	}
 }
