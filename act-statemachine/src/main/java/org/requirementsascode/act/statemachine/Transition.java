@@ -3,8 +3,6 @@ package org.requirementsascode.act.statemachine;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
 
-import java.util.function.BiFunction;
-
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
@@ -12,13 +10,13 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0, V0> transitionBehavior;
-	private BiFunction<Statemachine<S, V0>, State<S, V0>, Behavior<S, V0, V0>> toStateBehaviorProvider;
+	private StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
 
-	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, BiFunction<Statemachine<S, V0>, State<S, V0>, Behavior<S,V0,V0>> toStateBehavior) {
+	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
 		this.transitionBehavior = requireNonNull(transitionBehavior, "transitionBehavior must be non-null");
-		this.toStateBehaviorProvider = requireNonNull(toStateBehavior, "toStateBehavior must be non-null");
+		this.toStateEntryBehaviorSupplier = requireNonNull(toStateEntryBehaviorSupplier, "toStateEntryBehaviorSupplier must be non-null");
 	}
 
 	static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
@@ -27,8 +25,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
-			Behavior<S, V0, V0> transitionBehavior, BiFunction<Statemachine<S, V0>, State<S, V0>, Behavior<S,V0,V0>> toStateBehaviorProvider) {
-		return new Transition<>(fromState, toState, transitionBehavior, toStateBehaviorProvider);
+			Behavior<S, V0, V0> transitionBehavior, StateEntryBehaviorSupplier<S, V0> toStateEntryBehaviorSupplier) {
+		return new Transition<>(fromState, toState, transitionBehavior, toStateEntryBehaviorSupplier);
 	}
 
 	public State<S, V0> fromState() {
@@ -55,30 +53,32 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {	
-		Behavior<S, V0, V0> toStateBehavior = toStateBehaviorProvider.apply(sm, toState());
+		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntryBehaviorSupplier.supply(sm, fromState(), toState());
 		
 		return inCase(fromState()::matchesStateIn,
 			transitionBehavior().andThen(
-				inCase(this::hasFired,
-					inCase(this::isInToState, 
-							toStateBehavior, 
-						this::errorIfNotInToState))));
-	}
-
-	private boolean isInToState(Data<S, V0> d) {
-		return toState().matchesStateIn(d);
+				inCase(Transition::triggerIsPresent,
+					toStateEntryBehavior
+				)
+			)
+		);
 	}
 	
-	private static <S,V0> Behavior<S, V0, V0> defaultToStateBehaviorProvider(Statemachine<S, V0> sm, State<S,V0> toState) {
-		return toState.asBehavior(sm);
+	private static <S,V0> Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
+		return d -> {
+			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState + ", but invariant was false in toState! Data: " + d);
+		};
 	}
-
-	private boolean hasFired(Data<?, ?> data) {
+	
+	private static boolean triggerIsPresent(Data<?, ?> data) {
 		return data.value().isPresent();
 	}
 	
-	private Data<S, V0> errorIfNotInToState(Data<S, V0> d) {
-		throw new IllegalStateException("Tried transition from " + fromState() + " to " + toState()
-				+ ", but invariant was false in toState! Data: " + d);
+	interface StateEntryBehaviorSupplier<S,V0>{
+		Behavior<S,V0,V0> supply(Statemachine<S, V0> statemachine, State<S,V0> fromState, State<S, V0> toState);
+	}
+	
+	private static <S,V0> Behavior<S, V0, V0> defaultToStateBehaviorProvider(Statemachine<S, V0> sm, State<S,V0> fromState, State<S,V0> toState) {
+		return inCase(toState::matchesStateIn, toState.asBehavior(sm), errorIfNotInToState(fromState, toState));
 	}
 }
