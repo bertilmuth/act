@@ -76,8 +76,7 @@ public class HierarchicalCartStateMachine {
 				transition(nonFullCartSubState, fullCartSubState, when(AddItem.class, consumeWith(HierarchicalCart::addItem))),
 				transition(fullCartSubState, nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCart::removeItem))),
 				entryFlow(nonFullCartSubState, when(AddItem.class, consumeWith(HierarchicalCart::enterSubstate))),
-				exitFlow(nonFullCartSubState, when(RemoveItem.class,
-					consumeWith(HierarchicalCart::removeItem).andThen(consumeWith(HierarchicalCart::exitSubstate))))
+				exitFlow(nonFullCartSubState, when(RemoveItem.class, consumeWith(HierarchicalCart::exitSubstate)))
 			)
 			.build();
 		
