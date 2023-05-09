@@ -69,11 +69,11 @@ public class StatemachineApi {
 	}
 	
 	public static <S, V0> EntryFlow<S, V0> entryFlow(Behavior<S, V0,V0> entryBehavior) {
-		return EntryFlow.entryFlow(entryBehavior);
+		return entryFlow(null, entryBehavior);
 	}
 	
 	public static <S, V0> EntryFlow<S, V0> entryFlow(State<S, V0> toState, Behavior<S, V0,V0> entryBehavior) {
-		return EntryFlow.entryFlow(toState, entryBehavior);
+		return new EntryFlow<>(toState, entryBehavior);
 	}
 	
 	public static <S, V0> ExitFlow<S, V0> exitFlow(State<S, V0> fromState, Behavior<S, V0, V0> exitBehavior) {
