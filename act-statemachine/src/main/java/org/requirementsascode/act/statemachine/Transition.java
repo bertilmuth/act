@@ -12,21 +12,15 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	private final Behavior<S, V0, V0> transitionBehavior;
 	private StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
 
-	private Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
+	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior) {
+		this(fromState, toState, transitionBehavior, Transition::defaultToStateBehaviorProvider);
+	}
+	
+	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
 		this.transitionBehavior = requireNonNull(transitionBehavior, "transitionBehavior must be non-null");
 		this.toStateEntryBehaviorSupplier = requireNonNull(toStateEntryBehaviorSupplier, "toStateEntryBehaviorSupplier must be non-null");
-	}
-
-	static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
-			Behavior<S, V0, V0> transitionBehavior) {
-		return transition(fromState, toState, transitionBehavior, Transition::defaultToStateBehaviorProvider);
-	}
-	
-	static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
-			Behavior<S, V0, V0> transitionBehavior, StateEntryBehaviorSupplier<S, V0> toStateEntryBehaviorSupplier) {
-		return new Transition<>(fromState, toState, transitionBehavior, toStateEntryBehaviorSupplier);
 	}
 
 	public State<S, V0> fromState() {
