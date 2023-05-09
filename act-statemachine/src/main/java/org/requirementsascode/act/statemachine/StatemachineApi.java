@@ -61,7 +61,7 @@ public class StatemachineApi {
 	}
 	
 	public static <S,V1,V2> Behavior<S,V1,V2> mapWith(BiFunction<S,V1,Data<S,V2>> mapper){
-		return MapWith.mapWith(mapper);
+		return new MapWith<>(mapper);
 	}
 	
 	public static <S,V> Behavior<S,V,V> init(Function<V,S> init){
