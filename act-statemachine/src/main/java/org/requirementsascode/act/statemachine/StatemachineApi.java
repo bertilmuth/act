@@ -53,7 +53,7 @@ public class StatemachineApi {
 	}
 	
 	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> whenInCase(Class<V1> expectedType, Predicate<Data<S,V1>> predicate, Behavior<S, V1,V2> behavior) {
-		return WhenInCase.whenInCase(expectedType, predicate, behavior);
+		return new WhenInCase<>(expectedType, predicate, behavior);
 	}
 	
 	public static <S,V> Behavior<S,V,V> consumeWith(BiFunction<S,V,S> consumer){

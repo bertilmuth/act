@@ -7,7 +7,7 @@ public class When<S,V0> implements Behavior<S,V0,V0>{
 	private Behavior<S, V0, V0> when;
 
 	public <V1 extends V0, V2 extends V0> When(Class<V1> expectedType, Behavior<S, V1,V2> behavior) {
-		this.when = WhenInCase.whenInCase(expectedType, d -> true, behavior);
+		this.when = new WhenInCase<>(expectedType, d -> true, behavior);
 	}
 
 	@Override

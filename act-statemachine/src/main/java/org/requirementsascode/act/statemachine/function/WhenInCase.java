@@ -7,10 +7,17 @@ import java.util.function.Predicate;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
-public class WhenInCase {
+public class WhenInCase<S,V0> implements Behavior<S,V0,V0> {
+	private Behavior<S, V0, V0> whenInCase;
+
 	@SuppressWarnings("unchecked")
-	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> whenInCase(Class<V1> expectedType, Predicate<Data<S,V1>> predicate, Behavior<S, V1,V2> behavior) {
-		return (Behavior<S, V0,V0>) inCase(typeMatches(expectedType), inCase(predicate, i -> behaviorActOn(i, behavior)));
+	public <V1 extends V0, V2 extends V0> WhenInCase(Class<V1> expectedType, Predicate<Data<S,V1>> predicate, Behavior<S, V1,V2> behavior) {
+		this.whenInCase = (Behavior<S, V0,V0>) inCase(typeMatches(expectedType), inCase(predicate, i -> behaviorActOn(i, behavior)));
+	}
+	
+	@Override
+	public Data<S, V0> actOn(Data<S, V0> d) {
+		return whenInCase.actOn(d);
 	}
 
 	private static <S, V1 extends V0, V0> Predicate<Data<S, V0>> typeMatches(Class<V1> expectedType) {
