@@ -12,12 +12,8 @@ import org.requirementsascode.act.core.Behavior;
 public class States<S, V0> implements Behavioral<S, V0>{
 	private final List<State<S, V0>> states;
 
-	private States(List<State<S, V0>> states) {
+	States(List<State<S, V0>> states) {
 		this.states = requireNonNull(states, "states must be non-null!");
-	}
-
-	static <S, V0> States<S, V0> states(List<State<S, V0>> states) {
-		return new States<>(states);
 	}
 
 	@Override

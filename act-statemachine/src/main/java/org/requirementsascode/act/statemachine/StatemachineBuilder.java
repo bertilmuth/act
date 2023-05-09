@@ -24,7 +24,7 @@ public class StatemachineBuilder {
 
 		private StatesBuilder(State<S,V>[] states) {
 			requireNonNull(states, "states must be non-null!");
-			this.builderStates = States.states(asList(states));
+			this.builderStates = new States<>(asList(states));
 		}
 
 		@SafeVarargs
