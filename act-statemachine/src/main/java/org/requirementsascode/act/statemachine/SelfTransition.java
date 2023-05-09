@@ -9,13 +9,9 @@ public class SelfTransition<S, V0> implements Transitionable<S, V0> {
 	private final State<S, V0> state;
 	private final Behavior<S, V0, V0> transitionBehavior;
 
-	private SelfTransition(State<S, V0> state, Behavior<S, V0, V0> transitionBehavior) {
+	SelfTransition(State<S, V0> state, Behavior<S, V0, V0> transitionBehavior) {
 		this.state = state;
 		this.transitionBehavior = requireNonNull(transitionBehavior, "transitionBehavior must be non-null");
-	}
-
-	static <S, V0> SelfTransition<S, V0> selfTransition(State<S, V0> state, Behavior<S, V0, V0> transitionBehavior) {
-		return new SelfTransition<>(state, transitionBehavior);
 	}
 
 	public State<S, V0> state() {
