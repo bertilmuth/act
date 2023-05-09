@@ -6,12 +6,13 @@ import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
+import static java.util.Objects.requireNonNull;
 
 public class ConsumeWith<S,V> implements Behavior<S,V, V>{
 	private final BiFunction<S, V, S> consumer;
 
 	public ConsumeWith(BiFunction<S,V,S> consumer){
-		this.consumer = consumer;
+		this.consumer = requireNonNull(consumer, "consumer must be non-null!");
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package org.requirementsascode.act.statemachine.validate;
 
+import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.anyState;
 
 import java.util.List;
@@ -14,12 +15,16 @@ import org.requirementsascode.act.statemachine.Transitionable;
 
 public class StatemachineValidator {
 	public static <S, V0> void validate(Statemachine<S, V0> statemachine) {
+		requireNonNull(statemachine, "statemachine must be non-null!");
 		validateStates(statemachine, Transition::fromState, "The following fromStates are not in the state list:");
 		validateStates(statemachine, Transition::toState, "The following toStates are not in the state list:");
 	}
 
 	private static <S, V0> void validateStates(Statemachine<S, V0> statemachine,
 		Function<Transition<S, ?>, State<S, ?>> transitionStateAccess, String message) {
+		requireNonNull(statemachine, "statemachine must be non-null!");
+		requireNonNull(transitionStateAccess, "transitionStateAccess must be non-null!");
+		requireNonNull(message, "message must be non-null!");
 		
 		List<State<S, V0>> expectedStates = statemachine.states().stream().collect(Collectors.toList());
 		State<S, V0> definedState = statemachine.definedState();

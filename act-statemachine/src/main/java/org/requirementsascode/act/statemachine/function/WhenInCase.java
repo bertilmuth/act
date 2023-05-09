@@ -1,5 +1,6 @@
 package org.requirementsascode.act.statemachine.function;
 
+import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import java.util.function.Predicate;
@@ -12,6 +13,8 @@ public class WhenInCase<S,V0> implements Behavior<S,V0,V0> {
 
 	@SuppressWarnings("unchecked")
 	public <V1 extends V0, V2 extends V0> WhenInCase(Class<V1> expectedType, Predicate<Data<S,V1>> predicate, Behavior<S, V1,V2> behavior) {
+		requireNonNull(expectedType, "expectedType must be non-null!");
+		requireNonNull(behavior, "behavior must be non-null!");		
 		this.whenInCase = (Behavior<S, V0,V0>) inCase(typeMatches(expectedType), inCase(predicate, i -> behaviorActOn(i, behavior)));
 	}
 	
