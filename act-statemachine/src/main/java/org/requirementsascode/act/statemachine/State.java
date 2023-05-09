@@ -1,7 +1,7 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.selfTransition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -38,9 +38,9 @@ public class State<S, V> implements Behavioral<S, V> {
 	}
 
 	@Override
-	public Behavior<S, V, V> asBehavior(Statemachine<S, V> sm) {
-		return selfTransition(this, stateInternalBehavior)
-			.asTransition(sm).asBehavior(sm);
+	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStateMachine) {
+		return transition(this, this, stateInternalBehavior, (sm, f, t) -> Behavior.identity())
+			.asBehavior(owningStateMachine);
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
