@@ -65,7 +65,7 @@ public class StatemachineApi {
 	}
 	
 	public static <S,V> Behavior<S,V,V> init(Function<V,S> init){
-		return Init.init(init);
+		return new Init<>(init);
 	}
 	
 	public static <S, V0> EntryFlow<S, V0> entryFlow(Behavior<S, V0,V0> entryBehavior) {
