@@ -12,7 +12,7 @@ public class EntryFlow<S, V0> implements Transitionable<S, V0> {
 	private final Behavior<S, V0, V0> entryBehavior;
 
 	EntryFlow(State<S, V0> toState, Behavior<S, V0, V0> entryBehavior) {
-		this.toState = toState;
+		this.toState = toState; // May be null
 		this.entryBehavior = requireNonNull(entryBehavior, "entryBehavior must be non-null");
 	}
 

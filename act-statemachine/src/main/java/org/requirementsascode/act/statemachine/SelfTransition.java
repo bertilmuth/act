@@ -10,7 +10,7 @@ public class SelfTransition<S, V0> implements Transitionable<S, V0> {
 	private final Behavior<S, V0, V0> transitionBehavior;
 
 	SelfTransition(State<S, V0> state, Behavior<S, V0, V0> transitionBehavior) {
-		this.state = state;
+		this.state = requireNonNull(state, "state must be non-null!");
 		this.transitionBehavior = requireNonNull(transitionBehavior, "transitionBehavior must be non-null");
 	}
 
