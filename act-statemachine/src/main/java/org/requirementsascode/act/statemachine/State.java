@@ -39,7 +39,7 @@ public class State<S, V> implements Behavioral<S, V> {
 
 	@Override
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> owningStateMachine) {
-		return transition(this, this, stateInternalBehavior, (sm, f, t) -> Behavior.identity())
+		return transition(this, anyState(), stateInternalBehavior, (sm, f, t) -> Behavior.identity())
 			.asBehavior(owningStateMachine);
 	}
 
