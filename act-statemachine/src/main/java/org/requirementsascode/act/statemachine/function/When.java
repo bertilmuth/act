@@ -1,9 +1,17 @@
 package org.requirementsascode.act.statemachine.function;
 
 import org.requirementsascode.act.core.Behavior;
+import org.requirementsascode.act.core.Data;
 
-public class When {
-	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> when(Class<V1> expectedType, Behavior<S, V1,V2> behavior) {
-		return WhenInCase.whenInCase(expectedType, d -> true, behavior);
+public class When<S,V0> implements Behavior<S,V0,V0>{
+	private Behavior<S, V0, V0> when;
+
+	public <V1 extends V0, V2 extends V0> When(Class<V1> expectedType, Behavior<S, V1,V2> behavior) {
+		this.when = WhenInCase.whenInCase(expectedType, d -> true, behavior);
+	}
+
+	@Override
+	public Data<S, V0> actOn(Data<S, V0> before) {
+		return when.actOn(before);
 	}
 }
