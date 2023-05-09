@@ -77,6 +77,6 @@ public class StatemachineApi {
 	}
 	
 	public static <S, V0> ExitFlow<S, V0> exitFlow(State<S, V0> fromState, Behavior<S, V0, V0> exitBehavior) {
-		return ExitFlow.exitFlow(fromState, exitBehavior);
+		return new ExitFlow<>(fromState, exitBehavior);
 	}
 }
