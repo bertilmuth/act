@@ -48,6 +48,10 @@ public class StatemachineApi {
 		return new SelfTransition<>(state, transitionBehavior);
 	}
 	
+	public static <S, V0> Flow<S, V0> flow(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> flowBehavior) {
+		return new Flow<>(fromState, toState, flowBehavior);
+	}
+	
 	public static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> when(Class<V1> expectedType, Behavior<S, V1,V2> behavior) {
 		return new When<>(expectedType, behavior);
 	}

@@ -11,7 +11,7 @@ import static org.requirementsascode.act.statemachine.RegularLanguageTest.NonTer
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import java.util.function.Predicate;
 
@@ -93,9 +93,9 @@ class RegularLanguageTest {
 		Statemachine<NonTerminal, String> statemachine = Statemachine.builder()
 			.states(s1, s2, s3)
 			.transitions(
-				transition(s1, s2, accept('a', S2)),
-				transition(s1, s2, accept('b', S2)),
-				transition(s2, s3, accept('b', S3)),
+				flow(s1, s2, accept('a', S2)),
+				flow(s1, s2, accept('b', S2)),
+				flow(s2, s3, accept('b', S3)),
 				entryFlow(s1, accept('a', S1)),
 				entryFlow(s1, accept('b', S1))
 			)
