@@ -55,7 +55,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		));
 	}
 	
-	interface StateEntryBehaviorSupplier<S,V0>{
+	public interface StateEntryBehaviorSupplier<S,V0>{
 		Behavior<S,V0,V0> supply(Statemachine<S, V0> statemachine, State<S,V0> fromState, State<S, V0> toState);
 	}
 	
