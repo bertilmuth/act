@@ -2,7 +2,6 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
-import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
@@ -131,6 +130,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 	
 	private Behavior<S, V0, V0> transitionsBehavior() {
-		return inCase(Transition::triggerIsPresent, transitions().asBehavior(this));
+		return transitions().asBehavior(this);
 	}
 }
