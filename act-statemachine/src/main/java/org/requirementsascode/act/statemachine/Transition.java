@@ -13,7 +13,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	private StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
 
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior) {
-		this(fromState, toState, transitionBehavior, Transition::defaultToStateBehaviorProvider);
+		this(fromState, toState, transitionBehavior, new DefaultStateEntryProvider<>());
 	}
 	
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
@@ -63,7 +63,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		return triggeredBehavior(inCase(toState::matchesStateIn, toState.asBehavior(sm), errorIfNotInToState(fromState, toState)));
 	}
 	
-	private static <S,V0> Behavior<S, V0, V0> triggeredBehavior(Behavior<S, V0, V0> behavior) {
+	static <S,V0> Behavior<S, V0, V0> triggeredBehavior(Behavior<S, V0, V0> behavior) {
 		return inCase(Transition::triggerIsPresent, behavior);
 	}
 	
