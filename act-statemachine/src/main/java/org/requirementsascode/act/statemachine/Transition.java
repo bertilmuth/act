@@ -46,7 +46,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {	
-		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntryBehaviorSupplier.supply(sm, fromState(), toState());
+		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntryBehaviorSupplier.supply(sm, this);
 		
 		return new TriggeredBehavior<>(
 			inCase(fromState()::matchesStateIn,
@@ -55,6 +55,6 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	public interface ToStateEntryBehaviorSupplier<S,V0>{
-		Behavior<S,V0,V0> supply(Statemachine<S, V0> statemachine, State<S,V0> fromState, State<S, V0> toState);
+		Behavior<S,V0,V0> supply(Statemachine<S, V0> statemachine, Transition<S,V0> transition);
 	}
 }
