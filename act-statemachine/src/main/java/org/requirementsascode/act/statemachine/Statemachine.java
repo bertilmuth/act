@@ -98,6 +98,22 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return isRecursive;
 	}
 
+	private Behavior<S, V0, V0> createStatemachineBehavior() {
+		validate(this);
+		Behavior<S, V0, V0> behavior = 
+			unitedBehavior(new FirstOneWhoActsWins<>(),
+				statesBehavior().andThen(transitionsBehavior()),
+				transitionsBehavior());
+		return behavior;
+	}
+	private Behavior<S, V0, V0> statesBehavior() {
+		return states().asBehavior(this);
+	}
+	
+	private Behavior<S, V0, V0> transitionsBehavior() {
+		return transitions().asBehavior(this);
+	}
+	
 	private State<S, V0> createDefinedState(States<S, V0> states) {
 		return state(DEFINED_STATE, states.stream()
 			.map(State::invariant)
@@ -115,21 +131,5 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	
 	private Predicate<S> notIn(State<S, V0> state) {
 		return state.invariant().negate();
-	}
-
-	private Behavior<S, V0, V0> createStatemachineBehavior() {
-		validate(this);
-		Behavior<S, V0, V0> behavior = 
-			unitedBehavior(new FirstOneWhoActsWins<>(),
-				statesBehavior().andThen(transitionsBehavior()),
-				transitionsBehavior());
-		return behavior;
-	}
-	private Behavior<S, V0, V0> statesBehavior() {
-		return states().asBehavior(this);
-	}
-	
-	private Behavior<S, V0, V0> transitionsBehavior() {
-		return transitions().asBehavior(this);
 	}
 }
