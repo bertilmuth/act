@@ -48,6 +48,6 @@ public class StatemachineValidator {
 	}
 
 	private static <V0, S> Stream<Transitionable<S, V0>> transitionsOf(Statemachine<S, V0> stateMachine) {
-		return stateMachine.transitions().stream();
+		return stateMachine.transitionables().stream();
 	}
 }

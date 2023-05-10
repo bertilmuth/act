@@ -18,7 +18,7 @@ public class StatemachineBuilder {
 
 	public class StatesBuilder<S,V> {
 		private final States<S, V> builderStates;
-		private Transitions<S, V> builderTransitions;
+		private Transitionables<S, V> builderTransitions;
 		private boolean isRecursive = false;
 		private MergeStrategy<S, V> mergeStrategy;
 
@@ -36,7 +36,7 @@ public class StatemachineBuilder {
 		public class TransitionsBuilder {
 			private TransitionsBuilder(Transitionable<S, V>[] transitions){
 				requireNonNull(transitions, "transitions must be non-null!");
-				StatesBuilder.this.builderTransitions = new Transitions<>(asList(transitions));
+				StatesBuilder.this.builderTransitions = new Transitionables<>(asList(transitions));
 			}
 			
 			public Statemachine<S,V> build() {

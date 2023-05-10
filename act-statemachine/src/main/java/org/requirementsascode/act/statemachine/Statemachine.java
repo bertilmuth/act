@@ -21,7 +21,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String FINAL_STATE = "Final State";
 
 	private final States<S, V0> states;
-	private final Transitions<S, V0> transitions;
+	private final Transitionables<S, V0> transitionables;
 	private final Behavior<S, V0, V0> statemachineBehavior;
 	private final State<S, V0> initialState;
 	private final State<S, V0> definedState;
@@ -29,13 +29,13 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private final MergeStrategy<S, V0> mergeStrategy;
 	private final boolean isRecursive;
 
-	Statemachine(States<S, V0> states, Transitions<S, V0> transitions, MergeStrategy<S, V0> mergeStrategy, boolean isRecursive) {
+	Statemachine(States<S, V0> states, Transitionables<S, V0> transitionables, MergeStrategy<S, V0> mergeStrategy, boolean isRecursive) {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 		this.definedState = createDefinedState(states);
 		this.initialState = createInitialState(definedState);
 		this.finalState = createFinalState(definedState);
-		this.transitions = requireNonNull(transitions, "transitions must be non-null!");
+		this.transitionables = requireNonNull(transitionables, "transitions must be non-null!");
 		this.isRecursive = isRecursive;
 
 		this.statemachineBehavior = createStatemachineBehavior();
@@ -54,8 +54,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return states;
 	}
 
-	public Transitions<S, V0> transitions() {
-		return transitions;
+	public Transitionables<S, V0> transitionables() {
+		return transitionables;
 	}
 
 	public State<S, V0> definedState() {
@@ -74,24 +74,24 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return mergeStrategy;
 	}
 	
-	public Transitions<S, V0> incomingTransitions(State<S, V0> toState) {
+	public Transitionables<S, V0> incomingTransitions(State<S, V0> toState) {
 		requireNonNull(toState, "toState must be non-null!");
 		
-		List<Transitionable<S, V0>> transitions = transitions().stream()
+		List<Transitionable<S, V0>> transitions = transitionables().stream()
 			.filter(t -> t.asTransition(this).toState().equals(toState))
 			.collect(Collectors.toList());
 		
-		return new Transitions<>(transitions);
+		return new Transitionables<>(transitions);
 	}
 	
-	public Transitions<S, V0> outgoingTransitions(State<S, V0> fromState) {
+	public Transitionables<S, V0> outgoingTransitions(State<S, V0> fromState) {
 		requireNonNull(fromState, "fromState must be non-null!");
 				
-		List<Transitionable<S, V0>> transitions = transitions().stream()
+		List<Transitionable<S, V0>> transitions = transitionables().stream()
 			.filter(t -> t.asTransition(this).fromState().equals(fromState))
 			.collect(Collectors.toList());
 		
-		return new Transitions<>(transitions);
+		return new Transitionables<>(transitions);
 	}
 	
 	public boolean isRecursive() {
@@ -111,7 +111,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 	
 	private Behavior<S, V0, V0> transitionsBehavior() {
-		return transitions().asBehavior(this);
+		return transitionables().transitionsOf(this);
 	}
 	
 	private State<S, V0> createDefinedState(States<S, V0> states) {
