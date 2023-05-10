@@ -49,7 +49,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {	
 		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntryBehaviorSupplier.supply(sm, fromState(), toState());
 		
-		return triggeredBehavior(
+		return new TriggeredBehavior<>(
 			inCase(fromState()::matchesStateIn,
 				transitionBehavior().andThen(toStateEntryBehavior)
 		));
