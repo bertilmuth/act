@@ -63,7 +63,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		return triggeredBehavior(inCase(toState::matchesStateIn, toState.asBehavior(sm), errorIfNotInToState(fromState, toState)));
 	}
 	
-	static <S,V0> Behavior<S, V0, V0> triggeredBehavior(Behavior<S, V0, V0> behavior) {
+	private static <S,V0> Behavior<S, V0, V0> triggeredBehavior(Behavior<S, V0, V0> behavior) {
 		return inCase(Transition::triggerIsPresent, behavior);
 	}
 	
