@@ -2,6 +2,7 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.Behavior.identity;
+import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
@@ -120,20 +121,16 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private Behavior<S, V0, V0> createStatemachineBehavior() {
 		validate(this);
 		Behavior<S, V0, V0> behavior = 
-			statesBehaviorOrIdentity().andThen(transitionsBehaviorOrIdentity());
+			unitedBehavior(new FirstOneWhoActsWins<>(),
+				statesBehavior().andThen(transitionsBehavior()),
+				transitionsBehavior());
 		return behavior;
 	}
-	private Behavior<S, V0, V0> statesBehaviorOrIdentity() {
-		Behavior<S, V0, V0> statesBehavior = states().asBehavior(this);
-		return unitedBehavior(new FirstOneWhoActsWins<>(),
-			statesBehavior, 
-			identity());
+	private Behavior<S, V0, V0> statesBehavior() {
+		return states().asBehavior(this);
 	}
 	
-	private Behavior<S, V0, V0> transitionsBehaviorOrIdentity() {
-		Behavior<S, V0, V0> transitionsBehavior = transitions().asBehavior(this);
-		return unitedBehavior(new FirstOneWhoActsWins<>(),
-			transitionsBehavior, 
-			identity());
+	private Behavior<S, V0, V0> transitionsBehavior() {
+		return inCase(Transition::triggerIsPresent, transitions().asBehavior(this));
 	}
 }

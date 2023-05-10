@@ -58,7 +58,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		);
 	}
 	
-	private static boolean triggerIsPresent(Data<?, ?> data) {
+	static boolean triggerIsPresent(Data<?, ?> data) {
 		return data.value().isPresent();
 	}
 	
