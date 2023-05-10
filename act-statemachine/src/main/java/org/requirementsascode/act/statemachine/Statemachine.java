@@ -74,22 +74,22 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return mergeStrategy;
 	}
 	
-	public Transitionables<S, V0> incomingTransitions(State<S, V0> toState) {
+	public Transitionables<S, V0> incomingTransitionables(State<S, V0> toState) {
 		requireNonNull(toState, "toState must be non-null!");
 		
 		List<Transitionable<S, V0>> transitions = transitionables().stream()
 			.filter(t -> t.asTransition(this).toState().equals(toState))
-			.collect(Collectors.toList());
+			.collect(Collectors.toUnmodifiableList());
 		
 		return new Transitionables<>(transitions);
 	}
 	
-	public Transitionables<S, V0> outgoingTransitions(State<S, V0> fromState) {
+	public Transitionables<S, V0> outgoingTransitionables(State<S, V0> fromState) {
 		requireNonNull(fromState, "fromState must be non-null!");
 				
 		List<Transitionable<S, V0>> transitions = transitionables().stream()
 			.filter(t -> t.asTransition(this).fromState().equals(fromState))
-			.collect(Collectors.toList());
+			.collect(Collectors.toUnmodifiableList());
 		
 		return new Transitionables<>(transitions);
 	}
