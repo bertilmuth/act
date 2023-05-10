@@ -59,7 +59,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		return inCase(Transition::triggerIsPresent, behavior);
 	}
 	
-	static boolean triggerIsPresent(Data<?, ?> data) {
+	private static boolean triggerIsPresent(Data<?, ?> data) {
 		return data.value().isPresent();
 	}
 	
