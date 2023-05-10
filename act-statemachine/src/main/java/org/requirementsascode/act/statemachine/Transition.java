@@ -51,7 +51,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		
 		return triggeredBehavior(
 			inCase(fromState()::matchesStateIn,
-			transitionBehavior().andThen(triggeredBehavior(toStateEntryBehavior))
+				transitionBehavior().andThen(toStateEntryBehavior)
 		));
 	}
 	
@@ -60,7 +60,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	private static <S,V0> Behavior<S, V0, V0> defaultToStateBehaviorProvider(Statemachine<S, V0> sm, State<S,V0> fromState, State<S,V0> toState) {
-		return inCase(toState::matchesStateIn, toState.asBehavior(sm), errorIfNotInToState(fromState, toState));
+		return triggeredBehavior(inCase(toState::matchesStateIn, toState.asBehavior(sm), errorIfNotInToState(fromState, toState)));
 	}
 	
 	static <S,V0> Behavior<S, V0, V0> triggeredBehavior(Behavior<S, V0, V0> behavior) {
