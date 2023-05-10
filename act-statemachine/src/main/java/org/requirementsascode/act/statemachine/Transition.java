@@ -10,13 +10,13 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0, V0> transitionBehavior;
-	private StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
+	private ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
 
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior) {
-		this(fromState, toState, transitionBehavior, new DefaultStateEntryProvider<>());
+		this(fromState, toState, transitionBehavior, new DefaultToStateEntryProvider<>());
 	}
 	
-	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, StateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
+	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
 		this.transitionBehavior = requireNonNull(transitionBehavior, "transitionBehavior must be non-null");
@@ -55,12 +55,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		));
 	}
 	
-	public interface StateEntryBehaviorSupplier<S,V0>{
+	public interface ToStateEntryBehaviorSupplier<S,V0>{
 		Behavior<S,V0,V0> supply(Statemachine<S, V0> statemachine, State<S,V0> fromState, State<S, V0> toState);
-	}
-	
-	private static <S,V0> Behavior<S, V0, V0> defaultToStateBehaviorProvider(Statemachine<S, V0> sm, State<S,V0> fromState, State<S,V0> toState) {
-		return triggeredBehavior(inCase(toState::matchesStateIn, toState.asBehavior(sm), errorIfNotInToState(fromState, toState)));
 	}
 	
 	static <S,V0> Behavior<S, V0, V0> triggeredBehavior(Behavior<S, V0, V0> behavior) {
@@ -69,11 +65,5 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	
 	private static boolean triggerIsPresent(Data<?, ?> data) {
 		return data.value().isPresent();
-	}
-	
-	private static <S,V0> Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
-		return d -> {
-			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState + ", but invariant was false in toState! Data: " + d);
-		};
 	}
 }
