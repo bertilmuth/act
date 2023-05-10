@@ -9,17 +9,17 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0, V0> transitionBehavior;
-	private ToStateEntryBehaviorSupplier<S,V0> toStateEntrySupplier;
+	private ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
 
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior) {
-		this(fromState, toState, transitionBehavior, new DefaultToStateEntryProvider<>());
+		this(fromState, toState, transitionBehavior, new DefaultToStateEntryBehaviorProvider<>());
 	}
 	
-	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, ToStateEntryBehaviorSupplier<S,V0> toStateEntrySupplier) {
+	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
 		this.transitionBehavior = requireNonNull(transitionBehavior, "transitionBehavior must be non-null");
-		this.toStateEntrySupplier = requireNonNull(toStateEntrySupplier, "toStateEntryBehaviorSupplier must be non-null");
+		this.toStateEntryBehaviorSupplier = requireNonNull(toStateEntryBehaviorSupplier, "toStateEntryBehaviorSupplier must be non-null");
 	}
 
 	public State<S, V0> fromState() {
@@ -46,7 +46,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {	
-		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntrySupplier.supply(sm, fromState(), toState());
+		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntryBehaviorSupplier.supply(sm, fromState(), toState());
 		
 		return new TriggeredBehavior<>(
 			inCase(fromState()::matchesStateIn,
