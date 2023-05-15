@@ -1,7 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import org.requirementsascode.act.core.Behavior;
 
@@ -18,6 +17,6 @@ public class Flow<S, V0> implements Transitionable<S, V0> {
 
 	@Override
 	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
-		return transition(fromState, toState, flowBehavior);
+		return new Transition<>(fromState, toState, flowBehavior);
 	}
 }
