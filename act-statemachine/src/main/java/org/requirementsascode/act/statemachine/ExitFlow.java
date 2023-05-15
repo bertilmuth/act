@@ -1,7 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 
 import org.requirementsascode.act.core.Behavior;
 
@@ -19,6 +18,6 @@ public class ExitFlow<S, V0> implements Transitionable<S, V0>{
 		State<S, V0> finalState = owningStatemachine.finalState();
 		CheckedEntryBehaviorSupplier<S, V0> entryBehaviorSupplier = new CheckedEntryBehaviorSupplier<>(
 				sm -> Behavior.identity());
-		return transition(fromState, finalState, exitBehavior, entryBehaviorSupplier);
+		return new Transition<>(fromState, finalState, exitBehavior, entryBehaviorSupplier);
 	}
 }

@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.statemachine.Transition.ToStateEntryBehaviorSupplier;
 import org.requirementsascode.act.statemachine.function.ConsumeWith;
 import org.requirementsascode.act.statemachine.function.Init;
 import org.requirementsascode.act.statemachine.function.MapWith;
@@ -37,11 +36,6 @@ public class StatemachineApi {
 	public static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
 			Behavior<S, V0, V0> transitionBehavior) {
 		return new Transition<>(fromState, toState, transitionBehavior);
-	}
-	
-	public static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
-			Behavior<S, V0, V0> transitionBehavior, ToStateEntryBehaviorSupplier<S, V0> toStateEntryBehaviorSupplier) {
-		return new Transition<>(fromState, toState, transitionBehavior, toStateEntryBehaviorSupplier);
 	}
 
 	public static <S, V0> SelfTransition<S, V0> selfTransition(State<S, V0> state, Behavior<S, V0, V0> transitionBehavior) {
