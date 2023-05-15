@@ -1,7 +1,7 @@
 package org.requirementsascode.act.workflow;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 import org.requirementsascode.act.statemachine.Statemachine;
 import org.requirementsascode.act.statemachine.Transition;
@@ -19,7 +19,8 @@ public class Flow implements Transitionable<WorkflowState, Token>{
 
 	@Override
 	public Transition<WorkflowState, Token> asTransition(Statemachine<WorkflowState, Token> owningStatemachine) {
-		return transition(inPorts().asOneState(), outPorts().asOneState(), partBehavior.asBehavior(owner));
+		return flow(inPorts().asOneState(), outPorts().asOneState(), partBehavior.asBehavior(owner))
+			.asTransition(owningStatemachine);
 	}
 
 	public Ports inPorts() {

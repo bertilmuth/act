@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.statemachine.State;
 
 public class Ports implements Named{
@@ -45,7 +46,7 @@ public class Ports implements Named{
 	}
 	
 	private State<WorkflowState, Token> createState(String name) {
-		return state(name, this::areTokensInAllPorts);
+		return state(name, this::areTokensInAllPorts, Behavior.identity());
 	}
 	
 	private boolean areTokensInAllPorts(WorkflowState state) {

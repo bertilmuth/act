@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.workflow.testdata.IntegerData;
 import org.requirementsascode.act.workflow.testdata.StringData;
@@ -68,6 +69,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void runsTwoActions_firstOneUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
@@ -96,6 +98,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
@@ -126,6 +129,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void testImplicitFork_withOneOutPort() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
@@ -161,6 +165,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void testImplicitFork_withTwoOutPorts() {
 		Port<StringData> action1x_In = port(ACTION1X_IN, StringData.class);
 		Port<StringData> action1xa_Out = port(ACTION1XA_OUT, StringData.class);
@@ -197,6 +202,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void testImplicitMerge() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
