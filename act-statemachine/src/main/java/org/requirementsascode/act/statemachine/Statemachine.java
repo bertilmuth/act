@@ -102,7 +102,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		validate(this);
 		Behavior<S, V0, V0> behavior = 
 			unitedBehavior(new FirstOneWhoActsWins<>(),
-				statesBehavior().andThen(transitionsBehavior()),
+				statesBehavior().andThen(flowsBehavior()),
 				transitionsBehavior());
 		return behavior;
 	}
@@ -110,8 +110,12 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return states().asBehavior(this);
 	}
 	
+	private Behavior<S, V0, V0> flowsBehavior() {
+		return transitionables().flowsBehaviorOf(this);
+	}
+	
 	private Behavior<S, V0, V0> transitionsBehavior() {
-		return transitionables().transitionsOf(this);
+		return transitionables().transitionsBehaviorOf(this);
 	}
 	
 	private State<S, V0> createDefinedState(States<S, V0> states) {

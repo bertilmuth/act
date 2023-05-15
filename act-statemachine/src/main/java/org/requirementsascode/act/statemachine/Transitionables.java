@@ -16,29 +16,33 @@ public class Transitionables<S, V0>{
 		this.transitionables = requireNonNull(transitionables, "transitionables must be non-null!");
 	}
 
-	public Behavior<S, V0, V0> transitionsOf(Statemachine<S, V0> owningStatemachine) {
-		return unitedBehavior(owningStatemachine.mergeStrategy(), findTransitionsOf(owningStatemachine));
+	public Behavior<S, V0, V0> transitionsBehaviorOf(Statemachine<S, V0> owningStatemachine) {
+		return unitedBehavior(owningStatemachine.mergeStrategy(), transitionBehaviorList(owningStatemachine));
+	}
+	
+	public Behavior<S, V0, V0> flowsBehaviorOf(Statemachine<S, V0> owningStatemachine) {
+		return unitedBehavior(owningStatemachine.mergeStrategy(), flowBehaviorList(owningStatemachine));
 	}
 
 	public Stream<Transitionable<S, V0>> stream() {
 		return transitionables.stream();
 	}
 	
-	private List<Behavior<S, V0, V0>> findTransitionsOf(Statemachine<S, V0> owningStatemachine) {
+	private List<Behavior<S, V0, V0>> transitionBehaviorList(Statemachine<S, V0> owningStatemachine) {
 		List<Behavior<S, V0, V0>> behaviors = this.stream()
 			.filter(this::isNotFlow)
 			.map(t -> t.asTransition(owningStatemachine))
 			.map(t -> t.asBehavior(owningStatemachine))
-			.collect(Collectors.toList());
+			.collect(Collectors.toUnmodifiableList());
 		return behaviors;
 	}
 	
-	private List<Behavior<S, V0, V0>> findFlowsOf(Statemachine<S, V0> owningStatemachine) {
+	private List<Behavior<S, V0, V0>> flowBehaviorList(Statemachine<S, V0> owningStatemachine) {
 		List<Behavior<S, V0, V0>> behaviors = this.stream()
 			.filter(this::isFlow)
 			.map(t -> t.asTransition(owningStatemachine))
 			.map(t -> t.asBehavior(owningStatemachine))
-			.collect(Collectors.toList());
+			.collect(Collectors.toUnmodifiableList());
 		return behaviors;
 	}
 	

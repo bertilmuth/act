@@ -73,12 +73,11 @@ class RegularLanguageTest {
 	}
 	
 	@Test
-	@Disabled
 	void rejectsEmptyString() {
 		Data<NonTerminal, String> before = data(S0, "");
 		Data<NonTerminal, String> after = statemachine.actOn(before);
 		assertFalse(after.state().isAccepting());
-		assertEquals("", after.value().get());
+		assertFalse(after.value().isPresent());
 	}
 	
 	////////////////////////////////////////
