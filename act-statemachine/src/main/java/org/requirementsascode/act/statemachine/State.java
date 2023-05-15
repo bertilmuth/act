@@ -41,7 +41,8 @@ public class State<S, V> implements Behavioral<S, V> {
 	public Behavior<S, V, V> asBehavior(Statemachine<S, V> sm) {		
 		return selfTransition(this, stateInternalBehavior)
 			.asTransition(sm)
-			.asBehavior(sm);
+			.asBehavior(sm)
+			.andThen(d -> sm.flowsBehavior().actOn(d));
 	}
 
 	public boolean matchesStateIn(Data<S, ?> data) {
