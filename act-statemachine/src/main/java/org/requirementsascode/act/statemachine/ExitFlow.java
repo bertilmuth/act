@@ -17,6 +17,8 @@ public class ExitFlow<S, V0> implements Transitionable<S, V0>{
 	@Override
 	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
 		State<S, V0> finalState = owningStatemachine.finalState();
-		return transition(fromState, finalState, exitBehavior);
+		CheckedEntryBehaviorSupplier<S, V0> entryBehaviorSupplier = new CheckedEntryBehaviorSupplier<>(
+				sm -> Behavior.identity());
+		return transition(fromState, finalState, exitBehavior, entryBehaviorSupplier);
 	}
 }

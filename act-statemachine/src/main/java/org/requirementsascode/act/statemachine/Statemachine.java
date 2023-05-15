@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.core.merge.MergeStrategy;
-import org.requirementsascode.act.statemachine.merge.FirstOneWhoActsWins;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
 public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
@@ -103,7 +102,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		validate(this);
 		Behavior<S, V0, V0> behavior = 
 			unitedBehavior(new OnlyOneBehaviorMayAct<>(),
-				statesBehavior().andThen(flowsBehavior()),
+				statesBehavior(),
 				transitionsBehavior());
 		return behavior;
 	}
@@ -111,8 +110,12 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return states().asBehavior(this);
 	}
 	
-	private Behavior<S, V0, V0> flowsBehavior() {
+	Behavior<S, V0, V0> flowsBehavior() {
 		return transitionables().flowsBehaviorOf(this);
+	}
+	
+	Behavior<S, V0, V0> outgoingFlowsBehavior(State<S, V0> fromState) {
+		return outgoingTransitionables(fromState).flowsBehaviorOf(this);
 	}
 	
 	private Behavior<S, V0, V0> transitionsBehavior() {
