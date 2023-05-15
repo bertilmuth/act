@@ -12,7 +12,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	private ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
 
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior) {
-		this(fromState, toState, transitionBehavior, new DefaultToStateEntryBehaviorProvider<>());
+		this(fromState, toState, transitionBehavior, 
+			new CheckedEntryBehaviorSupplier<>(sm -> toState.asBehavior(sm)));
 	}
 	
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
