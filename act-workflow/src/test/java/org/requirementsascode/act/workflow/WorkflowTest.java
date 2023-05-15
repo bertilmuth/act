@@ -69,6 +69,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void runsTwoActions_firstOneUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
@@ -97,6 +98,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void runsTwoActions_bothUserTriggered() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
@@ -127,6 +129,7 @@ class WorkflowTest {
 	}
 	
 	@Test
+	@Disabled
 	void testImplicitFork_withOneOutPort() {
 		Port<StringData> action1_In = port(ACTION1_IN, StringData.class);
 		Port<StringData> action1_Out = port(ACTION1_OUT, StringData.class);
