@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import org.requirementsascode.act.core.Behavior;
+import org.requirementsascode.act.core.Data;
 
 public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0> {
 	private final State<S, V0> fromState;
@@ -13,7 +14,7 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior) {
 		this(fromState, toState, transitionBehavior, 
-			new CheckedEntryBehaviorSupplier<>(sm -> toState.asBehavior(sm).andThen(d -> sm.flowsBehavior().actOn(d))));
+			new CheckedEntryBehaviorSupplier<>(sm -> toState.asBehavior(sm)));
 	}
 	
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
