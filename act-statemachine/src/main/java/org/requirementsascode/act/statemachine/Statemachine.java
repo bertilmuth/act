@@ -39,7 +39,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		this.flowsBehavior = transitionables.flowsBehaviorOf(this);
 		this.transitionsBehavior = transitionables.transitionsBehaviorOf(this);
 		this.isRecursive = isRecursive;
-		this.statemachineBehavior = createStatemachineBehavior();
+		this.statemachineBehavior = createStatemachineBehavior(statesBehavior(), transitionsBehavior);
 	}
 
 	public final static StatemachineBuilder builder() {
@@ -79,24 +79,21 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return isRecursive;
 	}
 
-	private Behavior<S, V0, V0> createStatemachineBehavior() {
+	private Behavior<S, V0, V0> createStatemachineBehavior(Behavior<S, V0, V0> statesBehavior, Behavior<S, V0, V0> transitionsBehavior) {
 		validate(this);
 		Behavior<S, V0, V0> behavior = 
 			unitedBehavior(new OnlyOneBehaviorMayAct<>(),
-				statesBehavior(),
-				transitionsBehavior());
+				statesBehavior,
+				transitionsBehavior);
 		return behavior;
 	}
+	
 	private Behavior<S, V0, V0> statesBehavior() {
 		return states().asBehavior(this);
 	}
 	
 	Behavior<S, V0, V0> flowsBehavior() {
 		return flowsBehavior;
-	}
-	
-	private Behavior<S, V0, V0> transitionsBehavior() {
-		return transitionsBehavior;
 	}
 	
 	private State<S, V0> createDefinedState(States<S, V0> states) {
