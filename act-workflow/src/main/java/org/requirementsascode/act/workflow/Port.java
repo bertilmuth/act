@@ -8,6 +8,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 import org.requirementsascode.act.statemachine.State;
 
@@ -68,7 +69,7 @@ public class Port<T extends ActionData> implements Named {
 	
 	private State<WorkflowState, Token> createState(String name) {
 		return state(name, this::areTokensInPort, 
-				inCase(this::firstTokenHasWrongType, this::markAsDirty));
+				inCase(this::firstTokenHasWrongType, this::markAsDirty, Behavior.identity()));
 	}
 	
 	private boolean firstTokenHasWrongType(Data<WorkflowState, Token> data) {
