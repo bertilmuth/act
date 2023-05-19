@@ -6,9 +6,7 @@ import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
-import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
@@ -74,26 +72,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	
 	public MergeStrategy<S, V0> mergeStrategy() {
 		return mergeStrategy;
-	}
-	
-	public Transitionables<S, V0> incomingTransitionables(State<S, V0> toState) {
-		requireNonNull(toState, "toState must be non-null!");
-		
-		List<Transitionable<S, V0>> transitions = transitionables().stream()
-			.filter(t -> t.asTransition(this).toState().equals(toState))
-			.collect(Collectors.toUnmodifiableList());
-		
-		return new Transitionables<>(transitions);
-	}
-	
-	public Transitionables<S, V0> outgoingTransitionables(State<S, V0> fromState) {
-		requireNonNull(fromState, "fromState must be non-null!");
-				
-		List<Transitionable<S, V0>> transitions = transitionables().stream()
-			.filter(t -> t.asTransition(this).fromState().equals(fromState))
-			.collect(Collectors.toUnmodifiableList());
-		
-		return new Transitionables<>(transitions);
 	}
 	
 	public boolean isRecursive() {
