@@ -3,7 +3,6 @@ package org.requirementsascode.act.statemachine;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
@@ -11,6 +10,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
 
 class ToStateBehaviorTest {
@@ -24,16 +24,16 @@ class ToStateBehaviorTest {
 	@BeforeEach
 	void setup() {
 		State<String, Trigger> s1 = state(S1, s -> S1.equals(s));
-		State<String, Trigger> s2 = state(S2, s -> S2.equals(s), consumeWith(this::enterS2));
+		State<String, Trigger> s2 = state(S2, s -> S2.equals(s), enterS2());
 		
 		statemachine = Statemachine.builder()
 				.states(s1, s2)
 				.transitions(
 						transition(s1,s2, 
-							when(EnterNextState.class, consumeWith((s,t) -> S2))),
+							when(EnterNextState.class, d -> data(S2, d.value().get()))),
 						transition(s2,s1, 
-							when(EnterNextState.class, consumeWith((s,t) -> S1))
-						))
+							when(EnterNextState.class, d -> data(S1, d.value().get())))
+						)
 				.build();
 	}
 
@@ -55,8 +55,10 @@ class ToStateBehaviorTest {
 	class EnterNextState implements Trigger{};
 	class DontEnterNextState implements Trigger{};
 	
-	String enterS2(String state, Trigger event) {
-		s2Entered = true;
-		return S2;
+	Behavior<String,Trigger,Trigger> enterS2() {
+		return d -> {
+			s2Entered = true;
+			return data(S2);
+		};
 	}
 }

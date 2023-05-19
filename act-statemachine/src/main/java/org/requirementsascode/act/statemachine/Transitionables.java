@@ -39,7 +39,7 @@ public class Transitionables<S, V0>{
 	
 	private List<Behavior<S, V0, V0>> flowBehaviorList(Statemachine<S, V0> owningStatemachine) {
 		List<Behavior<S, V0, V0>> behaviors = this.stream()
-			.filter(this::isFlow)
+			//.filter(this::isFlow)
 			.map(t -> t.asTransition(owningStatemachine))
 			.map(t -> t.asBehavior(owningStatemachine))
 			.collect(Collectors.toUnmodifiableList());
