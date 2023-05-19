@@ -33,9 +33,9 @@ public class StatemachineApi {
 		return State.anyState();
 	}
 	
-	public static <S, V0> Transition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
+	public static <S, V0> TriggeredTransition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
 			Behavior<S, V0, V0> transitionBehavior) {
-		return new Transition<>(fromState, toState, new TriggeredBehavior<>(transitionBehavior));
+		return new TriggeredTransition<>(fromState, toState, transitionBehavior);
 	}
 
 	public static <S, V0> SelfTransition<S, V0> selfTransition(State<S, V0> state, Behavior<S, V0, V0> transitionBehavior) {
