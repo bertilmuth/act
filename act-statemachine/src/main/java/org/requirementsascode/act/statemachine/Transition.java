@@ -55,13 +55,13 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 	}
 	
 	private TriggeredBehavior<S, V0> createToStateEntryBehavior(Behavior<S, V0, V0> toStateBehavior) {
-		return new TriggeredBehavior<>(inCase(toState::matchesStateIn, 
-			toStateBehavior, errorIfNotInToState(fromState, toState)));
+		return new TriggeredBehavior<>(inCase(toState()::matchesStateIn, 
+			toStateBehavior, errorIfNotInToState()));
 	}
 	
-	private Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
+	private Behavior<S, V0,V0> errorIfNotInToState() {
 		return d -> {
-			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState + ", but invariant was false in toState! Data: " + d);
+			throw new IllegalStateException("Tried transition from " + fromState() + " to " + toState() + ", but invariant was false in toState! Data: " + d);
 		};
 	}
 }
