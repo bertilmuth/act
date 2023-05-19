@@ -83,8 +83,6 @@ class CheckedEntryBehaviorSupplier<S,V0> implements ToStateEntryBehaviorSupplier
 	public Behavior<S, V0, V0> supply(Statemachine<S, V0> sm, Transition<S, V0> transition) {
 		State<S, V0> fromState = transition.fromState();
 		State<S, V0> toState = transition.toState();
-		Behavior<S, V0, V0> toStateBehavior = toStateBehaviorSupplier.apply(sm);
-		
-		return Transition.createToStateEntryBehavior(fromState, toState, toStateBehavior);
+		return Transition.createToStateEntryBehavior(fromState, toState, toStateBehaviorSupplier.apply(sm));
 	}
 }
