@@ -27,6 +27,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private final MergeStrategy<S, V0> mergeStrategy;
 	private final boolean isRecursive;
 	private final Behavior<S, V0, V0> flowsBehavior;
+	private final Behavior<S, V0, V0> transitionsBehavior;
 
 	Statemachine(States<S, V0> states, Transitionables<S, V0> transitionables, MergeStrategy<S, V0> mergeStrategy, boolean isRecursive) {
 		this.states = requireNonNull(states, "states must be non-null!");
@@ -35,10 +36,10 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		this.initialState = createInitialState(definedState);
 		this.finalState = createFinalState(definedState);
 		this.transitionables = requireNonNull(transitionables, "transitions must be non-null!");
+		this.flowsBehavior = transitionables.flowsBehaviorOf(this);
+		this.transitionsBehavior = transitionables.transitionsBehaviorOf(this);
 		this.isRecursive = isRecursive;
-
 		this.statemachineBehavior = createStatemachineBehavior();
-		this.flowsBehavior = transitionables().flowsBehaviorOf(this);
 	}
 
 	public final static StatemachineBuilder builder() {
@@ -95,7 +96,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	}
 	
 	private Behavior<S, V0, V0> transitionsBehavior() {
-		return transitionables().transitionsBehaviorOf(this);
+		return transitionsBehavior;
 	}
 	
 	private State<S, V0> createDefinedState(States<S, V0> states) {
