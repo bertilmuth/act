@@ -48,15 +48,16 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {	
-		Behavior<S, V0, V0> toStateEntryBehavior = createToStateEntryBehavior(toStateEntryBehaviorSupplier.apply(sm));	
+		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntryBehaviorSupplier.apply(sm);
+		Behavior<S, V0, V0> checkedToStateEntryBehavior = createCheckedToStateEntryBehavior(toStateEntryBehavior);	
 		
 		return inCase(fromState()::matchesStateIn,
-			transitionBehavior().andThen(toStateEntryBehavior));
+			transitionBehavior().andThen(checkedToStateEntryBehavior));
 	}
 	
-	private Behavior<S, V0, V0> createToStateEntryBehavior(Behavior<S, V0, V0> toStateBehavior) {
+	private Behavior<S, V0, V0> createCheckedToStateEntryBehavior(Behavior<S, V0, V0> toStateEntryBehavior) {
 		return new TriggeredBehavior<>(inCase(toState()::matchesStateIn, 
-			toStateBehavior, errorIfNotInToState()));
+			toStateEntryBehavior, errorIfNotInToState()));
 	}
 	
 	private Behavior<S, V0,V0> errorIfNotInToState() {
