@@ -162,7 +162,6 @@ class WorkflowTest {
 	}
 	
 	@Test
-	@Disabled
 	void testImplicitFork_withTwoOutPorts() {
 		Port<StringData> action1x_In = port(ACTION1X_IN, StringData.class);
 		Port<StringData> action1xa_Out = port(ACTION1XA_OUT, StringData.class);
