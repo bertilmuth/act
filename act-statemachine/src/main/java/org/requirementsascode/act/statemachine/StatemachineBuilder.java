@@ -6,7 +6,6 @@ import static java.util.Objects.requireNonNull;
 import org.requirementsascode.act.core.merge.MergeStrategy;
 import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
-
 public class StatemachineBuilder {
 	StatemachineBuilder() {
 	}
@@ -36,19 +35,6 @@ public class StatemachineBuilder {
 			private TransitionsBuilder(Transitionable<S, V>[] transitions){
 				requireNonNull(transitions, "transitions must be non-null!");
 				StatesBuilder.this.builderTransitions = new Transitionables<>(asList(transitions));
-			}
-			
-			public Statemachine<S,V> build() {
-				return new RecursivenessBuilder().build();
-			}
-
-			public RecursivenessBuilder isRecursive(boolean recursive) {
-				return new RecursivenessBuilder();
-			}
-		}
-		
-		public class RecursivenessBuilder{
-			private RecursivenessBuilder() {
 			}
 			
 			public MergeStrategyBuilder mergeStrategy(MergeStrategy<S,V> mergeStrategy) {

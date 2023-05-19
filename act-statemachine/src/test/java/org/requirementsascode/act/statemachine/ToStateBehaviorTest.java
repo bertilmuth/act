@@ -34,7 +34,6 @@ class ToStateBehaviorTest {
 						transition(s2,s1, 
 							when(EnterNextState.class, consumeWith((s,t) -> S1))
 						))
-				.isRecursive(true)
 				.build();
 	}
 

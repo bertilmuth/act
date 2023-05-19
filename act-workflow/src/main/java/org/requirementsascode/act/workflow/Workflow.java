@@ -73,7 +73,6 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 				.transitions(
 					transitionables
 				)
-				.isRecursive(true)
 				.mergeStrategy(new TokenMergeStrategy())
 				.build();
 		return statemachine;

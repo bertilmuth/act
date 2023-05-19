@@ -88,7 +88,6 @@ class RegularLanguageTest {
 				entryFlow(s1, accept('a', S1)),
 				entryFlow(s1, accept('b', S1))
 			)
-			.isRecursive(true)
 			.build();
 		
 		return statemachine;
