@@ -19,7 +19,6 @@ public class StatemachineBuilder {
 	public class StatesBuilder<S,V> {
 		private final States<S, V> builderStates;
 		private Transitionables<S, V> builderTransitions;
-		private boolean isRecursive = false;
 		private MergeStrategy<S, V> mergeStrategy;
 
 		private StatesBuilder(State<S,V>[] states) {
@@ -40,17 +39,16 @@ public class StatemachineBuilder {
 			}
 			
 			public Statemachine<S,V> build() {
-				return new RecursivenessBuilder(false).build();
+				return new RecursivenessBuilder().build();
 			}
 
 			public RecursivenessBuilder isRecursive(boolean recursive) {
-				return new RecursivenessBuilder(recursive);
+				return new RecursivenessBuilder();
 			}
 		}
 		
 		public class RecursivenessBuilder{
-			private RecursivenessBuilder(boolean isRecursive) {
-				StatesBuilder.this.isRecursive = isRecursive;
+			private RecursivenessBuilder() {
 			}
 			
 			public MergeStrategyBuilder mergeStrategy(MergeStrategy<S,V> mergeStrategy) {
@@ -67,7 +65,7 @@ public class StatemachineBuilder {
 				}
 
 				public Statemachine<S, V> build() {
-					return new Statemachine<>(builderStates, builderTransitions, mergeStrategy, isRecursive);
+					return new Statemachine<>(builderStates, builderTransitions, mergeStrategy);
 				}
 			}
 		}

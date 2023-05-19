@@ -25,12 +25,11 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private final State<S, V0> definedState;
 	private final State<S, V0> finalState;
 	private final MergeStrategy<S, V0> mergeStrategy;
-	private final boolean isRecursive;
 	private final Behavior<S, V0, V0> statesBehavior;
 	private final Behavior<S, V0, V0> flowsBehavior;
 	private final Behavior<S, V0, V0> transitionsBehavior;
 
-	Statemachine(States<S, V0> states, Transitionables<S, V0> transitionables, MergeStrategy<S, V0> mergeStrategy, boolean isRecursive) {
+	Statemachine(States<S, V0> states, Transitionables<S, V0> transitionables, MergeStrategy<S, V0> mergeStrategy) {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 		this.definedState = createDefinedState(states);
@@ -42,7 +41,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		this.flowsBehavior = transitionables.flowsBehaviorOf(this);
 		this.transitionsBehavior = transitionables.transitionsBehaviorOf(this);
 		
-		this.isRecursive = isRecursive;
 		this.statemachineBehavior = createStatemachineBehavior(statesBehavior, transitionsBehavior);
 	}
 
@@ -77,10 +75,6 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	
 	public MergeStrategy<S, V0> mergeStrategy() {
 		return mergeStrategy;
-	}
-	
-	public boolean isRecursive() {
-		return isRecursive;
 	}
 
 	private Behavior<S, V0, V0> createStatemachineBehavior(Behavior<S, V0, V0> statesBehavior, Behavior<S, V0, V0> transitionsBehavior) {
