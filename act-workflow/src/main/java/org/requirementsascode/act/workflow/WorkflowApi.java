@@ -33,7 +33,7 @@ public class WorkflowApi {
 		return new Ports(Arrays.asList(ports));
 	}
 	
-	public static <T extends ActionData> Flow flow(Port<T> inPort, Port<T> outPort) {		
+	public static <T extends ActionData> TokenFlow flow(Port<T> inPort, Port<T> outPort) {		
 		return new BinaryConnection<>(inPort, outPort).asFlow();
 	}
 }

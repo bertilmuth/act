@@ -16,7 +16,7 @@ public class Actions {
 		return actions.stream();
 	}
 	
-	Stream<Flow> asFlows() {
+	Stream<TokenFlow> asFlows() {
 		return stream().map(Action::asFlow);
 	}
 }

@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Flows{
-	private final List<Flow> flowsList;
+	private final List<TokenFlow> flowsList;
 
-	Flows(List<Flow> flowsList) {
+	Flows(List<TokenFlow> flowsList) {
 		this.flowsList = requireNonNull(flowsList, "flowsList must be non-null!");
 	}
 
-	public Stream<Flow> stream() {
+	public Stream<TokenFlow> stream() {
 		return flowsList.stream();
 	}
 }

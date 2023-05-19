@@ -17,7 +17,7 @@ public class WorkflowBuilder {
 
 	public class ActionsBuilder {
 		private List<Action> builderActions = Collections.emptyList();		
-		private List<Flow> builderFlows = Collections.emptyList();
+		private List<TokenFlow> builderFlows = Collections.emptyList();
 		private List<Port<?>> builderPorts = Collections.emptyList();
 		private List<Port<?>> builderInPorts = Collections.emptyList();
 
@@ -49,7 +49,7 @@ public class WorkflowBuilder {
 			private InPortsBuilder(){}
 			
 			@SafeVarargs
-			public final FlowsBuilder flows(Flow... flowsArray) {
+			public final FlowsBuilder flows(TokenFlow... flowsArray) {
 				requireNonNull(flowsArray, "flowsArray must be non-null!");
 				builderFlows = asList(flowsArray);
 				return new FlowsBuilder();

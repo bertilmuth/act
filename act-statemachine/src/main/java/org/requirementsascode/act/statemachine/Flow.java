@@ -9,7 +9,7 @@ public class Flow<S, V0> implements Transitionable<S, V0> {
 	private final State<S, V0> toState;
 	private final Behavior<S, V0, V0> flowBehavior;
 
-	Flow(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> flowBehavior) {
+	protected Flow(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> flowBehavior) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null!");
 		this.toState = requireNonNull(toState, "toState must be non-null!");
 		this.flowBehavior = requireNonNull(flowBehavior, "flowBehavior must be non-null");

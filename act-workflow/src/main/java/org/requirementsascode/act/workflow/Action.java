@@ -38,8 +38,8 @@ public class Action implements Named, Part{
 	}
 	
 	@Override
-	public Flow asFlow() {
-		return new Flow(this, partBehavior);
+	public TokenFlow asFlow() {
+		return new TokenFlow(this, partBehavior);
 	}
 
 	@Override
