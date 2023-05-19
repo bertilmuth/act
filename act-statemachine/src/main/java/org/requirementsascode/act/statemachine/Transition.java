@@ -74,11 +74,15 @@ class CheckedEntryBehaviorSupplier<S,V0> implements ToStateEntryBehaviorSupplier
 		State<S, V0> toState = transition.toState();
 		Behavior<S, V0, V0> toStateBehavior = toStateBehaviorSupplier.apply(sm);
 		
+		return createToStateEntryBehavior(fromState, toState, toStateBehavior);
+	}
+
+	private static <S,V0> TriggeredBehavior<S, V0> createToStateEntryBehavior(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> toStateBehavior) {
 		return new TriggeredBehavior<>(inCase(toState::matchesStateIn, 
 			toStateBehavior, errorIfNotInToState(fromState, toState)));
 	}
 	
-	private Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
+	private static <S,V0> Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
 		return d -> {
 			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState + ", but invariant was false in toState! Data: " + d);
 		};
