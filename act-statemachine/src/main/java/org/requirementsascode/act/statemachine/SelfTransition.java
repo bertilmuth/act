@@ -23,8 +23,6 @@ public class SelfTransition<S, V0> implements Transitionable<S, V0> {
 
 	@Override
 	public Transition<S, V0> asTransition(Statemachine<S, V0> owningStatemachine) {
-		CheckedEntryBehaviorSupplier<S, V0> entryBehaviorSupplier = new CheckedEntryBehaviorSupplier<>(
-			sm -> Behavior.identity());
-		return new Transition<>(state(), state(), transitionBehavior(), entryBehaviorSupplier);
+		return new Transition<>(state(), state(), transitionBehavior(), sm -> Behavior.identity());
 	}
 }

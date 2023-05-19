@@ -6,20 +6,18 @@ import static org.requirementsascode.act.core.InCase.inCase;
 import java.util.function.Function;
 
 import org.requirementsascode.act.core.Behavior;
-import org.requirementsascode.act.statemachine.Transition.ToStateEntryBehaviorSupplier;
 
 public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0> {
 	private final State<S, V0> fromState;
 	private final State<S, V0> toState;
 	private final Behavior<S, V0, V0> transitionBehavior;
-	private ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier;
+	private Function<Statemachine<S, V0>, Behavior<S, V0, V0>> toStateEntryBehaviorSupplier;
 
 	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior) {
-		this(fromState, toState, transitionBehavior, 
-			new CheckedEntryBehaviorSupplier<>(sm -> toState.asBehavior(sm)));
+		this(fromState, toState, transitionBehavior, sm -> toState.asBehavior(sm));
 	}
 	
-	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, ToStateEntryBehaviorSupplier<S,V0> toStateEntryBehaviorSupplier) {
+	Transition(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> transitionBehavior, Function<Statemachine<S,V0>, Behavior<S,V0,V0>> toStateEntryBehaviorSupplier) {
 		this.fromState = requireNonNull(fromState, "fromState must be non-null");
 		this.toState = requireNonNull(toState, "toState must be non-null");
 		this.transitionBehavior = requireNonNull(transitionBehavior, "transitionBehavior must be non-null");
@@ -50,39 +48,20 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 
 	@Override
 	public Behavior<S, V0, V0> asBehavior(Statemachine<S, V0> sm) {	
-		Behavior<S, V0, V0> toStateEntryBehavior = toStateEntryBehaviorSupplier.supply(sm, this);
+		Behavior<S, V0, V0> toStateEntryBehavior = createToStateEntryBehavior(toStateEntryBehaviorSupplier.apply(sm));	
 		
 		return inCase(fromState()::matchesStateIn,
 			transitionBehavior().andThen(toStateEntryBehavior));
 	}
 	
-	public interface ToStateEntryBehaviorSupplier<S,V0>{
-		Behavior<S,V0,V0> supply(Statemachine<S, V0> statemachine, Transition<S,V0> transition);
-	}
-	
-	static <S,V0> TriggeredBehavior<S, V0> createToStateEntryBehavior(State<S, V0> fromState, State<S, V0> toState, Behavior<S, V0, V0> toStateBehavior) {
+	private TriggeredBehavior<S, V0> createToStateEntryBehavior(Behavior<S, V0, V0> toStateBehavior) {
 		return new TriggeredBehavior<>(inCase(toState::matchesStateIn, 
 			toStateBehavior, errorIfNotInToState(fromState, toState)));
 	}
 	
-	static <S,V0> Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
+	private Behavior<S, V0,V0> errorIfNotInToState(State<S,V0> fromState, State<S,V0> toState) {
 		return d -> {
 			throw new IllegalStateException("Tried transition from " + fromState + " to " + toState + ", but invariant was false in toState! Data: " + d);
 		};
-	}
-}
-
-class CheckedEntryBehaviorSupplier<S,V0> implements ToStateEntryBehaviorSupplier<S,V0>{
-	private final Function<Statemachine<S, V0>, Behavior<S, V0, V0>> toStateBehaviorSupplier;
-
-	public CheckedEntryBehaviorSupplier(Function<Statemachine<S,V0>, Behavior<S,V0,V0>> toStateBehaviorSupplier) {
-		this.toStateBehaviorSupplier = toStateBehaviorSupplier;
-	}
-	
-	@Override
-	public Behavior<S, V0, V0> supply(Statemachine<S, V0> sm, Transition<S, V0> transition) {
-		State<S, V0> fromState = transition.fromState();
-		State<S, V0> toState = transition.toState();
-		return Transition.createToStateEntryBehavior(fromState, toState, toStateBehaviorSupplier.apply(sm));
 	}
 }
