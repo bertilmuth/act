@@ -112,7 +112,7 @@ class RegularLanguageTest {
 	///////////////////////////////////////////////////
 	
 	private State<NonTerminal, String> s(NonTerminal nonTerminal){
-		return state(nonTerminal.toString(), stateInvariantOf(nonTerminal), Behavior.identity());
+		return state(nonTerminal.toString(), stateInvariantOf(nonTerminal));
 	}
 	
 	private Predicate<NonTerminal> stateInvariantOf(NonTerminal nonTerminal) {

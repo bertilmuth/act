@@ -8,7 +8,6 @@ import java.util.function.Predicate;
 
 import org.requirementsascode.act.core.Behavior;
 import org.requirementsascode.act.core.Data;
-import org.requirementsascode.act.core.NoOp;
 
 public class State<S, V> implements Behavioral<S, V> {
 	private final String name;
@@ -16,7 +15,7 @@ public class State<S, V> implements Behavioral<S, V> {
 	private Behavior<S, V, V> stateInternalBehavior;
 
 	State(String name, Predicate<S> invariant) {
-		this(name, invariant, new NoOp<>());
+		this(name, invariant, Behavior.identity());
 	}
 	
 	State(String name, Predicate<S> invariant, Behavior<S, V, V> stateInternalBehavior) {

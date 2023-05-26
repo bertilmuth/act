@@ -1,7 +1,6 @@
 package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
-import static org.requirementsascode.act.core.Behavior.identity;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
@@ -93,16 +92,15 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private State<S, V0> createDefinedState(States<S, V0> states) {
 		return state(DEFINED_STATE, states.stream()
 			.map(State::invariant)
-			.reduce(s -> false, Predicate::or),
-			identity());
+			.reduce(s -> false, Predicate::or));
 	}
 
 	private State<S, V0> createInitialState(State<S, V0> definedState) {
-		return state(INITIAL_STATE, notIn(definedState), identity());
+		return state(INITIAL_STATE, notIn(definedState));
 	}
 	
 	private State<S, V0> createFinalState(State<S, V0> definedState) {
-		return state(FINAL_STATE, notIn(definedState), identity());
+		return state(FINAL_STATE, notIn(definedState));
 	}
 	
 	private Predicate<S> notIn(State<S, V0> state) {
