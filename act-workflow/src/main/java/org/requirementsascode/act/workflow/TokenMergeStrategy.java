@@ -22,17 +22,15 @@ class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 		}
 
 		private Tokens mergeTokens(Tokens tokensBefore, List<Data<WorkflowState, Token>> datasAfter) {	
-			Tokens tokensToAdd = tokensStream(datasAfter)
-				.map(tafter -> tafter.minus(tokensBefore))
-				.reduce(emptyTokens(), (t1, t2) -> t1.union(t2));
+			Tokens unitedTokens = tokensStream(datasAfter)
+				.reduce(emptyTokens(), Tokens::union);
 			
 			Tokens tokensToRemove = tokensStream(datasAfter)
 				.map(tafter -> tokensBefore.minus(tafter))
-				.reduce(emptyTokens(), (t1, t2) -> t1.union(t2));
+				.reduce(emptyTokens(), Tokens::union);
 			
-			Tokens mergedTokens = 
-				tokensBefore
-				.union(tokensToAdd)
+			Tokens mergedTokens = tokensBefore
+				.union(unitedTokens)
 				.minus(tokensToRemove)
 				.removeDirtyTokens();
 			return mergedTokens;
