@@ -95,6 +95,37 @@ class TokensTest {
 		assertEquals(token2(), diff);
 	}
 	
+	@Test
+	void intersectionOfEmptyTokensIsEmpty() {
+		Tokens tokens = emptyTokens().intersection(emptyTokens());
+		assertEquals(emptyTokens(), tokens);
+	}
+	
+	@Test
+	void intersectionOfEmptyTokensWithTokenIsEmpty() {
+		Tokens tokens = emptyTokens().intersection(token1());
+		assertEquals(emptyTokens(), tokens);
+	}
+	
+	@Test
+	void intersectionOfTokenWithEmptyTokensIsEmpty() {
+		Tokens tokens = token1().intersection(emptyTokens());
+		assertEquals(emptyTokens(), tokens);
+	}
+	
+	@Test
+	void intersectionOfOneTokenWithItselfIsTheToken() {
+		Tokens tokens = token1().intersection(token1());
+		assertEquals(token1(), tokens);
+	}
+	
+	@Test
+	void intersectionOfTwoDifferentTokensIsEmpty() {
+		Tokens tokens = token1().intersection(token2());
+		assertEquals(emptyTokens(), tokens);
+
+	}
+	
 	private Tokens emptyTokens() {
 		return new Tokens(emptyMap());
 	}
@@ -118,7 +149,7 @@ class TokensTest {
 		return new Tokens(oneTokenMap);
 	}
 	
-	private List<Token> asTokenList(Tokens union) {
-		return union.asMap().values().stream().flatMap(Set::stream).collect(Collectors.toList());
+	private List<Token> asTokenList(Tokens tokens) {
+		return tokens.asMap().values().stream().flatMap(Set::stream).collect(Collectors.toList());
 	}
 }

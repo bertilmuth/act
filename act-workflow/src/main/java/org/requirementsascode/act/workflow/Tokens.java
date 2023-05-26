@@ -64,6 +64,22 @@ public class Tokens {
 		return new Tokens(resultTokens);
 	}
 	
+	public Tokens intersection(Tokens tokens) {
+		Map<Port<?>, Set<Token>> thisTokens = asMap();
+		Map<Port<?>, Set<Token>> intersectedTokens = tokens.asMap();
+		Map<Port<?>, Set<Token>> resultTokens = new HashMap<>();
+	
+		thisTokens.forEach((port, tkns) -> {
+			Set<Token> tokensForPort = new HashSet<>(tkns);
+			Set<Token> intersectedTokensForPort = intersectedTokens.getOrDefault(port, emptySet());
+			tokensForPort.retainAll(intersectedTokensForPort);
+			if(!tokensForPort.isEmpty()) {
+				resultTokens.put(port, tokensForPort);
+			}
+		});
+		return new Tokens(resultTokens);
+	}
+	
 	Tokens removeDirtyTokens() {
 		Map<Port<?>, Set<Token>> resultMap = new HashMap<>(asMap());
 		resultMap.replaceAll((key, value) -> value.stream()
