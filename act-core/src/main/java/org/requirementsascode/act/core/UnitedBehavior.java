@@ -34,7 +34,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 	public Data<S, V> actOn(Data<S, V> dataBefore) {
 		List<Data<S, V>> datasAfter = behaviors.stream()
 				.map(b -> b.actOn(dataBefore))
-				.filter(hasStateChangedFrom(dataBefore))
+				.filter(hasStateChangedFrom(dataBefore).or(hasValueChangedFrom(dataBefore)))
 				.collect(Collectors.toList());
 
 		Data<S, V> mergedData;
@@ -48,8 +48,12 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		return mergedData;
 	}
 
-	private Predicate<? super Data<S, V>> hasStateChangedFrom(Data<S, V> dataBefore) {
+	private Predicate<Data<S, V>> hasStateChangedFrom(Data<S, V> dataBefore) {
 		return d -> d.state() != null && !d.state().equals(dataBefore.state());
+	}
+	
+	private Predicate<Data<S, V>> hasValueChangedFrom(Data<S, V> dataBefore) {
+		return d -> d.value().filter(v -> v.equals(dataBefore.value().orElse(null))).isPresent();
 	}
 
 	private Data<S, V> noOp(Data<S, V> dataBefore) {
