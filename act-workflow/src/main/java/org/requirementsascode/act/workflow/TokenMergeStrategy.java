@@ -2,7 +2,6 @@ package org.requirementsascode.act.workflow;
 
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,21 +22,15 @@ class TokenMergeStrategy implements MergeStrategy<WorkflowState, Token>{
 
 		private Tokens mergeTokens(Tokens tokensBefore, List<Data<WorkflowState, Token>> datasAfter) {	
 			Tokens unitedTokens = tokensStream(datasAfter)
-				.reduce(emptyTokens(), Tokens::union);
+				.reduce(tokensBefore, (result, tokensAfter) -> {
+					Tokens added = tokensAfter.minus(tokensBefore);
+					Tokens removed = tokensBefore.minus(tokensAfter);
+					Tokens changed = added.union(removed);
+					return result.minus(changed).union(added);
+				});
 			
-			Tokens tokensToRemove = tokensStream(datasAfter)
-				.map(tafter -> tokensBefore.minus(tafter))
-				.reduce(emptyTokens(), Tokens::union);
-			
-			Tokens mergedTokens = tokensBefore
-				.union(unitedTokens)
-				.minus(tokensToRemove)
-				.removeDirtyTokens();
+			Tokens mergedTokens = unitedTokens.removeDirtyTokens();
 			return mergedTokens;
-		}
-
-		private Tokens emptyTokens() {
-			return new Tokens(Collections.emptyMap());
 		}
 		
 		private Stream<Tokens> tokensStream(List<Data<WorkflowState, Token>> datasAfter) {
