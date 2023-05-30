@@ -29,11 +29,11 @@ class ToStateBehaviorTest {
 		statemachine = Statemachine.builder()
 				.states(s1, s2)
 				.transitions(
-						transition(s1,s2, 
-							when(EnterNextState.class, d -> data(S2, d.value().get()))),
-						transition(s2,s1, 
-							when(EnterNextState.class, d -> data(S1, d.value().get())))
-						)
+					transition(s1,s2, 
+						when(EnterNextState.class, d -> data(S2, d.value().get()))),
+					transition(s2,s1, 
+						when(EnterNextState.class, d -> data(S1, d.value().get())))
+					)
 				.build();
 	}
 
