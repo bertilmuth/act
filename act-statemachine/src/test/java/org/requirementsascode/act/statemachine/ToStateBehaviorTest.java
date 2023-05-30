@@ -39,16 +39,21 @@ class ToStateBehaviorTest {
 
 	@Test
 	void entersS2() {
-		Data<String, Trigger> result = statemachine.actOn(data(S1, new EnterNextState()));
-		assertThat(result.state()).isEqualTo(S2);
+		Data<String, Trigger> data = data(S1, new EnterNextState());
+		assertThat(handle(data)).isEqualTo(S2);
 		assertTrue(s2Entered);
 	}
+
 	
 	@Test
 	void doesntEnterS2() {
-		Data<String, Trigger> result = statemachine.actOn(data(S1, new DontEnterNextState()));
-		assertThat(result.state()).isEqualTo(S1);
+		Data<String, Trigger> data = data(S1, new DontEnterNextState());
+		assertThat(handle(data)).isEqualTo(S1);
 		assertFalse(s2Entered);
+	}
+	
+	private String handle(Data<String, Trigger> data) {
+		return statemachine.actOn(data).state();
 	}
 	
 	interface Trigger {}
