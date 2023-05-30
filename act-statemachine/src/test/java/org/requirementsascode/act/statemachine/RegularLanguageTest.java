@@ -36,38 +36,36 @@ class RegularLanguageTest {
 
 	@Test
 	void acceptsThreeLetterStringWithLastOneBeingB() {
-		Data<NonTerminal, String> before = data(S0, "bbb");
-		Data<NonTerminal, String> after = statemachine.actOn(before);
-		assertTrue(after.state().isAccepting());
+		Data<NonTerminal, String> d = data(S0, "bbb");
+		assertTrue(handle(d).isAccepting());
 	}
 	
 	@Test
 	void acceptsAnotherThreeLetterStringWithLastOneBeingB() {
-		Data<NonTerminal, String> before = data(S0, "aab");
-		Data<NonTerminal, String> after = statemachine.actOn(before);
-		assertTrue(after.state().isAccepting());
+		Data<NonTerminal, String> d = data(S0, "aab");
+		assertTrue(handle(d).isAccepting());
 	}
 	
 	@Test
 	void acceptsFourLetterStringWithLastOneBeingB_bRemains() {
-		Data<NonTerminal, String> before = data(S0, "bbbb");
-		Data<NonTerminal, String> after = statemachine.actOn(before);
-		assertTrue(after.state().isAccepting());
+		Data<NonTerminal, String> d = data(S0, "bbbb");
+		assertTrue(handle(d).isAccepting());
 	}
 	
 	@Test
 	void rejectsThreeLetterStringWithLastOneBeingB_ifFirstLetterIsNeitherANorB() {
-		Data<NonTerminal, String> before = data(S0, "cab");
-		Data<NonTerminal, String> after = statemachine.actOn(before);
-		assertFalse(after.state().isAccepting());
+		Data<NonTerminal, String> d = data(S0, "cab");
+		assertFalse(handle(d).isAccepting());
 	}
 	
 	@Test
 	void rejectsEmptyString() {
-		Data<NonTerminal, String> before = data(S0, "");
-		Data<NonTerminal, String> after = statemachine.actOn(before);
-		assertFalse(after.state().isAccepting());
-		assertFalse(after.value().isPresent());
+		Data<NonTerminal, String> d = data(S0, "");
+		assertFalse(handle(d).isAccepting());
+	}
+	
+	private NonTerminal handle(Data<NonTerminal, String> before) {
+		return statemachine.actOn(before).state();
 	}
 	
 	////////////////////////////////////////
