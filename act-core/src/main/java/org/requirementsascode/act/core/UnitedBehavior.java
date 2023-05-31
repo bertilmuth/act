@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.merge.MergeStrategy;
@@ -32,17 +31,15 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> dataBefore) {
-		Data<S, V> noOp = noOp(dataBefore);
-		
 		List<Data<S, V>> datasAfter = behaviors.stream()
 				.map(b -> b.actOn(dataBefore))
-				.filter(hasStateChangedFrom(dataBefore).or(Behavior::hasActed))
+				.filter(d -> hasChangedFrom(dataBefore, d))
 				.collect(Collectors.toList());
 
 		Data<S, V> mergedData;
 
 		if (datasAfter.isEmpty()) {
-			mergedData = noOp;
+			mergedData = noOp(dataBefore);
 		} else {
 			mergedData = merge(dataBefore, datasAfter);
 		}
@@ -50,8 +47,8 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		return mergedData;
 	}
 
-	private Predicate<Data<S, V>> hasStateChangedFrom(Data<S, V> dataBefore) {
-		return d -> d.state() != null && !d.state().equals(dataBefore.state());
+	private boolean hasChangedFrom(Data<S, V> dataBefore, Data<S, V> dataNow) {
+		return !noOp(dataBefore).equals(dataNow);
 	}
 
 	private Data<S, V> noOp(Data<S, V> dataBefore) {
