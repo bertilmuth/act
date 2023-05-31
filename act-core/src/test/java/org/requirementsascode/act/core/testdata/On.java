@@ -9,7 +9,7 @@ import org.requirementsascode.act.core.Data;
 
 public class On{
 	public static <S, V extends V0, V0> Behavior<S, V0,V0> on(String expectedTriggerTypeName, Behavior<S, V,V> behavior){
-		return inCase(typeMatches(expectedTriggerTypeName), i -> behaviorActOn(behavior, i));
+		return inCase(typeMatches(expectedTriggerTypeName), behaviorV0(behavior));
 	}
 	
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(String expectedTriggerTypeName) {
@@ -26,8 +26,7 @@ public class On{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static <S, V extends V0, V0> Data<S, V0> behaviorActOn(Behavior<S, V,V> behavior, Data<S, V0> before) {
-		Data<S, V0> after = (Data<S, V0>) behavior.actOn((Data<S, V>) before);
-		return after;
+	private static <S, V1 extends V0, V2 extends V0, V0> Behavior<S,V0,V0> behaviorV0(Behavior<S, V1,V2> behavior){
+		return d -> (Data<S,V0>)behavior.actOn((Data<S,V1>)d);
 	}
 }
