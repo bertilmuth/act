@@ -12,7 +12,7 @@ public class Data<S,V> {
 		this.value = value;
 	}
 	
-	public static <S, V> Data<S, V> data(S state) {
+	static <S, V> Data<S, V> data(S state) {
 		return new Data<S, V>(state, null);
 	}
 	
