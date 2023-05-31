@@ -9,7 +9,11 @@ public interface Behavior<S, V1, V2> {
 
 	default <V3> Behavior<S, V1, V3> andThen(Behavior<S, V2, V3> nextBehavior) {
 		Objects.requireNonNull(nextBehavior, "nextBehavior must be non-null!");
-		return before -> nextBehavior.actOn(actOn(before));
+		return before -> {
+			Data<S, V2> firstResult = actOn(before);
+			Data<S, V3> secondResult = InCase.inCase(d -> d.value().isPresent(), nextBehavior).actOn(firstResult);
+			return secondResult;
+		};
 	}
 
 	default Behavior<S, V1, V2> andHandleChangeWith(ChangeHandler<S, V1, V2> changeHandler) {

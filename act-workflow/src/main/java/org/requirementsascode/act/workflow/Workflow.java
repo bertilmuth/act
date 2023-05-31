@@ -35,7 +35,7 @@ public class Workflow implements Behavior<WorkflowState, Token, Token>{
 	}
 	
 	public WorkflowState nextStep(WorkflowState state) {
-		return actOn(data(state)).state();
+		return actOn(data(state, Token.empty())).state();
 	}
 	
 	public Flows dataFlows() {

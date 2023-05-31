@@ -63,7 +63,7 @@ class ToStateBehaviorTest {
 	Behavior<String,Trigger,Trigger> enterS2() {
 		return d -> {
 			s2Entered = true;
-			return data(S2);
+			return data(S2, d.value().get());
 		};
 	}
 }
