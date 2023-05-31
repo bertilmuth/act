@@ -1,5 +1,6 @@
 package org.requirementsascode.act.core.testdata;
 
+import static org.requirementsascode.act.core.Behavior.hasActed;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import java.util.function.Predicate;
@@ -13,7 +14,7 @@ public class On{
 	}
 	
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(String expectedTriggerTypeName) {
-		Predicate<Data<S, V0>> predicate = i -> i.value().isPresent() && hasExpectedType(triggerTypeOf(i), expectedTriggerTypeName);
+		Predicate<Data<S, V0>> predicate = i -> hasActed(i) && hasExpectedType(triggerTypeOf(i), expectedTriggerTypeName);
 		return predicate;
 	}
 	

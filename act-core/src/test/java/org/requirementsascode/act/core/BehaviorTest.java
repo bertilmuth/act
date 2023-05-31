@@ -2,6 +2,7 @@ package org.requirementsascode.act.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.requirementsascode.act.core.Behavior.hasActed;
 import static org.requirementsascode.act.core.Data.data;
 import static org.requirementsascode.act.core.InCase.inCase;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
@@ -145,9 +146,5 @@ class BehaviorTest {
 
 	private Behavior<State, Trigger_B2, Trigger_B2> b2() {
 		return before -> DATA_AFTER_B2;
-	}
-	
-	private boolean hasActed(Data<State, ConditionalTrigger_B1> data) {
-		return data.value().isPresent();
 	}
 }
