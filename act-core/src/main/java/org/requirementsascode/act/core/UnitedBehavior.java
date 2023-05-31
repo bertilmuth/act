@@ -32,6 +32,8 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> dataBefore) {
+		Data<S, V> noOp = noOp(dataBefore);
+		
 		List<Data<S, V>> datasAfter = behaviors.stream()
 				.map(b -> b.actOn(dataBefore))
 				.filter(hasStateChangedFrom(dataBefore).or(Behavior::hasActed))
@@ -40,7 +42,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		Data<S, V> mergedData;
 
 		if (datasAfter.isEmpty()) {
-			mergedData = noOp(dataBefore);
+			mergedData = noOp;
 		} else {
 			mergedData = merge(dataBefore, datasAfter);
 		}
