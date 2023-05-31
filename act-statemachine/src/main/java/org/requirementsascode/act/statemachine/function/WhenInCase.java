@@ -1,6 +1,7 @@
 package org.requirementsascode.act.statemachine.function;
 
 import static java.util.Objects.requireNonNull;
+import static org.requirementsascode.act.core.Behavior.hasActed;
 import static org.requirementsascode.act.core.InCase.inCase;
 
 import java.util.function.Predicate;
@@ -34,7 +35,7 @@ public class WhenInCase<S,V0> implements Behavior<S,V0,V0> {
 	}
 
 	private static <S, V1 extends V0, V0> Predicate<Data<S, V0>> typeMatches(Class<V1> expectedType) {
-		Predicate<Data<S, V0>> predicate = d -> d.value().isPresent() && hasExpectedType(valueTypeOf(d), expectedType);
+		Predicate<Data<S, V0>> predicate = d -> hasActed(d) && hasExpectedType(valueTypeOf(d), expectedType);
 		return predicate;
 	}
 

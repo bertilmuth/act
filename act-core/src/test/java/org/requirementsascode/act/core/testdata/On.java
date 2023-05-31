@@ -14,7 +14,7 @@ public class On{
 	}
 	
 	private static <S, V extends V0, V0> Predicate<Data<S, V0>> typeMatches(String expectedTriggerTypeName) {
-		Predicate<Data<S, V0>> predicate = i -> hasActed(i) && hasExpectedType(triggerTypeOf(i), expectedTriggerTypeName);
+		Predicate<Data<S, V0>> predicate = d -> hasActed(d) && hasExpectedType(valueTypeOf(d), expectedTriggerTypeName);
 		return predicate;
 	}
 	
@@ -22,7 +22,7 @@ public class On{
 		return expectedTriggerTypeName.equals(beforeTriggerTypeName);
 	}
 	
-	private static String triggerTypeOf(Data<?, ?> i) {
+	private static String valueTypeOf(Data<?, ?> i) {
 		return i.value().get().getClass().getSimpleName();
 	}
 	
