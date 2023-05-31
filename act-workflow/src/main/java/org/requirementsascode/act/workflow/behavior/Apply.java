@@ -3,7 +3,6 @@ package org.requirementsascode.act.workflow.behavior;
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.requirementsascode.act.core.Behavior;
@@ -46,13 +45,12 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 	
 	private Data<WorkflowState, Token> applyActionFunction(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
-		Optional<Token> token = inputData.value();
+		Token token = inputData.value().get();
 		
 		@SuppressWarnings("unchecked")
-		Token outToken = token
-			.flatMap(Token::actionData)
+		Token outToken = token.actionData()
 			.map(ad -> actionFunction.apply(state, (T)ad))
-			.map(ad -> token.get().replaceActionData(ad))
+			.map(ad -> token.replaceActionData(ad))
 			.orElse(Token.empty());
 		
 		return data(state, outToken);
