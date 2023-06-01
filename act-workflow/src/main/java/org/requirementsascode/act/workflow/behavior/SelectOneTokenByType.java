@@ -13,10 +13,11 @@ import org.requirementsascode.act.workflow.WorkflowState;
 
 class SelectOneTokenByType<T> implements Behavior<WorkflowState, Part, Token> {
 	private final Class<T> type;
+	private final Part owner;
 
-	public SelectOneTokenByType(Class<T> type) {
+	public SelectOneTokenByType(Class<T> type, Part owner) {
 		this.type = requireNonNull(type, "type must be non-null!");
-
+		this.owner = requireNonNull(owner, "owner must be non-null!");
 	}
 
 	@Override
@@ -24,7 +25,7 @@ class SelectOneTokenByType<T> implements Behavior<WorkflowState, Part, Token> {
 		WorkflowState state = inputData.state();
 		
 		assert(inputData.value().isPresent());
-		Ports inPorts = inputData.value().get().inPorts();
+		Ports inPorts = owner.inPorts();
 		
 		Token outToken = inPorts.stream()
 			.flatMap(p -> p.tokens(state))

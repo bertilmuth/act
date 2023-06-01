@@ -35,7 +35,7 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 			assert(d.value().isPresent());
 			Part owner = d.value().get();
 			
-			return new SelectOneTokenByType<>(type)
+			return new SelectOneTokenByType<>(type, owner)
 				.andThen(this::applyActionFunction)
 				.andThen(new AddTokenToOutPorts(owner))
 				.andThen(new RemoveFirstTokenFromInPorts(owner))
