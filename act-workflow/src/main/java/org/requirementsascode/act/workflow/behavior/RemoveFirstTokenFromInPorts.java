@@ -1,5 +1,6 @@
 package org.requirementsascode.act.workflow.behavior;
 
+import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 
 import org.requirementsascode.act.core.Behavior;
@@ -10,13 +11,15 @@ import org.requirementsascode.act.workflow.WorkflowState;
 
 
 class RemoveFirstTokenFromInPorts implements Behavior<WorkflowState, Part, Part> {	
-	public RemoveFirstTokenFromInPorts() {
+	private final Part owner;
+
+	public RemoveFirstTokenFromInPorts(Part owner) {
+		this.owner = requireNonNull(owner, "owner must be non-null!");
 	}
 
 	@Override
 	public Data<WorkflowState, Part> actOn(Data<WorkflowState, Part> inputData) {
 		assert(inputData.value().isPresent());
-		Part owner = inputData.value().get();
 		Ports ports = owner.inPorts();
 		
 		WorkflowState newState = ports.stream()

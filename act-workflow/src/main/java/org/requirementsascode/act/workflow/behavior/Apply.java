@@ -38,7 +38,7 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 			return new SelectOneTokenByType<>(type)
 				.andThen(this::applyActionFunction)
 				.andThen(new AddTokenToOutPorts(owner))
-				.andThen(new RemoveFirstTokenFromInPorts())
+				.andThen(new RemoveFirstTokenFromInPorts(owner))
 				.actOn(d);
 		};
 	}
