@@ -23,11 +23,6 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 	
 	@Override
 	public Behavior<WorkflowState, Token, Token> asBehavior(Part owner) {
-		return actOnSingleToken(owner)
-			.andThen(out -> data(out.state(), Token.empty()));
-	}
-
-	private Behavior<WorkflowState, Token, Token> actOnSingleToken(Part owner) {
 		return d -> {
 			assert(d.value().isPresent());			
 			return new SelectOneTokenByType<>(type, owner)
