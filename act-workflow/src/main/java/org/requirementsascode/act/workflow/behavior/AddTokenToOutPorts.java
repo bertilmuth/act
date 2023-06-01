@@ -9,7 +9,7 @@ import org.requirementsascode.act.workflow.Part;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
-class AddTokenToOutPorts implements Behavior<WorkflowState, Token, Part> {
+class AddTokenToOutPorts implements Behavior<WorkflowState, Token, Token> {
 	private final Part owner;
 	
 	public AddTokenToOutPorts(Part owner) {
@@ -17,7 +17,7 @@ class AddTokenToOutPorts implements Behavior<WorkflowState, Token, Part> {
 	}
 
 	@Override
-	public Data<WorkflowState, Part> actOn(Data<WorkflowState, Token> inputData) {
+	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
 		assert(inputData.value().isPresent());
 		Token token = inputData.value().get();
 		
@@ -25,6 +25,6 @@ class AddTokenToOutPorts implements Behavior<WorkflowState, Token, Part> {
 	        .reduce(inputData.state(), 
 	        	(d, port) -> port.addToken(d, token), 
 	        	(d1, d2) -> d2);
-		return data(resultState, owner);
+		return data(resultState, token);
 	}
 }
