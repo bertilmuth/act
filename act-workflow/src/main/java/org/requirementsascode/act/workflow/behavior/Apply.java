@@ -30,7 +30,7 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 		};
 	}
 
-	private Behavior<WorkflowState, Part, Part> actOnSingleToken() {
+	private Behavior<WorkflowState, Part, Token> actOnSingleToken() {
 		return d -> {
 			assert(d.value().isPresent());
 			Part owner = d.value().get();

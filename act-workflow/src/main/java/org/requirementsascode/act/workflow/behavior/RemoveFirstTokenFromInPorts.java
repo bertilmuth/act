@@ -11,7 +11,7 @@ import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
 
-class RemoveFirstTokenFromInPorts implements Behavior<WorkflowState, Token, Part> {	
+class RemoveFirstTokenFromInPorts implements Behavior<WorkflowState, Token, Token> {	
 	private final Part owner;
 
 	public RemoveFirstTokenFromInPorts(Part owner) {
@@ -19,14 +19,15 @@ class RemoveFirstTokenFromInPorts implements Behavior<WorkflowState, Token, Part
 	}
 
 	@Override
-	public Data<WorkflowState, Part> actOn(Data<WorkflowState, Token> inputData) {
+	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
 		assert(inputData.value().isPresent());
+		Token token = inputData.value().get();
 		Ports ports = owner.inPorts();
 		
 		WorkflowState newState = ports.stream()
 	        .reduce(inputData.state(), 
 	        	(s, port) -> port.removeFirstToken(s), 
 	        	(s1, s2) -> s2);
-		return data(newState, owner);
+		return data(newState, token);
 	}
 }
