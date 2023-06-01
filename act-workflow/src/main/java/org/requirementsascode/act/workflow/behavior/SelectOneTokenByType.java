@@ -11,7 +11,7 @@ import org.requirementsascode.act.workflow.Ports;
 import org.requirementsascode.act.workflow.Token;
 import org.requirementsascode.act.workflow.WorkflowState;
 
-class SelectOneTokenByType<T> implements Behavior<WorkflowState, Part, Token> {
+class SelectOneTokenByType<T> implements Behavior<WorkflowState, Token, Token> {
 	private final Class<T> type;
 	private final Part owner;
 
@@ -21,7 +21,7 @@ class SelectOneTokenByType<T> implements Behavior<WorkflowState, Part, Token> {
 	}
 
 	@Override
-	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Part> inputData) {
+	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		
 		assert(inputData.value().isPresent());
