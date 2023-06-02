@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.merge.MergeStrategy;
@@ -30,25 +31,23 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 	}
 
 	@Override
-	public Data<S, V> actOn(Data<S, V> dataBefore) {
+	public Data<S, V> actOn(Data<S, V> before) {
+		Predicate<Data<S, V>> hasChanged = new NoOpTest<>(before).negate();
+		
 		List<Data<S, V>> datasAfter = behaviors.stream()
-				.map(b -> b.actOn(dataBefore))
-				.filter(d -> hasChangedFrom(dataBefore, d))
+				.map(b -> b.actOn(before))
+				.filter(hasChanged)
 				.collect(Collectors.toList());
 
 		Data<S, V> mergedData;
 
 		if (datasAfter.isEmpty()) {
-			mergedData = noOp(dataBefore);
+			mergedData = noOp(before);
 		} else {
-			mergedData = merge(dataBefore, datasAfter);
+			mergedData = merge(before, datasAfter);
 		}
 
 		return mergedData;
-	}
-
-	private boolean hasChangedFrom(Data<S, V> dataBefore, Data<S, V> dataNow) {
-		return !noOp(dataBefore).equals(dataNow);
 	}
 
 	private Data<S, V> noOp(Data<S, V> dataBefore) {
@@ -61,5 +60,19 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	public List<Behavior<S, ? extends V, ? extends V>> behaviors() {
 		return Collections.unmodifiableList(behaviors);
+	}
+	
+	private static class NoOpTest<S,V> implements Predicate<Data<S, V>> {
+		private final Data<S, V> noOpOnBefore;
+		
+		private NoOpTest(Data<S, V> before) {
+			noOpOnBefore = new NoOp<S,V,V>().actOn(before);
+		}
+		
+		@Override
+		public boolean test(Data<S, V> before) {
+			return noOpOnBefore.equals(before);
+		}
+
 	}
 }
