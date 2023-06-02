@@ -32,7 +32,8 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> before) {
-		Predicate<Data<S, V>> hasChanged = new NoOpTest<>(before).negate();
+		Data<S, V> noOpOnBefore = noOp(before);
+		Predicate<Data<S, V>> hasChanged = new NoOpTest<>(noOpOnBefore).negate();
 		
 		List<Data<S, V>> datasAfter = behaviors.stream()
 				.map(b -> b.actOn(before))
@@ -42,7 +43,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		Data<S, V> mergedData;
 
 		if (datasAfter.isEmpty()) {
-			mergedData = noOp(before);
+			mergedData = noOpOnBefore;
 		} else {
 			mergedData = merge(before, datasAfter);
 		}
@@ -65,14 +66,13 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 	private static class NoOpTest<S,V> implements Predicate<Data<S, V>> {
 		private final Data<S, V> noOpOnBefore;
 		
-		private NoOpTest(Data<S, V> before) {
-			noOpOnBefore = new NoOp<S,V,V>().actOn(before);
+		private NoOpTest(Data<S, V> noOpOnBefore) {
+			this.noOpOnBefore = noOpOnBefore;
 		}
 		
 		@Override
 		public boolean test(Data<S, V> before) {
 			return noOpOnBefore.equals(before);
 		}
-
 	}
 }
