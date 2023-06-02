@@ -3,7 +3,6 @@ package org.requirementsascode.act.core;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -57,10 +56,6 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	private Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datasAfter) {
 		return mergeStrategy.merge(dataBefore, datasAfter);
-	}
-
-	public List<Behavior<S, ? extends V, ? extends V>> behaviors() {
-		return Collections.unmodifiableList(behaviors);
 	}
 	
 	private static class NoOpTest<S,V> implements Predicate<Data<S, V>> {
