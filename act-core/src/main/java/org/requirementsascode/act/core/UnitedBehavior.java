@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.requirementsascode.act.core.merge.MergeStrategy;
 
@@ -31,31 +30,35 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> before) {
-		Data<S, V> noOpOnBefore = noOp(before);
-		Predicate<Data<S, V>> hasChanged = new NoOpTest<>(noOpOnBefore).negate();
+		Data<S, V> noOpBefore = noOp(before);
+		NoOpTest<S, V> noOpTest = new NoOpTest<>(noOpBefore);
 		
-		List<Data<S, V>> datasAfter = behaviors.stream()
-				.map(b -> b.actOn(before))
-				.filter(hasChanged)
-				.collect(Collectors.toList());
+		Data<S, V> mergedData = behaviors.stream()
+			.map(b -> b.actOn(before))
+			.reduce(noOpBefore,
+				(beforeNow, now) -> merge(noOpTest, before, beforeNow, now));
 
+		return mergedData;
+	}
+	
+	private Data<S, V> merge(NoOpTest<S, V> noOpTest, Data<S, V> before, Data<S, V> beforeNow, Data<S, V> now) {
 		Data<S, V> mergedData;
-
-		if (datasAfter.isEmpty()) {
-			mergedData = noOpOnBefore;
+		
+		if (noOpTest.test(beforeNow)) {
+			// Nothing got done before --> take data now (left identity)
+			mergedData = now;
+		} else if (noOpTest.test(now)) {
+			// Nothing got done now --> take data before (right identity)
+			mergedData = beforeNow;
 		} else {
-			mergedData = merge(before, datasAfter);
+			// Custom merge for everything else
+			mergedData = mergeStrategy.merge(before, beforeNow, now);
 		}
-
 		return mergedData;
 	}
 
 	private Data<S, V> noOp(Data<S, V> dataBefore) {
 		return new NoOp<S, V, V>().actOn(dataBefore);
-	}
-
-	private Data<S, V> merge(Data<S, V> dataBefore, List<Data<S, V>> datasAfter) {
-		return mergeStrategy.merge(dataBefore, datasAfter);
 	}
 	
 	private static class NoOpTest<S,V> implements Predicate<Data<S, V>> {
