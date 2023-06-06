@@ -34,13 +34,13 @@ tasks.named('test') {
 }
 
 task javadocJar(type: Jar) {
-	classifier = 'javadoc'
 	from javadoc
+	archiveClassifier = 'javadoc'
 }
 
 task sourcesJar(type: Jar) {
-	classifier = 'sources'
 	from sourceSets.main.allSource
+	archiveClassifier = 'sources'
 }
 
 artifacts {
@@ -65,13 +65,8 @@ if (project.hasProperty("signing.keyId")) {
 
 					from components.java
 
-      				artifact javadocJar {
-						classifier "javadoc"
-      				}
-
-					artifact sourcesJar {
-						classifier "sources"
-      				}
+      				artifact javadocJar
+					artifact sourcesJar
 
 					licenses {
 						license {
