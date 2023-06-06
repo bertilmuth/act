@@ -87,7 +87,7 @@ public class CartStateMachine {
 	}
 	
 	private String item(Data<Cart, RemoveItem> d) {
-		RemoveItem value = d.value().get();
+		RemoveItem value = d.value();
 		return value.item();
 	}
 }

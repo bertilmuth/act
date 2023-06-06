@@ -17,9 +17,7 @@ public class ConsumeWith<S,V> implements Behavior<S,V, V>{
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> d) {
-		assert(d.value().isPresent());
-		V trigger = d.value().get();
-		S newState = consumer.apply(d.state(), trigger);
-		return data(newState, trigger);
+		S newState = consumer.apply(d.state(), d.value());
+		return data(newState, d.value());
 	}
 }

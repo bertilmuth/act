@@ -20,8 +20,7 @@ class RemoveFirstTokenFromInPorts implements Behavior<WorkflowState, Token, Toke
 
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		assert(inputData.value().isPresent());
-		Token token = inputData.value().get();
+		Token token = inputData.value();
 		Ports ports = owner.inPorts();
 		
 		WorkflowState newState = ports.stream()

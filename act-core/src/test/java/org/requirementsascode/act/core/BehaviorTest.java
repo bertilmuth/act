@@ -141,7 +141,7 @@ class BehaviorTest {
 	}
 
 	private Behavior<State, ConditionalTrigger_B1, ConditionalTrigger_B1> conditionalB1() {
-		return inCase(before -> before.value().get().isTriggering(), before -> CONDITIONAL_AFTER_B1);
+		return inCase(before -> before.value().isTriggering(), before -> CONDITIONAL_AFTER_B1);
 	}
 
 	private Behavior<State, Trigger_B2, Trigger_B2> b2() {

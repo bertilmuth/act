@@ -120,12 +120,11 @@ class RegularLanguageTest {
 	private Behavior<NonTerminal, String, String> accept(char expectedTerminal, NonTerminal targetState) {
 		return inCase(i -> 
 		  isFirstLetterTheSame(expectedTerminal, i), 
-		  	i -> data(targetState, tail(i.value().get())));
+		  	i -> data(targetState, tail(i.value())));
 	}
 
-	private boolean isFirstLetterTheSame(char expectedTerminal, Data<NonTerminal, String> i) {
-		String beforeValue = i.value().get();
-		return !beforeValue.isEmpty() && expectedTerminal == firstLetter(beforeValue);
+	private boolean isFirstLetterTheSame(char expectedTerminal, Data<NonTerminal, String> before) {
+		return !before.value().isEmpty() && expectedTerminal == firstLetter(before.value());
 	}
 
 	private char firstLetter(String s) {

@@ -24,7 +24,7 @@ public class Token {
 	}
 	
 	public static Token from(Data<WorkflowState, Token> data) {
-		return data.value().orElse(null);
+		return data.value();
 	}
 	
 	public Optional<ActionData> actionData() {

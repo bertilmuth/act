@@ -43,6 +43,6 @@ public class WhenInCase<S,V0> implements Behavior<S,V0,V0> {
 	}
 
 	private static Class<?> valueTypeOf(Data<?, ?> d) {
-		return d.value().get().getClass();
+		return d.value().getClass();
 	}
 }

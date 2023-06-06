@@ -23,7 +23,7 @@ public class On{
 	}
 	
 	private static String valueTypeOf(Data<?, ?> i) {
-		return i.value().get().getClass().getSimpleName();
+		return i.value().getClass().getSimpleName();
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -24,7 +24,6 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 	@Override
 	public Behavior<WorkflowState, Token, Token> asBehavior(Part owner) {
 		return d -> {
-			assert(d.value().isPresent());			
 			return new SelectOneTokenByType<>(type, owner)
 				.andThen(this::applyActionFunction)
 				.andThen(new AddTokenToOutPorts(owner))
@@ -33,11 +32,11 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 		};
 	}
 	
+	@SuppressWarnings("unchecked")
 	private Data<WorkflowState, Token> applyActionFunction(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
-		Token token = inputData.value().get();
+		Token token = inputData.value();
 		
-		@SuppressWarnings("unchecked")
 		Token outToken = token.actionData()
 			.map(ad -> actionFunction.apply(state, (T)ad))
 			.map(ad -> token.replaceActionData(ad))

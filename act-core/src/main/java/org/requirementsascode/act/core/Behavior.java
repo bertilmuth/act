@@ -23,7 +23,7 @@ public interface Behavior<S, V1, V2> {
 	}
 	
 	static <S, V1> boolean hasActed(Data<S, V1> d) {
-		return d.value().isPresent();
+		return d.value() != null;
 	}
 
 	static <S, V1> Behavior<S, V1, V1> identity() {

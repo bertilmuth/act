@@ -30,9 +30,9 @@ class ToStateBehaviorTest {
 				.states(s1, s2)
 				.transitions(
 					transition(s1,s2, 
-						when(EnterNextState.class, d -> data(S2, d.value().get()))),
+						when(EnterNextState.class, d -> data(S2, d.value()))),
 					transition(s2,s1, 
-						when(EnterNextState.class, d -> data(S1, d.value().get())))
+						when(EnterNextState.class, d -> data(S1, d.value())))
 					)
 				.build();
 	}
@@ -63,7 +63,7 @@ class ToStateBehaviorTest {
 	Behavior<String,Trigger,Trigger> enterS2() {
 		return d -> {
 			s2Entered = true;
-			return data(S2, d.value().get());
+			return data(S2, d.value());
 		};
 	}
 }

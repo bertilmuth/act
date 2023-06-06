@@ -24,7 +24,6 @@ class SelectOneTokenByType<T> implements Behavior<WorkflowState, Token, Token> {
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
 		
-		assert(inputData.value().isPresent());
 		Ports inPorts = owner.inPorts();
 		
 		Token outToken = inPorts.stream()

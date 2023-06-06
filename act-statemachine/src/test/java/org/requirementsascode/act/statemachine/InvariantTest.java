@@ -52,7 +52,7 @@ class InvariantTest {
 	@Test
 	void exceptionIfStateBehaviorChangesState() {
 		State<String, String> state1 = 
-			state(STATE1, s -> s.equals(STATE1), d -> data(STATE2, d.value().get()));
+			state(STATE1, s -> s.equals(STATE1), d -> data(STATE2, d.value()));
 
 		Statemachine<String,String> statemachine = 
 			Statemachine.builder()
@@ -67,7 +67,7 @@ class InvariantTest {
 	@Test
 	void exceptionIfStateBehaviorChangesStateInToState() {
 		State<String, String> state2 = 
-			state(STATE2, s -> s.equals(STATE2), d -> data(STATE1, d.value().get()));
+			state(STATE2, s -> s.equals(STATE2), d -> data(STATE1, d.value()));
 
 		Statemachine<String,String> statemachine = 
 			Statemachine.builder()

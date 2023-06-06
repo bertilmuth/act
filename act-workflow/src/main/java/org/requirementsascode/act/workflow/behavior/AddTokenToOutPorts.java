@@ -18,8 +18,7 @@ class AddTokenToOutPorts implements Behavior<WorkflowState, Token, Token> {
 
 	@Override
 	public Data<WorkflowState, Token> actOn(Data<WorkflowState, Token> inputData) {
-		assert(inputData.value().isPresent());
-		Token token = inputData.value().get();
+		Token token = inputData.value();
 		
 		WorkflowState resultState = owner.outPorts().stream()
 	        .reduce(inputData.state(), 
