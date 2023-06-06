@@ -9,7 +9,6 @@ repositories {
 	mavenCentral()
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	maven {	url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
-	
 }
 
 ext.junitPlatformVersion = '1.8.2'
@@ -17,8 +16,11 @@ ext.junitJupiterVersion = '5.8.2'
 
 ext.jqwikVersion = '1.7.0'
 
-sourceCompatibility = 8
-targetCompatibility = 8
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}	
 
 compileTestJava {
     // To enable argument names in reporting and debugging
