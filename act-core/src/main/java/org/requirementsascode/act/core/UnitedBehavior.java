@@ -30,7 +30,7 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 
 	@Override
 	public Data<S, V> actOn(Data<S, V> before) {
-		Data<S, V> noOpBefore = noOp(before);
+		Data<S, V> noOpBefore = Behavior.noOp(before);
 		NoOpTest<S, V> noOpTest = new NoOpTest<>(noOpBefore);
 		
 		Data<S, V> mergedData = behaviors.stream()

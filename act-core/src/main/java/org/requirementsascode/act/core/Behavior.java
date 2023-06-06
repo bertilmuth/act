@@ -23,7 +23,7 @@ public interface Behavior<S, V1, V2> {
 		};
 	}
 	
-	default Data<S,V2> noOp(Data<S,V1> d) {
+	static <S, V1,V2> Data<S,V2> noOp(Data<S,V1> d) {
 		return data(d.state());
 	}
 	
