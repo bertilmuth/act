@@ -90,7 +90,7 @@ public class Port<T extends ActionData> implements Named {
 		WorkflowState state = inputData.state();
 		Token token = firstToken(state).get();
 		WorkflowState newState = state.replaceToken(this, token, dirty(token)).state();
-		return data(newState, inputData.value());
+		return data(newState, Token.from(inputData));
 	}
 
 	private Token dirty(Token token) {
