@@ -35,7 +35,7 @@ public class Apply<T extends ActionData, U extends ActionData> implements PartBe
 	@SuppressWarnings("unchecked")
 	private Data<WorkflowState, Token> applyActionFunction(Data<WorkflowState, Token> inputData) {
 		WorkflowState state = inputData.state();
-		Token token = inputData.value();
+		Token token = Token.from(inputData);
 		
 		Token outToken = token.actionData()
 			.map(ad -> actionFunction.apply(state, (T)ad))

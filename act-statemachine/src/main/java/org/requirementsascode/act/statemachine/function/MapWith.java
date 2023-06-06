@@ -16,9 +16,6 @@ public class MapWith<S,V1,V2> implements Behavior<S,V1,V2>{
 
 	@Override
 	public Data<S, V2> actOn(Data<S, V1> d) {
-		V1 trigger = d.value();
-		Data<S, V2> newData = mapper.apply(d.state(), trigger);
-		
-		return newData;
+		return mapper.apply(d.state(), d.value());
 	}
 }
