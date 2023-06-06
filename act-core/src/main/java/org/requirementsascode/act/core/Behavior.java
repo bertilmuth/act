@@ -1,12 +1,13 @@
 package org.requirementsascode.act.core;
 
 import static org.requirementsascode.act.core.Change.change;
+import static org.requirementsascode.act.core.Data.data;
 
 import java.util.Objects;
 import static org.requirementsascode.act.core.InCase.*;
 
 public interface Behavior<S, V1, V2> {
-	Data<S, V2> actOn(Data<S, V1> before);
+	Data<S, V2> actOn(Data<S, V1> d);
 
 	default <V3> Behavior<S, V1, V3> andThen(Behavior<S, V2, V3> nextBehavior) {
 		Objects.requireNonNull(nextBehavior, "nextBehavior must be non-null!");
@@ -20,6 +21,10 @@ public interface Behavior<S, V1, V2> {
 			Change<S, V1, V2> change = change(before, after);
 			return changeHandler.handleChange(change);
 		};
+	}
+	
+	default Data<S,V2> noOp(Data<S,V1> d) {
+		return data(d.state());
 	}
 	
 	static <S, V1> boolean hasActed(Data<S, V1> d) {

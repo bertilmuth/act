@@ -56,10 +56,6 @@ public class UnitedBehavior<S, V> implements Behavior<S, V, V> {
 		}
 		return mergedData;
 	}
-
-	private Data<S, V> noOp(Data<S, V> dataBefore) {
-		return new NoOp<S, V, V>().actOn(dataBefore);
-	}
 	
 	private static class NoOpTest<S,V> implements Predicate<Data<S, V>> {
 		private final Data<S, V> noOpOnBefore;
