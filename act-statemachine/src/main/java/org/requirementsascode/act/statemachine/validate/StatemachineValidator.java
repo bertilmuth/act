@@ -28,7 +28,7 @@ public class StatemachineValidator {
 		
 		List<State<S, V0>> expectedStates = statemachine.states().stream().collect(Collectors.toList());
 		State<S, V0> definedState = statemachine.definedState();
-		State<S, V0> initialState = statemachine.initialState();
+		State<S, V0> initialState = statemachine.defaultState();
 		State<S, V0> finalState = statemachine.finalState();
 		
 		List<State<S, ?>> statesNotInList = transitionsOf(statemachine)

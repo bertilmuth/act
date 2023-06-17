@@ -14,13 +14,13 @@ import org.requirementsascode.act.statemachine.merge.OnlyOneBehaviorMayAct;
 
 public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 	private static final String DEFINED_STATE = "Defined State";
-	private static final String INITIAL_STATE = "Initial State";
+	private static final String DEFAULT_STATE = "Default State";
 	private static final String FINAL_STATE = "Final State";
 
 	private final States<S, V0> states;
 	private final Transitionables<S, V0> transitionables;
 	private final Behavior<S, V0, V0> statemachineBehavior;
-	private final State<S, V0> initialState;
+	private final State<S, V0> defaultState;
 	private final State<S, V0> definedState;
 	private final State<S, V0> finalState;
 	private final MergeStrategy<S, V0> mergeStrategy;
@@ -32,7 +32,7 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		this.states = requireNonNull(states, "states must be non-null!");
 		this.mergeStrategy = requireNonNull(mergeStrategy, "mergeStrategy must be non-null!");
 		this.definedState = createDefinedState(states);
-		this.initialState = createInitialState(definedState);
+		this.defaultState = createDefaultState(definedState);
 		this.finalState = createFinalState(definedState);
 		
 		this.statesBehavior = states().asBehavior(this);
@@ -64,8 +64,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 		return definedState;
 	}
 	
-	public State<S, V0> initialState() {
-		return initialState;
+	public State<S, V0> defaultState() {
+		return defaultState;
 	}
 	
 	public State<S, V0> finalState() {
@@ -95,8 +95,8 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 			.reduce(s -> false, Predicate::or));
 	}
 
-	private State<S, V0> createInitialState(State<S, V0> definedState) {
-		return state(INITIAL_STATE, notIn(definedState));
+	private State<S, V0> createDefaultState(State<S, V0> definedState) {
+		return state(DEFAULT_STATE, notIn(definedState));
 	}
 	
 	private State<S, V0> createFinalState(State<S, V0> definedState) {
