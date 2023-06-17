@@ -63,7 +63,7 @@ class SimpleHierarchyTest {
 		return top.actOn(data(null, null));
 	}
 	
-	private State<State<?, ?>, Trigger> state(String stateName) {
+	private <T> State<State<?, ?>, T> state(String stateName) {
 		return StatemachineApi.state(stateName, s -> s != null && stateName.equals(s.name()));
 	}
 	
