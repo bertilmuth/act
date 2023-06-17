@@ -1,12 +1,15 @@
 package org.requirementsascode.act.statemachine;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
+import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
-
-import static org.requirementsascode.act.statemachine.StatemachineApi.*;
 
 class SimpleHierarchyTest {
 	private static final String TOP_S1 = "top_s1";
@@ -19,8 +22,8 @@ class SimpleHierarchyTest {
 
 	@BeforeEach
 	void test() {
-		State<State<?,?>, Trigger> top_s1 = s(TOP_S1);
-		State<State<?,?>, Trigger> top_s2 = s(TOP_S2);
+		State<State<?,?>, Trigger> top_s1 = state(TOP_S1);
+		State<State<?,?>, Trigger> top_s2 = state(TOP_S2);
 		
 		top =
 			Statemachine.builder()
@@ -61,7 +64,7 @@ class SimpleHierarchyTest {
 		return top.actOn(data(null, null));
 	}
 	
-	private State<State<?, ?>, Trigger> s(String stateName) {
-		return state(stateName, s -> s != null && stateName.equals(s.name()));
+	private State<State<?, ?>, Trigger> state(String stateName) {
+		return StatemachineApi.state(stateName, s -> s != null && stateName.equals(s.name()));
 	}
 }
