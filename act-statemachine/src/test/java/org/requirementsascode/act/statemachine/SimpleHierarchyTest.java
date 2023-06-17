@@ -19,8 +19,8 @@ class SimpleHierarchyTest {
 
 	@BeforeEach
 	void test() {
-		State<State<?,?>, Trigger> top_s1 = state(TOP_S1, s -> s != null && TOP_S1.equals(s.name()));
-		State<State<?,?>, Trigger> top_s2 = state(TOP_S2, s -> s != null &&  TOP_S2.equals(s.name()));
+		State<State<?,?>, Trigger> top_s1 = s(TOP_S1);
+		State<State<?,?>, Trigger> top_s2 = s(TOP_S2);
 		
 		top =
 			Statemachine.builder()
@@ -59,5 +59,9 @@ class SimpleHierarchyTest {
 
 	private Data<State<?, ?>, Trigger> topInit() {
 		return top.actOn(data(null, null));
+	}
+	
+	private State<State<?, ?>, Trigger> s(String stateName) {
+		return state(stateName, s -> s != null && stateName.equals(s.name()));
 	}
 }
