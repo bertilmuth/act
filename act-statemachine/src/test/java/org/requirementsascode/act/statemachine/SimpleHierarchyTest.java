@@ -32,8 +32,8 @@ class SimpleHierarchyTest {
 				)
 				.transitions(
 					entryFlow(top_s1, consumeWith((s,v) -> top_s1)),
-					transition(top_s1, top_s2),
-					transition(top_s2, top_s1)
+					transition(top_s1, top_s2, Switch.class),
+					transition(top_s2, top_s1, Switch.class)
 				)
 				.build();
 	}
@@ -62,8 +62,8 @@ class SimpleHierarchyTest {
 		return top.actOn(data(null, null));
 	}
 	
-	private TriggeredTransition<State<?, ?>, Trigger> transition(BasicState<Trigger> from, BasicState<Trigger> to) {
-		return StatemachineApi.transition(from, to, when(Switch.class, consumeWith((s, v) -> to)));
+	private <T> TriggeredTransition<State<?, ?>, T> transition(BasicState<T> from, BasicState<T> to, Class<? extends T> triggerClass) {
+		return StatemachineApi.transition(from, to, when(triggerClass, consumeWith((s, v) -> to)));
 	}
 	
 	private <T> BasicState<T> basicState(String stateName) {
