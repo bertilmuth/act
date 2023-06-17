@@ -5,7 +5,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWit
 import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
 import static org.requirementsascode.act.statemachine.StatemachineApi.init;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.triggeredTransition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 import static org.requirementsascode.act.statemachine.pbt.Property.property;
@@ -46,18 +46,18 @@ public class CartStateMachine implements Behavior<Cart,Value,Value>{
 		Statemachine<Cart, Value> statemachine = Statemachine.builder()
 			.states(empty,nonEmpty)
 			.transitions(
-				transition(anyState(), nonEmpty, 
+				triggeredTransition(anyState(), nonEmpty, 
 					when(AddItem.class, consumeWith(Cart::addItem))),	
 				
-				transition(nonEmpty, nonEmpty, 
+				triggeredTransition(nonEmpty, nonEmpty, 
 					whenInCase(RemoveItem.class, i -> size(i) > 1 && itemIsInCart(i), 
 						consumeWith(Cart::removeItem).andHandleChangeWith(itemRemoved))),
 				
-				transition(nonEmpty, empty, 
+				triggeredTransition(nonEmpty, empty, 
 					whenInCase(RemoveItem.class, i -> size(i) == 1 && itemIsInCart(i), 
 						consumeWith(Cart::removeItem).andHandleChangeWith(itemRemoved))),
 				
-				transition(anyState(), anyState(), 
+				triggeredTransition(anyState(), anyState(), 
 					whenInCase(RemoveItem.class, this::itemIsNotInCart, 
 						consumeWith(Cart::removeItem).andHandleChangeWith(itemNotRemoved))),
 				

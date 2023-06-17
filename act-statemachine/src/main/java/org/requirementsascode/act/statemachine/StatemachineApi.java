@@ -29,7 +29,7 @@ public class StatemachineApi {
 		return State.anyState();
 	}
 	
-	public static <S, V0> TriggeredTransition<S, V0> transition(State<S, V0> fromState, State<S, V0> toState,
+	public static <S, V0> TriggeredTransition<S, V0> triggeredTransition(State<S, V0> fromState, State<S, V0> toState,
 			Behavior<S, V0, V0> transitionBehavior) {
 		return new TriggeredTransition<>(fromState, toState, transitionBehavior);
 	}

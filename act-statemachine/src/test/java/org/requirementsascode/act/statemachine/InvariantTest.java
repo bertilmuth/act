@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.triggeredTransition;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class InvariantTest {
 			Statemachine.builder()
 				.states(statemachineState1, statemachineState2)
 				.transitions(
-					transition(statemachineState1, statemachineState2, consumeWith((s,v) -> STATE2))
+					triggeredTransition(statemachineState1, statemachineState2, consumeWith((s,v) -> STATE2))
 				).build();
 		
 		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
@@ -42,7 +42,7 @@ class InvariantTest {
 			Statemachine.builder()
 				.states(statemachineState1, statemachineState2)
 				.transitions(
-					transition(statemachineState1, statemachineState2, consumeWith((s,v) -> STATE1))
+					triggeredTransition(statemachineState1, statemachineState2, consumeWith((s,v) -> STATE1))
 				).build();
 		
 		Data<String, String> anyEventInState1 = data(STATE1, "AnyEvent");
@@ -73,7 +73,7 @@ class InvariantTest {
 			Statemachine.builder()
 				.states(statemachineState1, state2)
 				.transitions(
-						transition(statemachineState1, state2, consumeWith((s,v) -> STATE2))
+						triggeredTransition(statemachineState1, state2, consumeWith((s,v) -> STATE2))
 				)
 				.build();
 		

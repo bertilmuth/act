@@ -41,19 +41,19 @@ public class MyStringStackStateMachine implements Behavior<MyStringStack, Value,
 		return Statemachine.builder()
 				.states(stackEmpty, stackNotEmpty, stackSizeLessThanZero, stackToBig)
 				.transitions(
-						transition(anyState(), stackNotEmpty, 
+						triggeredTransition(anyState(), stackNotEmpty, 
 							when(Push.class, consumeWith(MyStringStack::push)
 								.andHandleChangeWith(pushValidator))),
 						
-						transition(stackNotEmpty, stackEmpty, 
+						triggeredTransition(stackNotEmpty, stackEmpty, 
 							whenInCase(Pop.class, i -> i.state().size() == 1, mapWith(MyStringStack::pop)
 								.andHandleChangeWith(popValidator))),
 						
-						transition(stackNotEmpty, stackNotEmpty, 
+						triggeredTransition(stackNotEmpty, stackNotEmpty, 
 							whenInCase(Pop.class, i -> i.state().size() > 1, mapWith(MyStringStack::pop)
 								.andHandleChangeWith(popValidator))),
 						
-						transition(anyState(), stackEmpty, 
+						triggeredTransition(anyState(), stackEmpty, 
 							when(Clear.class, consumeWith(MyStringStack::clear)))
 				)
 				.build();
