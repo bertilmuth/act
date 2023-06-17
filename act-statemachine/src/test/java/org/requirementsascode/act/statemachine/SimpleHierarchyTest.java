@@ -21,8 +21,8 @@ class SimpleHierarchyTest {
 
 	@BeforeEach
 	void test() {
-		State<State<?,?>, Trigger> top_s1 = basicState(TOP_S1);
-		State<State<?,?>, Trigger> top_s2 = basicState(TOP_S2);
+		BasicState<Trigger> top_s1 = basicState(TOP_S1);
+		BasicState<Trigger> top_s2 = basicState(TOP_S2);
 		
 		top =
 			Statemachine.builder()
@@ -67,7 +67,7 @@ class SimpleHierarchyTest {
 		return StatemachineApi.transition(from, to, when(Switch.class, consumeWith((s, v) -> to)));
 	}
 	
-	private <T> State<State<?, ?>, T> basicState(String stateName) {
+	private <T> BasicState<T> basicState(String stateName) {
 		return new BasicState<>(stateName);
 	}
 	
