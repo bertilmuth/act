@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.requirementsascode.act.statemachine.StatemachineApi.consumeWith;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
-import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +32,8 @@ class SimpleHierarchyTest {
 				)
 				.transitions(
 					entryFlow(top_s1, consumeWith((s,v) -> top_s1)),
-					transition(top_s1, top_s2, when(Switch.class, consumeWith((s,v) -> top_s2))),
-					transition(top_s2, top_s1, when(Switch.class, consumeWith((s,v) -> top_s1)))
+					transition(top_s1, top_s2),
+					transition(top_s2, top_s1)
 				)
 				.build();
 
@@ -66,5 +65,10 @@ class SimpleHierarchyTest {
 	
 	private State<State<?, ?>, Trigger> state(String stateName) {
 		return StatemachineApi.state(stateName, s -> s != null && stateName.equals(s.name()));
+	}
+	
+	private TriggeredTransition<State<?, ?>, Trigger> transition(State<State<?, ?>, Trigger> from,
+			State<State<?, ?>, Trigger> to) {
+		return StatemachineApi.transition(from, to, when(Switch.class, consumeWith((s, v) -> to)));
 	}
 }
