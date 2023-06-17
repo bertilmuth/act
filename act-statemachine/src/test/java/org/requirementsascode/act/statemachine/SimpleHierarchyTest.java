@@ -15,12 +15,12 @@ class SimpleHierarchyTest {
 	interface Trigger{ }
 	class Switch implements Trigger{ }
 
-	private Statemachine<String, Trigger> top;
+	private Statemachine<State<?,?>, Trigger> top;
 
 	@BeforeEach
 	void test() {
-		State<String, Trigger> top_s1 = state(TOP_S1, TOP_S1::equals);
-		State<String, Trigger> top_s2 = state(TOP_S2, TOP_S2::equals);
+		State<State<?,?>, Trigger> top_s1 = state(TOP_S1, s -> s != null && TOP_S1.equals(s.name()));
+		State<State<?,?>, Trigger> top_s2 = state(TOP_S2, s -> s != null &&  TOP_S2.equals(s.name()));
 		
 		top =
 			Statemachine.builder()
@@ -29,9 +29,9 @@ class SimpleHierarchyTest {
 					top_s2
 				)
 				.transitions(
-					entryFlow(top_s1, consumeWith((s,v) -> TOP_S1)),
-					transition(top_s1, top_s2, when(Switch.class, consumeWith((s,v) -> TOP_S2))),
-					transition(top_s2, top_s1, when(Switch.class, consumeWith((s,v) -> TOP_S1)))
+					entryFlow(top_s1, consumeWith((s,v) -> top_s1)),
+					transition(top_s1, top_s2, when(Switch.class, consumeWith((s,v) -> top_s2))),
+					transition(top_s2, top_s1, when(Switch.class, consumeWith((s,v) -> top_s1)))
 				)
 				.build();
 
@@ -39,25 +39,25 @@ class SimpleHierarchyTest {
 
 	@Test
 	void switchesOnce() {
-		Data<String, Trigger> afterInit = topInit();
-		Data<String, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
-		assertEquals(TOP_S2, afterSwitch1.state());
+		Data<State<?, ?>, Trigger> afterInit = topInit();
+		Data<State<?, ?>, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
+		assertEquals(TOP_S2, afterSwitch1.state().name());
 	}
 	
 	@Test
 	void switchesTwice() {
-		Data<String, Trigger> afterInit = topInit();
-		Data<String, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
-		Data<String, Trigger> afterSwitch2 = topActOn(afterSwitch1, new Switch());
-		assertEquals(TOP_S1, afterSwitch2.state());
+		Data<State<?, ?>, Trigger> afterInit = topInit();
+		Data<State<?, ?>, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
+		Data<State<?, ?>, Trigger> afterSwitch2 = topActOn(afterSwitch1, new Switch());
+		assertEquals(TOP_S1, afterSwitch2.state().name());
 	}
 
-	private Data<String, Trigger> topActOn(Data<String, Trigger> before, Trigger trigger) {
-		Data<String, Trigger> d = data(before.state(), trigger);
+	private Data<State<?, ?>, Trigger> topActOn(Data<State<?,?>, Trigger> before, Trigger trigger) {
+		Data<State<?, ?>, Trigger> d = data(before.state(), trigger);
 		return top.actOn(d);
 	}
 
-	private Data<String, Trigger> topInit() {
+	private Data<State<?, ?>, Trigger> topInit() {
 		return top.actOn(data(null, null));
 	}
 }
