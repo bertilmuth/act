@@ -41,20 +41,16 @@ class SimpleHierarchyTest {
 	@Test
 	void switchesOnce() {
 		Data<State<?, ?>, Trigger> afterInit = topInit();
-		Data<State<?, ?>, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
+		Data<State<?, ?>, Trigger> afterSwitch1 = top.act(afterInit, new Switch());
 		assertEquals(TOP_S2, afterSwitch1.state().name());
 	}
 	
 	@Test
 	void switchesTwice() {
 		Data<State<?, ?>, Trigger> afterInit = topInit();
-		Data<State<?, ?>, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
-		Data<State<?, ?>, Trigger> afterSwitch2 = topActOn(afterSwitch1, new Switch());
+		Data<State<?, ?>, Trigger> afterSwitch1 = top.act(afterInit, new Switch());
+		Data<State<?, ?>, Trigger> afterSwitch2 = top.act(afterSwitch1, new Switch());
 		assertEquals(TOP_S1, afterSwitch2.state().name());
-	}
-
-	private Data<State<?, ?>, Trigger> topActOn(Data<State<?,?>, Trigger> before, Trigger trigger) {
-		return top.act(before, trigger);
 	}
 
 	private Data<State<?, ?>, Trigger> topInit() {
