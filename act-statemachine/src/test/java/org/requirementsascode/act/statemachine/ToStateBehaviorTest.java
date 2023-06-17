@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.triggeredTransition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +29,9 @@ class ToStateBehaviorTest {
 		statemachine = Statemachine.builder()
 				.states(s1, s2)
 				.transitions(
-					triggeredTransition(s1,s2, 
+					transition(s1,s2, 
 						when(EnterNextState.class, d -> data(S2, d.value()))),
-					triggeredTransition(s2,s1, 
+					transition(s2,s1, 
 						when(EnterNextState.class, d -> data(S1, d.value())))
 					)
 				.build();

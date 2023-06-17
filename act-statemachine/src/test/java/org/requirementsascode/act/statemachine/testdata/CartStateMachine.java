@@ -6,7 +6,7 @@ import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.entryFlow;
 import static org.requirementsascode.act.statemachine.StatemachineApi.init;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
-import static org.requirementsascode.act.statemachine.StatemachineApi.triggeredTransition;
+import static org.requirementsascode.act.statemachine.StatemachineApi.transition;
 import static org.requirementsascode.act.statemachine.StatemachineApi.when;
 import static org.requirementsascode.act.statemachine.StatemachineApi.whenInCase;
 
@@ -52,15 +52,15 @@ public class CartStateMachine {
 		Statemachine<Cart, Trigger> statemachine = Statemachine.builder()
 			.states(empty,nonEmpty)
 			.transitions(
-				triggeredTransition(anyState(), nonEmpty, 
+				transition(anyState(), nonEmpty, 
 					when(AddItem.class, 
 						consumeWith(Cart::addItem))),	
 				
-				triggeredTransition(nonEmpty, nonEmpty, 
+				transition(nonEmpty, nonEmpty, 
 					whenInCase(RemoveItem.class, d -> cartSize(d) > 1 && itemIsInCart(d), 
 						consumeWith(Cart::removeItem))),
 								
-				triggeredTransition(nonEmpty, empty, 
+				transition(nonEmpty, empty, 
 					whenInCase(RemoveItem.class, d -> cartSize(d) == 1 && itemIsInCart(d), 
 						consumeWith(Cart::removeItem))),
 				

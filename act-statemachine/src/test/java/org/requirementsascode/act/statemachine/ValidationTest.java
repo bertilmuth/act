@@ -18,7 +18,7 @@ class ValidationTest {
 			Statemachine.builder() 
 				.states(secondState) // The first state is missing from the state list, but it's used in a transition -> exception expected
 				.transitions(
-					triggeredTransition(firstState, secondState, when(AddItem.class, consumeWith((s,t) -> s)))
+					transition(firstState, secondState, when(AddItem.class, consumeWith((s,t) -> s)))
 				)
 			.build()
 		);
@@ -33,7 +33,7 @@ class ValidationTest {
 			Statemachine.builder()
 				.states(firstState) // The second state is missing from the state list, but it's used in a transition -> exception expected
 				.transitions(
-					triggeredTransition(firstState, secondState, when(AddItem.class, consumeWith((s,t) -> s)))
+					transition(firstState, secondState, when(AddItem.class, consumeWith((s,t) -> s)))
 				)
 			.build()
 		);

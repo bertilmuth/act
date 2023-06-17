@@ -63,7 +63,7 @@ class SimpleHierarchyTest {
 	}
 	
 	private <T> TriggeredTransition<State<?, ?>, T> transition(BasicState<T> from, BasicState<T> to, Class<? extends T> triggerClass) {
-		return StatemachineApi.triggeredTransition(from, to, when(triggerClass, consumeWith((s, v) -> to)));
+		return StatemachineApi.transition(from, to, when(triggerClass, consumeWith((s, v) -> to)));
 	}
 	
 	private <T> BasicState<T> basicState(String stateName) {
