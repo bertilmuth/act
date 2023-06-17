@@ -21,8 +21,8 @@ class SimpleHierarchyTest {
 
 	@BeforeEach
 	void test() {
-		State<State<?,?>, Trigger> top_s1 = state(TOP_S1);
-		State<State<?,?>, Trigger> top_s2 = state(TOP_S2);
+		State<State<?,?>, Trigger> top_s1 = basicState(TOP_S1);
+		State<State<?,?>, Trigger> top_s2 = basicState(TOP_S2);
 		
 		top =
 			Statemachine.builder()
@@ -36,7 +36,6 @@ class SimpleHierarchyTest {
 					transition(top_s2, top_s1)
 				)
 				.build();
-
 	}
 
 	@Test
@@ -63,12 +62,18 @@ class SimpleHierarchyTest {
 		return top.actOn(data(null, null));
 	}
 	
-	private <T> State<State<?, ?>, T> state(String stateName) {
-		return StatemachineApi.state(stateName, s -> s != null && stateName.equals(s.name()));
-	}
-	
 	private TriggeredTransition<State<?, ?>, Trigger> transition(State<State<?, ?>, Trigger> from,
 			State<State<?, ?>, Trigger> to) {
 		return StatemachineApi.transition(from, to, when(Switch.class, consumeWith((s, v) -> to)));
+	}
+	
+	private <T> State<State<?, ?>, T> basicState(String stateName) {
+		return new BasicState<>(stateName);
+	}
+	
+	class BasicState<T> extends State<State<?,?>, T>{
+		public BasicState(String stateName) {
+			super(stateName, s -> s != null && stateName.equals(s.name()));
+		}
 	}
 }
