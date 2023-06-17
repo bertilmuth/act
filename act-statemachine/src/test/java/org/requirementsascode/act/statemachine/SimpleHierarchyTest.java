@@ -30,7 +30,8 @@ class SimpleHierarchyTest {
 				)
 				.transitions(
 					entryFlow(top_s1, consumeWith((s,v) -> TOP_S1)),
-					transition(top_s1, top_s2, when(Switch.class, consumeWith((s,v) -> TOP_S2)))
+					transition(top_s1, top_s2, when(Switch.class, consumeWith((s,v) -> TOP_S2))),
+					transition(top_s2, top_s1, when(Switch.class, consumeWith((s,v) -> TOP_S1)))
 				)
 				.build();
 
@@ -39,8 +40,16 @@ class SimpleHierarchyTest {
 	@Test
 	void switchesOnce() {
 		Data<String, Trigger> afterInit = topInit();
-		Data<String, Trigger> afterSwitch = topActOn(afterInit, new Switch());
-		assertEquals(TOP_S2, afterSwitch.state());
+		Data<String, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
+		assertEquals(TOP_S2, afterSwitch1.state());
+	}
+	
+	@Test
+	void switchesTwice() {
+		Data<String, Trigger> afterInit = topInit();
+		Data<String, Trigger> afterSwitch1 = topActOn(afterInit, new Switch());
+		Data<String, Trigger> afterSwitch2 = topActOn(afterSwitch1, new Switch());
+		assertEquals(TOP_S1, afterSwitch2.state());
 	}
 
 	private Data<String, Trigger> topActOn(Data<String, Trigger> before, Trigger trigger) {
