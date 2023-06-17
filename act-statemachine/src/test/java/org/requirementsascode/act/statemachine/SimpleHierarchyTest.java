@@ -39,12 +39,13 @@ class SimpleHierarchyTest {
 	@Test
 	void switchesOnce() {
 		Data<String, Trigger> afterInit = topInit();
-		assertEquals(TOP_S2, topActOn(afterInit, new Switch()));
+		Data<String, Trigger> afterSwitch = topActOn(afterInit, new Switch());
+		assertEquals(TOP_S2, afterSwitch.state());
 	}
 
-	private String topActOn(Data<String, Trigger> before, Trigger trigger) {
+	private Data<String, Trigger> topActOn(Data<String, Trigger> before, Trigger trigger) {
 		Data<String, Trigger> d = data(before.state(), trigger);
-		return top.actOn(d).state();
+		return top.actOn(d);
 	}
 
 	private Data<String, Trigger> topInit() {
