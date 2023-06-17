@@ -54,8 +54,7 @@ class SimpleHierarchyTest {
 	}
 
 	private Data<State<?, ?>, Trigger> topActOn(Data<State<?,?>, Trigger> before, Trigger trigger) {
-		Data<State<?, ?>, Trigger> d = data(before.state(), trigger);
-		return top.actOn(d);
+		return top.act(before, trigger);
 	}
 
 	private Data<State<?, ?>, Trigger> topInit() {

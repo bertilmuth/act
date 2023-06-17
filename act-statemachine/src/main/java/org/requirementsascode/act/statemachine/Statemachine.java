@@ -2,6 +2,7 @@ package org.requirementsascode.act.statemachine;
 
 import static java.util.Objects.requireNonNull;
 import static org.requirementsascode.act.core.UnitedBehavior.unitedBehavior;
+import static org.requirementsascode.act.statemachine.StatemachineApi.data;
 import static org.requirementsascode.act.statemachine.StatemachineApi.state;
 import static org.requirementsascode.act.statemachine.validate.StatemachineValidator.validate;
 
@@ -45,6 +46,11 @@ public class Statemachine<S, V0> implements Behavior<S, V0, V0> {
 
 	public final static StatemachineBuilder builder() {
 		return new StatemachineBuilder();
+	}
+	
+	public Data<S, V0> act(Data<S, V0> before, V0 trigger) {
+		Data<S, V0> d = data(before.state(), trigger);
+		return actOn(d);
 	}
 
 	@Override
