@@ -19,8 +19,8 @@ class SimpleHierarchyTest {
 
 	@BeforeEach
 	void test() {
-		State<String, Trigger> top_s1 = state(TOP_S1, s -> s != null && s.equals(TOP_S1));
-		State<String, Trigger> top_s2 = state(TOP_S2, s -> s != null && s.equals(TOP_S2));
+		State<String, Trigger> top_s1 = state(TOP_S1, TOP_S1::equals);
+		State<String, Trigger> top_s2 = state(TOP_S2, TOP_S2::equals);
 		
 		top =
 			Statemachine.builder()
