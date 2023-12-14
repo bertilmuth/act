@@ -111,7 +111,7 @@ class BehaviorTest {
 
 	@Test
 	void doesntActOnFalseTrigger() {
-		assertFalse(hasActed(conditionalB1().actOn(FALSE_BEFORE_B1)));
+		assertFalse(hasTrigger(conditionalB1().actOn(FALSE_BEFORE_B1)));
 	}
 	
 	@Test
@@ -122,7 +122,7 @@ class BehaviorTest {
 			);
 
 		Data<State, ConditionalTrigger_B1> after = unitedBehavior.actOn(TRUE_BEFORE_B1);
-		assertFalse(hasActed(after));
+		assertFalse(hasTrigger(after));
 	}
 
 	@Test

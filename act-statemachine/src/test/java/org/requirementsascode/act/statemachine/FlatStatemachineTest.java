@@ -10,12 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.requirementsascode.act.core.Data;
 
-class SimpleHierarchyTest {
+class FlatStatemachineTest {
 	private static final String TOP_S1 = "top_s1";
 	private static final String TOP_S2 = "top_s2";
 	
 	interface Trigger{ }
 	class Switch implements Trigger{ }
+	class Init implements Trigger{ }
 
 	private Statemachine<State<?,?>, Trigger> top;
 
@@ -54,7 +55,7 @@ class SimpleHierarchyTest {
 	}
 
 	private Data<State<?, ?>, Trigger> topInit() {
-		return top.actOn(data(null, null));
+		return top.actOn(data(null, new Init()));
 	}
 	
 	private <T> TriggeredTransition<State<?, ?>, T> transition(BasicState<T> from, BasicState<T> to, Class<? extends T> triggerClass) {
