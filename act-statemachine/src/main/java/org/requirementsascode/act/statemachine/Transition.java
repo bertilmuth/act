@@ -52,7 +52,8 @@ public class Transition<S, V0> implements Behavioral<S,V0>, Transitionable<S, V0
 		Behavior<S, V0, V0> checkedToStateEntryBehavior = createCheckedToStateEntryBehavior(toStateEntryBehavior);	
 		
 		return inCase(fromState()::matchesStateIn,
-			transitionBehavior().andThen(checkedToStateEntryBehavior));
+			transitionBehavior().andThen(
+				inCase(Behavior::hasActed, checkedToStateEntryBehavior)));
 	}
 	
 	private Behavior<S, V0, V0> createCheckedToStateEntryBehavior(Behavior<S, V0, V0> toStateEntryBehavior) {

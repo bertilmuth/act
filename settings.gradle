@@ -1,5 +1,19 @@
+plugins {
+    id("org.gradle.toolchains.foojay-resolver") version "0.7.0"
+}
+
 rootProject.name = 'act'
 include 'act-core'
 include 'act-statemachine'
 include 'act-pbt'
 include 'act-workflow'
+
+toolchainManagement {
+    jvm {
+        javaRepositories {
+            repository("foojay") {
+                resolverClass = org.gradle.toolchains.foojay.FoojayToolchainResolver
+            }
+        }
+    }
+}
